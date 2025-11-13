@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Interno - Plataforma Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: 'wf_1973fffd9707483bb7143c4dc';
+      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
+           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
+    }
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    :root {
+      --primary: #002d5b;
+      --secondary: #f5f7fa;
+      --accent: #00b3b0;
+      --text: #222;
+      --text-light: #fff;
+      --gray: #e5e7eb;
+      --border-radius: 8px;
+      --shadow: 0 2px 8px rgba(0,45,91,0.08);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'wf_1973fffd9707483bb7143c4dc', 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: var(--secondary);
+      color: var(--text);
+      font-size: 16px;
+    }
+    header {
+      background: var(--primary);
+      color: var(--text-light);
+      padding: 0 0 0 0;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      padding-left: 32px;
+    }
+    .header-logo img {
+      height: 48px;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+      padding-right: 32px;
+    }
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+    main {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 16px 48px 16px;
+      background: var(--secondary);
+    }
+    .login-container {
+      margin-top: 56px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 40px 32px 32px 32px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .login-container img {
+      width: 80px;
+      margin-bottom: 12px;
+    }
+    .login-container h2 {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px 10px;
+      border: 1px solid var(--gray);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      margin-bottom: 2px;
+      font-family: inherit;
+      background: #f9fafb;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+      border: 1.5px solid var(--primary);
+      outline: none;
+    }
+    select {
+      width: 100%;
+      padding: 12px 10px;
+      border: 1px solid var(--gray);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      background: #f9fafb;
+      margin-bottom: 2px;
+      font-family: inherit;
+      transition: border 0.2s;
+    }
+    select:focus {
+      border: 1.5px solid var(--primary);
+      outline: none;
+    }
+    .btn {
+      background: var(--primary);
+      color: var(--text-light);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 13px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(0,45,91,0.08);
+    }
+    .btn:hover {
+      background: #003c7a;
+    }
+    .login-links {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.98rem;
+    }
+    .login-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .login-links a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    .login-error {
+      color: #c00;
+      background: #fff0f0;
+      border-radius: var(--border-radius);
+      padding: 8px 0;
+      margin-bottom: 10px;
+      display: none;
+      font-size: 0.98rem;
+    }
+    @media (max-width: 600px) {
+      .login-container {
+        padding: 24px 8px 18px 8px;
+        margin-top: 32px;
+      }
+      .header-logo {
+        padding-left: 12px;
+      }
+      nav {
+        padding-right: 12px;
+      }
+    }
+    .fade-in {
+      animation: fadeIn 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
+      <span class="header-title">Plataforma Plurix</span>
+    </div>
+    <nav aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="login-fornecedor.html">Login Fornecedor</a>
+      <a href="login-interno.html" aria-current="page">Login Interno</a>
+    </nav>
+  </header>
+  <main class="fade-in">
+    <section class="login-container">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" width="80">
+      <h2>Acesso Interno</h2>
+      <form id="loginInternoForm" autocomplete="off" novalidate>
+        <div class="login-error" id="loginError">Usuário ou senha inválidos.</div>
+        <div class="form-group">
+          <label for="usuario">Usuário (e-mail corporativo)</label>
+          <input type="text" id="usuario" name="usuario" placeholder="Digite seu e-mail" required aria-required="true" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required aria-required="true" autocomplete="current-password">
+        </div>
+        <div class="form-group">
+          <label for="bandeira">Bandeira/Coligada</label>
+          <select id="bandeira" name="bandeira" required aria-required="true">
+            <option value="" disabled selected>Selecione a bandeira</option>
+            <option value="bandeira1">Bandeira 1</option>
+            <option value="bandeira2">Bandeira 2</option>
+            <option value="bandeira3">Bandeira 3</option>
+            <option value="bandeira4">Bandeira 4</option>
+            <option value="bandeira5">Bandeira 5</option>
+          </select>
+        </div>
+        <button type="submit" class="btn">Entrar com SSO/Azure AD</button>
+      </form>
+      <div class="login-links">
+        <a href="#" id="recuperarSenha">Esqueci minha senha</a>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+  <script>
+    // Transição suave ao navegar entre telas
+    document.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (link.getAttribute('href') && link.getAttribute('href').endsWith('.html')) {
+          e.preventDefault();
+          document.body.classList.remove('fade-in');
+          document.body.style.opacity = 1;
+          document.body.style.transition = 'opacity 0.3s';
+          document.body.style.opacity = 0;
+          setTimeout(function() {
+            window.location = link.getAttribute('href');
+          }, 300);
+        }
+      });
+    });
+    // Validação simples do formulário (exemplo)
+    document.getElementById('loginInternoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var usuario = document.getElementById('usuario').value.trim();
+      var senha = document.getElementById('senha').value.trim();
+      var bandeira = document.getElementById('bandeira').value;
+      var erro = document.getElementById('loginError');
+      if (!usuario || !senha || !bandeira) {
+        erro.textContent = 'Preencha todos os campos.';
+        erro.style.display = 'block';
+        return;
+      }
+      // Simulação de login
+      if (usuario === 'comprador@plurix.com' && senha === '123456' && bandeira) {
+        erro.style.display = 'none';
+        document.body.style.opacity = 1;
+        document.body.style.transition = 'opacity 0.3s';
+        document.body.style.opacity = 0;
+        setTimeout(function() {
+          window.location = 'index.html';
+        }, 300);
+      } else {
+        erro.textContent = 'Usuário ou senha inválidos.';
+        erro.style.display = 'block';
+      }
+    });
+    // Link de recuperação (exemplo)
+    document.getElementById('recuperarSenha').addEventListener('click', function(e) {
+      e.preventDefault();
+      alert('Recuperação de senha via SSO/Azure AD. Contate o suporte interno.');
+    });
+  </script>
+</body>
+</html>
