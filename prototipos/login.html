@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --color-primary: #003366;
+      --color-secondary: #00b8b0;
+      --color-accent: #f8b400;
+      --color-bg: #f5f7fa;
+      --color-white: #fff;
+      --color-dark: #222;
+      --font-main: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      --font-custom: 'wf_1973fffd9707483bb7143c4dc', Helvetica, Arial, sans-serif;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: var(--color-bg);
+      color: var(--color-dark);
+      font-size: 16px;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--color-primary);
+      color: var(--color-white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 72px;
+    }
+    .logo {
+      height: 48px;
+      width: auto;
+    }
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+    nav a {
+      color: var(--color-white);
+      text-decoration: none;
+      font-family: var(--font-custom);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: var(--color-accent);
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 56px auto 0 auto;
+      background: var(--color-white);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-container img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+    }
+    .login-title {
+      font-family: var(--font-custom);
+      font-size: 2rem;
+      color: var(--color-primary);
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .login-form label {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 4px;
+      font-family: var(--font-main);
+    }
+    .login-form input {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 1rem;
+      font-family: var(--font-main);
+      background: #f9fafb;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .login-form input:focus {
+      border-color: var(--color-secondary);
+    }
+    .login-btn {
+      background: var(--color-accent);
+      color: var(--color-dark);
+      border: none;
+      border-radius: 8px;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-family: var(--font-custom);
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .login-btn:hover {
+      background: var(--color-secondary);
+      color: var(--color-white);
+    }
+    .sso-btn {
+      background: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1rem;
+      font-family: var(--font-custom);
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .sso-btn:hover {
+      background: var(--color-secondary);
+    }
+    .login-error {
+      color: #d32f2f;
+      background: #fff3f3;
+      border: 1px solid #f8b4b4;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 0.98rem;
+      display: none;
+      width: 100%;
+      text-align: center;
+    }
+    footer {
+      background: var(--color-primary);
+      color: var(--color-white);
+      text-align: center;
+      font-size: 1rem;
+      padding: 24px 0 16px 0;
+      margin-top: 48px;
+      font-family: var(--font-main);
+    }
+    @media (max-width: 600px) {
+      .login-container {
+        padding: 24px 8px 18px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" aria-label="Página inicial">
+      <img class="logo" src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </a>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="fornecedor-upload.html">Upload Fornecedor</a>
+    </nav>
+  </header>
+  <main>
+    <div class="login-container">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <div class="login-title">Acesse o Portal</div>
+      <form class="login-form" id="loginForm" autocomplete="off" novalidate>
+        <div class="login-error" id="loginError">Preencha todos os campos corretamente.</div>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="Seu e-mail" required autocomplete="username" aria-label="E-mail">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" placeholder="Sua senha" required autocomplete="current-password" aria-label="Senha">
+        <button type="submit" class="login-btn">Entrar</button>
+      </form>
+      <button class="sso-btn" onclick="window.location.href='#'" aria-label="Entrar com SSO">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#fff"/><text x="50%" y="55%" text-anchor="middle" fill="#003366" font-size="11" font-family="Arial" dy=".3em">SSO</text></svg>
+        Entrar com SSO (AD/Azure)
+      </button>
+    </div>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value.trim();
+      var errorDiv = document.getElementById('loginError');
+      if (!email || !password) {
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = 'Preencha todos os campos corretamente.';
+        return false;
+      }
+      errorDiv.style.display = 'none';
+      // Simulação de login
+      window.location.href = 'fornecedor-upload.html';
+    });
+  </script>
+</body>
+</html>
