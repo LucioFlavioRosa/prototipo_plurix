@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componentes - Gráficos | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --color-primary: #004b8d;
+      --color-secondary: #f5a623;
+      --color-success: #2ecc40;
+      --color-error: #e74c3c;
+      --color-info: #3498db;
+      --color-warning: #f5a623;
+      --color-bg: #f5f7fa;
+      --color-white: #fff;
+      --font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    body {
+      font-family: var(--font-family);
+      background: var(--color-bg);
+      color: #222;
+      margin: 0;
+      padding: 32px;
+    }
+    h1 {
+      color: var(--color-primary);
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+    }
+    .chart-demo-section {
+      margin-bottom: 2.5em;
+    }
+    .chart-demo-label {
+      font-size: 1.1em;
+      color: #888;
+      margin-bottom: 0.4em;
+      font-weight: 500;
+    }
+    .chart-demo-bg {
+      background: var(--color-white);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 2em;
+      overflow-x: auto;
+    }
+    .chart-container {
+      width: 100%;
+      max-width: 540px;
+      min-width: 280px;
+      margin: 0 auto 2em auto;
+    }
+    @media (max-width: 700px) {
+      .chart-container { max-width: 100vw; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <h1>Componentes Reutilizáveis: Gráficos</h1>
+  <section class="chart-demo-section">
+    <div class="chart-demo-label">Gráfico de Linha</div>
+    <div class="chart-demo-bg">
+      <div class="chart-container">
+        <canvas id="lineChart" aria-label="Evolução de Preços" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+  <section class="chart-demo-section">
+    <div class="chart-demo-label">Gráfico de Barras</div>
+    <div class="chart-demo-bg">
+      <div class="chart-container">
+        <canvas id="barChart" aria-label="Comparativo de Fornecedores" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+  <section class="chart-demo-section">
+    <div class="chart-demo-label">Gráfico de Pizza</div>
+    <div class="chart-demo-bg">
+      <div class="chart-container">
+        <canvas id="pieChart" aria-label="Participação por Bandeira" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+  <section class="chart-demo-section">
+    <div class="chart-demo-label">Gráfico de Área</div>
+    <div class="chart-demo-bg">
+      <div class="chart-container">
+        <canvas id="areaChart" aria-label="Volume por UF" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+  <script>
+    // Paleta Plurix
+    const plurixPalette = [
+      '#004b8d', // primário
+      '#f5a623', // secundário
+      '#2ecc40', // sucesso
+      '#e74c3c', // erro
+      '#3498db', // info
+      '#f5f7fa', // cinza claro
+      '#888',    // cinza
+    ];
+    // Gráfico de Linha
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Preço Médio (R$)',
+          data: [12.3, 12.8, 13.1, 13.5, 13.2, 13.8, 14.1],
+          borderColor: plurixPalette[0],
+          backgroundColor: 'rgba(0,75,141,0.08)',
+          tension: 0.3,
+          fill: true,
+          pointBackgroundColor: plurixPalette[1],
+          pointBorderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: false }
+        }
+      }
+    });
+    // Gráfico de Barras
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Fornecedor A', 'Fornecedor B', 'Fornecedor C', 'Fornecedor D'],
+        datasets: [{
+          label: 'Variação (%)',
+          data: [5.2, 3.8, 7.1, 2.4],
+          backgroundColor: [plurixPalette[0], plurixPalette[1], plurixPalette[2], plurixPalette[3]],
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+    // Gráfico de Pizza
+    new Chart(document.getElementById('pieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Bandeira 1', 'Bandeira 2', 'Bandeira 3', 'Bandeira 4', 'Bandeira 5'],
+        datasets: [{
+          label: 'Participação (%)',
+          data: [22, 18, 27, 13, 20],
+          backgroundColor: [plurixPalette[0], plurixPalette[1], plurixPalette[2], plurixPalette[3], plurixPalette[4]],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: { enabled: true }
+        }
+      }
+    });
+    // Gráfico de Área (Stacked Area)
+    new Chart(document.getElementById('areaChart'), {
+      type: 'line',
+      data: {
+        labels: ['SP', 'RJ', 'MG', 'ES', 'PR'],
+        datasets: [
+          {
+            label: '2023',
+            data: [1200, 950, 800, 650, 700],
+            borderColor: plurixPalette[0],
+            backgroundColor: 'rgba(0,75,141,0.13)',
+            fill: true,
+            tension: 0.3,
+          },
+          {
+            label: '2024',
+            data: [1350, 1100, 900, 700, 800],
+            borderColor: plurixPalette[1],
+            backgroundColor: 'rgba(245,166,35,0.13)',
+            fill: true,
+            tension: 0.3,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
