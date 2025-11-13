@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componentes de Formulário | Plurix</title>
+  <style>
+    :root {
+      --primary: #0055b8;
+      --accent: #00b8a9;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --text: #222;
+      --text-light: #fff;
+      --border: #e0e0e0;
+      --radius: 6px;
+      --font: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      --bg: #f5f7fa;
+    }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 32px 0;
+    }
+    .form-container {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 32px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-weight: 500;
+      font-size: 1rem;
+      color: #222;
+    }
+    .form-input, .form-select, .form-textarea, .form-file {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-family: var(--font);
+      background: #f9fafb;
+      transition: border .2s, box-shadow .2s;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px #b7c9e2;
+    }
+    .form-input.error, .form-select.error, .form-textarea.error {
+      border-color: var(--danger);
+      background: #fff6f6;
+    }
+    .form-input:disabled, .form-select:disabled, .form-textarea:disabled {
+      background: #f0f0f0;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    .form-hint {
+      font-size: 0.92em;
+      color: #888;
+    }
+    .form-error {
+      color: var(--danger);
+      font-size: 0.95em;
+      margin-top: 2px;
+    }
+    .form-check-group {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .form-check input[type="checkbox"], .form-check input[type="radio"] {
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+    .form-file {
+      padding: 6px 0;
+      background: none;
+      border: none;
+    }
+    .form-btn {
+      padding: 10px 28px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      font-family: var(--font);
+      cursor: pointer;
+      background: var(--primary);
+      color: var(--text-light);
+      transition: background .2s;
+      margin-top: 10px;
+    }
+    .form-btn:disabled {
+      background: #b7c9e2;
+      cursor: not-allowed;
+    }
+    .form-btn.secondary {
+      background: #e0e0e0;
+      color: var(--text);
+    }
+    .form-btn.secondary:hover {
+      background: #c9d6e3;
+    }
+    .form-btn:hover:not(:disabled) {
+      background: #003a7d;
+    }
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="form-container">
+      <h2 style="margin-bottom:18px;">Componentes de Formulário Plurix</h2>
+      <form id="demoForm" novalidate autocomplete="off">
+        <div class="form-group">
+          <label for="produto">Produto *</label>
+          <input type="text" id="produto" name="produto" class="form-input" placeholder="Digite o nome do produto" required>
+          <div class="form-error" style="display:none;">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+          <label for="gtin">GTIN</label>
+          <input type="text" id="gtin" name="gtin" class="form-input" placeholder="Ex: 7891000055123">
+        </div>
+        <div class="form-group">
+          <label for="fornecedor">Fornecedor *</label>
+          <select id="fornecedor" name="fornecedor" class="form-select" required>
+            <option value="">Selecione</option>
+            <option value="Fornecedor A">Fornecedor A</option>
+            <option value="Fornecedor B">Fornecedor B</option>
+          </select>
+          <div class="form-error" style="display:none;">Selecione um fornecedor.</div>
+        </div>
+        <div class="form-group">
+          <label>UF de Vigência *</label>
+          <div class="form-check-group">
+            <label class="form-check"><input type="checkbox" name="uf" value="SP">SP</label>
+            <label class="form-check"><input type="checkbox" name="uf" value="RJ">RJ</label>
+            <label class="form-check"><input type="checkbox" name="uf" value="MG">MG</label>
+          </div>
+          <div class="form-error" style="display:none;">Selecione pelo menos uma UF.</div>
+        </div>
+        <div class="form-group">
+          <label>Tipo de Produto</label>
+          <div class="form-check-group">
+            <label class="form-check"><input type="radio" name="tipo" value="Comum" checked>Comum</label>
+            <label class="form-check"><input type="radio" name="tipo" value="Especial">Especial</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" name="descricao" class="form-textarea" rows="3" placeholder="Descreva o produto..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="arquivo">Upload de Tabela (Excel/CSV) *</label>
+          <input type="file" id="arquivo" name="arquivo" class="form-file" accept=".csv,.xls,.xlsx" required aria-label="Upload de arquivo">
+          <div class="form-error" style="display:none;">Selecione um arquivo válido.</div>
+        </div>
+        <button type="submit" class="form-btn">Enviar</button>
+        <button type="reset" class="form-btn secondary" style="margin-left:8px;">Limpar</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    // Validação visual
+    document.getElementById('demoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let ok = true;
+      // Produto
+      const produto = document.getElementById('produto');
+      if (!produto.value.trim()) {
+        produto.classList.add('error');
+        produto.nextElementSibling.style.display = 'block';
+        ok = false;
+      } else {
+        produto.classList.remove('error');
+        produto.nextElementSibling.style.display = 'none';
+      }
+      // Fornecedor
+      const fornecedor = document.getElementById('fornecedor');
+      if (!fornecedor.value) {
+        fornecedor.classList.add('error');
+        fornecedor.nextElementSibling.style.display = 'block';
+        ok = false;
+      } else {
+        fornecedor.classList.remove('error');
+        fornecedor.nextElementSibling.style.display = 'none';
+      }
+      // UF
+      const ufChecks = Array.from(document.querySelectorAll('input[name="uf"]'));
+      const ufGroup = ufChecks[0].closest('.form-group');
+      if (!ufChecks.some(cb=>cb.checked)) {
+        ufGroup.querySelector('.form-error').style.display = 'block';
+        ok = false;
+      } else {
+        ufGroup.querySelector('.form-error').style.display = 'none';
+      }
+      // Arquivo
+      const arquivo = document.getElementById('arquivo');
+      if (!arquivo.files.length) {
+        arquivo.classList.add('error');
+        arquivo.nextElementSibling.style.display = 'block';
+        ok = false;
+      } else {
+        arquivo.classList.remove('error');
+        arquivo.nextElementSibling.style.display = 'none';
+      }
+      if (ok) {
+        alert('Formulário enviado com sucesso! (Simulação)');
+        this.reset();
+      }
+    });
+    // Limpar erros ao resetar
+    document.getElementById('demoForm').addEventListener('reset', function() {
+      setTimeout(()=>{
+        document.querySelectorAll('.form-error').forEach(e=>e.style.display='none');
+        document.querySelectorAll('.error').forEach(e=>e.classList.remove('error'));
+      }, 50);
+    });
+  </script>
+</body>
+</html>
