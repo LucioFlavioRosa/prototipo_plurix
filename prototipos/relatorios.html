@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios e Exportações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f5f7;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 40px;
+    }
+    nav a {
+      color: #1a1a1a;
+      text-decoration: none;
+      margin: 0 16px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0097a7;
+      border-bottom: 2px solid #0097a7;
+      padding-bottom: 2px;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 32px 40px 40px 40px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0097a7;
+    }
+    .filters {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filters label {
+      font-weight: 500;
+      margin-right: 8px;
+    }
+    .filters select, .filters input[type="date"] {
+      padding: 6px 12px;
+      border: 1px solid #cfd8dc;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #fafbfc;
+      color: #222;
+    }
+    .export-btns {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .btn-export {
+      background: #0097a7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .btn-export:hover {
+      background: #007c91;
+    }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fafbfc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .preview-table th, .preview-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 0.97rem;
+    }
+    .preview-table th {
+      background: #e0f7fa;
+      color: #007c91;
+      font-weight: 700;
+    }
+    .preview-table tr:last-child td {
+      border-bottom: none;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      background: #e0f2f1;
+      color: #007c91;
+      margin-right: 4px;
+      font-weight: 600;
+    }
+    .status-up { color: #388e3c; font-weight: 700; }
+    .status-down { color: #d32f2f; font-weight: 700; }
+    .status-neutral { color: #616161; font-weight: 700; }
+    @media (max-width: 900px) {
+      main { padding: 20px 8px; }
+      .filters { flex-direction: column; gap: 12px; }
+    }
+    footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      padding: 24px 0 12px 0;
+      background: transparent;
+    }
+  </style>
+  <script>
+    function exportTable(format) {
+      alert('Exportação em ' + format + ' simulada. (Funcionalidade protótipo)');
+    }
+    function atualizarPreview() {
+      // Simulação de atualização dinâmica do preview
+      document.getElementById('preview-title').innerText =
+        document.getElementById('tipo-relatorio').value;
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"/>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html" class="active">Relatórios</a>
+      <a href="integracao-erps.html">Integração ERPs</a>
+      <a href="perfil-usuario.html">Perfil</a>
+      <a href="login.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Relatórios e Exportações</h1>
+    <form class="filters" oninput="atualizarPreview()">
+      <div>
+        <label for="tipo-relatorio">Tipo de Relatório:</label>
+        <select id="tipo-relatorio" name="tipo-relatorio">
+          <option value="Variação de Preços">Variação de Preços</option>
+          <option value="Impacto DRE">Impacto DRE</option>
+          <option value="Aprovações por Período">Aprovações por Período</option>
+          <option value="Performance de Fornecedores">Performance de Fornecedores</option>
+        </select>
+      </div>
+      <div>
+        <label for="periodo">Período:</label>
+        <input type="date" id="periodo-inicio" name="periodo-inicio"> a
+        <input type="date" id="periodo-fim" name="periodo-fim">
+      </div>
+      <div>
+        <label for="bandeira">Bandeira:</label>
+        <select id="bandeira" name="bandeira">
+          <option value="Todas">Todas</option>
+          <option value="Bandeira A">Bandeira A</option>
+          <option value="Bandeira B">Bandeira B</option>
+          <option value="Bandeira C">Bandeira C</option>
+        </select>
+      </div>
+      <div>
+        <label for="fornecedor">Fornecedor:</label>
+        <select id="fornecedor" name="fornecedor">
+          <option value="Todos">Todos</option>
+          <option value="Fornecedor 1">Fornecedor 1</option>
+          <option value="Fornecedor 2">Fornecedor 2</option>
+          <option value="Fornecedor 3">Fornecedor 3</option>
+        </select>
+      </div>
+    </form>
+    <div class="export-btns">
+      <button class="btn-export" onclick="exportTable('PDF')" aria-label="Exportar PDF">Exportar PDF</button>
+      <button class="btn-export" onclick="exportTable('Excel')" aria-label="Exportar Excel">Exportar Excel</button>
+      <button class="btn-export" onclick="exportTable('CSV')" aria-label="Exportar CSV">Exportar CSV</button>
+    </div>
+    <h2 id="preview-title" style="margin-top:24px; color:#007c91; font-size:1.2rem;">Variação de Preços</h2>
+    <div style="overflow-x:auto;">
+      <table class="preview-table" aria-label="Prévia do relatório">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+            <th>Preço Anterior</th>
+            <th>Preço Novo</th>
+            <th>Variação (%)</th>
+            <th>Status</th>
+            <th>Data Atualização</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>7891234567890</td>
+            <td>Arroz Tipo 1 5kg</td>
+            <td>Fornecedor 1</td>
+            <td>R$ 19,90</td>
+            <td>R$ 21,50</td>
+            <td><span class="status-up">+8,04%</span></td>
+            <td><span class="tag">Aprovado</span></td>
+            <td>2024-06-15</td>
+          </tr>
+          <tr>
+            <td>7899876543210</td>
+            <td>Óleo de Soja 900ml</td>
+            <td>Fornecedor 2</td>
+            <td>R$ 7,50</td>
+            <td>R$ 7,20</td>
+            <td><span class="status-down">-4,00%</span></td>
+            <td><span class="tag" style="background:#ffe0b2;color:#e65100;">Pendente</span></td>
+            <td>2024-06-16</td>
+          </tr>
+          <tr>
+            <td>7893216549870</td>
+            <td>Feijão Carioca 1kg</td>
+            <td>Fornecedor 3</td>
+            <td>R$ 8,90</td>
+            <td>R$ 8,90</td>
+            <td><span class="status-neutral">0,00%</span></td>
+            <td><span class="tag" style="background:#ffcdd2;color:#b71c1c;">Reprovado</span></td>
+            <td>2024-06-14</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
