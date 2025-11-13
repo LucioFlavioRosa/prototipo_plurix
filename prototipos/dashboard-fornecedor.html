@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-upload {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .cta-upload:hover {
+      background: #e1a12a;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    .card-table th, .card-table td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #f7f8fa;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 2px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.98rem;
+    }
+    .history-table th, .history-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .history-table th {
+      background: #f7f8fa;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../plurix.html';
+      }
+    }
+    function uploadCTA() {
+      window.location.href = 'upload-tabela.html';
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
+      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
+      <a href="#" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Fornecedor</h1>
+      <button class="cta-upload" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
+    </header>
+    <main class="dashboard-section">
+      <section class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">Tabelas Submetidas Recentes</div>
+          <table class="card-table" aria-label="Tabelas Submetidas">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Arquivo</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10/06/2024</td>
+                <td>precos_junho.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>02/06/2024</td>
+                <td>precos_maio.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>15/05/2024</td>
+                <td>precos_abril.xlsx</td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">Resumo de Submissões</div>
+          <table class="card-table" aria-label="Resumo de Submissões">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Quantidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="historico">
+        <div class="card">
+          <div class="card-title">Histórico de Submissões</div>
+          <table class="history-table" aria-label="Histórico de Submissões">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Arquivo</th>
+                <th>Status</th>
+                <th>Coligada/UF</th>
+                <th>Enviado por</th>
+                <th>Detalhes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10/06/2024</td>
+                <td>precos_junho.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td>SuperSul / SC</td>
+                <td>fornecedor@exemplo.com</td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>02/06/2024</td>
+                <td>precos_maio.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>SuperSul / PR</td>
+                <td>fornecedor@exemplo.com</td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>15/05/2024</td>
+                <td>precos_abril.xlsx</td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>SuperSul / RS</td>
+                <td>fornecedor@exemplo.com</td>
+                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
