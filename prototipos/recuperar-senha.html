@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recuperar Senha | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f7f7; }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+    }
+    .header-logo {
+      height: 38px;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .header-link {
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.2s;
+    }
+    .header-link.active, .header-link:hover {
+      color: #0071e3;
+    }
+    .container {
+      max-width: 400px;
+      margin: 48px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 32px 24px 24px 24px;
+    }
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafbfc;
+      font-size: 1rem;
+      color: #222;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .form-input:focus {
+      border: 1.5px solid #0071e3;
+    }
+    .btn-primary {
+      width: 100%;
+      background: #0071e3;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 0;
+      font-size: 1.08rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #005bb5;
+    }
+    .mensagem {
+      background: #f1f6ff;
+      color: #0071e3;
+      border-radius: 6px;
+      padding: 14px 12px;
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: 1.08rem;
+      font-weight: 500;
+    }
+    .link-voltar {
+      display: block;
+      margin-top: 18px;
+      text-align: center;
+      color: #0071e3;
+      text-decoration: none;
+      font-size: 1.01rem;
+      font-weight: 500;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 12px 2vw; }
+      .header { flex-direction: column; height: auto; padding: 8px 0; gap: 12px; }
+      .header-nav { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo">
+    <nav class="header-nav">
+      <a href="dashboard.html" class="header-link">Dashboard</a>
+      <a href="historico-tabelas.html" class="header-link">Histórico</a>
+      <a href="notificacoes.html" class="header-link">Notificações</a>
+      <a href="perfil.html" class="header-link">Perfil</a>
+      <a href="logout.html" class="header-link">Sair</a>
+    </nav>
+  </header>
+  <main class="container" id="mainContainer">
+    <div class="title">Recuperar Senha</div>
+    <form id="formSolicitacao" autocomplete="off" aria-label="Solicitação de recuperação de senha">
+      <div class="form-group">
+        <label class="form-label" for="emailCnpj">E-mail ou CNPJ cadastrado</label>
+        <input type="text" class="form-input" id="emailCnpj" name="emailCnpj" required placeholder="Digite seu e-mail ou CNPJ" autocomplete="username">
+      </div>
+      <button type="submit" class="btn-primary">Enviar link de recuperação</button>
+    </form>
+    <form id="formRedefinir" style="display:none;" autocomplete="off" aria-label="Redefinir senha">
+      <div class="form-group">
+        <label class="form-label" for="token">Código de verificação</label>
+        <input type="text" class="form-input" id="token" name="token" required placeholder="Informe o código recebido">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="novaSenha">Nova senha</label>
+        <input type="password" class="form-input" id="novaSenha" name="novaSenha" required minlength="6" placeholder="Nova senha" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="confirmaSenha">Confirmar nova senha</label>
+        <input type="password" class="form-input" id="confirmaSenha" name="confirmaSenha" required minlength="6" placeholder="Confirme a nova senha" autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn-primary">Redefinir senha</button>
+    </form>
+    <div id="mensagem" class="mensagem" style="display:none;"></div>
+    <a href="login.html" class="link-voltar">Voltar para login</a>
+  </main>
+  <script>
+    // Fluxo de recuperação de senha mockado
+    const formSolicitacao = document.getElementById('formSolicitacao');
+    const formRedefinir = document.getElementById('formRedefinir');
+    const mensagem = document.getElementById('mensagem');
+    formSolicitacao.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const valor = document.getElementById('emailCnpj').value.trim();
+      if (!valor) {
+        mensagem.innerText = 'Por favor, informe seu e-mail ou CNPJ.';
+        mensagem.style.display = 'block';
+        return;
+      }
+      mensagem.innerText = 'Enviamos um link de recuperação para o e-mail cadastrado.';
+      mensagem.style.display = 'block';
+      formSolicitacao.style.display = 'none';
+      setTimeout(() => {
+        mensagem.innerText = '';
+        mensagem.style.display = 'none';
+        formRedefinir.style.display = 'block';
+      }, 2000);
+    });
+    formRedefinir.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const token = document.getElementById('token').value.trim();
+      const senha = document.getElementById('novaSenha').value;
+      const confirma = document.getElementById('confirmaSenha').value;
+      if (!token || !senha || !confirma) {
+        mensagem.innerText = 'Preencha todos os campos.';
+        mensagem.style.display = 'block';
+        return;
+      }
+      if (senha.length < 6) {
+        mensagem.innerText = 'A senha deve ter pelo menos 6 caracteres.';
+        mensagem.style.display = 'block';
+        return;
+      }
+      if (senha !== confirma) {
+        mensagem.innerText = 'As senhas não coincidem.';
+        mensagem.style.display = 'block';
+        return;
+      }
+      mensagem.innerText = 'Senha redefinida com sucesso! Você já pode acessar a plataforma.';
+      mensagem.style.display = 'block';
+      formRedefinir.style.display = 'none';
+      setTimeout(() => { window.location.href = 'login.html'; }, 2200);
+    });
+  </script>
+</body>
+</html>
