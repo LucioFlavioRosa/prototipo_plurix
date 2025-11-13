@@ -1,0 +1,217 @@
+/* responsive.css - Responsividade total para o protótipo Plurix */
+
+/* Reset básico para garantir consistência */
+html, body {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Layout base */
+.container, .main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.header, .main-header, .main-footer {
+  width: 100%;
+  min-width: 0;
+  padding: 0 16px;
+}
+
+.grid, .dashboard-grid, .grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.upload-dropzone {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.2rem;
+}
+
+/* Tabelas responsivas */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+th, td {
+  padding: 10px 8px;
+  text-align: left;
+}
+
+/* Botões e formulários */
+.btn-primary, .btn-aprovar, .btn-reprovar {
+  min-width: 120px;
+  font-size: 1rem;
+  padding: 10px 18px;
+}
+.input-justificativa {
+  width: 100%;
+  max-width: 340px;
+  font-size: 1rem;
+  padding: 8px 10px;
+}
+
+/* Timeline workflow */
+.workflow-timeline {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+.timeline-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.96rem;
+  margin-bottom: 8px;
+  border-left: 4px solid #e0e0e0;
+  padding-left: 10px;
+}
+.timeline-step.aprovado {
+  border-color: #1db954;
+  color: #1db954;
+}
+.timeline-step.reprovado {
+  border-color: #e53935;
+  color: #e53935;
+}
+.timeline-status {
+  font-size: 1.2em;
+}
+.timeline-user {
+  font-weight: 600;
+}
+.timeline-date {
+  color: #888;
+  font-size: 0.92em;
+}
+.timeline-obs {
+  color: #444;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+/* Feedback visual */
+.upload-feedback, .workflow-feedback {
+  margin-top: 10px;
+  font-size: 1rem;
+  transition: opacity 0.3s;
+}
+.upload-feedback.success, .workflow-feedback.success {
+  color: #1db954;
+}
+.upload-feedback.error, .workflow-feedback.error {
+  color: #e53935;
+}
+
+/* Barra de progresso upload */
+.upload-progress {
+  width: 100%;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.upload-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #1db954 60%, #8ce99a 100%);
+  transition: width 0.4s;
+}
+
+/* Media Queries */
+@media (max-width: 1366px) {
+  .container, .main-content {
+    max-width: 1000px;
+    padding: 24px 12px;
+  }
+  .grid, .dashboard-grid, .grid-cards {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container, .main-content {
+    max-width: 800px;
+    padding: 18px 6px;
+  }
+  .grid, .dashboard-grid, .grid-cards {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .main-header, .main-footer {
+    padding: 0 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container, .main-content {
+    max-width: 98vw;
+    padding: 10px 2vw;
+  }
+  .header, .main-header, .main-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 2vw;
+  }
+  .grid, .dashboard-grid, .grid-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .upload-dropzone {
+    font-size: 1rem;
+    min-height: 100px;
+  }
+  table, th, td {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container, .main-content {
+    padding: 4px 1vw;
+  }
+  .header, .main-header, .main-footer {
+    padding: 0 1vw;
+  }
+  .btn-primary, .btn-aprovar, .btn-reprovar {
+    min-width: 90px;
+    font-size: 0.92rem;
+    padding: 8px 8px;
+  }
+  .input-justificativa {
+    font-size: 0.93rem;
+    padding: 6px 6px;
+  }
+  .timeline-step {
+    font-size: 0.88rem;
+    padding-left: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .container, .main-content {
+    padding: 2px 0.5vw;
+  }
+  .upload-dropzone {
+    font-size: 0.89rem;
+    min-height: 70px;
+  }
+}
