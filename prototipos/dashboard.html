@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | Plurix Plataforma</title>
+  <link rel="icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --secondary: #00bcd4;
+      --bg: #f5f7fa;
+      --menu-bg: #fff;
+      --menu-active: #e3f2fd;
+      --menu-hover: #e1f5fe;
+      --text: #1d2b36;
+      --border: #cfd8dc;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); }
+    body { min-height: 100vh; }
+    .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; z-index: 100; background: #fff; color: #1976d2; padding: 8px 16px; border-radius: 4px; }
+    .skip-link:focus { left: 16px; top: 16px; width: auto; height: auto; font-size: 1rem; }
+    .layout { display: flex; min-height: 100vh; }
+    nav.sidebar { width: 240px; background: var(--menu-bg); box-shadow: 2px 0 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; padding: 1.5rem 0.5rem; }
+    nav.sidebar .logo { width: 120px; margin: 0 auto 2rem auto; display: block; }
+    nav.sidebar ul { list-style: none; padding: 0; margin: 0; }
+    nav.sidebar li { margin-bottom: 0.5rem; }
+    nav.sidebar a { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--text); padding: 0.75rem 1rem; border-radius: 8px; font-weight: 500; transition: background 0.2s; outline: none; }
+    nav.sidebar a.active, nav.sidebar a:focus { background: var(--menu-active); color: var(--primary); font-weight: 700; }
+    nav.sidebar a:hover { background: var(--menu-hover); }
+    nav.sidebar .logout { margin-top: auto; color: #d32f2f; }
+    main.content { flex: 1; padding: 2rem 2.5rem; min-width: 0; }
+    header.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .breadcrumbs { font-size: 0.97rem; color: #607d8b; display: flex; align-items: center; gap: 0.5rem; }
+    .breadcrumbs a { color: #1976d2; text-decoration: none; }
+    .breadcrumbs a:focus { outline: 2px solid #1976d2; }
+    .user-info { display: flex; align-items: center; gap: 0.6rem; }
+    .user-info img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #00bcd4; }
+    .user-info span { font-size: 1rem; color: var(--text); }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+    .card { background: #fff; border-radius: 12px; box-shadow: var(--shadow); padding: 1.2rem 1.2rem 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+    .card-title { font-size: 1.1rem; color: var(--primary); font-weight: 600; }
+    .card-value { font-size: 1.6rem; font-weight: bold; color: var(--text); }
+    .card-desc { font-size: 0.97rem; color: #607d8b; }
+    .actions { display: flex; gap: 1rem; margin-bottom: 2rem; }
+    .btn-primary, .btn-secondary { border: none; border-radius: 8px; padding: 0.7rem 1.2rem; font-size: 1rem; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+    .btn-primary { background: linear-gradient(90deg, #1976d2 0%, #00bcd4 100%); color: #fff; }
+    .btn-primary:focus { outline: 2px solid #1976d2; }
+    .btn-secondary { background: #fff; color: #1976d2; border: 1px solid #1976d2; }
+    .btn-secondary:focus { outline: 2px solid #1976d2; }
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      nav.sidebar { width: 100%; flex-direction: row; padding: 0.5rem; box-shadow: none; border-bottom: 1px solid var(--border); }
+      nav.sidebar ul { display: flex; flex-direction: row; gap: 0.5rem; width: 100%; justify-content: center; }
+      nav.sidebar li { margin-bottom: 0; }
+      nav.sidebar .logout { margin-top: 0; }
+      main.content { padding: 1rem 0.5rem; }
+    }
+    @media (max-width: 600px) {
+      .dashboard-cards { grid-template-columns: 1fr; }
+      header.topbar { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+    }
+  </style>
+  <script>
+    // Navegação ativa
+    document.addEventListener('DOMContentLoaded', function() {
+      var links = document.querySelectorAll('nav.sidebar a');
+      links.forEach(function(link) {
+        if (link.href && link.href.split('/').pop() === location.pathname.split('/').pop()) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Menu principal">
+      <a href="dashboard.html"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"></a>
+      <ul>
+        <li><a href="dashboard.html" aria-current="page" tabindex="0">Dashboard</a></li>
+        <li><a href="upload.html" tabindex="0">Upload Tabela</a></li>
+        <li><a href="aprovacoes.html" tabindex="0">Aprovações</a></li>
+        <li><a href="analise.html" tabindex="0">Análise Comercial</a></li>
+        <li><a href="fornecedores.html" tabindex="0">Fornecedores</a></li>
+        <li><a href="usuarios.html" tabindex="0">Usuários</a></li>
+      </ul>
+      <a href="login.html" class="logout" tabindex="0" aria-label="Sair da plataforma">Sair</a>
+    </nav>
+    <main class="content" id="main-content" tabindex="-1">
+      <header class="topbar">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="dashboard.html">Início</a>
+          <span aria-hidden="true">›</span>
+          <span>Dashboard</span>
+        </nav>
+        <div class="user-info">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar do usuário">
+          <span>João Gerente</span>
+        </div>
+      </header>
+      <h1>Visão Geral</h1>
+      <div class="dashboard-cards" aria-label="Indicadores principais">
+        <div class="card" tabindex="0" aria-label="Tabelas aguardando aprovação">
+          <span class="card-title">Tabelas aguardando aprovação</span>
+          <span class="card-value">12</span>
+          <span class="card-desc">Últimas 24h</span>
+        </div>
+        <div class="card" tabindex="0" aria-label="Tabelas aprovadas">
+          <span class="card-title">Tabelas aprovadas</span>
+          <span class="card-value">8</span>
+          <span class="card-desc">Esta semana</span>
+        </div>
+        <div class="card" tabindex="0" aria-label="Tabelas reprovadas">
+          <span class="card-title">Tabelas reprovadas</span>
+          <span class="card-value">2</span>
+          <span class="card-desc">Esta semana</span>
+        </div>
+        <div class="card" tabindex="0" aria-label="Tempo médio de aprovação">
+          <span class="card-title">Tempo médio de aprovação</span>
+          <span class="card-value">3h 12min</span>
+          <span class="card-desc">Últimos 7 dias</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="upload.html" class="btn-primary" aria-label="Nova submissão de tabela">Nova Submissão</a>
+        <a href="analise.html" class="btn-secondary" aria-label="Ver análise comercial">Ver Análise</a>
+      </div>
+      <section aria-labelledby="tabelas-recentes">
+        <h2 id="tabelas-recentes" style="font-size:1.2rem; margin-bottom:0.8rem;">Tabelas Recentes</h2>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; box-shadow: var(--shadow);">
+            <thead style="background:#e3f2fd;">
+              <tr>
+                <th scope="col">Fornecedor</th>
+                <th scope="col">Data Submissão</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SuperAlimentos S/A</td>
+                <td>10/06/2024 09:12</td>
+                <td><span style="color:#1976d2;font-weight:600;">Aguardando</span></td>
+                <td><a href="aprovacoes.html" aria-label="Ver aprovação" style="color:#1976d2;text-decoration:underline;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>Distribuidora Brasil</td>
+                <td>09/06/2024 15:40</td>
+                <td><span style="color:#43a047;font-weight:600;">Aprovada</span></td>
+                <td><a href="analise.html" aria-label="Ver análise" style="color:#1976d2;text-decoration:underline;">Analisar</a></td>
+              </tr>
+              <tr>
+                <td>Alfa Foods</td>
+                <td>09/06/2024 12:22</td>
+                <td><span style="color:#d32f2f;font-weight:600;">Reprovada</span></td>
+                <td><a href="aprovacoes.html" aria-label="Ver justificativa" style="color:#1976d2;text-decoration:underline;">Justificativa</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
