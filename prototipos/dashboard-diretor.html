@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Executivo - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --primary: #1b2e59;
+      --secondary: #f7b731;
+      --bg: #f5f6fa;
+      --white: #fff;
+      --gray: #e4e7ed;
+      --text: #222;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --info: #2980b9;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--bg); font-family: var(--font-main); font-size: 16px; color: var(--text); height: 100%; min-height: 100vh;
+    }
+    header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      box-shadow: 0 2px 8px rgba(27,46,89,0.08);
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    nav {
+      display: flex; gap: 32px;
+    }
+    nav a {
+      color: var(--white); text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid var(--secondary);
+    }
+    main {
+      max-width: 1280px; margin: 32px auto; padding: 0 24px;
+    }
+    .dashboard-title {
+      font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: var(--primary);
+    }
+    .dashboard-subtitle {
+      font-size: 1.1rem; color: #555; margin-bottom: 32px;
+    }
+    .dashboard-filters {
+      display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .dashboard-filters select, .dashboard-filters input[type="date"] {
+      padding: 8px 12px; border: 1px solid var(--gray); border-radius: 6px; background: var(--white); font-size: 1rem;
+    }
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 32px;
+    }
+    .card {
+      background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(27,46,89,0.07); padding: 24px 20px; display: flex; flex-direction: column; align-items: flex-start; min-height: 120px;
+    }
+    .card .card-title {
+      font-size: 1.05rem; color: #555; margin-bottom: 6px;
+    }
+    .card .card-value {
+      font-size: 2.1rem; font-weight: 700; color: var(--primary);
+    }
+    .card .card-trend {
+      font-size: 1rem; margin-top: 4px;
+    }
+    .card .trend-up { color: var(--success); }
+    .card .trend-down { color: var(--danger); }
+    .dashboard-section {
+      background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(27,46,89,0.06); padding: 28px 24px; margin-bottom: 32px;
+    }
+    .dashboard-section h3 {
+      margin-top: 0; color: var(--primary); font-size: 1.2rem; font-weight: 600;
+    }
+    .dashboard-table {
+      width: 100%; border-collapse: collapse; margin-top: 16px;
+    }
+    .dashboard-table th, .dashboard-table td {
+      padding: 10px 12px; border-bottom: 1px solid var(--gray); text-align: left; font-size: 1rem;
+    }
+    .dashboard-table th {
+      background: #f0f2f7; color: #444; font-weight: 600;
+    }
+    .dashboard-table tr:last-child td {
+      border-bottom: none;
+    }
+    .chart-container {
+      width: 100%; max-width: 600px; margin: 0 auto 24px auto; background: #fafbfc; border-radius: 12px; padding: 18px 16px;
+    }
+    .footer {
+      text-align: center; color: #888; font-size: 0.98rem; margin: 48px 0 12px 0;
+    }
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      main { padding: 0 8px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gráfico de variação média de preços
+      const ctx = document.getElementById('chart-variacao').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago'],
+          datasets: [{
+            label: 'Variação Média (%)',
+            data: [2.1, 2.6, 1.9, 3.2, 2.8, 2.4, 3.1, 2.7],
+            borderColor: '#1b2e59',
+            backgroundColor: 'rgba(27,46,89,0.08)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span style="font-size:1.35rem;font-weight:700;letter-spacing:0.5px;">Plurix Plataforma</span>
+    </div>
+    <nav>
+      <a href="dashboard-diretor.html" class="active">Dashboard Executivo</a>
+      <a href="gestao-fornecedores.html">Gestão de Fornecedores</a>
+      <a href="cadastro-fornecedor.html">Novo Fornecedor</a>
+      <a href="#" style="color:#f7b731;font-weight:700;">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="dashboard-title">Dashboard Executivo</div>
+    <div class="dashboard-subtitle">Visão consolidada de aprovações, indicadores financeiros e performance dos fornecedores</div>
+    <form class="dashboard-filters" aria-label="Filtros do Dashboard">
+      <label>
+        Período:
+        <input type="date" value="2024-06-01">
+      </label>
+      <label>
+        Bandeira:
+        <select>
+          <option value="">Todas</option>
+          <option>SuperMaxi</option>
+          <option>BomPreço</option>
+          <option>UltraMais</option>
+          <option>Mercadão</option>
+          <option>Popular</option>
+        </select>
+      </label>
+      <label>
+        Status:
+        <select>
+          <option value="">Todos</option>
+          <option>Pendentes</option>
+          <option>Aprovados</option>
+          <option>Reprovados</option>
+        </select>
+      </label>
+    </form>
+    <section class="cards-grid">
+      <div class="card">
+        <div class="card-title">Aprovações Pendentes</div>
+        <div class="card-value">18</div>
+        <div class="card-trend trend-up">+3 desde ontem</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Impacto Financeiro Agregado</div>
+        <div class="card-value">R$ 2.450.000</div>
+        <div class="card-trend trend-down">-2,1% vs mês anterior</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Variação Média de Preços</div>
+        <div class="card-value">2,7%</div>
+        <div class="card-trend trend-up">+0,3pp</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Top Fornecedor (Impacto)</div>
+        <div class="card-value">Alfa Distribuidora</div>
+        <div class="card-trend trend-up">R$ 780.000</div>
+      </div>
+    </section>
+    <section class="dashboard-section">
+      <h3>Gráfico de Variação Média de Preços</h3>
+      <div class="chart-container">
+        <canvas id="chart-variacao" height="120" aria-label="Gráfico de variação média de preços"></canvas>
+      </div>
+    </section>
+    <section class="dashboard-section">
+      <h3>Aprovações Pendentes por Bandeira</h3>
+      <table class="dashboard-table" aria-label="Aprovações Pendentes por Bandeira">
+        <thead>
+          <tr>
+            <th>Bandeira</th>
+            <th>Qtd. Pendentes</th>
+            <th>Impacto Financeiro</th>
+            <th>Última Atualização</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SuperMaxi</td><td>6</td><td>R$ 980.000</td><td>04/06/2024 10:12</td></tr>
+          <tr><td>BomPreço</td><td>4</td><td>R$ 520.000</td><td>04/06/2024 09:41</td></tr>
+          <tr><td>UltraMais</td><td>3</td><td>R$ 390.000</td><td>04/06/2024 11:05</td></tr>
+          <tr><td>Mercadão</td><td>3</td><td>R$ 340.000</td><td>04/06/2024 08:59</td></tr>
+          <tr><td>Popular</td><td>2</td><td>R$ 220.000</td><td>04/06/2024 07:44</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="dashboard-section">
+      <h3>Top 5 Fornecedores com Maior Impacto</h3>
+      <table class="dashboard-table" aria-label="Top Fornecedores Impacto">
+        <thead>
+          <tr><th>Fornecedor</th><th>Impacto Financeiro</th><th>Variação (%)</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Alfa Distribuidora</td><td>R$ 780.000</td><td class="trend-up">+3,1%</td><td><span style="color:#f7b731;font-weight:600;">Pendente</span></td></tr>
+          <tr><td>Beta Alimentos</td><td>R$ 510.000</td><td class="trend-down">-1,2%</td><td><span style="color:#27ae60;">Aprovado</span></td></tr>
+          <tr><td>Gamma Bebidas</td><td>R$ 420.000</td><td class="trend-up">+2,4%</td><td><span style="color:#f7b731;font-weight:600;">Pendente</span></td></tr>
+          <tr><td>Delta Laticínios</td><td>R$ 320.000</td><td class="trend-up">+0,8%</td><td><span style="color:#e74c3c;">Reprovado</span></td></tr>
+          <tr><td>Epsilon Produtos</td><td>R$ 220.000</td><td class="trend-down">-0,4%</td><td><span style="color:#27ae60;">Aprovado</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <div class="footer">&copy; 2024 Plurix. Todos os direitos reservados.</div>
+</body>
+</html>
