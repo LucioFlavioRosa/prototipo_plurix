@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Tabela Reutilizável - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 32px;
+      color: #222;
+    }
+    .tabela-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 24px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .tabela-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .tabela-toolbar input[type="search"] {
+      border: 1px solid #d3d6db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 1rem;
+      min-width: 200px;
+      background: #fafbfc;
+      transition: border 0.2s;
+    }
+    .tabela-toolbar input[type="search"]:focus {
+      border-color: #0073e6;
+      outline: none;
+    }
+    .tabela-toolbar select {
+      border: 1px solid #d3d6db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 1rem;
+      background: #fafbfc;
+    }
+    .tabela-toolbar label {
+      font-size: 0.98rem;
+      color: #444;
+      margin-right: 4px;
+    }
+    table.tabela-plurix {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      font-size: 1rem;
+      min-width: 800px;
+    }
+    table.tabela-plurix th, table.tabela-plurix td {
+      padding: 12px 16px;
+      text-align: left;
+    }
+    table.tabela-plurix th {
+      background: #f0f4f8;
+      color: #222;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 2px solid #e0e4e8;
+      position: relative;
+    }
+    table.tabela-plurix th.sortable:after {
+      content: '\25B2';
+      font-size: 0.8em;
+      margin-left: 6px;
+      color: #bbb;
+      opacity: 0.7;
+      transition: transform 0.2s;
+    }
+    table.tabela-plurix th.sorted-asc:after {
+      content: '\25B2';
+      color: #0073e6;
+      opacity: 1;
+    }
+    table.tabela-plurix th.sorted-desc:after {
+      content: '\25BC';
+      color: #0073e6;
+      opacity: 1;
+    }
+    table.tabela-plurix tr {
+      transition: background 0.15s;
+    }
+    table.tabela-plurix tr.selected {
+      background: #e6f1fd;
+    }
+    table.tabela-plurix tr:hover {
+      background: #f8fafc;
+    }
+    table.tabela-plurix td {
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+    }
+    table.tabela-plurix td.acao {
+      text-align: right;
+      min-width: 120px;
+    }
+    .tabela-acoes button {
+      background: #0073e6;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      margin-left: 4px;
+      font-size: 0.96em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tabela-acoes button:hover {
+      background: #005bb5;
+    }
+    .tabela-paginacao {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: 0.98rem;
+    }
+    .tabela-paginacao button {
+      background: #f0f4f8;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      color: #0073e6;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tabela-paginacao button:disabled {
+      color: #aaa;
+      background: #f8f8f8;
+      cursor: not-allowed;
+    }
+    @media (max-width: 900px) {
+      .tabela-container {
+        padding: 8px;
+      }
+      table.tabela-plurix {
+        min-width: 600px;
+        font-size: 0.98em;
+      }
+    }
+    @media (max-width: 600px) {
+      .tabela-container {
+        padding: 2px;
+      }
+      table.tabela-plurix {
+        min-width: 500px;
+        font-size: 0.95em;
+      }
+      .tabela-toolbar {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="tabela-container">
+    <div class="tabela-toolbar">
+      <label for="busca">Buscar:</label>
+      <input type="search" id="busca" placeholder="Buscar por produto, SKU, fornecedor..." aria-label="Buscar na tabela">
+      <label for="filtroFornecedor">Fornecedor:</label>
+      <select id="filtroFornecedor">
+        <option value="">Todos</option>
+        <option value="Alfa">Alfa</option>
+        <option value="Beta">Beta</option>
+        <option value="Gamma">Gamma</option>
+      </select>
+      <label for="filtroUF">UF:</label>
+      <select id="filtroUF">
+        <option value="">Todas</option>
+        <option value="SP">SP</option>
+        <option value="RJ">RJ</option>
+        <option value="MG">MG</option>
+      </select>
+    </div>
+    <table class="tabela-plurix" aria-label="Tabela de Preços">
+      <thead>
+        <tr>
+          <th style="width:40px;"><input type="checkbox" id="selecionarTodos" aria-label="Selecionar todos"></th>
+          <th class="sortable" data-col="sku">SKU</th>
+          <th class="sortable" data-col="produto">Produto</th>
+          <th class="sortable" data-col="fornecedor">Fornecedor</th>
+          <th class="sortable" data-col="uf">UF</th>
+          <th class="sortable" data-col="preco_antigo">Preço Antigo</th>
+          <th class="sortable" data-col="preco_novo">Preço Novo</th>
+          <th class="sortable" data-col="variacao">Variação (%)</th>
+          <th class="acao">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaCorpo">
+        <!-- Linhas geradas por JS -->
+      </tbody>
+    </table>
+    <div class="tabela-paginacao" id="tabelaPaginacao">
+      <!-- Paginação JS -->
+    </div>
+  </div>
+  <script>
+    // Dados de exemplo
+    const dados = [
+      { sku: '10001', produto: 'Arroz Branco 5kg', fornecedor: 'Alfa', uf: 'SP', preco_antigo: 19.90, preco_novo: 21.50 },
+      { sku: '10002', produto: 'Feijão Carioca 1kg', fornecedor: 'Beta', uf: 'RJ', preco_antigo: 7.50, preco_novo: 7.80 },
+      { sku: '10003', produto: 'Óleo de Soja 900ml', fornecedor: 'Gamma', uf: 'MG', preco_antigo: 8.20, preco_novo: 8.10 },
+      { sku: '10004', produto: 'Açúcar Refinado 1kg', fornecedor: 'Alfa', uf: 'SP', preco_antigo: 4.50, preco_novo: 4.90 },
+      { sku: '10005', produto: 'Café Torrado 500g', fornecedor: 'Beta', uf: 'RJ', preco_antigo: 12.00, preco_novo: 13.20 },
+      { sku: '10006', produto: 'Leite Integral 1L', fornecedor: 'Gamma', uf: 'MG', preco_antigo: 5.80, preco_novo: 6.10 },
+      { sku: '10007', produto: 'Macarrão Espaguete 500g', fornecedor: 'Alfa', uf: 'SP', preco_antigo: 3.90, preco_novo: 4.10 },
+      { sku: '10008', produto: 'Farinha de Trigo 1kg', fornecedor: 'Beta', uf: 'RJ', preco_antigo: 6.20, preco_novo: 6.50 },
+      { sku: '10009', produto: 'Sal Refinado 1kg', fornecedor: 'Gamma', uf: 'MG', preco_antigo: 2.50, preco_novo: 2.60 },
+      { sku: '10010', produto: 'Margarina 500g', fornecedor: 'Alfa', uf: 'SP', preco_antigo: 7.80, preco_novo: 8.20 },
+      // ... mais exemplos
+    ];
+    let estado = {
+      busca: '',
+      filtroFornecedor: '',
+      filtroUF: '',
+      pagina: 1,
+      porPagina: 5,
+      ordem: { col: 'sku', dir: 'asc' },
+      selecionados: new Set()
+    };
+    function filtrarOrdenar() {
+      let filtrados = dados.filter(l => {
+        let busca = estado.busca.trim().toLowerCase();
+        let ok = true;
+        if (busca) {
+          ok = (
+            l.sku.toLowerCase().includes(busca) ||
+            l.produto.toLowerCase().includes(busca) ||
+            l.fornecedor.toLowerCase().includes(busca)
+          );
+        }
+        if (estado.filtroFornecedor && l.fornecedor !== estado.filtroFornecedor) ok = false;
+        if (estado.filtroUF && l.uf !== estado.filtroUF) ok = false;
+        return ok;
+      });
+      let { col, dir } = estado.ordem;
+      filtrados.sort((a, b) => {
+        let va = a[col], vb = b[col];
+        if (typeof va === 'string') va = va.toLowerCase();
+        if (typeof vb === 'string') vb = vb.toLowerCase();
+        if (va < vb) return dir === 'asc' ? -1 : 1;
+        if (va > vb) return dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+      return filtrados;
+    }
+    function renderTabela() {
+      let linhas = filtrarOrdenar();
+      let inicio = (estado.pagina - 1) * estado.porPagina;
+      let fim = inicio + estado.porPagina;
+      let paginados = linhas.slice(inicio, fim);
+      let corpo = paginados.map(l => {
+        let variacao = ((l.preco_novo - l.preco_antigo) / l.preco_antigo * 100).toFixed(2);
+        let selecionado = estado.selecionados.has(l.sku);
+        return `<tr${selecionado ? ' class="selected"' : ''}>
+          <td><input type="checkbox" class="linha-checkbox" data-sku="${l.sku}" ${selecionado ? 'checked' : ''} aria-label="Selecionar linha"></td>
+          <td>${l.sku}</td>
+          <td>${l.produto}</td>
+          <td>${l.fornecedor}</td>
+          <td>${l.uf}</td>
+          <td>R$ ${l.preco_antigo.toFixed(2)}</td>
+          <td>R$ ${l.preco_novo.toFixed(2)}</td>
+          <td style="color:${variacao > 0 ? '#e53935' : (variacao < 0 ? '#388e3c' : '#222')};font-weight:600;">${variacao}%</td>
+          <td class="acao tabela-acoes">
+            <button onclick="alert('Visualizar SKU ${l.sku}')" aria-label="Visualizar">Visualizar</button>
+            <button onclick="alert('Editar SKU ${l.sku}')" aria-label="Editar">Editar</button>
+          </td>
+        </tr>`;
+      }).join('');
+      document.getElementById('tabelaCorpo').innerHTML = corpo;
+      // Paginação
+      let totalPaginas = Math.ceil(linhas.length / estado.porPagina);
+      let paginacao = `<button ${estado.pagina === 1 ? 'disabled' : ''} onclick="mudaPagina(${estado.pagina - 1})" aria-label="Página anterior">&laquo;</button>`;
+      for (let i = 1; i <= totalPaginas; i++) {
+        paginacao += `<button ${i === estado.pagina ? 'style="background:#0073e6;color:#fff;" disabled' : ''} onclick="mudaPagina(${i})">${i}</button>`;
+      }
+      paginacao += `<button ${estado.pagina === totalPaginas ? 'disabled' : ''} onclick="mudaPagina(${estado.pagina + 1})" aria-label="Próxima página">&raquo;</button>`;
+      document.getElementById('tabelaPaginacao').innerHTML = paginacao;
+      // Checkbox "Selecionar todos"
+      let todosVisiveisSelecionados = paginados.every(l => estado.selecionados.has(l.sku));
+      document.getElementById('selecionarTodos').checked = todosVisiveisSelecionados && paginados.length > 0;
+    }
+    function mudaPagina(p) {
+      estado.pagina = p;
+      renderTabela();
+    }
+    document.getElementById('busca').addEventListener('input', function(e) {
+      estado.busca = this.value;
+      estado.pagina = 1;
+      renderTabela();
+    });
+    document.getElementById('filtroFornecedor').addEventListener('change', function() {
+      estado.filtroFornecedor = this.value;
+      estado.pagina = 1;
+      renderTabela();
+    });
+    document.getElementById('filtroUF').addEventListener('change', function() {
+      estado.filtroUF = this.value;
+      estado.pagina = 1;
+      renderTabela();
+    });
+    document.querySelectorAll('table.tabela-plurix th.sortable').forEach(th => {
+      th.addEventListener('click', function() {
+        let col = th.getAttribute('data-col');
+        if (estado.ordem.col === col) {
+          estado.ordem.dir = estado.ordem.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          estado.ordem.col = col;
+          estado.ordem.dir = 'asc';
+        }
+        document.querySelectorAll('table.tabela-plurix th').forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+        th.classList.add(estado.ordem.dir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        renderTabela();
+      });
+    });
+    document.getElementById('selecionarTodos').addEventListener('change', function() {
+      let check = this.checked;
+      let linhas = filtrarOrdenar().slice((estado.pagina-1)*estado.porPagina, estado.pagina*estado.porPagina);
+      linhas.forEach(l => {
+        if (check) estado.selecionados.add(l.sku);
+        else estado.selecionados.delete(l.sku);
+      });
+      renderTabela();
+    });
+    document.getElementById('tabelaCorpo').addEventListener('change', function(e) {
+      if (e.target.classList.contains('linha-checkbox')) {
+        let sku = e.target.getAttribute('data-sku');
+        if (e.target.checked) estado.selecionados.add(sku);
+        else estado.selecionados.delete(sku);
+        renderTabela();
+      }
+    });
+    // Inicialização
+    renderTabela();
+  </script>
+</body>
+</html>
