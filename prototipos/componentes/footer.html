@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componente Footer - Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --plurix-blue: #003366;
+      --plurix-light-blue: #4db6e2;
+      --plurix-gray: #f7f7f7;
+      --plurix-dark: #222;
+      --plurix-text: #333;
+      --plurix-footer-bg: #222;
+      --plurix-footer-link: #fff;
+      --plurix-footer-link-hover: #4db6e2;
+      --plurix-footer-border: #444;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--plurix-gray);
+    }
+    .footer {
+      background: var(--plurix-footer-bg);
+      color: #fff;
+      padding: 40px 0 0 0;
+      border-top: 4px solid var(--plurix-light-blue);
+      font-size: 15px;
+    }
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      justify-content: space-between;
+    }
+    .footer-section {
+      flex: 1 1 220px;
+      margin-bottom: 24px;
+      min-width: 200px;
+    }
+    .footer-logo {
+      margin-bottom: 16px;
+    }
+    .footer-logo img {
+      width: 140px;
+      height: auto;
+    }
+    .footer-links, .footer-social {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    .footer-links a {
+      color: var(--plurix-footer-link);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: var(--plurix-footer-link-hover);
+    }
+    .footer-social {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .footer-social a {
+      color: #fff;
+      font-size: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--plurix-dark);
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+    .footer-social a:hover {
+      background: var(--plurix-light-blue);
+      color: #fff;
+    }
+    .footer-contact p {
+      margin: 0 0 8px 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--plurix-footer-border);
+      text-align: center;
+      padding: 16px 0;
+      background: #191919;
+      color: #aaa;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    @media (max-width: 800px) {
+      .footer-content {
+        flex-direction: column;
+        padding: 0 12px;
+      }
+      .footer-section {
+        margin-bottom: 24px;
+      }
+    }
+  </style>
+  <!-- Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <footer class="footer" aria-label="Rodapé institucional">
+    <div class="footer-content">
+      <div class="footer-section footer-logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+        <p>Potencializando redes regionais de supermercados em todo o Brasil.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Institucional</h4>
+        <ul class="footer-links">
+          <li><a href="#">Sobre a Plurix</a></li>
+          <li><a href="#">Governança</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Redes Sociais</h4>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-section footer-contact">
+        <h4>Contato</h4>
+        <p><i class="fa fa-envelope"></i> contato@plurix.com.br</p>
+        <p><i class="fa fa-phone"></i> +55 11 99999-9999</p>
+        <p><i class="fa fa-map-marker-alt"></i> São Paulo, SP</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Plurix. Todos os direitos reservados.
+    </div>
+  </footer>
+</body>
+</html>
