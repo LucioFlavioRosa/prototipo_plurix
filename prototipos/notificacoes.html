@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Central de Notificações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f6f7fa;
+      margin: 0;
+      color: #222;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 64px;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+    header img {
+      height: 40px;
+      margin-right: 24px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #1a237e;
+      margin: 0;
+      flex: 1;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #1a237e;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #1976d2;
+      color: #1976d2;
+    }
+    .badge {
+      display: inline-block;
+      min-width: 24px;
+      padding: 2px 8px;
+      background: #d32f2f;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    main {
+      max-width: 900px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+      padding: 32px 40px 40px 40px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+    }
+    .filtros {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .filtros label {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #222;
+      margin-right: 8px;
+    }
+    .filtros select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cfd8dc;
+      background: #f6f7fa;
+      font-size: 1rem;
+      min-width: 120px;
+    }
+    .filtros button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-left: 10px;
+    }
+    .filtros button:hover {
+      background: #1565c0;
+    }
+    .notificacoes-lista {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .notificacao {
+      display: flex;
+      align-items: flex-start;
+      background: #fafbfc;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+      margin-bottom: 14px;
+      padding: 16px 18px;
+      position: relative;
+      gap: 14px;
+      border-left: 6px solid #1976d2;
+      transition: background 0.15s;
+    }
+    .notificacao.nao-lida { background: #e3e7f1; }
+    .notificacao .icon {
+      font-size: 1.5rem;
+      margin-right: 6px;
+      margin-top: 2px;
+      width: 28px;
+      text-align: center;
+    }
+    .notificacao.sucesso { border-left-color: #43a047; }
+    .notificacao.erro { border-left-color: #d32f2f; }
+    .notificacao.alerta { border-left-color: #ffb300; }
+    .notificacao.info { border-left-color: #1976d2; }
+    .notificacao .mensagem {
+      flex: 1;
+      font-size: 1rem;
+      color: #222;
+    }
+    .notificacao .timestamp {
+      font-size: 0.94rem;
+      color: #607d8b;
+      margin-top: 2px;
+      min-width: 120px;
+      text-align: right;
+    }
+    .notificacao .acoes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-left: 18px;
+    }
+    .notificacao .acoes button {
+      background: #fff;
+      color: #1976d2;
+      border: 1.2px solid #1976d2;
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .notificacao .acoes button:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+    @media (max-width: 700px) {
+      main { padding: 18px 6px; }
+      .notificacao { flex-direction: column; align-items: stretch; }
+      .notificacao .timestamp { text-align: left; margin-top: 8px; }
+      .notificacao .acoes { flex-direction: row; gap: 12px; margin-left: 0; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <h1>Central de Notificações <span class="badge" id="badgeNaoLidas">0</span></h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="admin-auditoria.html">Auditoria</a>
+      <a href="notificacoes.html" class="active">Notificações</a>
+      <a href="logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="section-title">Filtros de Notificações</div>
+    <form class="filtros" id="filtrosForm" onsubmit="event.preventDefault();filtrarNotificacoes();">
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" name="tipo">
+        <option value="">Todos</option>
+        <option value="sucesso">Sucesso</option>
+        <option value="erro">Erro</option>
+        <option value="alerta">Alerta</option>
+        <option value="info">Info</option>
+      </select>
+      <label for="status">Status:</label>
+      <select id="status" name="status">
+        <option value="">Todos</option>
+        <option value="nao-lida">Não lida</option>
+        <option value="lida">Lida</option>
+        <option value="arquivada">Arquivada</option>
+      </select>
+      <button type="submit">Filtrar</button>
+      <button type="button" onclick="resetarFiltros()" style="background:#fff; color:#1976d2; border:1.5px solid #1976d2;">Limpar</button>
+    </form>
+    <ul class="notificacoes-lista" id="listaNotificacoes">
+      <!-- Notificações preenchidas via JS -->
+    </ul>
+  </main>
+  <script>
+    // Simulação de notificações
+    const notificacoes = [
+      {id:1, tipo:'sucesso', mensagem:'Upload de tabela realizado com sucesso.', timestamp:'2024-06-10 11:32', status:'nao-lida'},
+      {id:2, tipo:'erro', mensagem:'Erro de validação: coluna SKU ausente.', timestamp:'2024-06-10 10:58', status:'nao-lida'},
+      {id:3, tipo:'alerta', mensagem:'Tabela aguardando aprovação do Diretor.', timestamp:'2024-06-09 18:25', status:'lida'},
+      {id:4, tipo:'info', mensagem:'Nova versão do template de preços disponível.', timestamp:'2024-06-09 09:12', status:'lida'},
+      {id:5, tipo:'sucesso', mensagem:'Aprovação concluída para tabela SuperMais.', timestamp:'2024-06-08 17:44', status:'arquivada'},
+      {id:6, tipo:'erro', mensagem:'Falha na integração com ERP Flex.', timestamp:'2024-06-08 15:02', status:'nao-lida'},
+      {id:7, tipo:'info', mensagem:'Seu acesso foi atualizado para perfil Comprador.', timestamp:'2024-06-07 13:20', status:'lida'},
+      {id:8, tipo:'alerta', mensagem:'Tabela reprovada: justificativa obrigatória não preenchida.', timestamp:'2024-06-06 20:18', status:'nao-lida'}
+    ];
+    const icones = {
+      sucesso: '✔️',
+      erro: '❌',
+      alerta: '⚠️',
+      info: 'ℹ️'
+    };
+    let notificacoesFiltradas = [...notificacoes];
+    function renderNotificacoes(){
+      const ul = document.getElementById('listaNotificacoes');
+      ul.innerHTML = '';
+      notificacoesFiltradas.forEach(n => {
+        const li = document.createElement('li');
+        li.className = `notificacao ${n.tipo} ${n.status}`;
+        li.innerHTML = `
+          <span class="icon">${icones[n.tipo]}</span>
+          <span class="mensagem">${n.mensagem}</span>
+          <span class="timestamp">${n.timestamp}</span>
+          <span class="acoes">
+            ${n.status!=='lida'?`<button onclick="marcarComoLida(${n.id})">Marcar como lida</button>`:''}
+            ${n.status!=='arquivada'?`<button onclick="arquivar(${n.id})">Arquivar</button>`:''}
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+      atualizarBadge();
+    }
+    function filtrarNotificacoes(){
+      const tipo = document.getElementById('tipo').value;
+      const status = document.getElementById('status').value;
+      notificacoesFiltradas = notificacoes.filter(n => {
+        let ok = true;
+        if(tipo && n.tipo!==tipo) ok=false;
+        if(status && n.status!==status) ok=false;
+        return ok;
+      });
+      renderNotificacoes();
+    }
+    function resetarFiltros(){
+      document.getElementById('filtrosForm').reset();
+      notificacoesFiltradas = [...notificacoes];
+      renderNotificacoes();
+    }
+    function marcarComoLida(id){
+      const n = notificacoes.find(n=>n.id===id);
+      if(n) n.status='lida';
+      renderNotificacoes();
+    }
+    function arquivar(id){
+      const n = notificacoes.find(n=>n.id===id);
+      if(n) n.status='arquivada';
+      renderNotificacoes();
+    }
+    function atualizarBadge(){
+      const naoLidas = notificacoes.filter(n=>n.status==='nao-lida').length;
+      document.getElementById('badgeNaoLidas').textContent = naoLidas;
+      document.getElementById('badgeNaoLidas').style.background = naoLidas>0?'#d32f2f':'#cfd8dc';
+    }
+    // Inicialização
+    renderNotificacoes();
+  </script>
+</body>
+</html>
