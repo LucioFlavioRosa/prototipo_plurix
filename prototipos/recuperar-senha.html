@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recuperar Senha | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --color-primary: #004aad;
+      --color-secondary: #f5f7fa;
+      --color-accent: #00b2a9;
+      --color-danger: #e53935;
+      --color-success: #43a047;
+      --color-bg: #fff;
+      --color-border: #e0e3e8;
+      --color-text: #222;
+      --color-muted: #6b7684;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--color-secondary); font-family: var(--font-main); font-size: 16px; color: var(--color-text); height: 100%; min-height: 100vh;
+    }
+    .container {
+      max-width: 420px;
+      margin: 60px auto 0 auto;
+      background: var(--color-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 36px 32px 32px 32px;
+      text-align: center;
+    }
+    .logo {
+      height: 48px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .desc {
+      color: var(--color-muted);
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 6px;
+    }
+    input[type="email"], input[type="text"], input[type="password"] {
+      padding: 10px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 15px;
+      background: #f9fafc;
+      color: var(--color-text);
+    }
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      padding: 10px 0;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover {
+      background: var(--color-accent);
+    }
+    .msg-success {
+      color: var(--color-success);
+      font-weight: bold;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .msg-error {
+      color: var(--color-danger);
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 0.97rem;
+      transition: color 0.15s;
+    }
+    .back-link:hover {
+      color: var(--color-accent);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 18px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="step-solicitar">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_80,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <h1>Recuperar senha</h1>
+    <div class="desc">Informe seu e-mail ou CNPJ cadastrado para receber as instruções de redefinição de senha.</div>
+    <form id="form-solicitar" autocomplete="off">
+      <input type="text" id="emailCnpj" name="emailCnpj" placeholder="E-mail ou CNPJ" required aria-label="E-mail ou CNPJ">
+      <button class="btn-primary" type="submit">Enviar instruções</button>
+    </form>
+    <a href="login.html" class="back-link">Voltar ao login</a>
+    <div class="msg-error" id="solicitar-erro" style="display:none;"></div>
+  </div>
+  <div class="container" id="step-confirmacao" style="display:none;">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_80,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <h1>Verifique seu e-mail</h1>
+    <div class="desc">Enviamos um link de redefinição de senha para o e-mail/CNPJ informado. Siga as instruções para criar uma nova senha.</div>
+    <a href="login.html" class="back-link">Voltar ao login</a>
+  </div>
+  <div class="container" id="step-redefinir" style="display:none;">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_80,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <h1>Redefinir senha</h1>
+    <div class="desc">Digite o código recebido e escolha sua nova senha.</div>
+    <form id="form-redefinir" autocomplete="off">
+      <input type="text" id="token" name="token" placeholder="Código de verificação" required aria-label="Código de verificação">
+      <input type="password" id="novaSenha" name="novaSenha" placeholder="Nova senha" required aria-label="Nova senha" minlength="6">
+      <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar nova senha" required aria-label="Confirmar nova senha" minlength="6">
+      <button class="btn-primary" type="submit">Redefinir senha</button>
+    </form>
+    <div class="msg-error" id="redefinir-erro" style="display:none;"></div>
+    <div class="msg-success" id="redefinir-sucesso" style="display:none;">Senha redefinida com sucesso! <a href="login.html">Acessar plataforma</a></div>
+  </div>
+  <script>
+    // Simulação de fluxo de recuperação de senha
+    const stepSolicitar = document.getElementById('step-solicitar');
+    const stepConfirmacao = document.getElementById('step-confirmacao');
+    const stepRedefinir = document.getElementById('step-redefinir');
+    const formSolicitar = document.getElementById('form-solicitar');
+    const formRedefinir = document.getElementById('form-redefinir');
+    const solicitarErro = document.getElementById('solicitar-erro');
+    const redefinirErro = document.getElementById('redefinir-erro');
+    const redefinirSucesso = document.getElementById('redefinir-sucesso');
+
+    // Simula envio de email
+    formSolicitar.addEventListener('submit', function(e) {
+      e.preventDefault();
+      solicitarErro.style.display = 'none';
+      const val = document.getElementById('emailCnpj').value.trim();
+      if (!val) {
+        solicitarErro.textContent = 'Informe um e-mail ou CNPJ válido.';
+        solicitarErro.style.display = '';
+        return;
+      }
+      stepSolicitar.style.display = 'none';
+      stepConfirmacao.style.display = '';
+      setTimeout(() => {
+        // Simula recebimento do token e vai para redefinir
+        stepConfirmacao.style.display = 'none';
+        stepRedefinir.style.display = '';
+      }, 2000);
+    });
+
+    // Simula redefinição de senha
+    formRedefinir.addEventListener('submit', function(e) {
+      e.preventDefault();
+      redefinirErro.style.display = 'none';
+      redefinirSucesso.style.display = 'none';
+      const token = document.getElementById('token').value.trim();
+      const novaSenha = document.getElementById('novaSenha').value;
+      const confirmarSenha = document.getElementById('confirmarSenha').value;
+      if (!token) {
+        redefinirErro.textContent = 'Informe o código de verificação.';
+        redefinirErro.style.display = '';
+        return;
+      }
+      if (!novaSenha || novaSenha.length < 6) {
+        redefinirErro.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+        redefinirErro.style.display = '';
+        return;
+      }
+      if (novaSenha !== confirmarSenha) {
+        redefinirErro.textContent = 'As senhas não coincidem.';
+        redefinirErro.style.display = '';
+        return;
+      }
+      redefinirErro.style.display = 'none';
+      redefinirSucesso.style.display = '';
+      formRedefinir.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
