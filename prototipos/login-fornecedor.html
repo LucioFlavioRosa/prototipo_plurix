@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: wf_1973fffd9707483bb7143c4dc;
+      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
+           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
+    }
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    :root {
+      --plurix-primary: #0c2340;
+      --plurix-secondary: #f5b800;
+      --plurix-bg: #f7f8fa;
+      --plurix-gray: #e5e7eb;
+      --plurix-dark: #222;
+      --plurix-accent: #0098d8;
+      --plurix-radius: 8px;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: wf_1973fffd9707483bb7143c4dc, 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: var(--plurix-bg);
+      color: var(--plurix-dark);
+      font-size: 16px;
+    }
+    header {
+      background: var(--plurix-primary);
+      color: #fff;
+      padding: 0;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      margin-left: 32px;
+    }
+    .header-logo img {
+      height: 48px;
+      width: auto;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      padding-top: 32px;
+    }
+    .login-container {
+      background: #fff;
+      border-radius: var(--plurix-radius);
+      box-shadow: 0 4px 24px rgba(12,35,64,0.07);
+      padding: 40px 32px 32px 32px;
+      min-width: 340px;
+      max-width: 360px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-container img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+    }
+    .login-container h2 {
+      font-size: 1.4rem;
+      color: var(--plurix-primary);
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .form-label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--plurix-primary);
+      margin-bottom: 4px;
+    }
+    .form-input {
+      padding: 12px 14px;
+      border: 1px solid var(--plurix-gray);
+      border-radius: var(--plurix-radius);
+      font-size: 1rem;
+      background: var(--plurix-bg);
+      color: var(--plurix-dark);
+      outline: none;
+      transition: border 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--plurix-accent);
+      background: #fff;
+    }
+    .btn {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 12px 0;
+      border: none;
+      border-radius: var(--plurix-radius);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      background: var(--plurix-primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
+      outline: none;
+    }
+    .btn:hover {
+      background: #142d4c;
+    }
+    .login-links {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .login-links a {
+      color: var(--plurix-accent);
+      text-decoration: none;
+      font-size: 0.98rem;
+      transition: color 0.2s;
+    }
+    .login-links a:hover {
+      color: var(--plurix-primary);
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .login-container {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 24px 8px 20px 8px;
+      }
+      .header-logo {
+        margin-left: 12px;
+      }
+    }
+  </style>
+  <script>
+    function validateForm(e) {
+      const emailCnpj = document.getElementById('emailCnpj');
+      const senha = document.getElementById('senha');
+      if (!emailCnpj.value.trim() || !senha.value.trim()) {
+        alert('Preencha todos os campos para continuar.');
+        e.preventDefault();
+        return false;
+      }
+      return true;
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
+      <span class="header-title">Portal do Fornecedor</span>
+    </div>
+  </header>
+  <main>
+    <div class="login-container">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <h2>Acesse sua conta de Fornecedor</h2>
+      <form action="#" method="post" onsubmit="return validateForm(event)">
+        <label for="emailCnpj" class="form-label">E-mail ou CNPJ</label>
+        <input type="text" id="emailCnpj" name="emailCnpj" class="form-input" placeholder="Digite seu e-mail ou CNPJ" autocomplete="username" required>
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" id="senha" name="senha" class="form-input" placeholder="Digite sua senha" autocomplete="current-password" required>
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+      <div class="login-links">
+        <a href="#" aria-label="Recuperar senha">Esqueci minha senha</a>
+        <a href="#" aria-label="Cadastrar novo fornecedor">Cadastrar-se</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
