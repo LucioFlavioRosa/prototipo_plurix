@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Central de Notificações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f7f7; }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+    }
+    .header-logo {
+      height: 38px;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .header-link {
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.2s;
+    }
+    .header-link.active, .header-link:hover {
+      color: #0071e3;
+    }
+    .badge {
+      background: #e6007a;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      margin-left: 6px;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 32px 24px 24px 24px;
+    }
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+    }
+    .filtros {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filtro-select, .filtro-checkbox {
+      font-size: 1rem;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafbfc;
+      outline: none;
+      color: #333;
+      min-width: 120px;
+    }
+    .notificacoes-lista {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .notificacao-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fff;
+      transition: background 0.2s;
+    }
+    .notificacao-item.nao-lida {
+      background: #f1f6ff;
+    }
+    .notificacao-info {
+      flex: 1;
+    }
+    .notificacao-titulo {
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+      font-size: 1.08rem;
+    }
+    .notificacao-descricao {
+      color: #444;
+      font-size: 0.98rem;
+      margin-bottom: 3px;
+    }
+    .notificacao-meta {
+      color: #888;
+      font-size: 0.92rem;
+    }
+    .notificacao-acoes {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 16px;
+    }
+    .btn-acao {
+      background: none;
+      border: none;
+      color: #0071e3;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.97rem;
+      transition: background 0.2s;
+    }
+    .btn-acao:hover {
+      background: #eaf3ff;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 12px 2vw; }
+      .header { flex-direction: column; height: auto; padding: 8px 0; gap: 12px; }
+      .header-nav { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo">
+    <nav class="header-nav">
+      <a href="dashboard.html" class="header-link">Dashboard</a>
+      <a href="historico-tabelas.html" class="header-link">Histórico</a>
+      <a href="notificacoes.html" class="header-link active">Notificações <span class="badge" id="badge-contador">3</span></a>
+      <a href="perfil.html" class="header-link">Perfil</a>
+      <a href="logout.html" class="header-link">Sair</a>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="title">Central de Notificações</div>
+    <form class="filtros" id="filtrosForm" aria-label="Filtros de notificações">
+      <select class="filtro-select" id="filtroTipo" aria-label="Filtrar por tipo">
+        <option value="">Todos os tipos</option>
+        <option value="nova">Nova Tabela</option>
+        <option value="aprovacao">Aprovação Pendente</option>
+        <option value="reprovacao">Reprovação</option>
+        <option value="lembrete">Lembrete</option>
+      </select>
+      <select class="filtro-select" id="filtroLida" aria-label="Filtrar por leitura">
+        <option value="">Todas</option>
+        <option value="nao-lida">Não lidas</option>
+        <option value="lida">Lidas</option>
+      </select>
+    </form>
+    <ul class="notificacoes-lista" id="notificacoesLista">
+      <!-- Notificações serão renderizadas via JS -->
+    </ul>
+  </main>
+  <script>
+    // Exemplo de notificações mockadas
+    const notificacoes = [
+      {
+        id: 1,
+        tipo: 'nova',
+        titulo: 'Nova tabela de preços enviada',
+        descricao: 'Fornecedor SuperAlimentos enviou uma nova tabela para aprovação.',
+        data: '2024-06-12 09:14',
+        lida: false
+      },
+      {
+        id: 2,
+        tipo: 'aprovacao',
+        titulo: 'Aprovação pendente',
+        descricao: 'Tabela do fornecedor MegaDistribuidora aguarda sua análise.',
+        data: '2024-06-11 17:32',
+        lida: false
+      },
+      {
+        id: 3,
+        tipo: 'lembrete',
+        titulo: 'Lembrete: Reavaliar tabela reprovada',
+        descricao: 'A tabela do fornecedor NutriMais foi reprovada e aguarda reenvio.',
+        data: '2024-06-10 13:20',
+        lida: false
+      },
+      {
+        id: 4,
+        tipo: 'reprovacao',
+        titulo: 'Tabela reprovada',
+        descricao: 'Tabela do fornecedor AgroMix foi reprovada por divergência de colunas.',
+        data: '2024-06-09 10:05',
+        lida: true
+      },
+      {
+        id: 5,
+        tipo: 'aprovacao',
+        titulo: 'Aprovação pendente',
+        descricao: 'Tabela do fornecedor SuperAlimentos aguarda aprovação da diretoria.',
+        data: '2024-06-08 16:40',
+        lida: true
+      }
+    ];
+    function renderNotificacoes() {
+      const tipo = document.getElementById('filtroTipo').value;
+      const lida = document.getElementById('filtroLida').value;
+      const lista = document.getElementById('notificacoesLista');
+      lista.innerHTML = '';
+      let countNaoLidas = 0;
+      notificacoes.forEach(notif => {
+        let show = true;
+        if (tipo && notif.tipo !== tipo) show = false;
+        if (lida === 'lida' && !notif.lida) show = false;
+        if (lida === 'nao-lida' && notif.lida) show = false;
+        if (!notif.lida) countNaoLidas++;
+        if (show) {
+          const li = document.createElement('li');
+          li.className = 'notificacao-item' + (notif.lida ? '' : ' nao-lida');
+          li.innerHTML = `
+            <div class="notificacao-info">
+              <div class="notificacao-titulo">${notif.titulo}</div>
+              <div class="notificacao-descricao">${notif.descricao}</div>
+              <div class="notificacao-meta">${notif.data}</div>
+            </div>
+            <div class="notificacao-acoes">
+              <button class="btn-acao" onclick="marcarComoLida(${notif.id})" aria-label="Marcar como lida">Marcar como lida</button>
+              <button class="btn-acao" onclick="excluirNotificacao(${notif.id})" aria-label="Excluir">Excluir</button>
+            </div>
+          `;
+          lista.appendChild(li);
+        }
+      });
+      document.getElementById('badge-contador').innerText = countNaoLidas;
+    }
+    function marcarComoLida(id) {
+      const notif = notificacoes.find(n => n.id === id);
+      if (notif) notif.lida = true;
+      renderNotificacoes();
+    }
+    function excluirNotificacao(id) {
+      const idx = notificacoes.findIndex(n => n.id === id);
+      if (idx > -1) notificacoes.splice(idx, 1);
+      renderNotificacoes();
+    }
+    document.getElementById('filtroTipo').addEventListener('change', renderNotificacoes);
+    document.getElementById('filtroLida').addEventListener('change', renderNotificacoes);
+    renderNotificacoes();
+  </script>
+</body>
+</html>
