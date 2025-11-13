@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Footer Plurix</title>
+  <style>
+    .plurix-footer {
+      width: 100%;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      padding: 32px 0 16px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 4px solid #e8e8e8;
+    }
+    .plurix-footer-links {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .plurix-footer-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-family: inherit;
+      transition: color 0.18s;
+    }
+    .plurix-footer-links a:hover {
+      color: #00a7e1;
+      text-decoration: underline;
+    }
+    .wixui-rich-text {
+      font-size: 0.98rem;
+      color: #e0e0e0;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .color_18 {
+      color: #bdbdbd;
+      font-size: 0.93rem;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .plurix-footer {
+        padding: 20px 0 10px 0;
+      }
+      .plurix-footer-links {
+        gap: 16px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <footer class="plurix-footer" role="contentinfo">
+    <nav class="plurix-footer-links" aria-label="Links institucionais">
+      <a href="#lgpd" target="_blank" rel="noopener">Canal LGPD</a>
+      <a href="#etica" target="_blank" rel="noopener">Canal de Ética</a>
+      <a href="#privacidade" target="_blank" rel="noopener">Política de Privacidade</a>
+    </nav>
+    <div class="wixui-rich-text">
+      A Plurix é uma empresa Pátria Investimentos
+    </div>
+    <div class="color_18">
+      CNPJ: 12.345.678/0001-99
+    </div>
+  </footer>
+</body>
+</html>
