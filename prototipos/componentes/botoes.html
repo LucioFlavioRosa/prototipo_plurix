@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componentes - Botões | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --color-primary: #004b8d;
+      --color-primary-hover: #003366;
+      --color-secondary: #f5a623;
+      --color-secondary-hover: #e5941a;
+      --color-outline: #004b8d;
+      --color-outline-bg: #fff;
+      --color-outline-hover: #e6f0fa;
+      --color-link: #004b8d;
+      --color-link-hover: #003366;
+      --color-disabled: #bdbdbd;
+      --color-text: #222;
+      --color-white: #fff;
+      --font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      --radius: 6px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    body {
+      font-family: var(--font-family);
+      background: #f5f7fa;
+      color: var(--color-text);
+      margin: 0;
+      padding: 32px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+      color: var(--color-primary);
+    }
+    .btn-demo-section {
+      margin-bottom: 2.5em;
+    }
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 1em;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-family);
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s;
+      outline: none;
+      box-shadow: var(--shadow);
+      gap: 8px;
+      text-decoration: none;
+      user-select: none;
+    }
+    .btn:focus {
+      box-shadow: 0 0 0 2px var(--color-secondary);
+    }
+    /* Variações */
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+    .btn-primary:hover:not(:disabled),
+    .btn-primary:active:not(:disabled) {
+      background: var(--color-primary-hover);
+    }
+    .btn-secondary {
+      background: var(--color-secondary);
+      color: var(--color-white);
+    }
+    .btn-secondary:hover:not(:disabled),
+    .btn-secondary:active:not(:disabled) {
+      background: var(--color-secondary-hover);
+    }
+    .btn-outline {
+      background: var(--color-outline-bg);
+      color: var(--color-outline);
+      border: 2px solid var(--color-outline);
+    }
+    .btn-outline:hover:not(:disabled),
+    .btn-outline:active:not(:disabled) {
+      background: var(--color-outline-hover);
+      color: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+    .btn-link {
+      background: none;
+      color: var(--color-link);
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      font-weight: 500;
+    }
+    .btn-link:hover:not(:disabled),
+    .btn-link:active:not(:disabled) {
+      color: var(--color-link-hover);
+      text-decoration: underline;
+    }
+    /* Tamanhos */
+    .btn-small {
+      font-size: 0.95rem;
+      padding: 6px 16px;
+      min-height: 32px;
+    }
+    .btn-medium {
+      font-size: 1.08rem;
+      padding: 10px 24px;
+      min-height: 40px;
+    }
+    .btn-large {
+      font-size: 1.18rem;
+      padding: 14px 32px;
+      min-height: 48px;
+    }
+    /* Estados */
+    .btn:disabled, .btn.disabled {
+      background: var(--color-disabled) !important;
+      color: #fff !important;
+      border-color: var(--color-disabled) !important;
+      cursor: not-allowed;
+      opacity: 0.7;
+      box-shadow: none;
+      text-decoration: none;
+    }
+    /* Ícones */
+    .btn .icon {
+      display: inline-flex;
+      width: 1.1em;
+      height: 1.1em;
+      vertical-align: middle;
+      margin-right: 0.5em;
+    }
+    .btn .icon-right {
+      margin-right: 0;
+      margin-left: 0.5em;
+    }
+    /* Demo layout */
+    .btn-demo-label {
+      font-size: 1.1em;
+      color: #888;
+      margin-bottom: 0.4em;
+      font-weight: 500;
+    }
+    .btn-demo-bg {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Componentes Reutilizáveis: Botões</h1>
+  <section class="btn-demo-section">
+    <div class="btn-demo-label">Variações</div>
+    <div class="btn-demo-bg">
+      <div class="btn-group">
+        <button class="btn btn-primary btn-medium">Primário</button>
+        <button class="btn btn-secondary btn-medium">Secundário</button>
+        <button class="btn btn-outline btn-medium">Outline</button>
+        <a href="#" class="btn btn-link btn-medium">Link</a>
+      </div>
+    </div>
+  </section>
+  <section class="btn-demo-section">
+    <div class="btn-demo-label">Tamanhos</div>
+    <div class="btn-demo-bg">
+      <div class="btn-group">
+        <button class="btn btn-primary btn-small">Pequeno</button>
+        <button class="btn btn-primary btn-medium">Médio</button>
+        <button class="btn btn-primary btn-large">Grande</button>
+      </div>
+    </div>
+  </section>
+  <section class="btn-demo-section">
+    <div class="btn-demo-label">Estados</div>
+    <div class="btn-demo-bg">
+      <div class="btn-group">
+        <button class="btn btn-primary btn-medium">Normal</button>
+        <button class="btn btn-primary btn-medium" disabled>Desabilitado</button>
+        <button class="btn btn-outline btn-medium" disabled>Outline Desabilitado</button>
+        <a href="#" class="btn btn-link btn-medium disabled" tabindex="-1" aria-disabled="true">Link Desabilitado</a>
+      </div>
+    </div>
+  </section>
+  <section class="btn-demo-section">
+    <div class="btn-demo-label">Com Ícones</div>
+    <div class="btn-demo-bg">
+      <div class="btn-group">
+        <button class="btn btn-primary btn-medium">
+          <span class="icon" aria-hidden="true">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 1.5v15M1.5 9h15" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Adicionar
+        </button>
+        <button class="btn btn-outline btn-medium">
+          <span class="icon" aria-hidden="true">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" stroke="#004b8d" stroke-width="2"/><path d="M9 5v4l2.5 2.5" stroke="#004b8d" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+          Tempo
+        </button>
+        <button class="btn btn-secondary btn-medium">
+          Próximo
+          <span class="icon icon-right" aria-hidden="true">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M7 5l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <section class="btn-demo-section">
+    <div class="btn-demo-label">Acessibilidade</div>
+    <div class="btn-demo-bg">
+      <div class="btn-group">
+        <button class="btn btn-primary btn-medium" aria-label="Salvar alterações">
+          <span class="icon" aria-hidden="true">
+            <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M6 9l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
