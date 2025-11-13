@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Modal Reutilizável Plurix</title>
+  <style>
+    .plurix-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(26,26,26,0.55);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInOverlay 0.25s;
+    }
+    .plurix-modal-overlay.active {
+      display: flex;
+    }
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .plurix-modal-container {
+      background: #fff;
+      border-radius: 12px;
+      min-width: 340px;
+      max-width: 96vw;
+      max-height: 92vh;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalPopIn 0.23s cubic-bezier(.42,0,.58,1);
+    }
+    @keyframes modalPopIn {
+      from { opacity: 0; transform: scale(0.92) translateY(32px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .plurix-modal-header {
+      padding: 20px 28px 12px 28px;
+      background: #f7f7f7;
+      font-size: 1.25rem;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      font-weight: 600;
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .plurix-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.18s;
+    }
+    .plurix-modal-close:focus,
+    .plurix-modal-close:hover {
+      background: #e0e0e0;
+      color: #1a1a1a;
+      outline: none;
+    }
+    .plurix-modal-body {
+      padding: 18px 28px;
+      font-size: 1.05rem;
+      color: #222;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      background: #fff;
+    }
+    .plurix-modal-footer {
+      padding: 16px 28px;
+      background: #f7f7f7;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .plurix-modal-btn {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 8px 22px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background: #00a7e1;
+      color: #fff;
+      transition: background 0.18s;
+    }
+    .plurix-modal-btn.cancel {
+      background: #e0e0e0;
+      color: #333;
+    }
+    .plurix-modal-btn:focus,
+    .plurix-modal-btn:hover {
+      background: #0077b5;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 600px) {
+      .plurix-modal-container {
+        min-width: 90vw;
+        padding: 0;
+      }
+      .plurix-modal-header, .plurix-modal-body, .plurix-modal-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Modal Overlay (hidden by default) -->
+  <div class="plurix-modal-overlay" id="plurix-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="plurix-modal-title" tabindex="-1">
+    <div class="plurix-modal-container" role="document">
+      <div class="plurix-modal-header">
+        <span id="plurix-modal-title">Título do Modal</span>
+        <button class="plurix-modal-close" aria-label="Fechar modal" id="plurix-modal-close">&times;</button>
+      </div>
+      <div class="plurix-modal-body" id="plurix-modal-body">
+        Conteúdo do modal reutilizável.
+      </div>
+      <div class="plurix-modal-footer" id="plurix-modal-footer">
+        <button class="plurix-modal-btn cancel" id="plurix-modal-cancel">Cancelar</button>
+        <button class="plurix-modal-btn" id="plurix-modal-action">Confirmar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Modal open/close logic, focus trap, accessibility
+    (function() {
+      var overlay = document.getElementById('plurix-modal-overlay');
+      var closeBtn = document.getElementById('plurix-modal-close');
+      var cancelBtn = document.getElementById('plurix-modal-cancel');
+      var actionBtn = document.getElementById('plurix-modal-action');
+      var lastFocused = null;
+      function openModal(title, body, footerBtns) {
+        lastFocused = document.activeElement;
+        document.getElementById('plurix-modal-title').textContent = title || 'Modal';
+        document.getElementById('plurix-modal-body').innerHTML = body || '';
+        overlay.classList.add('active');
+        overlay.focus();
+        // Optionally customize footer buttons
+        if (footerBtns) {
+          var footer = document.getElementById('plurix-modal-footer');
+          footer.innerHTML = '';
+          footerBtns.forEach(function(btn) { footer.appendChild(btn); });
+        }
+        trapFocus();
+      }
+      function closeModal() {
+        overlay.classList.remove('active');
+        if (lastFocused) lastFocused.focus();
+      }
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (overlay.classList.contains('active')) {
+          if (e.key === 'Escape') closeModal();
+          if (e.key === 'Tab') trapFocus(e);
+        }
+      });
+      function trapFocus(e) {
+        var focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (!e) {
+          first.focus();
+          return;
+        }
+        if (e.shiftKey && document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+      // Expose openModal globally for demo
+      window.openPlurixModal = openModal;
+      window.closePlurixModal = closeModal;
+    })();
+  </script>
+</body>
+</html>
