@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Comprador - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #eaeaea;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+    }
+    .sidebar img {
+      width: 60px;
+      margin-bottom: 18px;
+    }
+    .sidebar nav {
+      width: 100%;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sidebar a {
+      display: block;
+      width: 100%;
+      padding: 12px 32px;
+      color: #1a6ae5;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px 0 0 6px;
+      font-size: 1.08rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      background: #eaf2ff;
+      color: #144fa1;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eaeaea;
+      background: #fff;
+      margin-bottom: 32px;
+      padding-left: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .filters {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filters label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 6px;
+    }
+    .filters select, .filters input[type="date"] {
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: 1px solid #d9d9d9;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 26px 22px 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 120px;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      color: #888;
+      font-weight: 600;
+    }
+    .card-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #1a6ae5;
+      margin-top: 6px;
+    }
+    .card-indicator {
+      font-size: 1rem;
+      color: #16a34a;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .table-section {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      padding: 28px 18px 18px 18px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 18px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 1rem;
+    }
+    .data-table th, .data-table td {
+      padding: 12px 10px;
+      text-align: left;
+    }
+    .data-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .data-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .data-table tr:last-child {
+      border-bottom: none;
+    }
+    .btn-table {
+      background: #1a6ae5;
+      color: #fff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-table:hover {
+      background: #144fa1;
+    }
+    @media (max-width: 1000px) {
+      .main-content {
+        padding: 0 4vw 24px 4vw;
+      }
+      .sidebar {
+        width: 60px;
+        padding: 10px 0;
+      }
+      .sidebar nav a {
+        font-size: 0.95rem;
+        padding: 10px 10px;
+        text-align: center;
+      }
+      .sidebar img { width: 38px; }
+    }
+    @media (max-width: 700px) {
+      .main-header { font-size: 1.1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main-content { padding: 0 2vw 18px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Menu principal">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <nav>
+        <a href="dashboard-comprador.html" class="active">Dashboard</a>
+        <a href="#">Aprovações Pendentes</a>
+        <a href="#">Histórico</a>
+        <a href="#">Fornecedores</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Perfil</a>
+        <a href="#" style="color:#d4380d;">Sair</a>
+      </nav>
+    </aside>
+    <main class="main-content">
+      <header class="main-header">Dashboard do Comprador</header>
+      <form class="filters" aria-label="Filtros de pesquisa">
+        <label>Fornecedor:
+          <select>
+            <option>Todos</option>
+            <option>Fornecedor A</option>
+            <option>Fornecedor B</option>
+          </select>
+        </label>
+        <label>Bandeira:
+          <select>
+            <option>Todas</option>
+            <option>SuperMais</option>
+            <option>Maxi</option>
+          </select>
+        </label>
+        <label>UF:
+          <select>
+            <option>Todas</option>
+            <option>SP</option>
+            <option>MG</option>
+          </select>
+        </label>
+        <label>Data:
+          <input type="date">
+        </label>
+      </form>
+      <section class="card-grid">
+        <div class="card">
+          <span class="card-title">Tabelas Pendentes</span>
+          <span class="card-value">7</span>
+        </div>
+        <div class="card">
+          <span class="card-title">Variação Média de Preço</span>
+          <span class="card-value">+4,2% <span class="card-indicator">▲</span></span>
+        </div>
+        <div class="card">
+          <span class="card-title">Impacto no DRE</span>
+          <span class="card-value">R$ 12.500</span>
+        </div>
+        <div class="card">
+          <span class="card-title">IC Nielsen (Média)</span>
+          <span class="card-value">92</span>
+        </div>
+        <div class="card">
+          <span class="card-title">IC Objetiva (Média)</span>
+          <span class="card-value">87</span>
+        </div>
+      </section>
+      <section class="table-section">
+        <div class="section-title">Tabelas Pendentes de Aprovação</div>
+        <table class="data-table" aria-label="Tabelas pendentes">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Bandeira</th>
+              <th>UF</th>
+              <th>Data Submissão</th>
+              <th>Variação (%)</th>
+              <th>Impacto DRE</th>
+              <th>IC Nielsen</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fornecedor A</td>
+              <td>SuperMais</td>
+              <td>SP</td>
+              <td>2024-06-10</td>
+              <td style="color:#d4380d;">+5,1%</td>
+              <td>R$ 3.200</td>
+              <td>91</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>Fornecedor B</td>
+              <td>Maxi</td>
+              <td>MG</td>
+              <td>2024-06-09</td>
+              <td style="color:#16a34a;">-1,8%</td>
+              <td>R$ 1.100</td>
+              <td>89</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>Fornecedor C</td>
+              <td>SuperMais</td>
+              <td>SP</td>
+              <td>2024-06-08</td>
+              <td style="color:#d4380d;">+7,3%</td>
+              <td>R$ 2.800</td>
+              <td>94</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
