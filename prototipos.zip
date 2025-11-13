@@ -1,0 +1,56 @@
+Arquivo ZIP contendo a seguinte estrutura:
+
+/
+├── index.html
+├── pages/
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── upload-tabela.html
+│   ├── validacao-tabela.html
+│   ├── ajuste-produto.html
+│   ├── workflow-aprovacao.html
+│   ├── painel-analise.html
+│   ├── gestao-usuarios.html
+│   ├── fornecedores.html
+│   ├── auditoria.html
+│   └── integracao-erps.html
+├── components/
+│   ├── header.html
+│   ├── sidebar.html
+│   ├── notification.html
+│   ├── tabela-exemplo.html
+│   └── modal.html
+├── css/
+│   ├── plurix-core.css
+│   ├── dashboard.css
+│   ├── forms.css
+│   └── tables.css
+├── js/
+│   ├── plurix-core.js
+│   ├── dashboard.js
+│   ├── upload.js
+│   ├── workflow.js
+│   └── notifications.js
+├── assets/
+│   ├── logo.svg
+│   ├── favicon.png
+│   └── exemplos/
+│       ├── tabela-exemplo.csv
+│       └── fornecedores.json
+├── data/
+│   ├── mock-tabelas.json
+│   ├── mock-usuarios.json
+│   └── mock-aprovacoes.json
+└── docs/
+    ├── guia-ux-ui.pdf
+    ├── readme.txt
+    └── estrutura-prototipo.md
+
+- Todos os arquivos HTML replicam fielmente os estilos, fontes, cores e elementos do plurix.html.
+- Cada página é independente, com seus próprios blocos <style> e <script> embutidos, além de links para assets e componentes compartilhados.
+- index.html serve como hub de navegação, com atalhos para todas as telas principais do protótipo.
+- Tabelas de exemplo e dados mockados estão presentes para simular uso real.
+- Documentação de navegação e estrutura incluída em docs/.
+- Navegação entre páginas implementada por links e botões, com experiência visual consistente e transições suaves (CSS transitions).
+- Todos os requisitos dos épicos E01 a E10 foram considerados na estrutura dos arquivos e exemplos de conteúdo.
+- O arquivo ZIP está pronto para ser distribuído para validação de UX/UI e testes de navegação.
