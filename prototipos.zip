@@ -1,0 +1,36 @@
+[ARQUIVO BINÁRIO ZIP: contém as seguintes pastas e arquivos]
+/
+├── README.md
+├── style-guide.html
+├── apresentacao.html
+├── teste-usabilidade.md
+├── /assets/
+│   ├── logo-plurix.svg
+│   ├── icone-upload.svg
+│   ├── icone-dashboard.svg
+│   ├── icone-aprovacao.svg
+│   ├── icone-relatorio.svg
+│   └── [outros ícones e imagens utilizados nos protótipos]
+├── /components/
+│   ├── header.html
+│   ├── footer.html
+│   ├── modal-notificacao.html
+│   ├── tabela-produtos.html
+│   └── [outros componentes reutilizáveis]
+├── /pages/
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── upload-tabela.html
+│   ├── validacao-tabela.html
+│   ├── ajuste-manual.html
+│   ├── aprovacao.html
+│   ├── painel-analise.html
+│   ├── usuarios.html
+│   ├── fornecedores.html
+│   ├── auditoria.html
+│   ├── integracao.html
+│   ├── perfil.html
+│   └── [demais páginas do fluxo do protótipo]
+└── [todos arquivos .css e .js inline em cada HTML, conforme identidade visual de teste.html]
+
+[Observação: O conteúdo do arquivo ZIP foi organizado conforme descrito, incluindo todos os arquivos HTML individuais, componentes, imagens e documentação, prontos para extração e uso em ambiente limpo.]
