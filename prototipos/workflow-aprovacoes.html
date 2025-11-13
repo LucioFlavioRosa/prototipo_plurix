@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workflow de Aprovações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #212121;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      padding: 16px 32px;
+      justify-content: space-between;
+    }
+    .header-logo {
+      height: 40px;
+    }
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-left: 16px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 40px 40px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1976d2;
+      margin-bottom: 18px;
+    }
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      position: relative;
+      padding: 0 8px;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e3f2fd;
+      color: #1976d2;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      border: 3px solid #1976d2;
+      transition: background 0.2s, color 0.2s;
+    }
+    .step.active .step-circle {
+      background: #1976d2;
+      color: #fff;
+    }
+    .step.completed .step-circle {
+      background: #388e3c;
+      color: #fff;
+      border-color: #388e3c;
+    }
+    .step-label {
+      font-size: 1rem;
+      color: #757575;
+      text-align: center;
+      max-width: 120px;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      right: 40px;
+      height: 4px;
+      background: linear-gradient(90deg, #1976d2 0%, #388e3c 100%);
+      z-index: 1;
+      border-radius: 2px;
+    }
+    .status-atual {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #388e3c;
+      margin-bottom: 24px;
+    }
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 1rem;
+    }
+    .timeline-table th, .timeline-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e3f2fd;
+      text-align: left;
+    }
+    .timeline-table th {
+      background: #e3f2fd;
+      color: #1976d2;
+      font-weight: 700;
+    }
+    .timeline-table tr:last-child td {
+      border-bottom: none;
+    }
+    .lembrete {
+      background: #fffde7;
+      color: #f9a825;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      margin-top: 48px;
+      padding-bottom: 24px;
+    }
+    @media (max-width: 800px) {
+      .container { padding: 20px 6px; }
+      .step-label { max-width: 70px; font-size: 0.95rem; }
+      .stepper { flex-direction: column; align-items: stretch; }
+      .step { flex-direction: row; align-items: center; margin-bottom: 14px; }
+      .step-circle { margin-bottom: 0; margin-right: 10px; }
+      .stepper::before { top: 20px; left: 20px; right: 20px; height: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div style="display:flex;align-items:center;">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_120,h_40,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo"/>
+      <span class="header-title">Plataforma de Gerenciamento de Tabelas de Preços</span>
+    </div>
+    <nav>
+      <a href="dashboard.html" style="color:#1976d2;text-decoration:none;font-weight:600;margin-right:24px;">Dashboard</a>
+      <a href="aprovacao-reprovacao.html" style="color:#1976d2;text-decoration:none;font-weight:600;">Aprovações</a>
+    </nav>
+  </header>
+  <main class="container" aria-label="Workflow de Aprovações">
+    <div class="section-title">Workflow de Aprovações</div>
+    <div class="stepper" aria-label="Etapas do workflow">
+      <div class="step completed">
+        <div class="step-circle" aria-label="Gerente Categoria aprovado">1</div>
+        <div class="step-label">Gerente Categoria</div>
+      </div>
+      <div class="step completed">
+        <div class="step-circle" aria-label="Diretor Bandeira aprovado">2</div>
+        <div class="step-label">Dir. Comercial Bandeira</div>
+      </div>
+      <div class="step active">
+        <div class="step-circle" aria-label="Diretor Holding em aprovação">3</div>
+        <div class="step-label">Dir. Comercial Holding</div>
+      </div>
+      <div class="step">
+        <div class="step-circle" aria-label="VP aguardando">4</div>
+        <div class="step-label">VP</div>
+      </div>
+    </div>
+    <div class="status-atual">Status Atual: Em aprovação por Dir. Comercial Holding</div>
+    <div class="lembrete" aria-label="Lembrete de reavaliação">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#f9a825" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#f9a825" stroke-width="2" stroke-linecap="round"/></svg>
+      Lembrete: Reavaliar tabela reprovada em até 3 dias úteis.
+    </div>
+    <table class="timeline-table" aria-label="Histórico de decisões">
+      <thead>
+        <tr>
+          <th>Etapa</th>
+          <th>Responsável</th>
+          <th>Data/Hora</th>
+          <th>Decisão</th>
+          <th>Justificativa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gerente Categoria</td>
+          <td>Maria Souza</td>
+          <td>01/06/2024 10:12</td>
+          <td style="color:#388e3c;font-weight:bold;">Aprovado</td>
+          <td>Preço dentro do esperado para a categoria.</td>
+        </tr>
+        <tr>
+          <td>Dir. Comercial Bandeira</td>
+          <td>João Silva</td>
+          <td>01/06/2024 13:47</td>
+          <td style="color:#388e3c;font-weight:bold;">Aprovado</td>
+          <td>Alinhado com estratégia regional.</td>
+        </tr>
+        <tr>
+          <td>Dir. Comercial Holding</td>
+          <td>Patrícia Lima</td>
+          <td>02/06/2024 09:30</td>
+          <td style="color:#1976d2;font-weight:bold;">Em análise</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>VP</td>
+          <td>-</td>
+          <td>-</td>
+          <td style="color:#757575;">Pendente</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
