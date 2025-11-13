@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componente Card - Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --card-bg: #fff;
+      --card-border: #e0e0e0;
+      --card-radius: 12px;
+      --card-shadow: 0 2px 8px rgba(26,35,126,0.08);
+      --card-hover: #f5f5f5;
+      --card-selected: #fffde7;
+      --card-title: #1a237e;
+      --card-action: #ffd600;
+      --card-action-hover: #fffde7;
+      --card-img-bg: #f5f5f5;
+    }
+    body {
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+    }
+    .plurix-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      padding: 24px;
+      margin: 16px 0;
+      transition: box-shadow 0.2s, background 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      min-width: 220px;
+      max-width: 420px;
+    }
+    .plurix-card:hover {
+      background: var(--card-hover);
+      box-shadow: 0 4px 16px rgba(26,35,126,0.14);
+      border-color: #bdbdbd;
+    }
+    .plurix-card.selected {
+      background: var(--card-selected);
+      border-color: var(--card-action);
+      box-shadow: 0 4px 18px rgba(255,214,0,0.13);
+    }
+    .plurix-card .card-img {
+      width: 100%;
+      height: 120px;
+      background: var(--card-img-bg);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .plurix-card .card-img img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .plurix-card .card-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--card-title);
+      margin-bottom: 6px;
+    }
+    .plurix-card .card-content {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .plurix-card .card-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .plurix-card .card-action-btn {
+      background: var(--card-action);
+      color: #222;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .plurix-card .card-action-btn:hover {
+      background: var(--card-action-hover);
+      color: #1a237e;
+    }
+    /* Variação: card simples */
+    .plurix-card.simple {
+      padding: 20px 16px;
+      min-width: 180px;
+      max-width: 320px;
+    }
+    /* Responsividade */
+    @media (max-width: 600px) {
+      .plurix-card {
+        padding: 16px;
+        min-width: 140px;
+        max-width: 100%;
+      }
+      .plurix-card .card-img {
+        height: 80px;
+      }
+    }
+  </style>
+  <link rel="preload" href="//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+  <main style="padding:32px;max-width:900px;margin:auto;">
+    <h2>Exemplos de Cards Plurix</h2>
+    <section style="display:flex;flex-wrap:wrap;gap:32px;">
+      <!-- Card simples -->
+      <div class="plurix-card simple" tabindex="0">
+        <div class="card-title">Card Simples</div>
+        <div class="card-content">Exemplo de card sem imagem, apenas título e conteúdo.</div>
+      </div>
+      <!-- Card com imagem -->
+      <div class="plurix-card" tabindex="0">
+        <div class="card-img">
+          <img src="https://static.wixstatic.com/media/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png/v1/fill/w_250,h_140,al_c/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png" alt="Exemplo de produto">
+        </div>
+        <div class="card-title">Card com Imagem</div>
+        <div class="card-content">Card exibindo imagem, título e descrição. Ideal para produtos ou destaques.</div>
+      </div>
+      <!-- Card com ações -->
+      <div class="plurix-card selected" tabindex="0">
+        <div class="card-title">Card Selecionado + Ações</div>
+        <div class="card-content">Card com estado selecionado e botões de ação.</div>
+        <div class="card-actions">
+          <button class="card-action-btn">Editar</button>
+          <button class="card-action-btn">Remover</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    // Exemplo de seleção de card ao clicar
+    document.querySelectorAll('.plurix-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.plurix-card').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+      });
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          card.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
