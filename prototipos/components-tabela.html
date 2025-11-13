@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Tabela Reutilizável</title>
+  <style>
+    :root {
+      --primary: #2e3192;
+      --secondary: #00a9e0;
+      --bg: #f7f8fa;
+      --header-bg: #fff;
+      --text: #222;
+      --border: #e0e2e7;
+      --badge-success: #00c48c;
+      --badge-error: #ff647c;
+      --badge-warning: #ffb800;
+      --badge-info: #00a9e0;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      font-family: var(--font-main);
+      margin: 0;
+      padding: 40px;
+      color: var(--text);
+      font-size: 16px;
+    }
+    .tabela-container {
+      background: var(--header-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(46,49,146,0.06);
+      padding: 32px 24px 24px 24px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .tabela-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .tabela-toolbar input[type="text"] {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 15px;
+      width: 220px;
+      background: #fafbfc;
+      transition: border 0.2s;
+    }
+    .tabela-toolbar input[type="text"]:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .tabela-toolbar .btn-lote {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .tabela-toolbar .btn-lote:disabled {
+      background: #c7c9e2;
+      cursor: not-allowed;
+    }
+    table.tabela {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(46,49,146,0.03);
+    }
+    table.tabela thead {
+      background: var(--bg);
+    }
+    table.tabela th, table.tabela td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 15px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    table.tabela th {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    table.tabela th.sortable:after {
+      content: '\25B2\25BC';
+      font-size: 11px;
+      color: #b1b3c7;
+      margin-left: 8px;
+      vertical-align: middle;
+      opacity: 0.6;
+    }
+    table.tabela th.sorted-asc:after {
+      content: '\25B2';
+      color: var(--secondary);
+      opacity: 1;
+    }
+    table.tabela th.sorted-desc:after {
+      content: '\25BC';
+      color: var(--secondary);
+      opacity: 1;
+    }
+    table.tabela tr:last-child td {
+      border-bottom: none;
+    }
+    table.tabela tbody tr.selected {
+      background: #eaf4ff;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .badge-success { background: var(--badge-success); }
+    .badge-error { background: var(--badge-error); }
+    .badge-warning { background: var(--badge-warning); color: #222; }
+    .badge-info { background: var(--badge-info); }
+    .btn-acao {
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background 0.2s;
+      font-weight: 600;
+    }
+    .btn-acao:last-child { margin-right: 0; }
+    .btn-acao:hover { background: var(--primary); }
+    .paginacao {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 18px;
+      gap: 8px;
+    }
+    .paginacao button {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--primary);
+      border-radius: 5px;
+      padding: 5px 12px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .paginacao button.active, .paginacao button:focus {
+      background: var(--primary);
+      color: #fff;
+      outline: none;
+    }
+    .paginacao button:disabled {
+      background: #f0f0f6;
+      color: #b1b3c7;
+      cursor: not-allowed;
+    }
+    @media (max-width: 700px) {
+      .tabela-container { padding: 10px; }
+      table.tabela th, table.tabela td { padding: 8px 6px; font-size: 13px; }
+      .tabela-toolbar input[type="text"] { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="tabela-container">
+    <div class="tabela-toolbar">
+      <input type="text" id="buscaTabela" placeholder="Buscar por produto, SKU ou fornecedor..." aria-label="Busca na tabela">
+      <button class="btn-lote" id="btnAcoesLote" disabled>Ações em lote</button>
+    </div>
+    <table class="tabela" id="tabelaDados" aria-label="Tabela de Produtos">
+      <thead>
+        <tr>
+          <th style="width:40px;"><input type="checkbox" id="selectAll" aria-label="Selecionar todos"></th>
+          <th class="sortable" data-col="sku">SKU</th>
+          <th class="sortable" data-col="produto">Produto</th>
+          <th class="sortable" data-col="fornecedor">Fornecedor</th>
+          <th class="sortable" data-col="precoNovo">Preço Novo</th>
+          <th class="sortable" data-col="precoAntigo">Preço Antigo</th>
+          <th class="sortable" data-col="status">Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabela">
+        <!-- Linhas geradas via JS -->
+      </tbody>
+    </table>
+    <div class="paginacao" id="paginacaoTabela"></div>
+  </div>
+  <script>
+    // Dados de exemplo para prototipagem
+    const dadosTabela = [
+      { sku: '100001', produto: 'Arroz Tipo 1', fornecedor: 'Fornecedor A', precoNovo: 22.90, precoAntigo: 21.50, status: 'Aprovado' },
+      { sku: '100002', produto: 'Feijão Carioca', fornecedor: 'Fornecedor B', precoNovo: 8.99, precoAntigo: 8.99, status: 'Pendente' },
+      { sku: '100003', produto: 'Óleo de Soja', fornecedor: 'Fornecedor C', precoNovo: 7.50, precoAntigo: 7.00, status: 'Reprovado' },
+      { sku: '100004', produto: 'Açúcar Refinado', fornecedor: 'Fornecedor A', precoNovo: 5.40, precoAntigo: 5.20, status: 'Aprovado' },
+      { sku: '100005', produto: 'Café Torrado', fornecedor: 'Fornecedor D', precoNovo: 19.99, precoAntigo: 18.90, status: 'Pendente' },
+      { sku: '100006', produto: 'Leite Integral', fornecedor: 'Fornecedor E', precoNovo: 4.99, precoAntigo: 4.89, status: 'Aprovado' },
+      { sku: '100007', produto: 'Farinha de Trigo', fornecedor: 'Fornecedor B', precoNovo: 3.99, precoAntigo: 3.79, status: 'Aprovado' },
+      { sku: '100008', produto: 'Macarrão Espaguete', fornecedor: 'Fornecedor C', precoNovo: 6.49, precoAntigo: 6.29, status: 'Pendente' },
+      { sku: '100009', produto: 'Molho de Tomate', fornecedor: 'Fornecedor D', precoNovo: 2.99, precoAntigo: 2.89, status: 'Aprovado' },
+      { sku: '100010', produto: 'Sal Refinado', fornecedor: 'Fornecedor E', precoNovo: 1.99, precoAntigo: 1.89, status: 'Reprovado' }
+    ];
+    const statusBadges = {
+      'Aprovado': 'badge badge-success',
+      'Pendente': 'badge badge-warning',
+      'Reprovado': 'badge badge-error',
+      'Em Análise': 'badge badge-info'
+    };
+    let estadoTabela = {
+      pagina: 1,
+      porPagina: 5,
+      busca: '',
+      ordenaCol: '',
+      ordenaDir: 'asc',
+      selecionados: []
+    };
+    function filtrarDados() {
+      let dados = dadosTabela.filter(l => {
+        const busca = estadoTabela.busca.trim().toLowerCase();
+        if (!busca) return true;
+        return (
+          l.sku.toLowerCase().includes(busca) ||
+          l.produto.toLowerCase().includes(busca) ||
+          l.fornecedor.toLowerCase().includes(busca)
+        );
+      });
+      if (estadoTabela.ordenaCol) {
+        dados.sort((a, b) => {
+          let v1 = a[estadoTabela.ordenaCol];
+          let v2 = b[estadoTabela.ordenaCol];
+          if (typeof v1 === 'string') v1 = v1.toLowerCase();
+          if (typeof v2 === 'string') v2 = v2.toLowerCase();
+          if (v1 < v2) return estadoTabela.ordenaDir === 'asc' ? -1 : 1;
+          if (v1 > v2) return estadoTabela.ordenaDir === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+      return dados;
+    }
+    function renderTabela() {
+      const dados = filtrarDados();
+      const inicio = (estadoTabela.pagina - 1) * estadoTabela.porPagina;
+      const fim = inicio + estadoTabela.porPagina;
+      const paginaDados = dados.slice(inicio, fim);
+      const corpo = document.getElementById('corpoTabela');
+      corpo.innerHTML = '';
+      paginaDados.forEach((l, idx) => {
+        const checked = estadoTabela.selecionados.includes(l.sku) ? 'checked' : '';
+        const trClass = checked ? 'selected' : '';
+        corpo.innerHTML += `
+          <tr class="${trClass}">
+            <td><input type="checkbox" class="linhaCheck" data-sku="${l.sku}" aria-label="Selecionar linha"></td>
+            <td>${l.sku}</td>
+            <td>${l.produto}</td>
+            <td>${l.fornecedor}</td>
+            <td>R$ ${l.precoNovo.toFixed(2)}</td>
+            <td>R$ ${l.precoAntigo.toFixed(2)}</td>
+            <td><span class="${statusBadges[l.status] || 'badge'}">${l.status}</span></td>
+            <td>
+              <button class="btn-acao" aria-label="Editar ${l.produto}">Editar</button>
+              <button class="btn-acao" aria-label="Histórico ${l.produto}">Histórico</button>
+            </td>
+          </tr>
+        `;
+      });
+      // Atualizar checkbox geral
+      const selectAll = document.getElementById('selectAll');
+      selectAll.checked = paginaDados.length > 0 && paginaDados.every(l => estadoTabela.selecionados.includes(l.sku));
+      // Atualizar botão de ações em lote
+      document.getElementById('btnAcoesLote').disabled = estadoTabela.selecionados.length === 0;
+      renderPaginacao(dados.length);
+    }
+    function renderPaginacao(total) {
+      const pagDiv = document.getElementById('paginacaoTabela');
+      const totalPag = Math.ceil(total / estadoTabela.porPagina);
+      pagDiv.innerHTML = '';
+      if (totalPag <= 1) return;
+      for (let i = 1; i <= totalPag; i++) {
+        pagDiv.innerHTML += `<button ${i===estadoTabela.pagina?'class="active"':''} onclick="mudaPagina(${i})">${i}</button>`;
+      }
+    }
+    function mudaPagina(p) {
+      estadoTabela.pagina = p;
+      renderTabela();
+    }
+    document.getElementById('buscaTabela').addEventListener('input', function(e) {
+      estadoTabela.busca = e.target.value;
+      estadoTabela.pagina = 1;
+      renderTabela();
+    });
+    document.getElementById('selectAll').addEventListener('change', function(e) {
+      const dados = filtrarDados();
+      const inicio = (estadoTabela.pagina - 1) * estadoTabela.porPagina;
+      const fim = inicio + estadoTabela.porPagina;
+      const paginaDados = dados.slice(inicio, fim);
+      if (e.target.checked) {
+        paginaDados.forEach(l => {
+          if (!estadoTabela.selecionados.includes(l.sku)) estadoTabela.selecionados.push(l.sku);
+        });
+      } else {
+        estadoTabela.selecionados = estadoTabela.selecionados.filter(sku => !paginaDados.some(l => l.sku === sku));
+      }
+      renderTabela();
+    });
+    document.getElementById('corpoTabela').addEventListener('change', function(e) {
+      if (e.target.classList.contains('linhaCheck')) {
+        const sku = e.target.getAttribute('data-sku');
+        if (e.target.checked) {
+          if (!estadoTabela.selecionados.includes(sku)) estadoTabela.selecionados.push(sku);
+        } else {
+          estadoTabela.selecionados = estadoTabela.selecionados.filter(s => s !== sku);
+        }
+        renderTabela();
+      }
+    });
+    document.querySelectorAll('table.tabela th.sortable').forEach(th => {
+      th.addEventListener('click', function() {
+        const col = th.getAttribute('data-col');
+        if (estadoTabela.ordenaCol === col) {
+          estadoTabela.ordenaDir = estadoTabela.ordenaDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          estadoTabela.ordenaCol = col;
+          estadoTabela.ordenaDir = 'asc';
+        }
+        document.querySelectorAll('table.tabela th').forEach(th2 => {
+          th2.classList.remove('sorted-asc', 'sorted-desc');
+        });
+        th.classList.add(estadoTabela.ordenaDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        renderTabela();
+      });
+    });
+    document.getElementById('btnAcoesLote').addEventListener('click', function() {
+      alert('Ações em lote para os SKUs selecionados: ' + estadoTabela.selecionados.join(', '));
+    });
+    // Inicialização
+    renderTabela();
+  </script>
+</body>
+</html>
