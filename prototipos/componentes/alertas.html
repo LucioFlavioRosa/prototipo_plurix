@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componentes - Alertas | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --plurix-success: #2ecc71;
+      --plurix-error: #e74c3c;
+      --plurix-warning: #f7b32b;
+      --plurix-info: #3498db;
+      --plurix-primary: #0b2b4b;
+      --plurix-white: #fff;
+      --plurix-gray: #f4f6fa;
+      --plurix-font: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      --plurix-radius: 6px;
+      --plurix-shadow: 0 2px 8px rgba(11,43,75,0.08);
+      --plurix-transition: .18s cubic-bezier(.4,0,.2,1);
+    }
+    body {
+      font-family: var(--plurix-font);
+      background: var(--plurix-gray);
+      color: #222;
+      margin: 0;
+      padding: 0 0 48px 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: var(--plurix-white);
+      border-radius: var(--plurix-radius);
+      box-shadow: var(--plurix-shadow);
+      padding: 32px 32px 24px 32px;
+    }
+    h1, h2 {
+      color: var(--plurix-primary);
+      font-weight: 700;
+      margin-top: 0;
+    }
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      border-radius: var(--plurix-radius);
+      padding: 18px 24px 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--plurix-shadow);
+      font-size: 15px;
+      position: relative;
+      animation: fadeIn .5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: none; }
+    }
+    .alert-success {
+      background: #eafaf1;
+      border-left: 5px solid var(--plurix-success);
+      color: #217a53;
+    }
+    .alert-error {
+      background: #fdecea;
+      border-left: 5px solid var(--plurix-error);
+      color: #a94442;
+    }
+    .alert-warning {
+      background: #fff9e6;
+      border-left: 5px solid var(--plurix-warning);
+      color: #b8860b;
+    }
+    .alert-info {
+      background: #eaf4fb;
+      border-left: 5px solid var(--plurix-info);
+      color: #186fae;
+    }
+    .alert .alert-icon {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .alert .alert-content {
+      flex: 1;
+    }
+    .alert .alert-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: 8px;
+    }
+    .alert .alert-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0 4px;
+      border-radius: 4px;
+      transition: background .14s;
+      line-height: 1;
+    }
+    .alert .alert-close:hover {
+      background: #f4f6fa;
+      color: #222;
+    }
+    .alert-top {
+      position: fixed;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      min-width: 340px;
+      max-width: 480px;
+      box-shadow: 0 4px 16px rgba(11,43,75,0.15);
+      animation: fadeInTop .5s;
+    }
+    @keyframes fadeInTop {
+      from { opacity: 0; transform: translate(-50%, -32px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .alert .alert-action-btn {
+      background: none;
+      border: none;
+      color: var(--plurix-info);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0 4px;
+      border-radius: 4px;
+      transition: background .14s;
+      text-decoration: underline;
+    }
+    .alert .alert-action-btn:hover {
+      background: #eaf4fb;
+      color: #0b2b4b;
+    }
+    .section {
+      margin-bottom: 36px;
+    }
+    .code-block {
+      background: #f4f6fa;
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 13px;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      color: #2d3a4a;
+      margin: 8px 0 0 0;
+      overflow-x: auto;
+    }
+  </style>
+  <script>
+    function closeAlert(btn) {
+      const alert = btn.closest('.alert');
+      alert.style.opacity = '0';
+      setTimeout(() => alert.remove(), 220);
+    }
+    function showTopAlert(type) {
+      const messages = {
+        success: 'Arquivo enviado com sucesso! Sua tabela será processada.',
+        error: 'Erro ao processar arquivo. Verifique o template e tente novamente.',
+        warning: 'Atenção: Alguns SKUs não foram reconhecidos. Revise antes de submeter.',
+        info: 'Atualização disponível. Recarregue a página para ver as novidades.'
+      };
+      const icons = {
+        success: '<svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#2ecc71"/><path d="M7 13.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        error: '<svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#e74c3c"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>',
+        warning: '<svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#f7b32b"/><path d="M12 7v5m0 4h.01" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>',
+        info: '<svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#3498db"/><path d="M12 8.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 3v4m0 0h.01" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'
+      };
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type} alert-top`;
+      alert.innerHTML = `
+        <span class="alert-icon">${icons[type]}</span>
+        <span class="alert-content">${messages[type]}</span>
+        <span class="alert-actions">
+          <button class="alert-close" aria-label="Fechar" onclick="closeAlert(this)">&times;</button>
+        </span>
+      `;
+      document.body.appendChild(alert);
+      setTimeout(() => {
+        if (alert.parentNode) alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 400);
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header style="display:flex;align-items:center;gap:16px;margin-bottom:32px;">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_80,h_80,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" style="width:48px;height:48px;border-radius:12px;">
+      <h1 style="margin:0;font-size:2rem;">Componentes: Alertas</h1>
+    </header>
+    <section class="section">
+      <h2>Tipos de Alerta</h2>
+      <div class="alert alert-success" role="alert" aria-live="polite">
+        <span class="alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#2ecc71"/><path d="M7 13.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="alert-content">Arquivo enviado com sucesso! Sua tabela será processada.</span>
+        <span class="alert-actions">
+          <button class="alert-close" aria-label="Fechar" onclick="closeAlert(this)">&times;</button>
+        </span>
+      </div>
+      <div class="alert alert-error" role="alert" aria-live="assertive">
+        <span class="alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#e74c3c"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="alert-content">Erro ao processar arquivo. Verifique o template e tente novamente.</span>
+        <span class="alert-actions">
+          <button class="alert-close" aria-label="Fechar" onclick="closeAlert(this)">&times;</button>
+        </span>
+      </div>
+      <div class="alert alert-warning" role="alert" aria-live="polite">
+        <span class="alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#f7b32b"/><path d="M12 7v5m0 4h.01" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="alert-content">Atenção: Alguns SKUs não foram reconhecidos. Revise antes de submeter.</span>
+        <span class="alert-actions">
+          <button class="alert-close" aria-label="Fechar" onclick="closeAlert(this)">&times;</button>
+        </span>
+      </div>
+      <div class="alert alert-info" role="alert" aria-live="polite">
+        <span class="alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="12" fill="#3498db"/><path d="M12 8.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 3v4m0 0h.01" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="alert-content">Atualização disponível. Recarregue a página para ver as novidades.</span>
+        <span class="alert-actions">
+          <button class="alert-close" aria-label="Fechar" onclick="closeAlert(this)">&times;</button>
+          <button class="alert-action-btn" onclick="alert('Ação secundária!')">Saiba mais</button>
+        </span>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Alerta no Topo (Toast)</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-small" onclick="showTopAlert('success')">Sucesso</button>
+        <button class="btn btn-secondary btn-small" onclick="showTopAlert('error')">Erro</button>
+        <button class="btn btn-outline btn-small" onclick="showTopAlert('warning')">Aviso</button>
+        <button class="btn btn-link btn-small" onclick="showTopAlert('info')">Informação</button>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Código de Uso</h2>
+      <div class="code-block">
+        &lt;div class="alert alert-success"&gt;...&lt;/div&gt;<br>
+        &lt;div class="alert alert-error"&gt;...&lt;/div&gt;<br>
+        &lt;div class="alert alert-warning"&gt;...&lt;/div&gt;<br>
+        &lt;div class="alert alert-info"&gt;...&lt;/div&gt;<br>
+        &lt;button onclick="showTopAlert('success')"&gt;Sucesso&lt;/button&gt;
+      </div>
+    </section>
+  </div>
+</body>
+</html>
