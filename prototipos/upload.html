@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload de Tabelas | Plurix Gestão de Tabelas</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --primary: #1d2d44;
+      --accent: #fca311;
+      --bg: #f5f6fa;
+      --sidebar: #16213e;
+      --sidebar-active: #23395d;
+      --text: #22223b;
+      --white: #fff;
+      --success: #3bb273;
+      --danger: #e63946;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      margin: 0;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      z-index: 100;
+      background: var(--accent);
+      color: var(--sidebar);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .skip-link:focus {
+      left: 16px;
+      top: 16px;
+      width: auto;
+      height: auto;
+      outline: 2px solid var(--primary);
+    }
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      padding: 2rem 1.5rem 1rem 1.5rem;
+      border-bottom: 1px solid #23395d;
+    }
+    .sidebar .logo img {
+      width: 48px;
+      height: 48px;
+      margin-right: 1rem;
+    }
+    .sidebar nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+    .sidebar nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      border-left: 4px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .sidebar nav a.active, .sidebar nav a:focus {
+      background: var(--sidebar-active);
+      border-left: 4px solid var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+    .sidebar nav a:hover {
+      background: #23395d;
+      color: var(--accent);
+    }
+    .sidebar .user {
+      padding: 1rem 2rem;
+      border-top: 1px solid #23395d;
+      font-size: 0.95rem;
+      color: #bfc9d9;
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    header {
+      background: var(--white);
+      padding: 1.5rem 2rem 1rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .breadcrumbs {
+      font-size: 0.95rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .breadcrumbs a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .breadcrumbs a:focus {
+      outline: 2px solid var(--accent);
+      border-radius: 2px;
+    }
+    .breadcrumbs span {
+      color: #aaa;
+    }
+    main {
+      padding: 2rem;
+      flex: 1;
+      background: var(--bg);
+      min-width: 0;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+    }
+    form.upload-form {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px 0 rgba(34,34,59,0.06);
+      padding: 2rem 2.5rem;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: var(--primary);
+      display: block;
+    }
+    input[type="file"] {
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 0.7rem;
+      font-size: 1rem;
+      background: #fafafa;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .checkbox-group label {
+      font-weight: normal;
+      color: var(--text);
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 0.5rem;
+      accent-color: var(--accent);
+    }
+    .btn {
+      background: var(--accent);
+      color: var(--sidebar);
+      border: none;
+      border-radius: 6px;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 4px 0 rgba(34,34,59,0.04);
+      margin-top: 1rem;
+    }
+    .btn:focus {
+      outline: 2px solid var(--primary);
+      background: #ffd166;
+    }
+    .btn:hover {
+      background: #ffd166;
+      color: var(--primary);
+    }
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .alert-success { background: #eafaf1; color: var(--success); border: 1px solid var(--success); }
+    .alert-error { background: #fdeaea; color: var(--danger); border: 1px solid var(--danger); }
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; }
+      .sidebar .logo span { display: none; }
+      .sidebar nav a { font-size: 0.9rem; padding: 1rem 1rem; }
+      .sidebar .user { display: none; }
+      header, main { padding-left: 1rem; padding-right: 1rem; }
+      form.upload-form { padding: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      header { padding: 1rem; }
+      main { padding: 1rem; }
+      form.upload-form { padding: 0.5rem; }
+    }
+    a:focus, button:focus, input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link" tabindex="1">Pular para o conteúdo principal</a>
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" width="48" height="48">
+      <span style="font-size:1.25rem;font-weight:bold;letter-spacing:1px;">Plurix Gestão</span>
+    </div>
+    <nav aria-label="Navegação lateral">
+      <a href="dashboard.html" tabindex="2">Dashboard</a>
+      <a href="upload.html" class="active" aria-current="page" tabindex="3">Upload de Tabelas</a>
+      <a href="aprovacoes.html" tabindex="4">Aprovações</a>
+      <a href="analise.html" tabindex="5">Painel de Análise</a>
+      <a href="fornecedores.html" tabindex="6">Gestão de Fornecedores</a>
+      <a href="usuarios.html" tabindex="7">Usuários & Permissões</a>
+      <a href="logs.html" tabindex="8">Auditoria & Logs</a>
+      <a href="config.html" tabindex="9">Configurações</a>
+    </nav>
+    <div class="user" aria-label="Usuário logado">
+      <span aria-label="Nome do usuário">João Silva</span><br>
+      <span aria-label="Perfil do usuário">Administrador</span>
+    </div>
+  </aside>
+  <div class="main">
+    <header>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="dashboard.html">Início</a>
+        <span aria-hidden="true">/</span>
+        <a href="dashboard.html">Dashboard</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Upload de Tabelas</span>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="0">
+      <div class="section-title">Upload de Tabela de Preços</div>
+      <form class="upload-form" aria-label="Formulário de upload de tabela" autocomplete="off">
+        <div>
+          <label for="file-upload">Arquivo (Excel/CSV) <span aria-hidden="true" style="color:var(--danger);">*</span></label>
+          <input type="file" id="file-upload" name="file-upload" accept=".xlsx,.xls,.csv" required aria-required="true" aria-label="Selecione o arquivo Excel ou CSV para upload">
+        </div>
+        <div>
+          <label>Coligadas/UF <span aria-hidden="true" style="color:var(--danger);">*</span></label>
+          <div class="checkbox-group" role="group" aria-label="Seleção de coligadas e UF">
+            <label><input type="checkbox" name="coligada" value="SP" aria-label="São Paulo">SP</label>
+            <label><input type="checkbox" name="coligada" value="RJ" aria-label="Rio de Janeiro">RJ</label>
+            <label><input type="checkbox" name="coligada" value="MG" aria-label="Minas Gerais">MG</label>
+            <label><input type="checkbox" name="coligada" value="PR" aria-label="Paraná">PR</label>
+            <label><input type="checkbox" name="coligada" value="RS" aria-label="Rio Grande do Sul">RS</label>
+          </div>
+        </div>
+        <div>
+          <label for="ajuste">Ajuste Manual de Produtos</label>
+          <textarea id="ajuste" name="ajuste" rows="3" placeholder="Descreva ajustes manuais, se necessário" aria-label="Campo para ajuste manual de produtos"></textarea>
+        </div>
+        <button type="submit" class="btn" aria-label="Enviar tabela">Enviar Tabela</button>
+      </form>
+      <div id="upload-feedback" aria-live="polite"></div>
+    </main>
+  </div>
+  <script>
+    // Skip link foco
+    document.querySelector('.skip-link').addEventListener('click', function(e) {
+      document.getElementById('main-content').focus();
+    });
+    // Menu ativo
+    document.querySelectorAll('.sidebar nav a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.sidebar nav a').forEach(a=>a.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    // Simulação de feedback de upload
+    document.querySelector('.upload-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var feedback = document.getElementById('upload-feedback');
+      feedback.innerHTML = '<div class="alert alert-success" role="alert">Tabela enviada com sucesso! Validação automática realizada.</div>';
+      setTimeout(function(){ feedback.innerHTML = ''; }, 5000);
+    });
+  </script>
+</body>
+</html>
