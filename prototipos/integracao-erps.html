@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monitoramento Integração ERPs | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f5f7;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 40px;
+    }
+    nav a {
+      color: #1a1a1a;
+      text-decoration: none;
+      margin: 0 16px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0097a7;
+      border-bottom: 2px solid #0097a7;
+      padding-bottom: 2px;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 32px 40px 40px 40px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0097a7;
+    }
+    .cards-status {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .status-card {
+      background: #e0f7fa;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      padding: 20px 32px;
+      min-width: 220px;
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border-left: 6px solid #0097a7;
+    }
+    .status-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #007c91;
+      margin-bottom: 8px;
+    }
+    .status-indicator {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .status-ok { color: #388e3c; }
+    .status-erro { color: #d32f2f; }
+    .status-pendente { color: #fbc02d; }
+    .status-sync { color: #1976d2; }
+    .status-label {
+      font-size: 0.97rem;
+      color: #616161;
+      margin-bottom: 4px;
+    }
+    .retry-btn {
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ff9800;
+      border-radius: 4px;
+      padding: 6px 16px;
+      font-size: 0.97rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .retry-btn:hover {
+      background: #ffe0b2;
+    }
+    .sync-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      background: #fafbfc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .sync-table th, .sync-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 0.97rem;
+    }
+    .sync-table th {
+      background: #e0f7fa;
+      color: #007c91;
+      font-weight: 700;
+    }
+    .sync-table tr:last-child td {
+      border-bottom: none;
+    }
+    .erro-msg {
+      color: #d32f2f;
+      font-size: 0.97rem;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    @media (max-width: 900px) {
+      main { padding: 20px 8px; }
+      .cards-status { flex-direction: column; gap: 12px; }
+    }
+    footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      padding: 24px 0 12px 0;
+      background: transparent;
+    }
+  </style>
+  <script>
+    function retrySync(bandeira) {
+      alert('Retry manual solicitado para ' + bandeira + '. (Funcionalidade protótipo)');
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"/>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="integracao-erps.html" class="active">Integração ERPs</a>
+      <a href="perfil-usuario.html">Perfil</a>
+      <a href="login.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Monitoramento de Integração com ERPs</h1>
+    <div class="cards-status">
+      <div class="status-card">
+        <span class="status-title">Bandeira A (Consinco)</span>
+        <span class="status-indicator status-ok">Sincronizado</span>
+        <span class="status-label">Última sincronização: 2024-06-17 09:12</span>
+        <span class="status-label">Registros processados: 1.200</span>
+      </div>
+      <div class="status-card">
+        <span class="status-title">Bandeira B (Flex)</span>
+        <span class="status-indicator status-erro">Erro</span>
+        <span class="status-label">Última sincronização: 2024-06-17 09:10</span>
+        <span class="status-label">Registros processados: 980</span>
+        <span class="erro-msg">Erro: Timeout de conexão ERP</span>
+        <button class="retry-btn" onclick="retrySync('Bandeira B')" aria-label="Tentar novamente Bandeira B">Retry Manual</button>
+      </div>
+      <div class="status-card">
+        <span class="status-title">Bandeira C (Consinco)</span>
+        <span class="status-indicator status-pendente">Pendente</span>
+        <span class="status-label">Última sincronização: 2024-06-16 22:00</span>
+        <span class="status-label">Registros processados: 0</span>
+        <button class="retry-btn" onclick="retrySync('Bandeira C')" aria-label="Tentar novamente Bandeira C">Retry Manual</button>
+      </div>
+    </div>
+    <h2 style="color:#007c91; font-size:1.2rem; margin-top:32px;">Histórico de Sincronizações</h2>
+    <div style="overflow-x:auto;">
+      <table class="sync-table" aria-label="Histórico de sincronizações">
+        <thead>
+          <tr>
+            <th>Bandeira</th>
+            <th>ERP</th>
+            <th>Data/Hora</th>
+            <th>Status</th>
+            <th>Registros Processados</th>
+            <th>Mensagem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bandeira A</td>
+            <td>Consinco</td>
+            <td>2024-06-17 09:12</td>
+            <td><span class="status-ok">Sucesso</span></td>
+            <td>1.200</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>Bandeira B</td>
+            <td>Flex</td>
+            <td>2024-06-17 09:10</td>
+            <td><span class="status-erro">Erro</span></td>
+            <td>980</td>
+            <td>Timeout de conexão ERP</td>
+          </tr>
+          <tr>
+            <td>Bandeira C</td>
+            <td>Consinco</td>
+            <td>2024-06-16 22:00</td>
+            <td><span class="status-pendente">Pendente</span></td>
+            <td>0</td>
+            <td>Sincronização agendada</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

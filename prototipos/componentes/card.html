@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componente Card - Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --plurix-blue: #003366;
+      --plurix-light-blue: #4db6e2;
+      --plurix-gray: #f7f7f7;
+      --plurix-card-bg: #fff;
+      --plurix-card-border: #e0e0e0;
+      --plurix-card-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      --plurix-card-hover: #f0f8ff;
+      --plurix-card-selected: #e6f4fb;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--plurix-gray);
+    }
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 32px;
+      background: var(--plurix-gray);
+      justify-content: flex-start;
+    }
+    .card {
+      background: var(--plurix-card-bg);
+      border: 1px solid var(--plurix-card-border);
+      border-radius: 10px;
+      box-shadow: var(--plurix-card-shadow);
+      padding: 24px;
+      width: 320px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(77,182,226,0.13);
+      border-color: var(--plurix-light-blue);
+      background: var(--plurix-card-hover);
+    }
+    .card.selected {
+      border-color: var(--plurix-blue);
+      background: var(--plurix-card-selected);
+      box-shadow: 0 2px 12px rgba(0,51,102,0.10);
+    }
+    .card-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 12px;
+      background: #e9ecef;
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--plurix-blue);
+      margin: 0 0 8px 0;
+    }
+    .card-content {
+      font-size: 15px;
+      color: #444;
+      flex: 1;
+    }
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .card-btn {
+      background: var(--plurix-light-blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .card-btn:hover {
+      background: var(--plurix-blue);
+    }
+    .card-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: var(--plurix-light-blue);
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 700px) {
+      .card-grid {
+        flex-direction: column;
+        gap: 18px;
+        padding: 10px;
+      }
+      .card {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h2 style="margin: 32px 0 0 32px; color: #003366;">Exemplos de Card Plurix</h2>
+    <div class="card-grid">
+      <!-- Card Simples -->
+      <div class="card" tabindex="0" aria-label="Card simples">
+        <div class="card-title">Card Simples</div>
+        <div class="card-content">Este é um card básico, ideal para exibir informações resumidas ou KPIs.</div>
+      </div>
+      <!-- Card com Imagem -->
+      <div class="card" tabindex="0" aria-label="Card com imagem">
+        <img class="card-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Exemplo de produto">
+        <div class="card-title">Card com Imagem</div>
+        <div class="card-content">Inclua uma imagem para destacar produtos, fornecedores ou indicadores visuais.</div>
+      </div>
+      <!-- Card com Ações -->
+      <div class="card" tabindex="0" aria-label="Card com ações">
+        <div class="card-title">Card com Ações</div>
+        <div class="card-content">Cards podem incluir botões para ações rápidas, como editar, aprovar ou excluir.</div>
+        <div class="card-actions">
+          <button class="card-btn">Editar</button>
+          <button class="card-btn">Aprovar</button>
+        </div>
+      </div>
+      <!-- Card Selecionado -->
+      <div class="card selected" tabindex="0" aria-label="Card selecionado">
+        <div class="card-title">Card Selecionado</div>
+        <div class="card-content">Este card está no estado "selecionado" para indicar escolha do usuário.</div>
+        <span class="card-badge">Selecionado</span>
+      </div>
+      <!-- Card com Imagem e Badge -->
+      <div class="card" tabindex="0" aria-label="Card com imagem e badge">
+        <img class="card-image" src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Fornecedor destaque">
+        <div class="card-title">Fornecedor Destaque</div>
+        <div class="card-content">Card com imagem, badge e ações. Use para destacar fornecedores ou produtos-chave.</div>
+        <span class="card-badge">Top 10</span>
+        <div class="card-actions">
+          <button class="card-btn">Ver Detalhes</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Exemplo de seleção de card
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>

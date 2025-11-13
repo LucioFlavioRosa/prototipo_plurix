@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma Plurix - Gestão de Tabelas de Preços</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: 'wf_1973fffd9707483bb7143c4dc';
+      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
+           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
+    }
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    :root {
+      --primary: #002d5b;
+      --secondary: #f5f7fa;
+      --accent: #00b3b0;
+      --text: #222;
+      --text-light: #fff;
+      --gray: #e5e7eb;
+      --border-radius: 8px;
+      --shadow: 0 2px 8px rgba(0,45,91,0.08);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'wf_1973fffd9707483bb7143c4dc', 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: var(--secondary);
+      color: var(--text);
+      font-size: 16px;
+    }
+    header {
+      background: var(--primary);
+      color: var(--text-light);
+      padding: 0 0 0 0;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      padding-left: 32px;
+    }
+    .header-logo img {
+      height: 48px;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+      padding-right: 32px;
+    }
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+    main {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 16px 48px 16px;
+      background: var(--secondary);
+    }
+    .hero {
+      margin-top: 48px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 48px 32px 32px 32px;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero img {
+      width: 120px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: #444;
+      margin-bottom: 24px;
+    }
+    .cta-group {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .btn {
+      background: var(--primary);
+      color: var(--text-light);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0,45,91,0.08);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-accent {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+    .btn:hover {
+      background: #003c7a;
+    }
+    .btn-accent:hover {
+      background: #009b9a;
+    }
+    .features {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      max-width: 1040px;
+      width: 100%;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 32px 24px;
+      flex: 1 1 320px;
+      min-width: 280px;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(0,45,91,0.13);
+    }
+    .feature-title {
+      color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-desc {
+      color: #444;
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+    footer {
+      background: var(--primary);
+      color: var(--text-light);
+      text-align: center;
+      padding: 24px 0 16px 0;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      margin-top: 32px;
+      box-shadow: var(--shadow);
+    }
+    @media (max-width: 900px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+      .feature-card {
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero {
+        padding: 32px 8px 24px 8px;
+      }
+      .features {
+        gap: 16px;
+      }
+      .header-logo {
+        padding-left: 12px;
+      }
+      nav {
+        padding-right: 12px;
+      }
+    }
+    /* Transição suave entre telas */
+    .fade-in {
+      animation: fadeIn 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
+      <span class="header-title">Plataforma Plurix</span>
+    </div>
+    <nav aria-label="Navegação principal">
+      <a href="index.html" aria-current="page">Início</a>
+      <a href="login-fornecedor.html">Login Fornecedor</a>
+      <a href="login-interno.html">Login Interno</a>
+    </nav>
+  </header>
+  <main class="fade-in">
+    <section class="hero">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" width="120">
+      <h1>Gestão Inteligente de Tabelas de Preços</h1>
+      <p>Centralize, valide e aprove tabelas de preços de fornecedores com governança, agilidade e total rastreabilidade. Plataforma robusta para gestão, análise e integração de preços, conectando fornecedores e gestores das bandeiras Plurix.</p>
+      <div class="cta-group">
+        <a href="login-fornecedor.html" class="btn">Acessar como Fornecedor</a>
+        <a href="login-interno.html" class="btn btn-accent">Acessar como Gestor Interno</a>
+      </div>
+    </section>
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-title">Upload Padronizado</div>
+        <div class="feature-desc">Envio de tabelas Excel/CSV com validação automática de estrutura e template padrão.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Workflow de Aprovação</div>
+        <div class="feature-desc">Fluxo multinível configurável, com rastreabilidade e logs completos de decisões.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Análise Comercial Avançada</div>
+        <div class="feature-desc">Dashboards interativos, indicadores críticos e integração com dados de mercado.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Segurança & Permissões</div>
+        <div class="feature-desc">Controle de acessos, autenticação SSO e conformidade com auditoria.</div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+  <script>
+    // Transição suave ao navegar entre telas
+    document.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (link.getAttribute('href') && link.getAttribute('href').endsWith('.html')) {
+          e.preventDefault();
+          document.body.classList.remove('fade-in');
+          document.body.style.opacity = 1;
+          document.body.style.transition = 'opacity 0.3s';
+          document.body.style.opacity = 0;
+          setTimeout(function() {
+            window.location = link.getAttribute('href');
+          }, 300);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+[
+  {
+    "dataHora": "2024-06-01T08:12:34Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Upload de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_junho.xlsx enviado com sucesso.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:13:10Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Validação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação concluída: 2 erros encontrados (SKU inválido, coluna faltante)",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:15:00Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Ajuste Manual",
+    "entidade": "Produto SKU 7891234567890",
+    "detalhes": "Preço ajustado manualmente de R$ 12,99 para R$ 13,49.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:18:12Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Gerente de Categoria.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:19:45Z",
+    "usuario": "d.oliveira@diretoria.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Diretor Comercial Bandeira.",
+    "ip": "200.142.33.13"
+  },
+  {
+    "dataHora": "2024-06-01T08:21:02Z",
+    "usuario": "v.pereira@holding.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por VP.",
+    "ip": "200.142.33.14"
+  },
+  {
+    "dataHora": "2024-06-01T08:22:30Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Consinco",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira SuperMais.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:22:31Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Flex",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira MaxiCompra.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:24:00Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Consulta Histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Visualizou histórico de preços dos últimos 12 meses.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:25:10Z",
+    "usuario": "a.mendes@auditoria.com",
+    "acao": "Exportação de Logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Exportou relatório de logs para auditoria externa.",
+    "ip": "189.45.67.123"
+  },
+  {
+    "dataHora": "2024-06-01T08:26:45Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Reprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Reprovada: divergência em preço de SKU 7891234567890.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:27:30Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Novo Upload",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_junho_corrigida.xlsx enviado.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:29:10Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada após correção.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:30:00Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Cadastro de Usuário",
+    "entidade": "Usuário",
+    "detalhes": "Usuário novo cadastrado: l.souza@fornecedor.com (Fornecedor)",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:31:22Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Login",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Login realizado com sucesso.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:32:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Upload de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_julho.xlsx enviado.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:33:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Validação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação concluída: sem erros.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:34:10Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Gerente de Categoria.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:35:45Z",
+    "usuario": "d.oliveira@diretoria.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Diretor Comercial Bandeira.",
+    "ip": "200.142.33.13"
+  },
+  {
+    "dataHora": "2024-06-01T08:36:50Z",
+    "usuario": "v.pereira@holding.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por VP.",
+    "ip": "200.142.33.14"
+  },
+  {
+    "dataHora": "2024-06-01T08:37:15Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Consinco",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira SuperMais.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:38:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Consulta Histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Visualizou histórico de preços dos últimos 6 meses.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:39:10Z",
+    "usuario": "a.mendes@auditoria.com",
+    "acao": "Exportação de Logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Exportou relatório de logs para auditoria interna.",
+    "ip": "189.45.67.123"
+  },
+  {
+    "dataHora": "2024-06-01T08:40:20Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Alteração de Permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de l.souza@fornecedor.com alterada para Fornecedor Master.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:41:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Upload de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_agosto.xlsx enviado.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:42:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Validação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação concluída: 1 erro encontrado (coluna extra).",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:43:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Ajuste Manual",
+    "entidade": "Produto SKU 7899876543210",
+    "detalhes": "Preço ajustado manualmente de R$ 8,99 para R$ 9,29.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:44:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Novo Upload",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_agosto_corrigida.xlsx enviado.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:45:15Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada após correção.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:46:30Z",
+    "usuario": "d.oliveira@diretoria.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Diretor Comercial Bandeira.",
+    "ip": "200.142.33.13"
+  },
+  {
+    "dataHora": "2024-06-01T08:47:50Z",
+    "usuario": "v.pereira@holding.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por VP.",
+    "ip": "200.142.33.14"
+  },
+  {
+    "dataHora": "2024-06-01T08:48:10Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Flex",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira MaxiCompra.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:49:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Consulta Histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Visualizou histórico de preços dos últimos 3 meses.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:50:30Z",
+    "usuario": "a.mendes@auditoria.com",
+    "acao": "Exportação de Logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Exportou relatório de logs para auditoria externa.",
+    "ip": "189.45.67.123"
+  },
+  {
+    "dataHora": "2024-06-01T08:51:00Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Alteração de Permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de l.souza@fornecedor.com alterada para Fornecedor.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T08:52:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Logout",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Logout realizado.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T08:53:00Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Login",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Login realizado com sucesso.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:54:10Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Upload de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_setembro.xlsx enviado.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:55:00Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Validação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação concluída: sem erros.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:56:10Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Gerente de Categoria.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:57:45Z",
+    "usuario": "d.oliveira@diretoria.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Diretor Comercial Bandeira.",
+    "ip": "200.142.33.13"
+  },
+  {
+    "dataHora": "2024-06-01T08:58:50Z",
+    "usuario": "v.pereira@holding.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por VP.",
+    "ip": "200.142.33.14"
+  },
+  {
+    "dataHora": "2024-06-01T08:59:10Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Consinco",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira SuperMais.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T09:00:00Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Consulta Histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Visualizou histórico de preços dos últimos 12 meses.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T09:01:10Z",
+    "usuario": "a.mendes@auditoria.com",
+    "acao": "Exportação de Logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Exportou relatório de logs para auditoria interna.",
+    "ip": "189.45.67.123"
+  },
+  {
+    "dataHora": "2024-06-01T09:02:20Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Alteração de Permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de j.silva@fornecedor.com alterada para Fornecedor Master.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T09:03:10Z",
+    "usuario": "j.silva@fornecedor.com",
+    "acao": "Logout",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Logout realizado.",
+    "ip": "187.22.45.101"
+  },
+  {
+    "dataHora": "2024-06-01T09:04:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Login",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Login realizado com sucesso.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:05:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Upload de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_outubro.xlsx enviado.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:06:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Validação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação concluída: sem erros.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:07:10Z",
+    "usuario": "m.moura@comprador.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Gerente de Categoria.",
+    "ip": "200.142.33.12"
+  },
+  {
+    "dataHora": "2024-06-01T09:08:45Z",
+    "usuario": "d.oliveira@diretoria.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por Diretor Comercial Bandeira.",
+    "ip": "200.142.33.13"
+  },
+  {
+    "dataHora": "2024-06-01T09:09:50Z",
+    "usuario": "v.pereira@holding.com",
+    "acao": "Aprovação de Tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Aprovada por VP.",
+    "ip": "200.142.33.14"
+  },
+  {
+    "dataHora": "2024-06-01T09:10:10Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Sincronização ERP",
+    "entidade": "ERP Consinco",
+    "detalhes": "Tabela sincronizada com sucesso para bandeira SuperMais.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T09:11:00Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Consulta Histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Visualizou histórico de preços dos últimos 12 meses.",
+    "ip": "187.22.45.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:12:10Z",
+    "usuario": "a.mendes@auditoria.com",
+    "acao": "Exportação de Logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Exportou relatório de logs para auditoria externa.",
+    "ip": "189.45.67.123"
+  },
+  {
+    "dataHora": "2024-06-01T09:13:00Z",
+    "usuario": "s.rocha@admin.com",
+    "acao": "Alteração de Permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de l.souza@fornecedor.com alterada para Fornecedor Master.",
+    "ip": "10.0.1.5"
+  },
+  {
+    "dataHora": "2024-06-01T09:14:10Z",
+    "usuario": "l.souza@fornecedor.com",
+    "acao": "Logout",
+    "entidade": "Portal de Fornecedores",
+    "detalhes": "Logout realizado.",
+    "ip": "187.22.45.102"
+  }
+]

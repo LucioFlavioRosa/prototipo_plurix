@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload de Tabela | Plurix Plataforma</title>
+  <link rel="icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --secondary: #00bcd4;
+      --bg: #f5f7fa;
+      --menu-bg: #fff;
+      --menu-active: #e3f2fd;
+      --menu-hover: #e1f5fe;
+      --text: #1d2b36;
+      --border: #cfd8dc;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); }
+    body { min-height: 100vh; }
+    .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; z-index: 100; background: #fff; color: #1976d2; padding: 8px 16px; border-radius: 4px; }
+    .skip-link:focus { left: 16px; top: 16px; width: auto; height: auto; font-size: 1rem; }
+    .layout { display: flex; min-height: 100vh; }
+    nav.sidebar { width: 240px; background: var(--menu-bg); box-shadow: 2px 0 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; padding: 1.5rem 0.5rem; }
+    nav.sidebar .logo { width: 120px; margin: 0 auto 2rem auto; display: block; }
+    nav.sidebar ul { list-style: none; padding: 0; margin: 0; }
+    nav.sidebar li { margin-bottom: 0.5rem; }
+    nav.sidebar a { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--text); padding: 0.75rem 1rem; border-radius: 8px; font-weight: 500; transition: background 0.2s; outline: none; }
+    nav.sidebar a.active, nav.sidebar a:focus { background: var(--menu-active); color: var(--primary); font-weight: 700; }
+    nav.sidebar a:hover { background: var(--menu-hover); }
+    nav.sidebar .logout { margin-top: auto; color: #d32f2f; }
+    main.content { flex: 1; padding: 2rem 2.5rem; min-width: 0; }
+    header.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .breadcrumbs { font-size: 0.97rem; color: #607d8b; display: flex; align-items: center; gap: 0.5rem; }
+    .breadcrumbs a { color: #1976d2; text-decoration: none; }
+    .breadcrumbs a:focus { outline: 2px solid #1976d2; }
+    .user-info { display: flex; align-items: center; gap: 0.6rem; }
+    .user-info img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #00bcd4; }
+    .user-info span { font-size: 1rem; color: var(--text); }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    form.upload-form { background: #fff; border-radius: 12px; box-shadow: var(--shadow); padding: 2rem 1.5rem; max-width: 600px; margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.3rem; }
+    label { display: block; font-size: 1rem; color: var(--text); margin-bottom: 0.3rem; font-weight: 500; }
+    input[type="file"] { border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem; background: var(--bg); width: 100%; font-size: 1rem; }
+    .checkbox-list { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .checkbox-list label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; }
+    .btn-primary { background: linear-gradient(90deg, #1976d2 0%, #00bcd4 100%); color: #fff; border: none; border-radius: 8px; padding: 0.85rem 1.5rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(25,118,210,0.08); transition: background 0.2s; }
+    .btn-primary:focus { outline: 2px solid #1976d2; }
+    .form-feedback { margin-top: 1rem; font-size: 1rem; }
+    .form-feedback.success { color: #43a047; }
+    .form-feedback.error { color: #d32f2f; }
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      nav.sidebar { width: 100%; flex-direction: row; padding: 0.5rem; box-shadow: none; border-bottom: 1px solid var(--border); }
+      nav.sidebar ul { display: flex; flex-direction: row; gap: 0.5rem; width: 100%; justify-content: center; }
+      nav.sidebar li { margin-bottom: 0; }
+      nav.sidebar .logout { margin-top: 0; }
+      main.content { padding: 1rem 0.5rem; }
+    }
+    @media (max-width: 600px) {
+      form.upload-form { padding: 1rem 0.5rem; }
+      header.topbar { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+    }
+  </style>
+  <script>
+    function handleUpload(e) {
+      e.preventDefault();
+      var feedback = document.getElementById('form-feedback');
+      var file = document.getElementById('file').files[0];
+      if (!file) {
+        feedback.textContent = 'Selecione um arquivo para upload.';
+        feedback.className = 'form-feedback error';
+        return;
+      }
+      var allowed = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel','text/csv'];
+      if (!allowed.includes(file.type) && !file.name.endsWith('.csv') && !file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
+        feedback.textContent = 'Formato de arquivo inválido. Envie um Excel ou CSV.';
+        feedback.className = 'form-feedback error';
+        return;
+      }
+      feedback.textContent = 'Upload realizado com sucesso!';
+      feedback.className = 'form-feedback success';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('upload-form').addEventListener('submit', handleUpload);
+      var links = document.querySelectorAll('nav.sidebar a');
+      links.forEach(function(link) {
+        if (link.href && link.href.split('/').pop() === location.pathname.split('/').pop()) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Menu principal">
+      <a href="dashboard.html"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"></a>
+      <ul>
+        <li><a href="dashboard.html" tabindex="0">Dashboard</a></li>
+        <li><a href="upload.html" aria-current="page" tabindex="0">Upload Tabela</a></li>
+        <li><a href="aprovacoes.html" tabindex="0">Aprovações</a></li>
+        <li><a href="analise.html" tabindex="0">Análise Comercial</a></li>
+        <li><a href="fornecedores.html" tabindex="0">Fornecedores</a></li>
+        <li><a href="usuarios.html" tabindex="0">Usuários</a></li>
+      </ul>
+      <a href="login.html" class="logout" tabindex="0" aria-label="Sair da plataforma">Sair</a>
+    </nav>
+    <main class="content" id="main-content" tabindex="-1">
+      <header class="topbar">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="dashboard.html">Início</a>
+          <span aria-hidden="true">›</span>
+          <span>Upload de Tabela</span>
+        </nav>
+        <div class="user-info">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar do usuário">
+          <span>João Gerente</span>
+        </div>
+      </header>
+      <h1>Upload de Tabela de Preços</h1>
+      <form class="upload-form" id="upload-form" aria-label="Formulário de upload de tabela">
+        <div class="form-group">
+          <label for="file">Arquivo Excel/CSV <span aria-hidden="true" style="color:#d32f2f;">*</span></label>
+          <input type="file" id="file" name="file" accept=".csv,.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" required aria-required="true">
+        </div>
+        <div class="form-group">
+          <label>Coligadas/UF (Selecione onde os preços serão vigentes)</label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="uf[]" value="SP"> SP</label>
+            <label><input type="checkbox" name="uf[]" value="RJ"> RJ</label>
+            <label><input type="checkbox" name="uf[]" value="MG"> MG</label>
+            <label><input type="checkbox" name="uf[]" value="ES"> ES</label>
+            <label><input type="checkbox" name="uf[]" value="PR"> PR</label>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" aria-label="Enviar tabela">Enviar</button>
+        <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+      </form>
+      <section aria-labelledby="exemplo-tabela">
+        <h2 id="exemplo-tabela" style="font-size:1.1rem; margin-bottom:0.5rem;">Exemplo de Estrutura de Arquivo</h2>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; box-shadow: var(--shadow);">
+            <thead style="background:#e3f2fd;">
+              <tr>
+                <th>SKU</th>
+                <th>Descrição</th>
+                <th>Preço Atual</th>
+                <th>Novo Preço</th>
+                <th>Código Fornecedor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>7891234567890</td><td>Arroz Tipo 1 5kg</td><td>22,90</td><td>23,50</td><td>F1234</td></tr>
+              <tr><td>7899876543210</td><td>Feijão Carioca 1kg</td><td>8,50</td><td>8,80</td><td>F1234</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

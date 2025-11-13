@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalhes do SKU | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #212121;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      padding: 16px 32px;
+      justify-content: space-between;
+    }
+    .header-logo {
+      height: 40px;
+    }
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-left: 16px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 40px 40px;
+    }
+    .sku-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .sku-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0063b1;
+    }
+    .sku-meta {
+      font-size: 1rem;
+      color: #757575;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 32px;
+      margin-bottom: 32px;
+    }
+    .details-label {
+      font-size: 0.95rem;
+      color: #757575;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .details-value {
+      font-size: 1.1rem;
+      color: #1d1d1f;
+      font-weight: 600;
+    }
+    .variation-positive {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    .variation-negative {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+    .card {
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .chart-container {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 24px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 16px 8px 8px 8px;
+    }
+    .ic-indicators {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 16px;
+    }
+    .ic-indicator {
+      background: #e3f2fd;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      color: #1976d2;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ic-indicator.ic-baixa { background: #ffebee; color: #d32f2f; }
+    .ic-indicator.ic-media { background: #fffde7; color: #f9a825; }
+    .ic-indicator.ic-alta { background: #e8f5e9; color: #388e3c; }
+    .footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      margin-top: 48px;
+      padding-bottom: 24px;
+    }
+    .btn-voltar {
+      background: #0063b1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 24px;
+    }
+    .btn-voltar:hover {
+      background: #004a87;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 20px 6px; }
+      .details-grid { grid-template-columns: 1fr; }
+      .chart-container { max-width: 100%; }
+      .ic-indicators { flex-direction: column; gap: 12px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div style="display:flex;align-items:center;">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_120,h_40,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo"/>
+      <span class="header-title">Plataforma de Gerenciamento de Tabelas de Preços</span>
+    </div>
+    <nav>
+      <a href="dashboard.html" style="color:#1976d2;text-decoration:none;font-weight:600;margin-right:24px;">Dashboard</a>
+      <a href="aprovacao-reprovacao.html" style="color:#1976d2;text-decoration:none;font-weight:600;">Aprovações</a>
+    </nav>
+  </header>
+  <main class="container" aria-label="Detalhes do SKU">
+    <button class="btn-voltar" onclick="window.history.back()">&larr; Voltar</button>
+    <div class="sku-header">
+      <div>
+        <div class="sku-title">SKU: 7891234567890</div>
+        <div class="sku-meta">GTIN: 7891234567890 &nbsp;|&nbsp; Última atualização: 02/06/2024</div>
+      </div>
+      <div style="font-size:1.2rem;color:#757575;">Fornecedor: <b>Alimentos Brasil Ltda</b></div>
+    </div>
+    <div class="details-grid">
+      <div>
+        <div class="details-label">Descrição Completa</div>
+        <div class="details-value">Arroz Branco Tipo 1 5kg - Pacote Econômico</div>
+      </div>
+      <div>
+        <div class="details-label">Embalagem</div>
+        <div class="details-value">Pacote 5kg</div>
+      </div>
+      <div>
+        <div class="details-label">Preço Atual</div>
+        <div class="details-value">R$ 25,90</div>
+      </div>
+      <div>
+        <div class="details-label">Preço Novo</div>
+        <div class="details-value">R$ 27,50</div>
+      </div>
+      <div>
+        <div class="details-label">Variação (%)</div>
+        <div class="details-value variation-positive">+6,17%</div>
+      </div>
+      <div>
+        <div class="details-label">Peso nas Vendas do Fornecedor</div>
+        <div class="details-value">12,4%</div>
+      </div>
+      <div>
+        <div class="details-label">Impostos</div>
+        <div class="details-value">R$ 2,10</div>
+      </div>
+      <div>
+        <div class="details-label">Custos</div>
+        <div class="details-value">R$ 19,80</div>
+      </div>
+    </div>
+    <div class="ic-indicators">
+      <div class="ic-indicator ic-alta" title="Índice de Competitividade Nielsen">IC Nielsen: 92 (Alta)</div>
+      <div class="ic-indicator ic-media" title="Índice de Competitividade Objetiva">IC Objetiva: 78 (Média)</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="historicoPrecos" aria-label="Histórico de Preços" height="120"></canvas>
+    </div>
+    <div class="card">
+      <strong>Histórico de Preços (últimos 6 meses):</strong>
+      <table style="width:100%;margin-top:10px;font-size:0.98rem;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#e3f2fd;color:#1976d2;">
+            <th style="padding:6px 8px;">Mês</th>
+            <th style="padding:6px 8px;">Preço</th>
+            <th style="padding:6px 8px;">Variação (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>01/2024</td><td>R$ 24,90</td><td>+2,0%</td></tr>
+          <tr><td>02/2024</td><td>R$ 25,10</td><td>+0,8%</td></tr>
+          <tr><td>03/2024</td><td>R$ 25,90</td><td>+3,2%</td></tr>
+          <tr><td>04/2024</td><td>R$ 25,90</td><td>0,0%</td></tr>
+          <tr><td>05/2024</td><td>R$ 26,80</td><td>+3,5%</td></tr>
+          <tr><td>06/2024</td><td>R$ 27,50</td><td>+2,6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+  <script>
+    // Gráfico de linha do histórico de preços
+    const ctx = document.getElementById('historicoPrecos').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['01/2024', '02/2024', '03/2024', '04/2024', '05/2024', '06/2024'],
+        datasets: [{
+          label: 'Preço (R$)',
+          data: [24.90, 25.10, 25.90, 25.90, 26.80, 27.50],
+          borderColor: '#1976d2',
+          backgroundColor: 'rgba(25, 118, 210, 0.10)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 4,
+          pointBackgroundColor: '#1976d2',
+          pointBorderColor: '#fff',
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: { color: '#757575', font: { size: 13 } },
+            grid: { color: '#e3f2fd' }
+          },
+          x: {
+            ticks: { color: '#757575', font: { size: 13 } },
+            grid: { color: '#e3f2fd' }
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        height: 120
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aprovação/Reprovação de Tabela | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #212121;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      padding: 16px 32px;
+      justify-content: space-between;
+    }
+    .header-logo {
+      height: 40px;
+    }
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-left: 16px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 40px 40px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1976d2;
+      margin-bottom: 18px;
+    }
+    .tabela-resumo {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      font-size: 1rem;
+    }
+    .tabela-resumo th, .tabela-resumo td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e3f2fd;
+      text-align: left;
+    }
+    .tabela-resumo th {
+      background: #e3f2fd;
+      color: #1976d2;
+      font-weight: 700;
+    }
+    .tabela-resumo tr:last-child td {
+      border-bottom: none;
+    }
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .btn {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-aprovar {
+      background: #388e3c;
+      color: #fff;
+    }
+    .btn-aprovar:hover {
+      background: #27632a;
+    }
+    .btn-reprovar {
+      background: #d32f2f;
+      color: #fff;
+    }
+    .btn-reprovar:hover {
+      background: #a31515;
+    }
+    .btn-ajuste {
+      background: #f9a825;
+      color: #fff;
+    }
+    .btn-ajuste:hover {
+      background: #c17900;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      color: #757575;
+      font-size: 1rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    textarea {
+      width: 100%;
+      min-height: 60px;
+      border-radius: 6px;
+      border: 1px solid #e3f2fd;
+      font-size: 1rem;
+      padding: 8px 10px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    select {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #e3f2fd;
+      font-size: 1rem;
+      padding: 8px 10px;
+      background: #fafbfc;
+      font-family: inherit;
+    }
+    .feedback {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #388e3c;
+      display: none;
+    }
+    .feedback.error {
+      color: #d32f2f;
+    }
+    .footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      margin-top: 48px;
+      padding-bottom: 24px;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 20px 6px; }
+      .actions { flex-direction: column; gap: 10px; }
+    }
+  </style>
+  <script>
+    function validarFormulario(acao) {
+      const justificativa = document.getElementById('justificativa').value.trim();
+      const feedback = document.getElementById('feedback');
+      if (!justificativa) {
+        feedback.textContent = 'Justificativa é obrigatória para esta ação.';
+        feedback.classList.add('error');
+        feedback.style.display = 'block';
+        return false;
+      }
+      let msg = '';
+      if (acao === 'aprovar') msg = 'Tabela aprovada com sucesso!';
+      else if (acao === 'reprovar') msg = 'Tabela reprovada. Notificação enviada ao fornecedor.';
+      else msg = 'Solicitação de ajuste enviada ao fornecedor.';
+      feedback.textContent = msg;
+      feedback.classList.remove('error');
+      feedback.style.display = 'block';
+      setTimeout(() => { feedback.style.display = 'none'; }, 3500);
+      document.getElementById('justificativa').value = '';
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div style="display:flex;align-items:center;">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_120,h_40,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo"/>
+      <span class="header-title">Plataforma de Gerenciamento de Tabelas de Preços</span>
+    </div>
+    <nav>
+      <a href="dashboard.html" style="color:#1976d2;text-decoration:none;font-weight:600;margin-right:24px;">Dashboard</a>
+      <a href="workflow-aprovacoes.html" style="color:#1976d2;text-decoration:none;font-weight:600;">Workflow</a>
+    </nav>
+  </header>
+  <main class="container" aria-label="Aprovação ou Reprovação de Tabela">
+    <div class="section-title">Resumo da Tabela Submetida</div>
+    <table class="tabela-resumo">
+      <thead>
+        <tr>
+          <th>Fornecedor</th>
+          <th>Coligada</th>
+          <th>Período Vigência</th>
+          <th>Itens</th>
+          <th>Variação Média (%)</th>
+          <th>Impacto Financeiro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Alimentos Brasil Ltda</td>
+          <td>Bandeira Sul</td>
+          <td>06/2024 - 08/2024</td>
+          <td>58</td>
+          <td style="color:#2e7d32;font-weight:bold;">+4,2%</td>
+          <td>R$ 13.200,00</td>
+        </tr>
+      </tbody>
+    </table>
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label for="proximoAprovador">Próximo aprovador (se aplicável):</label>
+        <select id="proximoAprovador" name="proximoAprovador">
+          <option value="">Selecione...</option>
+          <option value="diretor-bandeira">Diretor Comercial Bandeira</option>
+          <option value="diretor-holding">Diretor Comercial Holding</option>
+          <option value="vp">VP</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="justificativa">Justificativa <span style="color:#d32f2f;">*</span></label>
+        <textarea id="justificativa" name="justificativa" required placeholder="Descreva o motivo da decisão..."></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn btn-aprovar" onclick="return validarFormulario('aprovar')">Aprovar</button>
+        <button class="btn btn-reprovar" onclick="return validarFormulario('reprovar')">Reprovar</button>
+        <button class="btn btn-ajuste" onclick="return validarFormulario('ajuste')">Solicitar Ajustes</button>
+      </div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </form>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

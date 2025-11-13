@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfil do Usuário | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f5f7;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 40px;
+    }
+    nav a {
+      color: #1a1a1a;
+      text-decoration: none;
+      margin: 0 16px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0097a7;
+      border-bottom: 2px solid #0097a7;
+      padding-bottom: 2px;
+    }
+    main {
+      max-width: 800px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 32px 40px 40px 40px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0097a7;
+    }
+    .perfil-section {
+      margin-bottom: 32px;
+    }
+    .perfil-form label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #007c91;
+    }
+    .perfil-form input, .perfil-form select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cfd8dc;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin-bottom: 14px;
+      background: #fafbfc;
+      color: #222;
+    }
+    .perfil-form .form-row {
+      display: flex;
+      gap: 24px;
+    }
+    .perfil-form .form-row > div {
+      flex: 1;
+    }
+    .perfil-form button {
+      background: #0097a7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .perfil-form button:hover {
+      background: #007c91;
+    }
+    .notificacoes {
+      margin-top: 8px;
+      margin-bottom: 24px;
+    }
+    .notificacoes label {
+      font-weight: 400;
+      color: #222;
+      margin-right: 16px;
+      font-size: 1rem;
+    }
+    .historico {
+      background: #e0f7fa;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .historico h3 {
+      color: #007c91;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .historico ul {
+      margin: 0;
+      padding: 0 0 0 18px;
+      font-size: 0.97rem;
+      color: #222;
+    }
+    .logout-btn {
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ff9800;
+      border-radius: 4px;
+      padding: 8px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: #ffe0b2;
+    }
+    @media (max-width: 700px) {
+      main { padding: 20px 8px; }
+      .perfil-form .form-row { flex-direction: column; gap: 0; }
+    }
+    footer {
+      text-align: center;
+      color: #757575;
+      font-size: 0.95rem;
+      padding: 24px 0 12px 0;
+      background: transparent;
+    }
+  </style>
+  <script>
+    function salvarPerfil(e) {
+      e.preventDefault();
+      alert('Dados salvos! (Protótipo)');
+    }
+    function alterarSenha(e) {
+      e.preventDefault();
+      alert('Senha alterada! (Protótipo)');
+    }
+    function logout() {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"/>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="integracao-erps.html">Integração ERPs</a>
+      <a href="perfil-usuario.html" class="active">Perfil</a>
+      <a href="login.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Perfil do Usuário</h1>
+    <section class="perfil-section">
+      <form class="perfil-form" onsubmit="salvarPerfil(event)">
+        <div class="form-row">
+          <div>
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" name="nome" value="João da Silva" required>
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" value="joao.silva@plurix.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="perfil">Perfil</label>
+            <select id="perfil" name="perfil" disabled>
+              <option selected>Gerente de Categoria</option>
+              <option>Fornecedor</option>
+              <option>Diretor</option>
+              <option>Administrador</option>
+            </select>
+          </div>
+          <div>
+            <label for="bandeira">Bandeira</label>
+            <select id="bandeira" name="bandeira">
+              <option>Bandeira A</option>
+              <option>Bandeira B</option>
+              <option>Bandeira C</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">Salvar Dados</button>
+      </form>
+    </section>
+    <section class="perfil-section">
+      <form class="perfil-form" onsubmit="alterarSenha(event)">
+        <label for="senha-atual">Alterar Senha</label>
+        <input type="password" id="senha-atual" name="senha-atual" placeholder="Senha atual" required>
+        <input type="password" id="nova-senha" name="nova-senha" placeholder="Nova senha" required>
+        <input type="password" id="confirma-senha" name="confirma-senha" placeholder="Confirmar nova senha" required>
+        <button type="submit">Alterar Senha</button>
+      </form>
+    </section>
+    <section class="perfil-section notificacoes">
+      <label><input type="checkbox" checked> Receber notificações por e-mail</label>
+      <label><input type="checkbox"> Receber notificações por SMS</label>
+      <label><input type="checkbox" checked> Notificar sobre aprovações</label>
+    </section>
+    <section class="perfil-section historico">
+      <h3>Histórico de Atividades Recentes</h3>
+      <ul>
+        <li>17/06/2024 09:15 - Login realizado</li>
+        <li>17/06/2024 09:12 - Aprovação de tabela de preços (Fornecedor 1)</li>
+        <li>16/06/2024 18:40 - Exportação de relatório DRE</li>
+        <li>16/06/2024 14:05 - Alteração de senha</li>
+      </ul>
+    </section>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </main>
+  <footer>
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

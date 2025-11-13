@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componente Sidebar - Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --plurix-blue: #003366;
+      --plurix-light-blue: #4db6e2;
+      --plurix-gray: #f7f7f7;
+      --plurix-dark: #222;
+      --plurix-sidebar-bg: #003366;
+      --plurix-sidebar-active: #4db6e2;
+      --plurix-sidebar-hover: #245a8d;
+      --plurix-sidebar-text: #fff;
+      --plurix-sidebar-icon: #b8c7ce;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--plurix-gray);
+    }
+    .sidebar {
+      width: 240px;
+      background: var(--plurix-sidebar-bg);
+      color: var(--plurix-sidebar-text);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+      z-index: 1000;
+      transition: width 0.2s;
+    }
+    .sidebar.collapsed {
+      width: 64px;
+    }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 16px 20px;
+      background: var(--plurix-blue);
+      min-height: 64px;
+    }
+    .sidebar-header img {
+      height: 36px;
+      width: auto;
+      transition: opacity 0.2s;
+    }
+    .sidebar.collapsed .sidebar-header img {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      color: var(--plurix-sidebar-text);
+      font-size: 22px;
+      cursor: pointer;
+      outline: none;
+    }
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar-nav li {
+      margin: 0;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 24px;
+      color: var(--plurix-sidebar-text);
+      text-decoration: none;
+      border-left: 4px solid transparent;
+      font-size: 16px;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .sidebar-link:hover {
+      background: var(--plurix-sidebar-hover);
+      color: #fff;
+    }
+    .sidebar-link.active {
+      background: var(--plurix-sidebar-active);
+      border-left: 4px solid #fff;
+      color: #fff;
+      font-weight: bold;
+    }
+    .sidebar-link .icon {
+      font-size: 18px;
+      color: var(--plurix-sidebar-icon);
+      min-width: 22px;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .sidebar-link.active .icon,
+    .sidebar-link:hover .icon {
+      color: #fff;
+    }
+    .sidebar-section-title {
+      padding: 10px 24px 4px 24px;
+      font-size: 13px;
+      color: #b8c7ce;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .sidebar-profile {
+      padding: 16px 24px;
+      border-top: 1px solid #234;
+      background: #002244;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--plurix-light-blue);
+    }
+    .sidebar-profile-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.collapsed .sidebar-profile-info {
+      display: none;
+    }
+    .sidebar.collapsed .sidebar-section-title,
+    .sidebar.collapsed .sidebar-link span {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .sidebar {
+        position: absolute;
+        height: 100%;
+        z-index: 2000;
+      }
+    }
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100vw;
+        min-width: unset;
+        max-width: unset;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        box-shadow: none;
+      }
+      .sidebar.collapsed {
+        width: 0;
+      }
+    }
+  </style>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar" aria-label="Menu lateral de navegação">
+    <div class="sidebar-header">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir/recolher menu"><i class="fas fa-bars"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Principal</div>
+      <ul>
+        <li><a class="sidebar-link active" href="#"><span class="icon"><i class="fas fa-home"></i></span><span>Dashboard</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-upload"></i></span><span>Upload Tabelas</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-table"></i></span><span>Minhas Submissões</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-check-double"></i></span><span>Workflow Aprovação</span></a></li>
+      </ul>
+      <div class="sidebar-section-title">Gestão</div>
+      <ul>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-users"></i></span><span>Fornecedores</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-user-shield"></i></span><span>Usuários</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-cogs"></i></span><span>Configurações</span></a></li>
+      </ul>
+      <div class="sidebar-section-title">Relatórios</div>
+      <ul>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-chart-line"></i></span><span>Análises Comerciais</span></a></li>
+        <li><a class="sidebar-link" href="#"><span class="icon"><i class="fas fa-file-alt"></i></span><span>Exportar Dados</span></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-profile">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto do usuário">
+      <div class="sidebar-profile-info">
+        <span style="font-weight:bold;">João Silva</span>
+        <span style="font-size:13px; color:#b8c7ce;">Fornecedor</span>
+      </div>
+    </div>
+  </aside>
+  <script>
+    // Sidebar collapse/expand
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+    });
+    // Navegação ativa (exemplo)
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

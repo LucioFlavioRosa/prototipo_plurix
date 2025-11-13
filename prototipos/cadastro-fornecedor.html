@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Fornecedor - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f4f6fa;
+      margin: 0;
+      color: #222;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+    nav a {
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    nav a.active, nav a:hover {
+      background: #e5e7eb;
+    }
+    main {
+      max-width: 700px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #1a237e;
+    }
+    form {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30, 34, 90, 0.06);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    label {
+      font-weight: 600;
+      color: #1a237e;
+      margin-bottom: 4px;
+      display: block;
+    }
+    input[type="text"], input[type="email"], input[type="file"], select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #bdbdbd;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+    .checkbox-group {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .checkbox-group label {
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: #1a237e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #3949ab;
+    }
+    .error {
+      color: #b71c1c;
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+    }
+    @media (max-width: 700px) {
+      main {
+        padding: 0 8px;
+      }
+      form {
+        padding: 20px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <nav>
+      <a href="dashboard-diretor.html">Dashboard Executivo</a>
+      <a href="gestao-fornecedores.html">Gestão de Fornecedores</a>
+      <a href="cadastro-fornecedor.html" class="active">Novo Fornecedor</a>
+      <a href="#" onclick="logout()">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Cadastro de Fornecedor</h1>
+    <form id="formFornecedor" autocomplete="off" enctype="multipart/form-data" novalidate>
+      <div>
+        <label for="cnpj">CNPJ *</label>
+        <input type="text" id="cnpj" name="cnpj" maxlength="18" required placeholder="00.000.000/0000-00" aria-required="true">
+        <div class="error" id="erroCnpj" style="display:none;"></div>
+      </div>
+      <div>
+        <label for="razao">Razão Social *</label>
+        <input type="text" id="razao" name="razao" required aria-required="true">
+        <div class="error" id="erroRazao" style="display:none;"></div>
+      </div>
+      <div>
+        <label for="endereco">Endereço *</label>
+        <input type="text" id="endereco" name="endereco" required aria-required="true">
+        <div class="error" id="erroEndereco" style="display:none;"></div>
+      </div>
+      <div>
+        <label for="contato">Contato (E-mail) *</label>
+        <input type="email" id="contato" name="contato" required aria-required="true">
+        <div class="error" id="erroContato" style="display:none;"></div>
+      </div>
+      <div>
+        <label>Bandeiras Atendidas *</label>
+        <div class="checkbox-group" id="bandeirasGroup">
+          <label><input type="checkbox" name="bandeiras" value="Bandeira 1"> Bandeira 1</label>
+          <label><input type="checkbox" name="bandeiras" value="Bandeira 2"> Bandeira 2</label>
+          <label><input type="checkbox" name="bandeiras" value="Bandeira 3"> Bandeira 3</label>
+          <label><input type="checkbox" name="bandeiras" value="Bandeira 4"> Bandeira 4</label>
+          <label><input type="checkbox" name="bandeiras" value="Bandeira 5"> Bandeira 5</label>
+        </div>
+        <div class="error" id="erroBandeiras" style="display:none;"></div>
+      </div>
+      <div>
+        <label for="documentos">Upload de Documentos (Contrato, Certidões) *</label>
+        <input type="file" id="documentos" name="documentos" accept=".pdf,.jpg,.png" multiple required aria-required="true">
+        <div class="error" id="erroDocumentos" style="display:none;"></div>
+      </div>
+      <button type="submit" class="btn-primary">Salvar Fornecedor</button>
+    </form>
+    <div id="sucessoMsg" style="display:none; color:#388e3c; font-weight:600; margin-top:18px;">Fornecedor cadastrado com sucesso!</div>
+  </main>
+  <script>
+    function validarCNPJ(cnpj) {
+      cnpj = cnpj.replace(/[\D]/g, '');
+      if (cnpj.length !== 14) return false;
+      // Validação básica de CNPJ (não rigorosa)
+      let soma = 0, tamanho = cnpj.length - 2, numeros = cnpj.substring(0, tamanho), digitos = cnpj.substring(tamanho), pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+      }
+      let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(0)) return false;
+      tamanho = tamanho + 1;
+      numeros = cnpj.substring(0, tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(1)) return false;
+      return true;
+    }
+    document.getElementById('formFornecedor').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let ok = true;
+      // Limpa erros
+      ['erroCnpj','erroRazao','erroEndereco','erroContato','erroBandeiras','erroDocumentos'].forEach(id => document.getElementById(id).style.display='none');
+      // CNPJ
+      const cnpj = document.getElementById('cnpj').value.trim();
+      if (!cnpj) {
+        document.getElementById('erroCnpj').innerText = 'CNPJ é obrigatório.';
+        document.getElementById('erroCnpj').style.display = 'block';
+        ok = false;
+      } else if (!validarCNPJ(cnpj)) {
+        document.getElementById('erroCnpj').innerText = 'CNPJ inválido.';
+        document.getElementById('erroCnpj').style.display = 'block';
+        ok = false;
+      }
+      // Razão Social
+      const razao = document.getElementById('razao').value.trim();
+      if (!razao) {
+        document.getElementById('erroRazao').innerText = 'Razão Social é obrigatória.';
+        document.getElementById('erroRazao').style.display = 'block';
+        ok = false;
+      }
+      // Endereço
+      const endereco = document.getElementById('endereco').value.trim();
+      if (!endereco) {
+        document.getElementById('erroEndereco').innerText = 'Endereço é obrigatório.';
+        document.getElementById('erroEndereco').style.display = 'block';
+        ok = false;
+      }
+      // Contato
+      const contato = document.getElementById('contato').value.trim();
+      if (!contato) {
+        document.getElementById('erroContato').innerText = 'Contato é obrigatório.';
+        document.getElementById('erroContato').style.display = 'block';
+        ok = false;
+      } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contato)) {
+        document.getElementById('erroContato').innerText = 'E-mail inválido.';
+        document.getElementById('erroContato').style.display = 'block';
+        ok = false;
+      }
+      // Bandeiras
+      const bandeiras = Array.from(document.querySelectorAll('input[name="bandeiras"]:checked'));
+      if (bandeiras.length === 0) {
+        document.getElementById('erroBandeiras').innerText = 'Selecione ao menos uma bandeira.';
+        document.getElementById('erroBandeiras').style.display = 'block';
+        ok = false;
+      }
+      // Documentos
+      const docs = document.getElementById('documentos').files;
+      if (!docs || docs.length === 0) {
+        document.getElementById('erroDocumentos').innerText = 'Envie ao menos um documento.';
+        document.getElementById('erroDocumentos').style.display = 'block';
+        ok = false;
+      }
+      if (ok) {
+        document.getElementById('sucessoMsg').style.display = 'block';
+        setTimeout(() => {
+          window.location.href = 'gestao-fornecedores.html';
+        }, 1800);
+      }
+    });
+    function logout() {
+      window.location.href = 'login.html';
+    }
+    // Edição simulada
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('edit')) {
+      const fornecedores = [
+        { cnpj: '12.345.678/0001-90', razao: 'SuperAlimentos SA', endereco: 'Av. Brasil, 1000', contato: 'contato@superalimentos.com', bandeiras: ['Bandeira 1', 'Bandeira 3'] },
+        { cnpj: '23.456.789/0001-01', razao: 'Distribuidora Brasil', endereco: 'Rua das Flores, 200', contato: 'vendas@distribuidorabrasil.com', bandeiras: ['Bandeira 2', 'Bandeira 4'] },
+        { cnpj: '34.567.890/0001-12', razao: 'Alfa Foods', endereco: 'Praça Central, 50', contato: 'alfa@alfafoods.com', bandeiras: ['Bandeira 5'] }
+      ];
+      const idx = parseInt(params.get('edit'));
+      if (fornecedores[idx]) {
+        document.getElementById('cnpj').value = fornecedores[idx].cnpj;
+        document.getElementById('razao').value = fornecedores[idx].razao;
+        document.getElementById('endereco').value = fornecedores[idx].endereco;
+        document.getElementById('contato').value = fornecedores[idx].contato;
+        fornecedores[idx].bandeiras.forEach(b => {
+          const cb = Array.from(document.querySelectorAll('input[name="bandeiras"]')).find(x => x.value === b);
+          if (cb) cb.checked = true;
+        });
+      }
+    }
+  </script>
+</body>
+</html>

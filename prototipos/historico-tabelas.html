@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Tabelas | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f7f7; }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+    }
+    .header-logo {
+      height: 38px;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .header-link {
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      position: relative;
+      padding: 8px 0;
+      transition: color 0.2s;
+    }
+    .header-link.active, .header-link:hover {
+      color: #0071e3;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 32px 20px 24px 20px;
+    }
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+    }
+    .filtros {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filtro-select, .filtro-input {
+      font-size: 1rem;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafbfc;
+      outline: none;
+      color: #333;
+      min-width: 120px;
+    }
+    .tabela-historico {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      background: #fff;
+    }
+    .tabela-historico th, .tabela-historico td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    .tabela-historico th {
+      background: #f7f7fa;
+      color: #222;
+      font-weight: 600;
+    }
+    .tabela-historico tr:hover {
+      background: #f1f6ff;
+    }
+    .status {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status.aprovado { background: #00b37e; }
+    .status.pendente { background: #0071e3; }
+    .status.reprovado { background: #e6007a; }
+    .acoes-btn {
+      background: #fafbfc;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      color: #0071e3;
+      font-weight: 500;
+      font-size: 0.97rem;
+      padding: 4px 10px;
+      margin-right: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .acoes-btn:hover {
+      background: #eaf3ff;
+    }
+    .comparacao-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.25);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .comparacao-modal.active {
+      display: flex;
+    }
+    .comparacao-conteudo {
+      background: #fff;
+      border-radius: 10px;
+      padding: 32px 24px;
+      max-width: 700px;
+      width: 95vw;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+      position: relative;
+    }
+    .comparacao-fechar {
+      position: absolute;
+      top: 12px; right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+    }
+    .comparacao-titulo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #222;
+    }
+    .comparacao-tabela {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.98rem;
+    }
+    .comparacao-tabela th, .comparacao-tabela td {
+      padding: 7px 6px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    .comparacao-tabela th { background: #f7f7fa; }
+    .comparacao-tabela .destaque { background: #fffbe6; color: #e67e22; font-weight: 700; }
+    @media (max-width: 800px) {
+      .container { padding: 10px 1vw; }
+      .tabela-historico th, .tabela-historico td { font-size: 0.97rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="header-logo">
+    <nav class="header-nav">
+      <a href="dashboard.html" class="header-link">Dashboard</a>
+      <a href="historico-tabelas.html" class="header-link active">Histórico</a>
+      <a href="notificacoes.html" class="header-link">Notificações</a>
+      <a href="perfil.html" class="header-link">Perfil</a>
+      <a href="logout.html" class="header-link">Sair</a>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="title">Histórico de Tabelas</div>
+    <form class="filtros" id="filtrosForm" aria-label="Filtros de histórico">
+      <input type="text" class="filtro-input" id="filtroFornecedor" placeholder="Fornecedor" aria-label="Filtrar por fornecedor">
+      <select class="filtro-select" id="filtroBandeira" aria-label="Filtrar por bandeira">
+        <option value="">Todas as bandeiras</option>
+        <option value="SuperMais">SuperMais</option>
+        <option value="MaxiCompra">MaxiCompra</option>
+        <option value="BandeiraSul">BandeiraSul</option>
+      </select>
+      <select class="filtro-select" id="filtroStatus" aria-label="Filtrar por status">
+        <option value="">Todos os status</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="pendente">Pendente</option>
+        <option value="reprovado">Reprovado</option>
+      </select>
+      <input type="date" class="filtro-input" id="filtroDataIni" aria-label="Data inicial">
+      <input type="date" class="filtro-input" id="filtroDataFim" aria-label="Data final">
+    </form>
+    <table class="tabela-historico" id="tabelaHistorico" aria-label="Tabela de histórico de tabelas">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Fornecedor</th>
+          <th>Bandeira</th>
+          <th>Status</th>
+          <th>Aprovador</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Conteúdo via JS -->
+      </tbody>
+    </table>
+  </main>
+  <div class="comparacao-modal" id="modalComparacao" role="dialog" aria-modal="true" aria-labelledby="comparacaoTitulo">
+    <div class="comparacao-conteudo">
+      <button class="comparacao-fechar" onclick="fecharComparacao()" aria-label="Fechar">&times;</button>
+      <div class="comparacao-titulo" id="comparacaoTitulo">Comparação de Versões</div>
+      <table class="comparacao-tabela">
+        <thead>
+          <tr><th>SKU</th><th>Produto</th><th>Preço Antigo</th><th>Preço Novo</th></tr>
+        </thead>
+        <tbody id="comparacaoBody">
+          <!-- Conteúdo via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    // Exemplo de dados de histórico
+    const historico = [
+      {
+        id: 1,
+        data: '2024-06-12',
+        fornecedor: 'SuperAlimentos',
+        bandeira: 'SuperMais',
+        status: 'aprovado',
+        aprovador: 'João Silva',
+        comparacao: [
+          { sku: '7891001', produto: 'Arroz Premium 5kg', antigo: 'R$ 19,90', novo: 'R$ 21,50' },
+          { sku: '7891002', produto: 'Feijão Carioca 1kg', antigo: 'R$ 7,50', novo: 'R$ 7,90' }
+        ]
+      },
+      {
+        id: 2,
+        data: '2024-06-11',
+        fornecedor: 'MegaDistribuidora',
+        bandeira: 'MaxiCompra',
+        status: 'pendente',
+        aprovador: 'Maria Souza',
+        comparacao: [
+          { sku: '7892001', produto: 'Óleo de Soja 900ml', antigo: 'R$ 5,20', novo: 'R$ 5,40' }
+        ]
+      },
+      {
+        id: 3,
+        data: '2024-06-10',
+        fornecedor: 'NutriMais',
+        bandeira: 'BandeiraSul',
+        status: 'reprovado',
+        aprovador: 'Carlos Lima',
+        comparacao: [
+          { sku: '7893001', produto: 'Açúcar Refinado 1kg', antigo: 'R$ 4,10', novo: 'R$ 4,30' }
+        ]
+      }
+    ];
+    function renderHistorico() {
+      const tbody = document.querySelector('#tabelaHistorico tbody');
+      tbody.innerHTML = '';
+      const filtroFornecedor = document.getElementById('filtroFornecedor').value.toLowerCase();
+      const filtroBandeira = document.getElementById('filtroBandeira').value;
+      const filtroStatus = document.getElementById('filtroStatus').value;
+      const filtroDataIni = document.getElementById('filtroDataIni').value;
+      const filtroDataFim = document.getElementById('filtroDataFim').value;
+      historico.forEach(item => {
+        let show = true;
+        if (filtroFornecedor && !item.fornecedor.toLowerCase().includes(filtroFornecedor)) show = false;
+        if (filtroBandeira && item.bandeira !== filtroBandeira) show = false;
+        if (filtroStatus && item.status !== filtroStatus) show = false;
+        if (filtroDataIni && item.data < filtroDataIni) show = false;
+        if (filtroDataFim && item.data > filtroDataFim) show = false;
+        if (show) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.data}</td>
+            <td>${item.fornecedor}</td>
+            <td>${item.bandeira}</td>
+            <td><span class="status ${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span></td>
+            <td>${item.aprovador}</td>
+            <td>
+              <button class="acoes-btn" onclick="abrirComparacao(${item.id})">Comparar</button>
+              <button class="acoes-btn" onclick="visualizarTabela(${item.id})">Visualizar</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      });
+    }
+    function abrirComparacao(id) {
+      const item = historico.find(h => h.id === id);
+      if (!item) return;
+      document.getElementById('modalComparacao').classList.add('active');
+      const body = document.getElementById('comparacaoBody');
+      body.innerHTML = '';
+      item.comparacao.forEach(row => {
+        const destaque = row.antigo !== row.novo ? 'destaque' : '';
+        body.innerHTML += `<tr>
+          <td>${row.sku}</td>
+          <td>${row.produto}</td>
+          <td class="${destaque}">${row.antigo}</td>
+          <td class="${destaque}">${row.novo}</td>
+        </tr>`;
+      });
+    }
+    function fecharComparacao() {
+      document.getElementById('modalComparacao').classList.remove('active');
+    }
+    function visualizarTabela(id) {
+      alert('Visualização detalhada da tabela histórica (mock).');
+    }
+    document.getElementById('filtroFornecedor').addEventListener('input', renderHistorico);
+    document.getElementById('filtroBandeira').addEventListener('change', renderHistorico);
+    document.getElementById('filtroStatus').addEventListener('change', renderHistorico);
+    document.getElementById('filtroDataIni').addEventListener('change', renderHistorico);
+    document.getElementById('filtroDataFim').addEventListener('change', renderHistorico);
+    renderHistorico();
+  </script>
+</body>
+</html>

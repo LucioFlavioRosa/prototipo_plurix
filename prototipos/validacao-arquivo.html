@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação de Arquivo - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif; background: #f5f6fa; color: #222; }
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    .header {
+      background: #fff;
+      padding: 24px 0 16px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    }
+    .header img { height: 48px; }
+    .main-container {
+      max-width: 540px;
+      margin: 40px auto 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+      padding: 32px 32px 24px 32px;
+    }
+    .status-alert {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2em;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+    .status-success {
+      background: #e6f7ec;
+      color: #1a7f37;
+      border: 1px solid #b7ebc6;
+    }
+    .status-error {
+      background: #fff1f0;
+      color: #d4380d;
+      border: 1px solid #ffa39e;
+    }
+    .status-alert svg {
+      flex-shrink: 0;
+    }
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 1em;
+    }
+    .error-table th, .error-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    .error-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 600;
+    }
+    .error-table tr:last-child td {
+      border-bottom: none;
+    }
+    .actions {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+    .btn {
+      font-family: inherit;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #222;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #444; }
+    .btn-outline {
+      background: #fff;
+      color: #222;
+      border: 1.5px solid #222;
+    }
+    .btn-outline:hover {
+      background: #f5f6fa;
+    }
+    @media (max-width: 600px) {
+      .main-container { padding: 16px 4vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+  </div>
+  <main class="main-container">
+    <!-- Status de erro (exemplo) -->
+    <div class="status-alert status-error" id="statusAlert">
+      <svg width="24" height="24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ffa39e"/><path d="M12 7v5" stroke="#d4380d" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="#d4380d"/></svg>
+      <span>Falha na validação do arquivo. Corrija os erros abaixo.</span>
+    </div>
+    <table class="error-table" aria-label="Lista de erros de validação">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Coluna</th>
+          <th>Descrição do Erro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>7</td><td>SKU</td><td>SKU inválido ou ausente</td></tr>
+        <tr><td>12</td><td>Preço Novo</td><td>Formato de valor incorreto</td></tr>
+        <tr><td>15</td><td>Fornecedor</td><td>Código de fornecedor não reconhecido</td></tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="reenviarArquivo()">Corrigir e Reenviar</button>
+      <button class="btn btn-outline" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+    </div>
+  </main>
+  <script>
+    // Exemplo de alternância para status de sucesso
+    // Para produção, trocar dinamicamente conforme resultado da validação
+    function reenviarArquivo() {
+      // Simulação: troca para status de sucesso
+      document.getElementById('statusAlert').className = 'status-alert status-success';
+      document.getElementById('statusAlert').innerHTML = `
+        <svg width="24" height="24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#b7ebc6"/><path d="M8 12.5l3 3 5-5" stroke="#1a7f37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Arquivo validado com sucesso! Pronto para submissão.</span>
+      `;
+      document.querySelector('.error-table').style.display = 'none';
+      document.querySelector('.actions').innerHTML = '<button class="btn btn-primary" onclick="window.location.href=\'dashboard-comprador.html\'">Ir para Dashboard</button>';
+    }
+  </script>
+</body>
+</html>

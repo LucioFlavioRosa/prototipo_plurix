@@ -1,0 +1,122 @@
+[
+  {
+    "nome": "João Gerente",
+    "email": "joao.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T18:00:00"
+  },
+  {
+    "nome": "Maria Diretora",
+    "email": "maria.diretora@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["BomPreço", "SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T17:30:00"
+  },
+  {
+    "nome": "Paulo VP",
+    "email": "paulo.vp@plurix.com",
+    "perfil": "VP",
+    "bandeiras_acesso": ["SuperMais", "MaisBarato", "BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T17:00:00"
+  },
+  {
+    "nome": "Fernanda Admin",
+    "email": "fernanda.admin@plurix.com",
+    "perfil": "Admin",
+    "bandeiras_acesso": ["SuperMais", "BomPreço", "MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T16:30:00"
+  },
+  {
+    "nome": "Lucas Gerente",
+    "email": "lucas.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T16:00:00"
+  },
+  {
+    "nome": "Patrícia Diretora",
+    "email": "patricia.diretora@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T15:30:00"
+  },
+  {
+    "nome": "Carlos VP",
+    "email": "carlos.vp@plurix.com",
+    "perfil": "VP",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T15:00:00"
+  },
+  {
+    "nome": "Fernanda Souza",
+    "email": "fernanda@distsul.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T14:30:00"
+  },
+  {
+    "nome": "Juliana Lima",
+    "email": "juliana@bebidasnorte.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["BomPreço", "MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T14:00:00"
+  },
+  {
+    "nome": "Roberto Dias",
+    "email": "roberto@laticiniosuniao.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais", "BomPreço", "MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T13:30:00"
+  },
+  {
+    "nome": "Ana Paula",
+    "email": "ana@cereaisco.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T13:00:00"
+  },
+  {
+    "nome": "Marcos Vinicius",
+    "email": "marcos@produtosnaturais.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T12:30:00"
+  },
+  {
+    "nome": "Simone Freitas",
+    "email": "simone@importleste.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["BomPreço", "MaisBarato"],
+    "status": "Inativo",
+    "ultima_atividade": "2024-06-09T18:00:00"
+  },
+  {
+    "nome": "Rafael Costa",
+    "email": "rafael@padariacentral.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-09T17:30:00"
+  },
+  {
+    "nome": "Gustavo Almeida",
+    "email": "gustavo@hortifrutibr.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["BomPreço", "MaisBarato"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-09T17:00:00"
+  }
+]

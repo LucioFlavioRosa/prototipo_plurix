@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Comprador - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif; background: #f5f6fa; color: #222; }
+    body { min-height: 100vh; }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 232px;
+      background: #fff;
+      box-shadow: 2px 0 8px 0 rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+    }
+    .sidebar img {
+      height: 48px;
+      margin-bottom: 32px;
+    }
+    .menu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .menu a {
+      display: block;
+      padding: 14px 32px;
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 8px 0 0 8px;
+      transition: background 0.2s, color 0.2s;
+      font-size: 1.06em;
+    }
+    .menu a.active, .menu a:hover {
+      background: #f5f6fa;
+      color: #1a7f37;
+      font-weight: 600;
+    }
+    .main-content {
+      flex: 1;
+      padding: 40px 48px 32px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .dashboard-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .dashboard-header h1 {
+      font-size: 2.1em;
+      font-weight: 700;
+      margin: 0;
+      color: #222;
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .filters select, .filters input[type="date"] {
+      padding: 8px 14px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 1em;
+      color: #222;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
+      padding: 28px 24px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 100px;
+      transition: box-shadow 0.2s;
+    }
+    .card-title {
+      font-size: 1.08em;
+      color: #888;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .card-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: #1a7f37;
+    }
+    .card-indicator {
+      font-size: 1em;
+      color: #d4380d;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .section-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .pending-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      margin-bottom: 18px;
+    }
+    .pending-table th, .pending-table td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 1em;
+    }
+    .pending-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 600;
+    }
+    .pending-table tr:last-child td {
+      border-bottom: none;
+    }
+    .pending-table td.status-pendente {
+      color: #faad14;
+      font-weight: 600;
+    }
+    .pending-table td.status-aprovado {
+      color: #1a7f37;
+      font-weight: 600;
+    }
+    .pending-table td.status-reprovado {
+      color: #d4380d;
+      font-weight: 600;
+    }
+    .btn-table {
+      background: #fff;
+      color: #1a7f37;
+      border: 1.5px solid #1a7f37;
+      border-radius: 6px;
+      padding: 6px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-table:hover {
+      background: #e6f7ec;
+    }
+    @media (max-width: 900px) {
+      .main-content { padding: 24px 8vw; }
+      .dashboard-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { flex-direction: row; width: 100%; height: 70px; padding: 0 0 0 16px; box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04); }
+      .sidebar img { height: 36px; margin: 0 24px 0 0; }
+      .menu { flex-direction: row; gap: 0; }
+      .menu a { border-radius: 8px 8px 0 0; padding: 10px 16px; font-size: 0.98em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Menu principal">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <div class="menu">
+        <a href="dashboard-comprador.html" class="active">Dashboard</a>
+        <a href="#">Aprovações Pendentes</a>
+        <a href="#">Histórico</a>
+        <a href="#">Fornecedores</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Perfil</a>
+        <a href="#" onclick="window.location.href='../../plurix.html'">Sair</a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="dashboard-header">
+        <h1>Dashboard do Comprador</h1>
+        <form class="filters" aria-label="Filtros de tabelas">
+          <select name="fornecedor" aria-label="Fornecedor">
+            <option value="">Fornecedor</option>
+            <option>ACME Ltda</option>
+            <option>SuperFoods</option>
+            <option>Distribuidora Brasil</option>
+          </select>
+          <select name="bandeira" aria-label="Bandeira">
+            <option value="">Bandeira</option>
+            <option>SuperMais</option>
+            <option>Maxi</option>
+            <option>Popular</option>
+          </select>
+          <select name="uf" aria-label="UF">
+            <option value="">UF</option>
+            <option>SP</option>
+            <option>MG</option>
+            <option>RJ</option>
+          </select>
+          <input type="date" name="data" aria-label="Data de Submissão">
+        </form>
+      </div>
+      <section>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-title">Tabelas Pendentes</div>
+            <div class="card-value">4</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Variação Média de Preço</div>
+            <div class="card-value">+3,7%</div>
+            <div class="card-indicator" style="color:#faad14;">Alerta: 2 acima do limite</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Impacto no DRE</div>
+            <div class="card-value">R$ 18.200</div>
+          </div>
+          <div class="card">
+            <div class="card-title">IC Nielsen (Média)</div>
+            <div class="card-value">87</div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="section-title">Tabelas Pendentes de Aprovação</div>
+        <table class="pending-table" aria-label="Tabelas pendentes">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Bandeira</th>
+              <th>UF</th>
+              <th>Data Submissão</th>
+              <th>Variação (%)</th>
+              <th>Impacto DRE</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ACME Ltda</td>
+              <td>SuperMais</td>
+              <td>SP</td>
+              <td>2024-06-12</td>
+              <td>+4,2%</td>
+              <td>R$ 7.500</td>
+              <td class="status-pendente">Pendente</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>SuperFoods</td>
+              <td>Maxi</td>
+              <td>MG</td>
+              <td>2024-06-10</td>
+              <td>+2,9%</td>
+              <td>R$ 4.100</td>
+              <td class="status-pendente">Pendente</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>Distribuidora Brasil</td>
+              <td>Popular</td>
+              <td>RJ</td>
+              <td>2024-06-09</td>
+              <td>+5,1%</td>
+              <td>R$ 6.600</td>
+              <td class="status-pendente">Pendente</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>ACME Ltda</td>
+              <td>Maxi</td>
+              <td>SP</td>
+              <td>2024-06-08</td>
+              <td>+2,5%</td>
+              <td>R$ 3.200</td>
+              <td class="status-pendente">Pendente</td>
+              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

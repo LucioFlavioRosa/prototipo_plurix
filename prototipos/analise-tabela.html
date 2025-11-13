@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise Comercial da Tabela - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif; background: #f5f6fa; color: #222; }
+    body { min-height: 100vh; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 232px;
+      background: #fff;
+      box-shadow: 2px 0 8px 0 rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+    }
+    .sidebar img { height: 48px; margin-bottom: 32px; }
+    .menu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .menu a {
+      display: block;
+      padding: 14px 32px;
+      color: #222;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 8px 0 0 8px;
+      transition: background 0.2s, color 0.2s;
+      font-size: 1.06em;
+    }
+    .menu a.active, .menu a:hover {
+      background: #f5f6fa;
+      color: #1a7f37;
+      font-weight: 600;
+    }
+    .main-content {
+      flex: 1;
+      padding: 40px 48px 32px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .header-table {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
+      padding: 24px 32px 16px 32px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 36px;
+      align-items: flex-end;
+    }
+    .header-table .info {
+      min-width: 180px;
+      margin-bottom: 8px;
+    }
+    .header-table .info-label {
+      color: #888;
+      font-size: 1em;
+      font-weight: 500;
+    }
+    .header-table .info-value {
+      font-size: 1.18em;
+      font-weight: 700;
+      color: #222;
+    }
+    .section-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .analysis-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      margin-bottom: 18px;
+    }
+    .analysis-table th, .analysis-table td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 1em;
+    }
+    .analysis-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 600;
+    }
+    .analysis-table tr:last-child td {
+      border-bottom: none;
+    }
+    .analysis-table td.variation-up { color: #d4380d; font-weight: 600; }
+    .analysis-table td.variation-down { color: #1a7f37; font-weight: 600; }
+    .analysis-table td.ic-high { color: #1a7f37; }
+    .analysis-table td.ic-low { color: #d4380d; }
+    .analysis-table td.ic-medium { color: #faad14; }
+    .btn-table {
+      background: #fff;
+      color: #1a7f37;
+      border: 1.5px solid #1a7f37;
+      border-radius: 6px;
+      padding: 6px 18px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-table:hover {
+      background: #e6f7ec;
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .filters select, .filters input[type="text"] {
+      padding: 8px 14px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 1em;
+      color: #222;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
+      padding: 24px 32px 24px 32px;
+      margin-bottom: 12px;
+      max-width: 600px;
+    }
+    @media (max-width: 900px) {
+      .main-content { padding: 24px 8vw; }
+      .header-table { flex-direction: column; gap: 12px; padding: 16px 12px; }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { flex-direction: row; width: 100%; height: 70px; padding: 0 0 0 16px; box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04); }
+      .sidebar img { height: 36px; margin: 0 24px 0 0; }
+      .menu { flex-direction: row; gap: 0; }
+      .menu a { border-radius: 8px 8px 0 0; padding: 10px 16px; font-size: 0.98em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar" aria-label="Menu principal">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <div class="menu">
+        <a href="dashboard-comprador.html">Dashboard</a>
+        <a href="#" class="active">Aprovações Pendentes</a>
+        <a href="#">Histórico</a>
+        <a href="#">Fornecedores</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Perfil</a>
+        <a href="#" onclick="window.location.href='../../plurix.html'">Sair</a>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="header-table">
+        <div class="info">
+          <div class="info-label">Fornecedor</div>
+          <div class="info-value">ACME Ltda</div>
+        </div>
+        <div class="info">
+          <div class="info-label">Bandeira</div>
+          <div class="info-value">SuperMais</div>
+        </div>
+        <div class="info">
+          <div class="info-label">UF</div>
+          <div class="info-value">SP</div>
+        </div>
+        <div class="info">
+          <div class="info-label">Data Submissão</div>
+          <div class="info-value">2024-06-12</div>
+        </div>
+      </div>
+      <form class="filters" aria-label="Filtros de produtos">
+        <select name="ic" aria-label="IC Nielsen">
+          <option value="">IC Nielsen</option>
+          <option>Alto</option>
+          <option>Médio</option>
+          <option>Baixo</option>
+        </select>
+        <select name="impacto" aria-label="Impacto DRE">
+          <option value="">Impacto DRE</option>
+          <option>Alto</option>
+          <option>Médio</option>
+          <option>Baixo</option>
+        </select>
+        <input type="text" name="sku" placeholder="Buscar SKU ou descrição" aria-label="Buscar SKU ou descrição">
+      </form>
+      <section>
+        <div class="section-title">Tabela Comparativa de Produtos</div>
+        <table class="analysis-table" aria-label="Tabela comparativa de produtos">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Descrição</th>
+              <th>Preço Antigo</th>
+              <th>Preço Novo</th>
+              <th>Variação (%)</th>
+              <th>IC Nielsen</th>
+              <th>IC Objetiva</th>
+              <th>Impacto DRE</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7891234567890</td>
+              <td>Arroz Tipo 1 5kg</td>
+              <td>R$ 19,90</td>
+              <td>R$ 21,50</td>
+              <td class="variation-up">+8,0%</td>
+              <td class="ic-high">92</td>
+              <td class="ic-medium">78</td>
+              <td>Alto</td>
+              <td><button class="btn-table" onclick="drillDown('7891234567890')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7899876543210</td>
+              <td>Feijão Carioca 1kg</td>
+              <td>R$ 8,90</td>
+              <td>R$ 8,50</td>
+              <td class="variation-down">-4,5%</td>
+              <td class="ic-medium">75</td>
+              <td class="ic-low">55</td>
+              <td>Médio</td>
+              <td><button class="btn-table" onclick="drillDown('7899876543210')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7891122334455</td>
+              <td>Açúcar Refinado 1kg</td>
+              <td>R$ 4,50</td>
+              <td>R$ 4,80</td>
+              <td class="variation-up">+6,7%</td>
+              <td class="ic-low">52</td>
+              <td class="ic-low">49</td>
+              <td>Baixo</td>
+              <td><button class="btn-table" onclick="drillDown('7891122334455')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7895566778899</td>
+              <td>Óleo de Soja 900ml</td>
+              <td>R$ 7,20</td>
+              <td>R$ 7,20</td>
+              <td>0,0%</td>
+              <td class="ic-high">90</td>
+              <td class="ic-high">93</td>
+              <td>Baixo</td>
+              <td><button class="btn-table" onclick="drillDown('7895566778899')">Ver</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <div class="section-title">Variação Ponderada e Indicadores</div>
+        <div class="chart-container">
+          <canvas id="chartVaria" width="540" height="220" aria-label="Gráfico de variação ponderada"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Gráfico simples de variação ponderada (mock)
+    window.onload = function() {
+      var ctx = document.getElementById('chartVaria').getContext('2d');
+      var chart = new window.Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Arroz', 'Feijão', 'Açúcar', 'Óleo'],
+          datasets: [{
+            label: 'Variação (%)',
+            data: [8, -4.5, 6.7, 0],
+            backgroundColor: [
+              'rgba(218, 68, 13, 0.7)',
+              'rgba(26, 127, 55, 0.7)',
+              'rgba(250, 173, 20, 0.7)',
+              'rgba(26, 127, 55, 0.7)'
+            ]
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: function(val) { return val + '%'; } } }
+          }
+        }
+      });
+    };
+    // Chart.js CDN inserido inline para protótipo
+    (function(){
+      var s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/chart.js';
+      s.onload=function(){ window.Chart = Chart; window.onload(); };
+      document.head.appendChild(s);
+    })();
+    // Drill-down simulado
+    function drillDown(sku) {
+      alert('Drill-down para SKU: ' + sku + '\n(Exemplo de navegação detalhada por produto)');
+    }
+  </script>
+</body>
+</html>
