@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload de Tabela de Preços | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .upload-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .upload-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 32px 28px 32px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    .upload-card h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+    .drag-drop {
+      border: 2px dashed #f9b233;
+      border-radius: 8px;
+      background: #fffbe7;
+      padding: 36px 0;
+      text-align: center;
+      color: #1a2340;
+      font-size: 1.08rem;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+    .drag-drop.dragover {
+      border-color: #1a2340;
+      background: #fff3c2;
+    }
+    .drag-drop input[type="file"] {
+      display: none;
+    }
+    .upload-info {
+      font-size: 0.98rem;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .bandeiras-group {
+      margin-bottom: 22px;
+    }
+    .bandeiras-label {
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .bandeira {
+      margin-bottom: 10px;
+    }
+    .bandeira-title {
+      font-weight: 600;
+      color: #f9b233;
+      margin-bottom: 2px;
+      font-size: 1.02rem;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 2px;
+    }
+    .checkbox-group label {
+      font-size: 0.98rem;
+      color: #1a2340;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 1rem;
+    }
+    .preview-table th, .preview-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .preview-table th {
+      background: #f7f8fa;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .preview-table .required {
+      color: #e74c3c;
+      font-weight: 700;
+    }
+    .btn-submit {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 32px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: 18px;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .btn-submit:hover {
+      background: #e1a12a;
+    }
+    .message {
+      margin-top: 18px;
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      display: none;
+    }
+    .message.success {
+      background: #e9f9e7;
+      color: #228c22;
+      display: block;
+    }
+    .message.error {
+      background: #fbeaea;
+      color: #d32f2f;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .upload-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../plurix.html';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var drop = document.getElementById('dragDropArea');
+      var input = document.getElementById('fileInput');
+      var preview = document.getElementById('previewTable');
+      var message = document.getElementById('message');
+      drop.addEventListener('click', function() { input.click(); });
+      drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('dragover'); });
+      drop.addEventListener('dragleave', function(e) { drop.classList.remove('dragover'); });
+      drop.addEventListener('drop', function(e) {
+        e.preventDefault();
+        drop.classList.remove('dragover');
+        input.files = e.dataTransfer.files;
+        handleFile(input.files[0]);
+      });
+      input.addEventListener('change', function() {
+        if (input.files.length > 0) handleFile(input.files[0]);
+      });
+      function handleFile(file) {
+        // Simulação de preview de arquivo
+        preview.innerHTML = `<thead><tr><th><span class='required'>*</span>GTIN</th><th><span class='required'>*</span>Descrição</th><th><span class='required'>*</span>Preço Novo</th><th><span class='required'>*</span>Embalagem</th></tr></thead><tbody><tr><td>7891234567890</td><td>Arroz Branco 5kg</td><td>R$ 19,90</td><td>PACOTE</td></tr><tr><td>7899876543210</td><td>Feijão Carioca 1kg</td><td>R$ 7,99</td><td>PACOTE</td></tr></tbody>`;
+      }
+      document.getElementById('formUpload').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Simulação de validação e submissão
+        var valid = input.files.length > 0;
+        if (valid) {
+          message.className = 'message success';
+          message.textContent = 'Tabela enviada com sucesso!';
+          setTimeout(function(){ window.location.href = 'dashboard-fornecedor.html'; }, 1500);
+        } else {
+          message.className = 'message error';
+          message.textContent = 'Por favor, selecione um arquivo Excel/CSV.';
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html" class="active">Nova Tabela</a>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
+      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
+      <a href="#" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Upload de Tabela de Preços</h1>
+    </header>
+    <main class="upload-section">
+      <form id="formUpload" class="upload-card" autocomplete="off">
+        <h2>1. Selecione o arquivo Excel/CSV</h2>
+        <div class="drag-drop" id="dragDropArea" tabindex="0" aria-label="Área para arrastar e soltar arquivo">
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Selecionar arquivo Excel ou CSV">
+          Arraste e solte o arquivo aqui ou <span style="color:#f9b233;text-decoration:underline;cursor:pointer;">clique para selecionar</span>.
+        </div>
+        <div class="upload-info">Apenas arquivos no formato <b>.xlsx</b>, <b>.xls</b> ou <b>.csv</b> com até 10.000 SKUs.</div>
+        <h2>2. Escolha as Coligadas/UF</h2>
+        <div class="bandeiras-group">
+          <label class="bandeiras-label">Bandeiras:</label>
+          <div class="bandeira">
+            <div class="bandeira-title">SuperSul</div>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="coligadas[]" value="SC"> SC</label>
+              <label><input type="checkbox" name="coligadas[]" value="PR"> PR</label>
+              <label><input type="checkbox" name="coligadas[]" value="RS"> RS</label>
+            </div>
+          </div>
+          <div class="bandeira">
+            <div class="bandeira-title">MaxiNorte</div>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="coligadas[]" value="AM"> AM</label>
+              <label><input type="checkbox" name="coligadas[]" value="PA"> PA</label>
+            </div>
+          </div>
+          <div class="bandeira">
+            <div class="bandeira-title">CentroMais</div>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="coligadas[]" value="GO"> GO</label>
+              <label><input type="checkbox" name="coligadas[]" value="DF"> DF</label>
+            </div>
+          </div>
+        </div>
+        <h2>3. Estrutura Esperada do Arquivo</h2>
+        <table class="preview-table" id="previewTable" aria-label="Preview do Arquivo">
+          <thead>
+            <tr>
+              <th><span class="required">*</span>GTIN</th>
+              <th><span class="required">*</span>Descrição</th>
+              <th><span class="required">*</span>Preço Novo</th>
+              <th><span class="required">*</span>Embalagem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="color:#b7b9c6;text-align:center;">Selecione um arquivo para visualizar o preview.</td></tr>
+          </tbody>
+        </table>
+        <button type="submit" class="btn-submit">Enviar Tabela</button>
+        <div id="message" class="message"></div>
+      </form>
+    </main>
+  </div>
+</body>
+</html>
