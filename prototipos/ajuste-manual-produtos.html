@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ajuste Manual de Produtos | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      box-shadow: 2px 0 8px 0 rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      width: 120px;
+      margin-bottom: 36px;
+    }
+    .sidebar nav {
+      width: 100%;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 14px 32px;
+      color: #222;
+      font-size: 1.1em;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      border-left: 4px solid transparent;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #f0f4fb;
+      color: #1a4ca0;
+      border-left: 4px solid #1a4ca0;
+      font-weight: bold;
+    }
+    .sidebar .bottom-link {
+      position: absolute;
+      bottom: 32px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      height: 64px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 1.7em;
+      font-weight: 700;
+      margin: 0;
+      color: #1a4ca0;
+    }
+    .ajuste-section {
+      flex: 1;
+      padding: 36px 48px 32px 48px;
+      background: #f5f6fa;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .ajuste-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px 0 rgba(26,76,160,0.07);
+      padding: 32px 40px 28px 40px;
+      width: 100%;
+      max-width: 820px;
+      margin-bottom: 32px;
+    }
+    .ajuste-title {
+      font-size: 1.25em;
+      font-weight: 700;
+      color: #1a4ca0;
+      margin-bottom: 18px;
+    }
+    .ajuste-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 32px;
+      margin-bottom: 18px;
+    }
+    .ajuste-form label {
+      font-size: 1em;
+      color: #1a4ca0;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .ajuste-form input, .ajuste-form select, .ajuste-form textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #bfc9e1;
+      border-radius: 6px;
+      font-size: 1em;
+      margin-bottom: 8px;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    .ajuste-form input:focus, .ajuste-form select:focus, .ajuste-form textarea:focus {
+      border-color: #1a4ca0;
+      outline: none;
+      background: #fff;
+    }
+    .ajuste-form textarea {
+      resize: vertical;
+      min-height: 38px;
+      max-height: 120px;
+    }
+    .ajuste-form .full {
+      grid-column: 1 / 3;
+    }
+    .cta-btn {
+      background: linear-gradient(90deg, #1a4ca0 0%, #3e7be6 100%);
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px 0 rgba(26,76,160,0.09);
+    }
+    .cta-btn:hover {
+      background: linear-gradient(90deg, #3e7be6 0%, #1a4ca0 100%);
+    }
+    .produtos-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .produtos-table th, .produtos-table td {
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 1em;
+    }
+    .produtos-table th {
+      background: #f0f4fb;
+      color: #1a4ca0;
+      font-weight: 700;
+      border-bottom: 2px solid #e0e7f5;
+    }
+    .produtos-table tr {
+      background: #fff;
+      border-bottom: 1px solid #e0e7f5;
+    }
+    .produtos-table tr:last-child {
+      border-bottom: none;
+    }
+    .table-actions button {
+      background: none;
+      border: none;
+      color: #1a4ca0;
+      font-size: 1em;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .table-actions button:hover {
+      color: #e53935;
+    }
+    @media (max-width: 900px) {
+      .ajuste-card { padding: 20px 8vw; }
+      .ajuste-section { padding: 24px 2vw; }
+      .ajuste-form { grid-template-columns: 1fr; }
+      .ajuste-form .full { grid-column: 1; }
+    }
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .main-content { padding: 0; }
+      .ajuste-section { padding: 8px 2vw; }
+      .ajuste-card { padding: 12px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_240,h_80,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo" />
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="dashboard-fornecedor.html#historico">Histórico</a>
+      <a href="#">Perfil</a>
+    </nav>
+    <div class="bottom-link">
+      <a href="#" style="color:#e53935;font-weight:bold;text-decoration:none;">Sair</a>
+    </div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Ajuste Manual de Produtos</h1>
+    </header>
+    <section class="ajuste-section">
+      <div class="ajuste-card">
+        <div class="ajuste-title">Adicionar/Editar Produto Individualmente</div>
+        <form class="ajuste-form" id="produtoForm" autocomplete="off">
+          <div>
+            <label for="gtin">GTIN</label>
+            <input type="text" id="gtin" name="gtin" placeholder="Ex: 7891234567890" required autocomplete="off" />
+          </div>
+          <div>
+            <label for="descricao">Descrição</label>
+            <input type="text" id="descricao" name="descricao" placeholder="Ex: Arroz Tipo 1" required />
+          </div>
+          <div>
+            <label for="precoAtual">Preço Atual</label>
+            <input type="number" id="precoAtual" name="precoAtual" placeholder="Ex: 23.50" min="0" step="0.01" required />
+          </div>
+          <div>
+            <label for="precoNovo">Preço Novo</label>
+            <input type="number" id="precoNovo" name="precoNovo" placeholder="Ex: 24.90" min="0" step="0.01" required />
+          </div>
+          <div>
+            <label for="embalagem">Embalagem</label>
+            <input type="text" id="embalagem" name="embalagem" placeholder="Ex: 5kg" required />
+          </div>
+          <div>
+            <label for="uf">UF/Coligada</label>
+            <select id="uf" name="uf" required>
+              <option value="">Selecione</option>
+              <option value="Alpha-SP">Alpha - SP</option>
+              <option value="Alpha-RJ">Alpha - RJ</option>
+              <option value="Beta-MG">Beta - MG</option>
+              <option value="Beta-ES">Beta - ES</option>
+              <option value="Gama-PR">Gama - PR</option>
+              <option value="Gama-SC">Gama - SC</option>
+            </select>
+          </div>
+          <div class="full">
+            <label for="justificativa">Justificativa</label>
+            <textarea id="justificativa" name="justificativa" placeholder="Explique o motivo do ajuste" required></textarea>
+          </div>
+          <div class="full">
+            <button type="submit" class="cta-btn">Adicionar Produto</button>
+          </div>
+        </form>
+        <div class="ajuste-title" style="margin-top:30px;">Produtos Adicionados Manualmente</div>
+        <table class="produtos-table" id="produtosTable" aria-label="Produtos adicionados manualmente">
+          <thead>
+            <tr>
+              <th>GTIN</th>
+              <th>Descrição</th>
+              <th>Preço Atual</th>
+              <th>Preço Novo</th>
+              <th>Embalagem</th>
+              <th>UF/Coligada</th>
+              <th>Justificativa</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7891234567890</td>
+              <td>Arroz Tipo 1</td>
+              <td>R$ 23,50</td>
+              <td>R$ 24,90</td>
+              <td>5kg</td>
+              <td>Alpha-SP</td>
+              <td>Reposição de custos de matéria-prima</td>
+              <td class="table-actions">
+                <button type="button" onclick="editarProduto(0)" aria-label="Editar produto">Editar</button>
+                <button type="button" onclick="removerProduto(0)" aria-label="Remover produto">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <td>7899876543210</td>
+              <td>Feijão Carioca</td>
+              <td>R$ 8,50</td>
+              <td>R$ 8,90</td>
+              <td>1kg</td>
+              <td>Beta-MG</td>
+              <td>Ajuste sazonal</td>
+              <td class="table-actions">
+                <button type="button" onclick="editarProduto(1)" aria-label="Editar produto">Editar</button>
+                <button type="button" onclick="removerProduto(1)" aria-label="Remover produto">Remover</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Simulação de adição/edição/remover produto (não persistente)
+    let produtos = [
+      {
+        gtin: '7891234567890', descricao: 'Arroz Tipo 1', precoAtual: '23.50', precoNovo: '24.90', embalagem: '5kg', uf: 'Alpha-SP', justificativa: 'Reposição de custos de matéria-prima'
+      },
+      {
+        gtin: '7899876543210', descricao: 'Feijão Carioca', precoAtual: '8.50', precoNovo: '8.90', embalagem: '1kg', uf: 'Beta-MG', justificativa: 'Ajuste sazonal'
+      }
+    ];
+    let editIndex = null;
+    function renderTable() {
+      const tbody = document.querySelector('#produtosTable tbody');
+      tbody.innerHTML = '';
+      produtos.forEach((p, i) => {
+        tbody.innerHTML += `<tr>
+          <td>${p.gtin}</td>
+          <td>${p.descricao}</td>
+          <td>R$ ${parseFloat(p.precoAtual).toFixed(2).replace('.', ',')}</td>
+          <td>R$ ${parseFloat(p.precoNovo).toFixed(2).replace('.', ',')}</td>
+          <td>${p.embalagem}</td>
+          <td>${p.uf}</td>
+          <td>${p.justificativa}</td>
+          <td class='table-actions'>
+            <button type='button' onclick='editarProduto(${i})' aria-label='Editar produto'>Editar</button>
+            <button type='button' onclick='removerProduto(${i})' aria-label='Remover produto'>Remover</button>
+          </td>
+        </tr>`;
+      });
+    }
+    function editarProduto(i) {
+      editIndex = i;
+      const p = produtos[i];
+      document.getElementById('gtin').value = p.gtin;
+      document.getElementById('descricao').value = p.descricao;
+      document.getElementById('precoAtual').value = p.precoAtual;
+      document.getElementById('precoNovo').value = p.precoNovo;
+      document.getElementById('embalagem').value = p.embalagem;
+      document.getElementById('uf').value = p.uf;
+      document.getElementById('justificativa').value = p.justificativa;
+      document.querySelector('.cta-btn').textContent = 'Salvar Alteração';
+    }
+    function removerProduto(i) {
+      if (confirm('Remover produto?')) {
+        produtos.splice(i, 1);
+        renderTable();
+      }
+    }
+    document.getElementById('produtoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const p = {
+        gtin: document.getElementById('gtin').value,
+        descricao: document.getElementById('descricao').value,
+        precoAtual: document.getElementById('precoAtual').value,
+        precoNovo: document.getElementById('precoNovo').value,
+        embalagem: document.getElementById('embalagem').value,
+        uf: document.getElementById('uf').value,
+        justificativa: document.getElementById('justificativa').value
+      };
+      if (editIndex !== null) {
+        produtos[editIndex] = p;
+        editIndex = null;
+        document.querySelector('.cta-btn').textContent = 'Adicionar Produto';
+      } else {
+        produtos.push(p);
+      }
+      this.reset();
+      renderTable();
+    });
+    renderTable();
+  </script>
+</body>
+</html>
