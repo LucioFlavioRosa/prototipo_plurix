@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios Customizáveis | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f6f7fa;
+      margin: 0;
+      color: #222;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 64px;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+    header img {
+      height: 40px;
+      margin-right: 24px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #1a237e;
+      margin: 0;
+      flex: 1;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #1a237e;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #1976d2;
+      color: #1976d2;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+      padding: 32px 40px 40px 40px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+    }
+    .form-relatorio {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px 32px;
+      margin-bottom: 24px;
+      align-items: flex-end;
+    }
+    .form-relatorio label {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #222;
+      margin-right: 8px;
+    }
+    .form-relatorio input, .form-relatorio select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cfd8dc;
+      background: #f6f7fa;
+      font-size: 1rem;
+      min-width: 120px;
+    }
+    .form-relatorio button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-left: 10px;
+    }
+    .form-relatorio button:hover {
+      background: #1565c0;
+    }
+    .export-btns {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .export-btns button {
+      background: #fff;
+      color: #1976d2;
+      border: 1.5px solid #1976d2;
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .export-btns button:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+    .preview-relatorio {
+      margin-bottom: 30px;
+      border-radius: 8px;
+      background: #fafbfc;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.98rem;
+      background: #fff;
+      min-width: 900px;
+    }
+    thead {
+      background: #e3e7f1;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      color: #1a237e;
+      font-weight: 700;
+      border-bottom: 2px solid #cfd8dc;
+      font-size: 1rem;
+    }
+    tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+    tbody tr:hover {
+      background: #f6f7fa;
+    }
+    .graficos {
+      display: flex;
+      gap: 36px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .grafico-box {
+      background: #f6f7fa;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+      padding: 24px 28px 18px 28px;
+      flex: 1 1 340px;
+      min-width: 320px;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .grafico-title {
+      font-size: 1.08rem;
+      color: #1a237e;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    canvas {
+      max-width: 100%;
+      height: 180px !important;
+    }
+    @media (max-width: 900px) {
+      main { padding: 18px 6px; }
+      .graficos { flex-direction: column; gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <h1>Relatórios Customizáveis</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html" class="active">Relatórios</a>
+      <a href="admin-auditoria.html">Auditoria</a>
+      <a href="notificacoes.html">Notificações</a>
+      <a href="logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="section-title">Gerar Relatório</div>
+    <form class="form-relatorio" id="formRelatorio" onsubmit="event.preventDefault();gerarPreview();">
+      <label for="periodo">Período:</label>
+      <input type="date" id="dataInicio" name="dataInicio">
+      <span style="margin:0 6px;">a</span>
+      <input type="date" id="dataFim" name="dataFim">
+      <label for="bandeira">Bandeira:</label>
+      <select id="bandeira" name="bandeira">
+        <option value="">Todas</option>
+        <option value="SuperMais">SuperMais</option>
+        <option value="MegaSul">MegaSul</option>
+        <option value="BonsPrecos">BonsPreços</option>
+        <option value="NorteMix">NorteMix</option>
+        <option value="ValeTop">ValeTop</option>
+      </select>
+      <label for="fornecedor">Fornecedor:</label>
+      <input type="text" id="fornecedor" name="fornecedor" placeholder="Nome ou código">
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" name="tipo">
+        <option value="precos">Variação de Preços</option>
+        <option value="impacto">Impacto DRE</option>
+        <option value="competitividade">Competitividade</option>
+      </select>
+      <button type="submit">Visualizar</button>
+    </form>
+    <div class="export-btns">
+      <button onclick="exportarRelatorio('pdf')">Exportar PDF</button>
+      <button onclick="exportarRelatorio('excel')">Exportar Excel</button>
+      <button onclick="exportarRelatorio('csv')">Exportar CSV</button>
+    </div>
+    <div class="preview-relatorio" id="previewRelatorio">
+      <!-- Tabela de preview gerada via JS -->
+    </div>
+    <div class="section-title" style="margin-top:40px;">Gráficos de Análise</div>
+    <div class="graficos">
+      <div class="grafico-box">
+        <div class="grafico-title">Variação de Preços (%)</div>
+        <canvas id="graficoPrecos" aria-label="Gráfico de variação de preços"></canvas>
+      </div>
+      <div class="grafico-box">
+        <div class="grafico-title">Impacto no DRE</div>
+        <canvas id="graficoDRE" aria-label="Gráfico de impacto no DRE"></canvas>
+      </div>
+      <div class="grafico-box">
+        <div class="grafico-title">Índice de Competitividade</div>
+        <canvas id="graficoCompetitividade" aria-label="Gráfico de competitividade"></canvas>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Simulação de dados de relatório
+    function gerarPreview(){
+      const tipo = document.getElementById('tipo').value;
+      let html = '<table aria-label="Preview do relatório"><thead><tr>';
+      if(tipo==='precos'){
+        html += '<th>SKU</th><th>Produto</th><th>Preço Antigo</th><th>Preço Novo</th><th>Variação (%)</th><th>Fornecedor</th><th>Bandeira</th>';
+      }else if(tipo==='impacto'){
+        html += '<th>SKU</th><th>Produto</th><th>Volume</th><th>Preço Novo</th><th>Impacto DRE</th><th>Fornecedor</th><th>Bandeira</th>';
+      }else{
+        html += '<th>SKU</th><th>Produto</th><th>IC Nielsen</th><th>IC Objetiva</th><th>Competitividade</th><th>Fornecedor</th><th>Bandeira</th>';
+      }
+      html += '</tr></thead><tbody>';
+      for(let i=1;i<=8;i++){
+        if(tipo==='precos'){
+          const precoA = (10+Math.random()*40).toFixed(2);
+          const precoN = (precoA*(1+((Math.random()-0.5)*0.2))).toFixed(2);
+          const variacao = (((precoN-precoA)/precoA)*100).toFixed(1);
+          html += `<tr><td>SKU${1000+i}</td><td>Produto ${i}</td><td>R$ ${precoA}</td><td>R$ ${precoN}</td><td style="color:${variacao>=0?'#388e3c':'#d32f2f'};font-weight:600;">${variacao}%</td><td>Fornecedor ${i%3+1}</td><td>${['SuperMais','MegaSul','BonsPrecos'][i%3]}</td></tr>`;
+        }else if(tipo==='impacto'){
+          const vol = Math.floor(100+Math.random()*900);
+          const preco = (10+Math.random()*40).toFixed(2);
+          const impacto = (vol*preco*0.05*(Math.random()-0.5)).toFixed(2);
+          html += `<tr><td>SKU${1000+i}</td><td>Produto ${i}</td><td>${vol}</td><td>R$ ${preco}</td><td style="color:${impacto>=0?'#388e3c':'#d32f2f'};font-weight:600;">R$ ${impacto}</td><td>Fornecedor ${i%3+1}</td><td>${['SuperMais','MegaSul','BonsPrecos'][i%3]}</td></tr>`;
+        }else{
+          const nielsen = (80+Math.random()*20).toFixed(1);
+          const objetiva = (60+Math.random()*40).toFixed(1);
+          const comp = nielsen>90?'Alta':(nielsen>85?'Média':'Baixa');
+          html += `<tr><td>SKU${1000+i}</td><td>Produto ${i}</td><td>${nielsen}</td><td>${objetiva}</td><td style="color:${comp==='Alta'?'#388e3c':comp==='Média'?'#ffb300':'#d32f2f'};font-weight:600;">${comp}</td><td>Fornecedor ${i%3+1}</td><td>${['SuperMais','MegaSul','BonsPrecos'][i%3]}</td></tr>`;
+        }
+      }
+      html += '</tbody></table>';
+      document.getElementById('previewRelatorio').innerHTML = html;
+      atualizarGraficos();
+    }
+    function exportarRelatorio(tipo){
+      alert('Exportação simulada para '+tipo.toUpperCase());
+    }
+    // Gráficos
+    let chartPrecos, chartDRE, chartComp;
+    function atualizarGraficos(){
+      // Gráfico de Variação de Preços
+      const labels = Array.from({length:8},(_,i)=>'SKU'+(1001+i));
+      const variacoes = labels.map(()=>((Math.random()-0.5)*20).toFixed(1));
+      if(chartPrecos) chartPrecos.destroy();
+      chartPrecos = new Chart(document.getElementById('graficoPrecos'), {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Variação (%)', data: variacoes, backgroundColor: variacoes.map(v=>v>=0?'#388e3c':'#d32f2f') }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#1a237e'}},y:{beginAtZero:true,ticks:{color:'#1a237e'}}} }
+      });
+      // Gráfico de Impacto DRE
+      const dre = labels.map(()=>((Math.random()-0.5)*1000).toFixed(0));
+      if(chartDRE) chartDRE.destroy();
+      chartDRE = new Chart(document.getElementById('graficoDRE'), {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'Impacto DRE', data: dre, borderColor: '#1976d2', backgroundColor: 'rgba(25,118,210,0.08)', fill:true }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#1a237e'}},y:{beginAtZero:true,ticks:{color:'#1a237e'}}} }
+      });
+      // Gráfico de Competitividade
+      const comp = labels.map(()=>Math.floor(80+Math.random()*20));
+      if(chartComp) chartComp.destroy();
+      chartComp = new Chart(document.getElementById('graficoCompetitividade'), {
+        type: 'radar',
+        data: { labels, datasets: [{ label: 'IC Nielsen', data: comp, backgroundColor: 'rgba(67,160,71,0.18)', borderColor:'#43a047', pointBackgroundColor:'#43a047' }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{r:{angleLines:{color:'#cfd8dc'},pointLabels:{color:'#1a237e'},ticks:{color:'#1a237e'}}} }
+      });
+    }
+    // Inicialização
+    gerarPreview();
+  </script>
+</body>
+</html>
