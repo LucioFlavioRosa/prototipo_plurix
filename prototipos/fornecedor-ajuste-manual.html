@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajuste Manual de Produto | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; margin: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+    h1 { color: #004aad; font-size: 2rem; margin-bottom: 24px; }
+    form label { display: block; margin-bottom: 8px; font-weight: bold; color: #222; }
+    form input, form select { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    .error-msg { color: #c00; font-size: 0.95em; margin: 4px 0 12px 0; }
+    .success-msg { color: #0a0; font-size: 1em; margin: 12px 0; }
+    button[type="submit"] {
+      background: #004aad;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    button[type="submit"]:disabled { background: #b3c7e6; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ajuste Manual de Produto</h1>
+    <form id="ajusteForm" novalidate>
+      <label for="sku">SKU (GTIN):</label>
+      <input type="text" id="sku" name="sku" maxlength="14" required pattern="\d{8,14}">
+      <div id="skuError" class="error-msg" style="display:none"></div>
+
+      <label for="descricao">Descrição:</label>
+      <input type="text" id="descricao" name="descricao" maxlength="120" required>
+      <div id="descricaoError" class="error-msg" style="display:none"></div>
+
+      <label for="preco">Preço:</label>
+      <input type="number" id="preco" name="preco" min="0.01" step="0.01" required>
+      <div id="precoError" class="error-msg" style="display:none"></div>
+
+      <label for="embalagem">Embalagem:</label>
+      <input type="text" id="embalagem" name="embalagem" maxlength="40" required>
+      <div id="embalagemError" class="error-msg" style="display:none"></div>
+
+      <label for="impostos">Impostos (%):</label>
+      <input type="number" id="impostos" name="impostos" min="0" max="100" step="0.01" required>
+      <div id="impostosError" class="error-msg" style="display:none"></div>
+
+      <button type="submit" id="submitBtn" disabled>Salvar Ajuste</button>
+      <div id="formSuccess" class="success-msg" style="display:none"></div>
+    </form>
+  </div>
+  <script>
+    // Validação de formulário
+    const form = document.getElementById('ajusteForm');
+    const sku = document.getElementById('sku');
+    const descricao = document.getElementById('descricao');
+    const preco = document.getElementById('preco');
+    const embalagem = document.getElementById('embalagem');
+    const impostos = document.getElementById('impostos');
+    const submitBtn = document.getElementById('submitBtn');
+    const skuError = document.getElementById('skuError');
+    const descricaoError = document.getElementById('descricaoError');
+    const precoError = document.getElementById('precoError');
+    const embalagemError = document.getElementById('embalagemError');
+    const impostosError = document.getElementById('impostosError');
+    const formSuccess = document.getElementById('formSuccess');
+
+    function validarSKU() {
+      if (!sku.value.match(/^\d{8,14}$/)) {
+        skuError.textContent = 'Informe um GTIN válido (8 a 14 dígitos numéricos).';
+        skuError.style.display = 'block';
+        return false;
+      }
+      skuError.style.display = 'none';
+      return true;
+    }
+
+    function validarDescricao() {
+      if (!descricao.value.trim()) {
+        descricaoError.textContent = 'Descrição obrigatória.';
+        descricaoError.style.display = 'block';
+        return false;
+      }
+      descricaoError.style.display = 'none';
+      return true;
+    }
+
+    function validarPreco() {
+      if (!preco.value || parseFloat(preco.value) <= 0) {
+        precoError.textContent = 'Preço deve ser maior que zero.';
+        precoError.style.display = 'block';
+        return false;
+      }
+      precoError.style.display = 'none';
+      return true;
+    }
+
+    function validarEmbalagem() {
+      if (!embalagem.value.trim()) {
+        embalagemError.textContent = 'Embalagem obrigatória.';
+        embalagemError.style.display = 'block';
+        return false;
+      }
+      embalagemError.style.display = 'none';
+      return true;
+    }
+
+    function validarImpostos() {
+      const val = parseFloat(impostos.value);
+      if (isNaN(val) || val < 0 || val > 100) {
+        impostosError.textContent = 'Informe um valor entre 0 e 100.';
+        impostosError.style.display = 'block';
+        return false;
+      }
+      impostosError.style.display = 'none';
+      return true;
+    }
+
+    function validarFormulario() {
+      const v1 = validarSKU();
+      const v2 = validarDescricao();
+      const v3 = validarPreco();
+      const v4 = validarEmbalagem();
+      const v5 = validarImpostos();
+      submitBtn.disabled = !(v1 && v2 && v3 && v4 && v5);
+    }
+
+    [sku, descricao, preco, embalagem, impostos].forEach(input => {
+      input.addEventListener('input', validarFormulario);
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validarSKU() && validarDescricao() && validarPreco() && validarEmbalagem() && validarImpostos()) {
+        formSuccess.textContent = 'Ajuste salvo com sucesso!';
+        formSuccess.style.display = 'block';
+        setTimeout(() => { formSuccess.style.display = 'none'; form.reset(); submitBtn.disabled = true; }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
