@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Componente Footer - Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --plurix-blue: #1a237e;
+      --plurix-yellow: #ffd600;
+      --plurix-gray: #f5f5f5;
+      --plurix-dark: #222;
+      --plurix-link: #1976d2;
+      --footer-bg: #181c2a;
+      --footer-text: #fff;
+      --footer-link: #ffd600;
+      --footer-link-hover: #fffde7;
+    }
+    body {
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: var(--plurix-gray);
+    }
+    .plurix-footer {
+      background: var(--footer-bg);
+      color: var(--footer-text);
+      padding: 40px 0 20px 0;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .plurix-footer .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 24px;
+    }
+    .plurix-footer .footer-section {
+      flex: 1 1 200px;
+      margin: 0 16px 24px 0;
+      min-width: 180px;
+    }
+    .plurix-footer .footer-logo {
+      margin-bottom: 16px;
+    }
+    .plurix-footer .footer-logo img {
+      width: 120px;
+      height: auto;
+      display: block;
+    }
+    .plurix-footer .footer-links,
+    .plurix-footer .footer-social {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .plurix-footer .footer-links li {
+      margin-bottom: 8px;
+    }
+    .plurix-footer .footer-links a {
+      color: var(--footer-link);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+    .plurix-footer .footer-links a:hover {
+      color: var(--footer-link-hover);
+      text-decoration: underline;
+    }
+    .plurix-footer .footer-social {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .plurix-footer .footer-social a {
+      color: var(--footer-link);
+      font-size: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+    .plurix-footer .footer-social a:hover {
+      color: var(--footer-link-hover);
+    }
+    .plurix-footer .footer-contact {
+      font-size: 0.97rem;
+      margin-top: 8px;
+      color: #bdbdbd;
+    }
+    .plurix-footer .footer-bottom {
+      border-top: 1px solid #23263a;
+      margin-top: 24px;
+      padding-top: 16px;
+      text-align: center;
+      color: #bdbdbd;
+      font-size: 0.95rem;
+    }
+    @media (max-width: 800px) {
+      .plurix-footer .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .plurix-footer .footer-section {
+        margin-right: 0;
+        margin-bottom: 24px;
+      }
+    }
+  </style>
+  <link rel="preload" href="//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+  <footer class="plurix-footer" aria-label="Rodapé">
+    <div class="footer-container">
+      <div class="footer-section footer-logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      </div>
+      <div class="footer-section">
+        <h4>Institucional</h4>
+        <ul class="footer-links">
+          <li><a href="#">Sobre a Plurix</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Trabalhe Conosco</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <div class="footer-contact">
+          <div>Email: <a href="mailto:contato@plurix.com" style="color:var(--footer-link)">contato@plurix.com</a></div>
+          <div>Telefone: <a href="tel:+5511999999999" style="color:var(--footer-link)">(11) 99999-9999</a></div>
+          <div>Endereço: Av. Exemplo, 1234 - São Paulo, SP</div>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Redes Sociais</h4>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn"><svg width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.07-.02-2.44-1.49-2.44-1.5 0-1.73 1.17-1.73 2.36v4.58h-3v-9h2.89v1.23h.04c.4-.76 1.36-1.56 2.8-1.56 3 0 3.56 1.98 3.56 4.56v4.77z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.056 1.97.24 2.43.41.58.21 1 .46 1.44.9.44.44.69.86.9 1.44.17.46.354 1.26.41 2.43.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.24 1.97-.41 2.43-.21.58-.46 1-.9 1.44-.44.44-.86.69-1.44.9-.46.17-1.26.354-2.43.41-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.24-2.43-.41-.58-.21-1-.46-1.44-.9-.44-.44-.69-.86-.9-1.44-.17-.46-.354-1.26-.41-2.43C2.212 15.634 2.2 15.25 2.2 12s.012-3.584.07-4.85c.056-1.17.24-1.97.41-2.43.21-.58.46-1 .9-1.44.44-.44.86-.69 1.44-.9.46-.17 1.26-.354 2.43-.41C8.416 2.212 8.8 2.2 12 2.2zm0-2.2C8.736 0 8.332.012 7.052.07c-1.28.058-2.157.25-2.91.53-.8.3-1.5.7-2.19 1.39-.69.69-1.09 1.39-1.39 2.19-.28.753-.472 1.63-.53 2.91C.012 8.332 0 8.736 0 12c0 3.264.012 3.668.07 4.948.058 1.28.25 2.157.53 2.91.3.8.7 1.5 1.39 2.19.69.69 1.39 1.09 2.19 1.39.753.28 1.63.472 2.91.53C8.332 23.988 8.736 24 12 24s3.668-.012 4.948-.07c1.28-.058 2.157-.25 2.91-.53.8-.3 1.5-.7 2.19-1.39.69-.69 1.09-1.39 1.39-2.19.28-.753.472-1.63.53-2.91.058-1.28.07-1.684.07-4.948s-.012-3.668-.07-4.948c-.058-1.28-.25-2.157-.53-2.91-.3-.8-.7-1.5-1.39-2.19-.69-.69-1.39-1.09-2.19-1.39-.753-.28-1.63-.472-2.91-.53C15.668.012 15.264 0 12 0zm0 5.838A6.162 6.162 0 1 0 12 18.162 6.162 6.162 0 1 0 12 5.838zm0 10.162A4 4 0 1 1 12 7.838a4 4 0 0 1 0 8.162zm6.406-10.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.406.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.406 24 22.674V1.326C24 .592 23.406 0 22.675 0"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Plurix. Todos os direitos reservados.
+    </div>
+  </footer>
+</body>
+</html>
