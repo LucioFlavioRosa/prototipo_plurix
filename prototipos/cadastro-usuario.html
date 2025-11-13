@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Usuário | Plataforma Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      color: #222;
+      font-size: 16px;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+    nav a {
+      color: #2b3a4a;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #0096d6;
+      color: #0096d6;
+    }
+    main {
+      max-width: 600px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.05);
+      padding: 32px 40px 40px 40px;
+    }
+    .titulo-pagina {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0096d6;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    label {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], select {
+      padding: 9px 12px;
+      border: 1px solid #cfd8dc;
+      border-radius: 6px;
+      background: #fafbfc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus {
+      border-color: #0096d6;
+    }
+    .grupo-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 24px;
+    }
+    .grupo-checkboxes label {
+      font-size: 0.98rem;
+      color: #333;
+      margin-bottom: 0;
+      font-weight: 400;
+      cursor: pointer;
+    }
+    .grupo-checkboxes input[type="checkbox"] {
+      margin-right: 6px;
+      accent-color: #0096d6;
+    }
+    .status-switch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #0096d6 0%, #00c2cb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,150,214,0.07);
+      transition: background 0.2s;
+      margin-top: 14px;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #00c2cb 0%, #0096d6 100%);
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #2b3a4a;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover {
+      background: #cfd8dc;
+    }
+    .feedback-erro {
+      color: #e74c3c;
+      font-size: 0.98rem;
+      margin-top: -10px;
+      margin-bottom: 6px;
+      display: none;
+    }
+    .feedback-sucesso {
+      color: #1abc9c;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      display: none;
+    }
+    .footer {
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      padding: 18px 0 10px 0;
+      color: #7b8a99;
+      font-size: 0.98rem;
+      margin-top: 48px;
+    }
+    @media (max-width: 700px) {
+      main { padding: 18px 2vw 24px 2vw; }
+    }
+  </style>
+  <script>
+    function validarFormulario(event) {
+      event.preventDefault();
+      let nome = document.getElementById('nome').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let perfil = document.getElementById('perfil').value;
+      let erro = '';
+      if (!nome) erro = 'Nome é obrigatório.';
+      else if (!email || !/^\S+@\S+\.\S+$/.test(email)) erro = 'E-mail válido é obrigatório.';
+      else if (!perfil) erro = 'Selecione um perfil.';
+      document.getElementById('feedback-erro').style.display = erro ? 'block' : 'none';
+      document.getElementById('feedback-erro').textContent = erro;
+      if (!erro) {
+        document.getElementById('feedback-sucesso').style.display = 'block';
+        document.getElementById('feedback-sucesso').textContent = 'Usuário salvo com sucesso!';
+        setTimeout(function() {
+          window.location.href = 'gestao-usuarios.html';
+        }, 1200);
+      }
+    }
+    function cancelarCadastro() {
+      window.location.href = 'gestao-usuarios.html';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <nav aria-label="Menu principal">
+      <a href="../dashboard.html">Início</a>
+      <a href="../gestao-tabelas.html">Tabelas de Preços</a>
+      <a href="gestao-usuarios.html">Gestão de Usuários</a>
+      <a href="logs-auditoria.html">Logs & Auditoria</a>
+      <a href="../logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="titulo-pagina">Cadastro de Usuário</div>
+    <form onsubmit="validarFormulario(event)">
+      <div>
+        <label for="nome">Nome completo *</label>
+        <input type="text" id="nome" name="nome" maxlength="80" required autocomplete="off">
+      </div>
+      <div>
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name="email" maxlength="80" required autocomplete="off">
+      </div>
+      <div>
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" maxlength="20" placeholder="(99) 99999-9999">
+      </div>
+      <div>
+        <label for="perfil">Perfil *</label>
+        <select id="perfil" name="perfil" required>
+          <option value="">Selecione</option>
+          <option value="Fornecedor">Fornecedor</option>
+          <option value="Comprador">Comprador</option>
+          <option value="Gerente">Gerente</option>
+          <option value="Diretor">Diretor</option>
+          <option value="VP">VP</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div>
+        <label>Permissões Granulares</label>
+        <div class="grupo-checkboxes">
+          <label><input type="checkbox" name="permissao" value="upload-tabelas"> Upload de Tabelas</label>
+          <label><input type="checkbox" name="permissao" value="aprovacao"> Aprovação de Preços</label>
+          <label><input type="checkbox" name="permissao" value="edicao-produtos"> Edição de Produtos</label>
+          <label><input type="checkbox" name="permissao" value="visualizacao-dash"> Visualização de Dashboards</label>
+          <label><input type="checkbox" name="permissao" value="exportacao"> Exportação de Relatórios</label>
+          <label><input type="checkbox" name="permissao" value="admin"> Administração do Sistema</label>
+        </div>
+      </div>
+      <div>
+        <label>Bandeiras/Coligadas de Acesso</label>
+        <div class="grupo-checkboxes">
+          <label><input type="checkbox" name="bandeira" value="Norte"> Bandeira Norte</label>
+          <label><input type="checkbox" name="bandeira" value="Sul"> Bandeira Sul</label>
+          <label><input type="checkbox" name="bandeira" value="Centro"> Bandeira Centro</label>
+          <label><input type="checkbox" name="bandeira" value="Leste"> Bandeira Leste</label>
+          <label><input type="checkbox" name="bandeira" value="Oeste"> Bandeira Oeste</label>
+        </div>
+      </div>
+      <div class="status-switch">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+        </select>
+      </div>
+      <div id="feedback-erro" class="feedback-erro"></div>
+      <div id="feedback-sucesso" class="feedback-sucesso"></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="btn-secondary" onclick="cancelarCadastro()">Cancelar</button>
+        <button type="submit" class="btn-primary">Salvar</button>
+      </div>
+    </form>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
