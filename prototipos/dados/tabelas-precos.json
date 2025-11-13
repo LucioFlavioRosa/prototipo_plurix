@@ -1,0 +1,212 @@
+[
+  {
+    "id": "TP-2024-001",
+    "fornecedor": "Alimentos Brasil Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "SP",
+    "data_submissao": "2024-06-01T09:30:00",
+    "status": "Aprovada",
+    "aprovador": "João Gerente",
+    "skus": [
+      {"gtin": "7891000000011", "descricao": "Arroz Tipo 1 5kg", "preco_antigo": 19.99, "preco_novo": 21.49, "variacao": 7.5, "ic_nielsen": 85, "ic_objetiva": 82},
+      {"gtin": "7891000000028", "descricao": "Feijão Carioca 1kg", "preco_antigo": 7.49, "preco_novo": 7.99, "variacao": 6.7, "ic_nielsen": 78, "ic_objetiva": 80},
+      {"gtin": "7891000000035", "descricao": "Açúcar Refinado 1kg", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 90, "ic_objetiva": 91},
+      {"gtin": "7891000000042", "descricao": "Óleo de Soja 900ml", "preco_antigo": 8.99, "preco_novo": 9.29, "variacao": 3.3, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7891000000059", "descricao": "Macarrão Espaguete 500g", "preco_antigo": 3.99, "preco_novo": 4.29, "variacao": 7.5, "ic_nielsen": 75, "ic_objetiva": 78},
+      {"gtin": "7891000000066", "descricao": "Farinha de Trigo 1kg", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 80, "ic_objetiva": 82},
+      {"gtin": "7891000000073", "descricao": "Leite UHT Integral 1L", "preco_antigo": 4.29, "preco_novo": 4.59, "variacao": 7.0, "ic_nielsen": 92, "ic_objetiva": 90},
+      {"gtin": "7891000000080", "descricao": "Café Torrado 500g", "preco_antigo": 13.99, "preco_novo": 14.49, "variacao": 3.6, "ic_nielsen": 88, "ic_objetiva": 85},
+      {"gtin": "7891000000097", "descricao": "Sal Refinado 1kg", "preco_antigo": 2.49, "preco_novo": 2.59, "variacao": 4.0, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7891000000103", "descricao": "Margarina 500g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81}
+    ]
+  },
+  {
+    "id": "TP-2024-002",
+    "fornecedor": "Distribuidora Sul Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "RS",
+    "data_submissao": "2024-06-02T10:15:00",
+    "status": "Aguardando Aprovação",
+    "aprovador": "",
+    "skus": [
+      {"gtin": "7892000000110", "descricao": "Refrigerante Cola 2L", "preco_antigo": 7.99, "preco_novo": 8.49, "variacao": 6.3, "ic_nielsen": 84, "ic_objetiva": 85},
+      {"gtin": "7892000000127", "descricao": "Água Mineral 1,5L", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 91, "ic_objetiva": 89},
+      {"gtin": "7892000000134", "descricao": "Suco de Laranja 1L", "preco_antigo": 6.49, "preco_novo": 6.99, "variacao": 7.7, "ic_nielsen": 79, "ic_objetiva": 80},
+      {"gtin": "7892000000141", "descricao": "Cerveja Pilsen 350ml", "preco_antigo": 3.19, "preco_novo": 3.39, "variacao": 6.3, "ic_nielsen": 87, "ic_objetiva": 88},
+      {"gtin": "7892000000158", "descricao": "Vinho Tinto 750ml", "preco_antigo": 29.99, "preco_novo": 31.49, "variacao": 5.0, "ic_nielsen": 72, "ic_objetiva": 74},
+      {"gtin": "7892000000165", "descricao": "Energético 250ml", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7892000000172", "descricao": "Chá Gelado 1L", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7892000000189", "descricao": "Água de Coco 1L", "preco_antigo": 8.49, "preco_novo": 8.99, "variacao": 5.9, "ic_nielsen": 88, "ic_objetiva": 86},
+      {"gtin": "7892000000196", "descricao": "Isotônico 500ml", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 81, "ic_objetiva": 80},
+      {"gtin": "7892000000202", "descricao": "Cerveja Sem Álcool 350ml", "preco_antigo": 3.29, "preco_novo": 3.49, "variacao": 6.1, "ic_nielsen": 83, "ic_objetiva": 82}
+    ]
+  },
+  {
+    "id": "TP-2024-003",
+    "fornecedor": "Bebidas do Norte S.A.",
+    "bandeira": "BomPreço",
+    "uf": "AM",
+    "data_submissao": "2024-06-03T11:00:00",
+    "status": "Reprovada",
+    "aprovador": "Maria Diretora",
+    "skus": [
+      {"gtin": "7893000000219", "descricao": "Cerveja Lager 600ml", "preco_antigo": 8.99, "preco_novo": 9.49, "variacao": 5.6, "ic_nielsen": 86, "ic_objetiva": 84},
+      {"gtin": "7893000000226", "descricao": "Refrigerante Guaraná 2L", "preco_antigo": 7.49, "preco_novo": 7.99, "variacao": 6.7, "ic_nielsen": 80, "ic_objetiva": 82},
+      {"gtin": "7893000000233", "descricao": "Água com Gás 500ml", "preco_antigo": 2.49, "preco_novo": 2.69, "variacao": 8.0, "ic_nielsen": 93, "ic_objetiva": 91},
+      {"gtin": "7893000000240", "descricao": "Suco de Uva 1L", "preco_antigo": 8.99, "preco_novo": 9.59, "variacao": 6.7, "ic_nielsen": 77, "ic_objetiva": 79},
+      {"gtin": "7893000000257", "descricao": "Cerveja IPA 355ml", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 82, "ic_objetiva": 81},
+      {"gtin": "7893000000264", "descricao": "Água Tônica 1L", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 89, "ic_objetiva": 88},
+      {"gtin": "7893000000271", "descricao": "Cerveja Puro Malte 350ml", "preco_antigo": 3.99, "preco_novo": 4.19, "variacao": 5.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7893000000288", "descricao": "Energético 473ml", "preco_antigo": 9.99, "preco_novo": 10.49, "variacao": 5.0, "ic_nielsen": 78, "ic_objetiva": 79},
+      {"gtin": "7893000000295", "descricao": "Chá Verde 1L", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7893000000301", "descricao": "Água de Coco 200ml", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 90, "ic_objetiva": 89}
+    ]
+  },
+  {
+    "id": "TP-2024-004",
+    "fornecedor": "Laticínios União Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "MG",
+    "data_submissao": "2024-06-04T12:20:00",
+    "status": "Aprovada",
+    "aprovador": "Paulo VP",
+    "skus": [
+      {"gtin": "7894000000318", "descricao": "Leite UHT Desnatado 1L", "preco_antigo": 4.29, "preco_novo": 4.59, "variacao": 7.0, "ic_nielsen": 92, "ic_objetiva": 90},
+      {"gtin": "7894000000325", "descricao": "Iogurte Natural 170g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7894000000332", "descricao": "Queijo Mussarela 500g", "preco_antigo": 22.99, "preco_novo": 23.99, "variacao": 4.3, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7894000000349", "descricao": "Manteiga 200g", "preco_antigo": 9.99, "preco_novo": 10.49, "variacao": 5.0, "ic_nielsen": 90, "ic_objetiva": 91},
+      {"gtin": "7894000000356", "descricao": "Requeijão Cremoso 200g", "preco_antigo": 7.49, "preco_novo": 7.99, "variacao": 6.7, "ic_nielsen": 80, "ic_objetiva": 82},
+      {"gtin": "7894000000363", "descricao": "Leite Condensado 395g", "preco_antigo": 5.99, "preco_novo": 6.29, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7894000000370", "descricao": "Creme de Leite 200g", "preco_antigo": 3.99, "preco_novo": 4.19, "variacao": 5.0, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7894000000387", "descricao": "Queijo Prato 500g", "preco_antigo": 23.99, "preco_novo": 24.99, "variacao": 4.2, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7894000000394", "descricao": "Iogurte de Morango 170g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7894000000400", "descricao": "Leite UHT Semidesnatado 1L", "preco_antigo": 4.29, "preco_novo": 4.59, "variacao": 7.0, "ic_nielsen": 91, "ic_objetiva": 90}
+    ]
+  },
+  {
+    "id": "TP-2024-005",
+    "fornecedor": "Cereais do Centro Oeste Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "GO",
+    "data_submissao": "2024-06-05T13:00:00",
+    "status": "Aguardando Aprovação",
+    "aprovador": "",
+    "skus": [
+      {"gtin": "7895000000417", "descricao": "Milho para Pipoca 500g", "preco_antigo": 3.49, "preco_novo": 3.69, "variacao": 5.7, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7895000000424", "descricao": "Aveia em Flocos 200g", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7895000000431", "descricao": "Farinha de Milho 1kg", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7895000000448", "descricao": "Granola 250g", "preco_antigo": 8.99, "preco_novo": 9.29, "variacao": 3.3, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7895000000455", "descricao": "Cereal Matinal 200g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7895000000462", "descricao": "Linhaça Dourada 200g", "preco_antigo": 9.99, "preco_novo": 10.49, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7895000000479", "descricao": "Chia 100g", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7895000000486", "descricao": "Semente de Girassol 100g", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7895000000493", "descricao": "Centeio em Grãos 500g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7895000000509", "descricao": "Trigo para Quibe 500g", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 90, "ic_objetiva": 89}
+    ]
+  },
+  {
+    "id": "TP-2024-006",
+    "fornecedor": "Produtos Naturais Ltda.",
+    "bandeira": "MaisBarato",
+    "uf": "RJ",
+    "data_submissao": "2024-06-06T14:10:00",
+    "status": "Aprovada",
+    "aprovador": "Lucas Gerente",
+    "skus": [
+      {"gtin": "7896000000516", "descricao": "Granola Light 250g", "preco_antigo": 9.99, "preco_novo": 10.49, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7896000000523", "descricao": "Barra de Cereal 25g", "preco_antigo": 1.99, "preco_novo": 2.09, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7896000000530", "descricao": "Mix de Castanhas 100g", "preco_antigo": 12.99, "preco_novo": 13.49, "variacao": 3.8, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7896000000547", "descricao": "Semente de Abóbora 100g", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7896000000554", "descricao": "Farinha de Coco 200g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7896000000561", "descricao": "Farinha de Amêndoas 200g", "preco_antigo": 14.99, "preco_novo": 15.49, "variacao": 3.3, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7896000000578", "descricao": "Cacau em Pó 100g", "preco_antigo": 5.99, "preco_novo": 6.29, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7896000000585", "descricao": "Açúcar de Coco 200g", "preco_antigo": 8.99, "preco_novo": 9.29, "variacao": 3.3, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7896000000592", "descricao": "Chia 100g", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7896000000608", "descricao": "Linhaça Marrom 200g", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 80, "ic_objetiva": 81}
+    ]
+  },
+  {
+    "id": "TP-2024-007",
+    "fornecedor": "Doces e Delícias S.A.",
+    "bandeira": "SuperMais",
+    "uf": "CE",
+    "data_submissao": "2024-06-07T15:00:00",
+    "status": "Aguardando Aprovação",
+    "aprovador": "",
+    "skus": [
+      {"gtin": "7897000000615", "descricao": "Bala de Goma 100g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7897000000622", "descricao": "Chocolate ao Leite 90g", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7897000000639", "descricao": "Paçoca Rolha 20g", "preco_antigo": 0.99, "preco_novo": 1.09, "variacao": 10.1, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7897000000646", "descricao": "Doce de Leite 400g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7897000000653", "descricao": "Goiabada 300g", "preco_antigo": 5.99, "preco_novo": 6.29, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7897000000660", "descricao": "Cocada Branca 50g", "preco_antigo": 1.99, "preco_novo": 2.09, "variacao": 5.0, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7897000000677", "descricao": "Pé de Moleque 25g", "preco_antigo": 1.49, "preco_novo": 1.59, "variacao": 6.7, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7897000000684", "descricao": "Doce de Abóbora 100g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7897000000691", "descricao": "Chocolate Meio Amargo 90g", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7897000000707", "descricao": "Doce de Banana 100g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 88, "ic_objetiva": 87}
+    ]
+  },
+  {
+    "id": "TP-2024-008",
+    "fornecedor": "Carnes do Sul Ltda.",
+    "bandeira": "BomPreço",
+    "uf": "PR",
+    "data_submissao": "2024-06-08T16:30:00",
+    "status": "Aprovada",
+    "aprovador": "Patrícia Diretora",
+    "skus": [
+      {"gtin": "7898000000714", "descricao": "Carne Bovina Patinho 1kg", "preco_antigo": 39.99, "preco_novo": 41.49, "variacao": 3.8, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7898000000721", "descricao": "Carne Suína Lombo 1kg", "preco_antigo": 22.99, "preco_novo": 23.99, "variacao": 4.3, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7898000000738", "descricao": "Carne de Frango Coxa 1kg", "preco_antigo": 13.99, "preco_novo": 14.49, "variacao": 3.6, "ic_nielsen": 88, "ic_objetiva": 85},
+      {"gtin": "7898000000745", "descricao": "Linguiça Toscana 1kg", "preco_antigo": 18.99, "preco_novo": 19.49, "variacao": 2.6, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7898000000752", "descricao": "Carne Moída 1kg", "preco_antigo": 29.99, "preco_novo": 31.49, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7898000000769", "descricao": "Costela Bovina 1kg", "preco_antigo": 25.99, "preco_novo": 26.99, "variacao": 3.8, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7898000000776", "descricao": "Filé de Peito de Frango 1kg", "preco_antigo": 16.99, "preco_novo": 17.49, "variacao": 2.9, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7898000000783", "descricao": "Carne de Porco Pernil 1kg", "preco_antigo": 19.99, "preco_novo": 20.49, "variacao": 2.5, "ic_nielsen": 88, "ic_objetiva": 85},
+      {"gtin": "7898000000790", "descricao": "Carne Bovina Alcatra 1kg", "preco_antigo": 44.99, "preco_novo": 46.49, "variacao": 3.3, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7898000000806", "descricao": "Carne de Frango Asa 1kg", "preco_antigo": 12.99, "preco_novo": 13.49, "variacao": 3.8, "ic_nielsen": 80, "ic_objetiva": 81}
+    ]
+  },
+  {
+    "id": "TP-2024-009",
+    "fornecedor": "Frios e Congelados Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "BA",
+    "data_submissao": "2024-06-09T17:40:00",
+    "status": "Reprovada",
+    "aprovador": "Carlos VP",
+    "skus": [
+      {"gtin": "7899000000813", "descricao": "Pizza Congelada 460g", "preco_antigo": 14.99, "preco_novo": 15.49, "variacao": 3.3, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7899000000820", "descricao": "Hambúrguer Bovino 56g", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7899000000837", "descricao": "Batata Pré-Frita 2kg", "preco_antigo": 19.99, "preco_novo": 20.49, "variacao": 2.5, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7899000000844", "descricao": "Nuggets de Frango 300g", "preco_antigo": 8.99, "preco_novo": 9.29, "variacao": 3.3, "ic_nielsen": 85, "ic_objetiva": 84},
+      {"gtin": "7899000000851", "descricao": "Empanado de Peixe 400g", "preco_antigo": 10.99, "preco_novo": 11.49, "variacao": 4.5, "ic_nielsen": 92, "ic_objetiva": 91},
+      {"gtin": "7899000000868", "descricao": "Sorvete Napolitano 2L", "preco_antigo": 15.99, "preco_novo": 16.49, "variacao": 3.1, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7899000000875", "descricao": "Lasagna Congelada 600g", "preco_antigo": 13.99, "preco_novo": 14.49, "variacao": 3.6, "ic_nielsen": 88, "ic_objetiva": 85},
+      {"gtin": "7899000000882", "descricao": "Frango à Parmegiana 400g", "preco_antigo": 11.99, "preco_novo": 12.49, "variacao": 4.2, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7899000000899", "descricao": "Pizza Calabresa 460g", "preco_antigo": 14.99, "preco_novo": 15.49, "variacao": 3.3, "ic_nielsen": 90, "ic_objetiva": 89},
+      {"gtin": "7899000000905", "descricao": "Sorvete Chocolate 2L", "preco_antigo": 15.99, "preco_novo": 16.49, "variacao": 3.1, "ic_nielsen": 88, "ic_objetiva": 87}
+    ]
+  },
+  {
+    "id": "TP-2024-010",
+    "fornecedor": "Hortifruti Brasil S.A.",
+    "bandeira": "BomPreço",
+    "uf": "ES",
+    "data_submissao": "2024-06-10T18:50:00",
+    "status": "Aprovada",
+    "aprovador": "Fernanda Admin",
+    "skus": [
+      {"gtin": "7890100000912", "descricao": "Banana Prata 1kg", "preco_antigo": 4.99, "preco_novo": 5.19, "variacao": 4.0, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7890100000929", "descricao": "Maçã Gala 1kg", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7890100000936", "descricao": "Laranja Pera 1kg", "preco_antigo": 3.99, "preco_novo": 4.29, "variacao": 7.5, "ic_nielsen": 75, "ic_objetiva": 78},
+      {"gtin": "7890100000943", "descricao": "Mamão Formosa 1kg", "preco_antigo": 5.49, "preco_novo": 5.79, "variacao": 5.5, "ic_nielsen": 80, "ic_objetiva": 82},
+      {"gtin": "7890100000950", "descricao": "Abacaxi Pérola Unid.", "preco_antigo": 6.99, "preco_novo": 7.29, "variacao": 4.3, "ic_nielsen": 88, "ic_objetiva": 87},
+      {"gtin": "7890100000967", "descricao": "Melancia Kg", "preco_antigo": 2.99, "preco_novo": 3.19, "variacao": 6.7, "ic_nielsen": 78, "ic_objetiva": 80},
+      {"gtin": "7890100000974", "descricao": "Uva Thompson 500g", "preco_antigo": 7.99, "preco_novo": 8.39, "variacao": 5.0, "ic_nielsen": 80, "ic_objetiva": 81},
+      {"gtin": "7890100000981", "descricao": "Pera Williams 1kg", "preco_antigo": 9.99, "preco_novo": 10.49, "variacao": 5.0, "ic_nielsen": 88, "ic_objetiva": 89},
+      {"gtin": "7890100000998", "descricao": "Limão Tahiti 500g", "preco_antigo": 2.49, "preco_novo": 2.59, "variacao": 4.0, "ic_nielsen": 95, "ic_objetiva": 94},
+      {"gtin": "7890100001001", "descricao": "Cenoura Kg", "preco_antigo": 3.99, "preco_novo": 4.29, "variacao": 7.5, "ic_nielsen": 75, "ic_objetiva": 78}
+    ]
+  }
+]
