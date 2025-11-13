@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel Executivo de Aprovações - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+      font-size: 15px;
+    }
+    .header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7ef;
+      padding: 24px 40px 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header .logo {
+      height: 48px;
+    }
+    .header .titulo {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #2d3a4a;
+      margin-left: 24px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(40, 53, 80, 0.09);
+      padding: 32px 40px 40px 40px;
+    }
+    .kpi-cards {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      background: #f5f6fa;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.07);
+      padding: 22px 32px;
+      min-width: 220px;
+      flex: 1;
+      text-align: center;
+    }
+    .kpi-label {
+      font-size: 1.05rem;
+      color: #6e7a8a;
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #1e88e5;
+    }
+    .kpi-trend {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .kpi-trend.positivo {
+      color: #2ecc71;
+    }
+    .kpi-trend.negativo {
+      color: #e74c3c;
+    }
+    .filtros {
+      margin-bottom: 18px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .filtros label {
+      font-weight: 600;
+      color: #2d3a4a;
+      margin-right: 8px;
+    }
+    .filtros select {
+      border-radius: 6px;
+      border: 1px solid #e5e7ef;
+      padding: 6px 12px;
+      font-size: 1rem;
+      background: #f5f6fa;
+    }
+    .tabela-pendencias {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.07);
+      margin-bottom: 32px;
+    }
+    .tabela-pendencias th, .tabela-pendencias td {
+      padding: 12px 10px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7ef;
+      font-size: 1rem;
+    }
+    .tabela-pendencias th {
+      background: #f5f6fa;
+      color: #2d3a4a;
+      font-weight: 700;
+    }
+    .tabela-pendencias tr:last-child td {
+      border-bottom: none;
+    }
+    .dre-impacto {
+      font-weight: 700;
+      color: #e74c3c;
+    }
+    .grafico-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.07);
+      padding: 24px 24px 10px 24px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .grafico-titulo {
+      color: #2d3a4a;
+      font-size: 1.12rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 800px) {
+      .container {
+        padding: 18px 8px;
+      }
+      .header {
+        padding: 12px 8px 8px 8px;
+      }
+      .kpi-cards {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <span class="titulo">Painel Executivo de Aprovações</span>
+  </header>
+  <main class="container">
+    <div class="kpi-cards">
+      <div class="kpi-card">
+        <div class="kpi-label">Tabelas aguardando aprovação</div>
+        <div class="kpi-value" id="kpiAguardando">7</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tempo médio de aprovação</div>
+        <div class="kpi-value">2,4d</div>
+        <div class="kpi-trend positivo">&#9650; +0,2d</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Taxa de aprovação</div>
+        <div class="kpi-value">81%</div>
+        <div class="kpi-trend negativo">&#9660; -3%</div>
+      </div>
+    </div>
+    <div class="filtros">
+      <label for="filtroBandeira">Bandeira:</label>
+      <select id="filtroBandeira" onchange="filtrarPainel()">
+        <option value="">Todas</option>
+        <option value="Sulmax">Sulmax</option>
+        <option value="SuperSul">SuperSul</option>
+      </select>
+      <label for="filtroFornecedor">Fornecedor:</label>
+      <select id="filtroFornecedor" onchange="filtrarPainel()">
+        <option value="">Todos</option>
+        <option value="SuperAlimentos S.A.">SuperAlimentos S.A.</option>
+        <option value="MegaBebidas Ltda.">MegaBebidas Ltda.</option>
+      </select>
+    </div>
+    <div class="grafico-container">
+      <div class="grafico-titulo">Variação de Preços ao Longo do Tempo</div>
+      <canvas id="graficoVaria" width="650" height="180" aria-label="Gráfico de tendência de preços"></canvas>
+    </div>
+    <section>
+      <h2 style="color:#2d3a4a;font-size:1.15rem;margin-bottom:12px;margin-top:0;">Tabelas Pendentes (ordenadas por impacto DRE)</h2>
+      <table class="tabela-pendencias" aria-label="Tabelas pendentes">
+        <thead>
+          <tr>
+            <th>ID Tabela</th>
+            <th>Fornecedor</th>
+            <th>Bandeira</th>
+            <th>Data Submissão</th>
+            <th>Impacto DRE</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaPendenciasBody">
+          <!-- Preenchido via JS -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+    // Dados simulados
+    const pendencias = [
+      {id:'TBL-010', fornecedor:'SuperAlimentos S.A.', bandeira:'Sulmax', data:'02/07/2024', dre:-12340, status:'Pendente'},
+      {id:'TBL-011', fornecedor:'MegaBebidas Ltda.', bandeira:'SuperSul', data:'01/07/2024', dre:-9800, status:'Pendente'},
+      {id:'TBL-012', fornecedor:'Doces Brasil', bandeira:'Sulmax', data:'30/06/2024', dre:-6700, status:'Pendente'},
+      {id:'TBL-013', fornecedor:'SuperAlimentos S.A.', bandeira:'Sulmax', data:'29/06/2024', dre:-5400, status:'Pendente'},
+      {id:'TBL-014', fornecedor:'MegaBebidas Ltda.', bandeira:'SuperSul', data:'28/06/2024', dre:-3900, status:'Pendente'},
+      {id:'TBL-015', fornecedor:'Doces Brasil', bandeira:'Sulmax', data:'27/06/2024', dre:-2600, status:'Pendente'},
+      {id:'TBL-016', fornecedor:'SuperAlimentos S.A.', bandeira:'Sulmax', data:'26/06/2024', dre:-1200, status:'Pendente'}
+    ];
+    function filtrarPainel() {
+      const bandeira = document.getElementById('filtroBandeira').value;
+      const fornecedor = document.getElementById('filtroFornecedor').value;
+      let lista = pendencias.filter(p => {
+        return (!bandeira || p.bandeira === bandeira) && (!fornecedor || p.fornecedor === fornecedor);
+      });
+      document.getElementById('kpiAguardando').textContent = lista.length;
+      let html = '';
+      lista.sort((a,b) => a.dre - b.dre);
+      lista.forEach(p => {
+        html += `<tr>
+          <td>${p.id}</td>
+          <td>${p.fornecedor}</td>
+          <td>${p.bandeira}</td>
+          <td>${p.data}</td>
+          <td class="dre-impacto">${p.dre < 0 ? '-R$ ' + Math.abs(p.dre).toLocaleString('pt-BR') : 'R$ ' + p.dre.toLocaleString('pt-BR')}</td>
+          <td><span class="workflow-status pendente">${p.status}</span></td>
+        </tr>`;
+      });
+      document.getElementById('tabelaPendenciasBody').innerHTML = html;
+    }
+    // Gráfico de tendência (simples, sem lib externa)
+    function desenharGrafico() {
+      const ctx = document.getElementById('graficoVaria').getContext('2d');
+      ctx.clearRect(0,0,650,180);
+      // Eixo
+      ctx.strokeStyle = '#e5e7ef';
+      ctx.beginPath();
+      ctx.moveTo(50,20); ctx.lineTo(50,150); ctx.lineTo(630,150);
+      ctx.stroke();
+      // Dados
+      const dados = [-3.8, -2.5, -4.1, -1.7, -3.2, -2.9, -3.5];
+      const labels = ['26/06','27/06','28/06','29/06','30/06','01/07','02/07'];
+      ctx.font = '13px Arial';
+      ctx.fillStyle = '#6e7a8a';
+      labels.forEach((l,i) => {
+        ctx.fillText(l, 70 + i*80, 165);
+      });
+      // Linha
+      ctx.strokeStyle = '#1e88e5';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      dados.forEach((v,i) => {
+        let x = 70 + i*80;
+        let y = 150 + v*20; // -4% vira 70, -2% vira 110
+        if (i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+      // Pontos
+      ctx.fillStyle = '#1e88e5';
+      dados.forEach((v,i) => {
+        let x = 70 + i*80;
+        let y = 150 + v*20;
+        ctx.beginPath();
+        ctx.arc(x,y,5,0,2*Math.PI);
+        ctx.fill();
+      });
+      // Eixo Y
+      ctx.fillStyle = '#6e7a8a';
+      ctx.fillText('-1%', 20, 110);
+      ctx.fillText('-2%', 20, 130);
+      ctx.fillText('-3%', 20, 150);
+      ctx.fillText('-4%', 20, 170);
+    }
+    filtrarPainel();
+    desenharGrafico();
+    document.getElementById('filtroBandeira').addEventListener('change', filtrarPainel);
+    document.getElementById('filtroFornecedor').addEventListener('change', filtrarPainel);
+  </script>
+</body>
+</html>
