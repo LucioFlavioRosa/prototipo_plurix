@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração - Logs e Auditoria | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f6f7fa;
+      margin: 0;
+      color: #222;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 64px;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+    header img {
+      height: 40px;
+      margin-right: 24px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #1a237e;
+      margin: 0;
+      flex: 1;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #1a237e;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #1976d2;
+      color: #1976d2;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+      padding: 32px 40px 40px 40px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+    }
+    .filtros {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .filtros label {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #222;
+      margin-right: 8px;
+    }
+    .filtros input, .filtros select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cfd8dc;
+      background: #f6f7fa;
+      font-size: 1rem;
+      min-width: 120px;
+    }
+    .filtros button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-left: 10px;
+    }
+    .filtros button:hover {
+      background: #1565c0;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 32px;
+      border-radius: 8px;
+      background: #fafbfc;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.98rem;
+      background: #fff;
+      min-width: 900px;
+    }
+    thead {
+      background: #e3e7f1;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      color: #1a237e;
+      font-weight: 700;
+      border-bottom: 2px solid #cfd8dc;
+      font-size: 1rem;
+    }
+    tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+    tbody tr:hover {
+      background: #f6f7fa;
+    }
+    .export-btns {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .export-btns button {
+      background: #fff;
+      color: #1976d2;
+      border: 1.5px solid #1976d2;
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .export-btns button:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pagination button {
+      background: #f6f7fa;
+      border: 1px solid #cfd8dc;
+      border-radius: 4px;
+      color: #222;
+      font-size: 0.96rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pagination button.active, .pagination button:hover {
+      background: #1976d2;
+      color: #fff;
+      border-color: #1976d2;
+    }
+    .graficos {
+      display: flex;
+      gap: 36px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .grafico-box {
+      background: #f6f7fa;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+      padding: 24px 28px 18px 28px;
+      flex: 1 1 340px;
+      min-width: 320px;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .grafico-title {
+      font-size: 1.08rem;
+      color: #1a237e;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    canvas {
+      max-width: 100%;
+      height: 180px !important;
+    }
+    @media (max-width: 900px) {
+      main { padding: 18px 6px; }
+      .graficos { flex-direction: column; gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <h1>Administração - Logs & Auditoria</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="admin-auditoria.html" class="active">Auditoria</a>
+      <a href="notificacoes.html">Notificações</a>
+      <a href="logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="section-title">Filtros Avançados</div>
+    <form class="filtros" id="filtrosForm" autocomplete="off" onsubmit="event.preventDefault();filtrarLogs();">
+      <label for="usuario">Usuário:</label>
+      <input type="text" id="usuario" name="usuario" placeholder="Nome ou e-mail">
+      <label for="acao">Ação:</label>
+      <select id="acao" name="acao">
+        <option value="">Todas</option>
+        <option value="upload">Upload</option>
+        <option value="aprovacao">Aprovação</option>
+        <option value="reprovacao">Reprovação</option>
+        <option value="login">Login</option>
+        <option value="exportacao">Exportação</option>
+        <option value="edicao">Edição</option>
+      </select>
+      <label for="periodo">Período:</label>
+      <input type="date" id="dataInicio" name="dataInicio">
+      <span style="margin:0 6px;">a</span>
+      <input type="date" id="dataFim" name="dataFim">
+      <label for="entidade">Entidade:</label>
+      <input type="text" id="entidade" name="entidade" placeholder="Tabela, SKU, Usuário...">
+      <button type="submit">Filtrar</button>
+      <button type="button" onclick="resetarFiltros()" style="background:#fff; color:#1976d2; border:1.5px solid #1976d2;">Limpar</button>
+    </form>
+    <div class="export-btns">
+      <button onclick="exportarTabela('csv')">Exportar CSV</button>
+      <button onclick="exportarTabela('excel')">Exportar Excel</button>
+    </div>
+    <div class="table-container">
+      <table id="logsTable" aria-label="Tabela de logs de auditoria">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Usuário</th>
+            <th>Ação</th>
+            <th>Entidade Afetada</th>
+            <th>Detalhes</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Preenchido via JS -->
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="paginacao"></div>
+    <div class="section-title" style="margin-top:40px;">Gráficos de Atividade</div>
+    <div class="graficos">
+      <div class="grafico-box">
+        <div class="grafico-title">Ações por Dia</div>
+        <canvas id="graficoAcoesDia" aria-label="Gráfico de ações por dia"></canvas>
+      </div>
+      <div class="grafico-box">
+        <div class="grafico-title">Usuários Mais Ativos</div>
+        <canvas id="graficoUsuariosAtivos" aria-label="Gráfico de usuários mais ativos"></canvas>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Simulação de dados de logs
+    const logs = [];
+    const nomes = ['Ana Souza', 'Carlos Lima', 'Fernanda Alves', 'João Silva', 'Marina Dias', 'Roberto Costa'];
+    const acoes = ['upload', 'aprovacao', 'reprovacao', 'login', 'exportacao', 'edicao'];
+    const entidades = ['Tabela Preços', 'SKU 12345', 'Usuário', 'Fornecedor 002', 'Relatório', 'Painel'];
+    const detalhes = ['Upload realizado com sucesso', 'Aprovado por gerente', 'Reprovado por falta de dados', 'Login efetuado', 'Exportação concluída', 'Edição manual de produto'];
+    const ips = ['187.12.34.56', '201.45.67.89', '143.98.76.54', '200.100.50.25', '189.54.33.12', '177.65.43.21'];
+    function randomDate(start, end) {
+      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    }
+    for(let i=0;i<80;i++){
+      const dt = randomDate(new Date(Date.now()-1000*60*60*24*15), new Date());
+      logs.push({
+        timestamp: dt.toLocaleString('pt-BR'),
+        usuario: nomes[Math.floor(Math.random()*nomes.length)],
+        acao: acoes[Math.floor(Math.random()*acoes.length)],
+        entidade: entidades[Math.floor(Math.random()*entidades.length)],
+        detalhes: detalhes[Math.floor(Math.random()*detalhes.length)],
+        ip: ips[Math.floor(Math.random()*ips.length)]
+      });
+    }
+    let logsFiltrados = [...logs];
+    let paginaAtual = 1;
+    const porPagina = 10;
+    function renderTabela(){
+      const tbody = document.querySelector('#logsTable tbody');
+      tbody.innerHTML = '';
+      const inicio = (paginaAtual-1)*porPagina;
+      const fim = inicio+porPagina;
+      logsFiltrados.slice(inicio, fim).forEach(log => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${log.timestamp}</td><td>${log.usuario}</td><td>${log.acao}</td><td>${log.entidade}</td><td>${log.detalhes}</td><td>${log.ip}</td>`;
+        tbody.appendChild(tr);
+      });
+      renderPaginacao();
+    }
+    function renderPaginacao(){
+      const pagDiv = document.getElementById('paginacao');
+      pagDiv.innerHTML = '';
+      const totalPag = Math.ceil(logsFiltrados.length/porPagina);
+      for(let i=1;i<=totalPag;i++){
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if(i===paginaAtual) btn.classList.add('active');
+        btn.onclick = ()=>{paginaAtual=i;renderTabela();};
+        pagDiv.appendChild(btn);
+      }
+    }
+    function filtrarLogs(){
+      const usuario = document.getElementById('usuario').value.trim().toLowerCase();
+      const acao = document.getElementById('acao').value;
+      const entidade = document.getElementById('entidade').value.trim().toLowerCase();
+      const dataInicio = document.getElementById('dataInicio').value;
+      const dataFim = document.getElementById('dataFim').value;
+      logsFiltrados = logs.filter(l => {
+        let ok = true;
+        if(usuario && !l.usuario.toLowerCase().includes(usuario)) ok=false;
+        if(acao && l.acao!==acao) ok=false;
+        if(entidade && !l.entidade.toLowerCase().includes(entidade)) ok=false;
+        if(dataInicio) {
+          const dt = l.timestamp.split(',')[0].split('/').reverse().join('-');
+          if(dt<dataInicio) ok=false;
+        }
+        if(dataFim) {
+          const dt = l.timestamp.split(',')[0].split('/').reverse().join('-');
+          if(dt>dataFim) ok=false;
+        }
+        return ok;
+      });
+      paginaAtual=1;
+      renderTabela();
+      atualizarGraficos();
+    }
+    function resetarFiltros(){
+      document.getElementById('filtrosForm').reset();
+      logsFiltrados = [...logs];
+      paginaAtual=1;
+      renderTabela();
+      atualizarGraficos();
+    }
+    function exportarTabela(tipo){
+      alert('Exportação simulada para '+(tipo==='csv'?'CSV':'Excel'));
+    }
+    // Gráficos
+    let chartAcoes, chartUsuarios;
+    function atualizarGraficos(){
+      // Gráfico de ações por dia
+      const porDia = {};
+      logsFiltrados.forEach(l => {
+        const dia = l.timestamp.split(',')[0];
+        porDia[dia] = (porDia[dia]||0)+1;
+      });
+      const dias = Object.keys(porDia).sort((a,b)=>{
+        const [da,ma,aa]=a.split('/');
+        const [db,mb,ab]=b.split('/');
+        return new Date(`${aa}-${ma}-${da}`)-new Date(`${ab}-${mb}-${db}`);
+      });
+      const valores = dias.map(d=>porDia[d]);
+      if(chartAcoes) chartAcoes.destroy();
+      chartAcoes = new Chart(document.getElementById('graficoAcoesDia'), {
+        type: 'bar',
+        data: { labels: dias, datasets: [{ label: 'Ações', data: valores, backgroundColor: '#1976d2' }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#1a237e'}},y:{beginAtZero:true,ticks:{color:'#1a237e'}}} }
+      });
+      // Gráfico de usuários mais ativos
+      const porUsuario = {};
+      logsFiltrados.forEach(l=>{porUsuario[l.usuario]=(porUsuario[l.usuario]||0)+1;});
+      const usuarios = Object.keys(porUsuario);
+      const acoesU = usuarios.map(u=>porUsuario[u]);
+      if(chartUsuarios) chartUsuarios.destroy();
+      chartUsuarios = new Chart(document.getElementById('graficoUsuariosAtivos'), {
+        type: 'doughnut',
+        data: { labels: usuarios, datasets: [{ data: acoesU, backgroundColor: ['#1976d2','#43a047','#ffb300','#e53935','#6d4c41','#0288d1'] }] },
+        options: { responsive:true, plugins:{legend:{position:'bottom',labels:{color:'#1a237e'}}} }
+      });
+    }
+    // Inicialização
+    renderTabela();
+    atualizarGraficos();
+  </script>
+</body>
+</html>
