@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logs & Auditoria | Plataforma Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      color: #222;
+      font-size: 16px;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+    nav a {
+      color: #2b3a4a;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #0096d6;
+      color: #0096d6;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.05);
+      padding: 32px 40px 40px 40px;
+    }
+    .titulo-pagina {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0096d6;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    .filtros-logs {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filtros-logs label {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .filtros-logs input, .filtros-logs select {
+      padding: 7px 12px;
+      border: 1px solid #cfd8dc;
+      border-radius: 6px;
+      background: #fafbfc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .filtros-logs input:focus, .filtros-logs select:focus {
+      border-color: #0096d6;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #0096d6 0%, #00c2cb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,150,214,0.07);
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #00c2cb 0%, #0096d6 100%);
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #2b3a4a;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover {
+      background: #cfd8dc;
+    }
+    .tabela-logs {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+    }
+    .tabela-logs th, .tabela-logs td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 1rem;
+    }
+    .tabela-logs th {
+      background: #f5f6fa;
+      color: #0096d6;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .tabela-logs tr:last-child td {
+      border-bottom: none;
+    }
+    .acoes-log button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #0096d6;
+      transition: color 0.2s;
+    }
+    .acoes-log button:hover {
+      color: #00c2cb;
+    }
+    .badge-acao {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.95em;
+      font-weight: 600;
+      background: #e0f7fa;
+      color: #0096d6;
+      margin-right: 4px;
+    }
+    .badge-alerta {
+      background: #ffe082;
+      color: #b28900;
+    }
+    .badge-sucesso {
+      background: #e0f2f1;
+      color: #009688;
+    }
+    .badge-erro {
+      background: #fbe9e7;
+      color: #d84315;
+    }
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(44,62,80,0.18);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+      padding: 32px 28px 24px 28px;
+      min-width: 350px;
+      max-width: 95vw;
+      position: relative;
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    .modal .close {
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      font-size: 1.5rem;
+      color: #bbb;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .modal .close:hover {
+      color: #0096d6;
+    }
+    .modal .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0096d6;
+      margin-bottom: 18px;
+    }
+    .modal .modal-content {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 18px;
+    }
+    .modal .modal-actions {
+      text-align: right;
+    }
+    .footer {
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      padding: 18px 0 10px 0;
+      color: #7b8a99;
+      font-size: 0.98rem;
+      margin-top: 48px;
+    }
+    @media (max-width: 900px) {
+      main { padding: 18px 2vw 24px 2vw; }
+      .tabela-logs th, .tabela-logs td { font-size: 0.95rem; }
+      .filtros-logs { flex-direction: column; gap: 10px; }
+    }
+  </style>
+  <script>
+    function abrirModalLog(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function fecharModalLog(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    function mostrarDetalhesLog(data, usuario, acao, entidade, detalhes) {
+      document.getElementById('detalheLogData').textContent = data;
+      document.getElementById('detalheLogUsuario').textContent = usuario;
+      document.getElementById('detalheLogAcao').textContent = acao;
+      document.getElementById('detalheLogEntidade').textContent = entidade;
+      document.getElementById('detalheLogDetalhes').textContent = detalhes;
+      abrirModalLog('modalDetalheLog');
+    }
+    function exportarRelatorio() {
+      alert('Exportação de relatório simulada (protótipo).');
+    }
+    function filtrarLogs() {
+      alert('Filtro aplicado (apenas protótipo).');
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <nav aria-label="Menu principal">
+      <a href="../dashboard.html">Início</a>
+      <a href="../gestao-tabelas.html">Tabelas de Preços</a>
+      <a href="gestao-usuarios.html">Gestão de Usuários</a>
+      <a href="logs-auditoria.html" class="active">Logs & Auditoria</a>
+      <a href="../logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="titulo-pagina">Logs & Auditoria</div>
+    <div class="filtros-logs">
+      <div>
+        <label for="filtro-periodo">Período</label>
+        <input type="date" id="filtro-periodo-inicio"> a <input type="date" id="filtro-periodo-fim">
+      </div>
+      <div>
+        <label for="filtro-usuario">Usuário</label>
+        <input type="text" id="filtro-usuario" placeholder="Nome ou e-mail">
+      </div>
+      <div>
+        <label for="filtro-acao">Tipo de Ação</label>
+        <select id="filtro-acao">
+          <option value="">Todas</option>
+          <option value="login">Login</option>
+          <option value="upload">Upload de Tabela</option>
+          <option value="aprovacao">Aprovação</option>
+          <option value="edicao">Edição</option>
+          <option value="exportacao">Exportação</option>
+          <option value="erro">Erro</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="filtrarLogs()">Filtrar</button>
+      <button class="btn-secondary" style="margin-left:auto;" onclick="exportarRelatorio()">Exportar Relatório</button>
+    </div>
+    <table class="tabela-logs" aria-label="Tabela de logs de auditoria">
+      <thead>
+        <tr>
+          <th>Data/Hora</th>
+          <th>Usuário</th>
+          <th>Ação</th>
+          <th>Entidade</th>
+          <th>Detalhes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2024-06-18 14:32</td>
+          <td>Maria Oliveira</td>
+          <td><span class="badge-acao badge-sucesso">Upload</span></td>
+          <td>Tabela de Preços</td>
+          <td>Arquivo: tabela_junho.xlsx</td>
+          <td class="acoes-log">
+            <button title="Detalhes" aria-label="Ver detalhes do log" onclick="mostrarDetalhesLog('2024-06-18 14:32','Maria Oliveira','Upload','Tabela de Preços','Arquivo: tabela_junho.xlsx\nStatus: Sucesso\nLinhas processadas: 1200')">&#128269;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>2024-06-18 14:35</td>
+          <td>João Silva</td>
+          <td><span class="badge-acao badge-erro">Erro</span></td>
+          <td>Login</td>
+          <td>Senha incorreta</td>
+          <td class="acoes-log">
+            <button title="Detalhes" aria-label="Ver detalhes do log" onclick="mostrarDetalhesLog('2024-06-18 14:35','João Silva','Erro','Login','Tentativa de login com senha inválida. IP: 177.23.1.45')">&#128269;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>2024-06-18 14:40</td>
+          <td>Fernanda Souza</td>
+          <td><span class="badge-acao badge-alerta">Aprovação</span></td>
+          <td>SKU 7891234567890</td>
+          <td>Aprovado por Gerente</td>
+          <td class="acoes-log">
+            <button title="Detalhes" aria-label="Ver detalhes do log" onclick="mostrarDetalhesLog('2024-06-18 14:40','Fernanda Souza','Aprovação','SKU 7891234567890','Aprovação concedida. Justificativa: "Preço competitivo"')">&#128269;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>2024-06-18 14:45</td>
+          <td>Lucas Pereira</td>
+          <td><span class="badge-acao badge-sucesso">Exportação</span></td>
+          <td>Relatório Financeiro</td>
+          <td>Exportação realizada</td>
+          <td class="acoes-log">
+            <button title="Detalhes" aria-label="Ver detalhes do log" onclick="mostrarDetalhesLog('2024-06-18 14:45','Lucas Pereira','Exportação','Relatório Financeiro','Exportação de relatório financeiro anual em PDF.')">&#128269;</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Modal de detalhes do log -->
+    <div class="modal-bg" id="modalDetalheLog" role="dialog" aria-modal="true" aria-labelledby="modalDetalheLogTitulo">
+      <div class="modal">
+        <button class="close" onclick="fecharModalLog('modalDetalheLog')" aria-label="Fechar">&times;</button>
+        <div class="modal-title" id="modalDetalheLogTitulo">Detalhes do Log</div>
+        <div class="modal-content">
+          <strong>Data/Hora:</strong> <span id="detalheLogData"></span><br>
+          <strong>Usuário:</strong> <span id="detalheLogUsuario"></span><br>
+          <strong>Ação:</strong> <span id="detalheLogAcao"></span><br>
+          <strong>Entidade:</strong> <span id="detalheLogEntidade"></span><br>
+          <strong>Detalhes:</strong><br>
+          <pre id="detalheLogDetalhes" style="background:#f5f6fa;padding:10px;border-radius:6px;overflow-x:auto;"></pre>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" onclick="fecharModalLog('modalDetalheLog')">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
