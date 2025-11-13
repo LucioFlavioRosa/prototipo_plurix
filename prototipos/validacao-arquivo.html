@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação de Arquivo - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .header img {
+      height: 40px;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 48px auto 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      padding: 40px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .alert {
+      padding: 18px 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .alert-success {
+      background: #e7f9ed;
+      color: #1e7e34;
+      border: 1px solid #b7e7c2;
+    }
+    .alert-error {
+      background: #fff2f0;
+      color: #d4380d;
+      border: 1px solid #ffccc7;
+    }
+    .alert svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .error-table th, .error-table td {
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .error-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .error-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .error-table tr:last-child {
+      border-bottom: none;
+    }
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+    .btn {
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary {
+      background: #1a6ae5;
+      color: #fff;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-primary:hover {
+      background: #144fa1;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #1a6ae5;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-secondary:hover {
+      background: #f0f5ff;
+    }
+    @media (max-width: 700px) {
+      .container {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <span class="header-title">Validação de Arquivo de Preços</span>
+  </header>
+  <main class="container">
+    <!-- Exemplo de alerta de erro -->
+    <div class="alert alert-error" role="alert">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
+    </div>
+    <table class="error-table" aria-label="Erros de validação">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Coluna</th>
+          <th>Descrição do Erro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>12</td>
+          <td>GTIN</td>
+          <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td>Preço Novo</td>
+          <td>Valor negativo não permitido</td>
+        </tr>
+        <tr>
+          <td>45</td>
+          <td>Descrição</td>
+          <td>Campo obrigatório não preenchido</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="window.location.reload()">Corrigir e reenviar</button>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+    </div>
+    <!-- Exemplo de alerta de sucesso (descomentar para exibir sucesso)
+    <div class="alert alert-success" role="alert">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+    </div>
+    -->
+  </main>
+</body>
+</html>
