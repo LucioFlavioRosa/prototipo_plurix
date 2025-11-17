@@ -64,49 +64,36 @@
       font-weight: 700;
       letter-spacing: 1px;
     }
-    nav {
-      margin-right: 32px;
-      display: flex;
-      align-items: center;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 24px;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: color 0.2s;
-      background: none;
-      padding: 0;
-      border-radius: 0;
-    }
-    nav a:hover {
-      color: var(--plurix-secondary);
-    }
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: calc(100vh - 72px);
-      padding-top: 32px;
+      min-height: calc(100vh - 72px - 80px);
+      padding-top: 48px;
     }
     .login-container {
       background: #fff;
       border-radius: var(--plurix-radius);
-      box-shadow: 0 8px 32px rgba(12,35,64,0.08);
+      box-shadow: 0 4px 24px rgba(12,35,64,0.07);
       padding: 48px 40px 40px 40px;
       min-width: 340px;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      animation: fadeIn 0.5s ease-out;
+      animation: fadeInUp 0.5s ease-out;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .login-container img {
       width: 80px;
@@ -117,8 +104,9 @@
       font-size: 1.6rem;
       color: var(--plurix-primary);
       font-weight: 700;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       letter-spacing: 1px;
+      transition: font-size 0.2s;
     }
     form {
       width: 100%;
@@ -128,13 +116,12 @@
     }
     .form-label {
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--plurix-primary);
       margin-bottom: 4px;
-      letter-spacing: 0.3px;
     }
     .form-input {
-      padding: 14px 16px;
+      padding: 12px 14px;
       border: 1px solid var(--plurix-gray);
       border-radius: var(--plurix-radius);
       font-size: 1rem;
@@ -148,66 +135,133 @@
       background: #fff;
       box-shadow: 0 0 0 3px rgba(0,152,216,0.1);
     }
+    .form-hint {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: -12px;
+      display: block;
+    }
     .btn {
       font-family: inherit;
       font-size: 1rem;
-      padding: 14px 0;
+      padding: 12px 0;
       border: none;
       border-radius: var(--plurix-radius);
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
       background: var(--plurix-primary);
       color: #fff;
       box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       outline: none;
+      text-align: center;
+      display: inline-block;
+      position: relative;
     }
     .btn:hover {
       background: #142d4c;
+      transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(12,35,64,0.12);
+    }
+    .btn-loading {
+      cursor: wait !important;
+      opacity: 0.7 !important;
+    }
+    .btn-loading::after {
+      content: ' Entrando...';
+      font-weight: 400;
+      font-size: 1rem;
+      margin-left: 8px;
+      animation: blink 1s steps(2, start) infinite;
+    }
+    @keyframes blink {
+      to { opacity: 0.4; }
     }
     .login-links {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 20px;
     }
     .login-links a {
       color: var(--plurix-accent);
       text-decoration: none;
-      font-size: 0.98rem;
-      transition: color 0.2s, font-weight 0.2s;
+      font-size: 1rem;
+      transition: color 0.2s;
     }
     .login-links a:hover {
-      color: #0077b3;
-      font-weight: 600;
+      color: var(--plurix-primary);
       text-decoration: underline;
+    }
+    footer {
+      background: var(--plurix-primary);
+      color: #fff;
+      text-align: center;
+      padding: 24px 0 12px 0;
+      font-size: 1rem;
+      margin-top: 48px;
     }
     @media (max-width: 600px) {
       .login-container {
-        min-width: 90vw;
-        max-width: 98vw;
-        padding: 24px 8px 20px 8px;
+        min-width: 92vw;
+        max-width: 96vw;
+        padding: 32px 20px 28px 20px;
+      }
+      .login-container h2 {
+        font-size: 1.4rem;
       }
       .header-logo {
         margin-left: 12px;
       }
-      nav {
-        margin-right: 12px;
-        margin-top: 8px;
-      }
     }
   </style>
   <script>
+    function formatCNPJ(value) {
+      return value.replace(/\D/g, '');
+    }
+
     function validateForm(e) {
       const emailCnpj = document.getElementById('emailCnpj');
       const senha = document.getElementById('senha');
-      if (!emailCnpj.value.trim() || !senha.value.trim()) {
+      const btn = document.getElementById('btn-entrar');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;
+      const valor = emailCnpj.value.trim();
+      const senhaValor = senha.value;
+      // 1. Verificar campos vazios
+      if (!valor || !senhaValor) {
         alert('Preencha todos os campos para continuar.');
         e.preventDefault();
         return false;
       }
-      return true;
+      // 2. Validar formato (e-mail OU CNPJ)
+      if (valor.includes('@')) {
+        if (!emailRegex.test(valor)) {
+          alert('Formato de e-mail inválido');
+          e.preventDefault();
+          return false;
+        }
+      } else {
+        // Aceita CNPJ com ou sem pontuação
+        if (!cnpjRegex.test(valor)) {
+          alert('Formato de CNPJ inválido');
+          e.preventDefault();
+          return false;
+        }
+      }
+      // 3. Verificar credenciais hardcoded
+      if (valor === 'lucio.rosa@peers.com.br' && senhaValor === 'prototipo_2') {
+        btn.classList.add('btn-loading');
+        setTimeout(function() {
+          window.location.href = 'dashboard-fornecedor.html';
+        }, 800);
+        e.preventDefault();
+        return false;
+      } else {
+        alert('Credenciais inválidas');
+        e.preventDefault();
+        return false;
+      }
     }
   </script>
 </head>
@@ -217,23 +271,22 @@
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
       <span class="header-title">Portal do Fornecedor</span>
     </div>
-    <nav>
-      <a href="index.html">&larr; Voltar para Home</a>
-    </nav>
   </header>
   <main>
     <div class="login-container">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
       <h2>Acesse sua conta de Fornecedor</h2>
-      <form action="#" method="post" onsubmit="return validateForm(event)">
+      <form action="#" method="post" onsubmit="return validateForm(event)" novalidate>
         <label for="emailCnpj" class="form-label">E-mail ou CNPJ</label>
-        <input type="text" id="emailCnpj" name="emailCnpj" class="form-input" placeholder="Digite seu e-mail ou CNPJ" autocomplete="username" required>
+        <input type="text" id="emailCnpj" name="emailCnpj" class="form-input" placeholder="Digite seu e-mail ou CNPJ" autocomplete="username" required inputmode="email">
+        <small class="form-hint">Formato: email@exemplo.com ou 12.345.678/0001-90</small>
         <label for="senha" class="form-label">Senha</label>
         <input type="password" id="senha" name="senha" class="form-input" placeholder="Digite sua senha" autocomplete="current-password" required>
-        <button type="submit" class="btn">Entrar</button>
+        <button type="submit" class="btn" id="btn-entrar">Entrar</button>
       </form>
       <div class="login-links">
         <a href="#" aria-label="Recuperar senha">Esqueci minha senha</a>
+        <a href="#" aria-label="Cadastrar novo fornecedor">Cadastrar-se</a>
       </div>
     </div>
   </main>
