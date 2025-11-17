@@ -168,7 +168,7 @@
     }
     .modal-content {
       background: #fff;
-      max-width: 800px;
+      max-width: 900px;
       width: 100%;
       padding: 32px;
       border-radius: 12px;
@@ -264,6 +264,121 @@
       color: #555;
       font-size: 1.02rem;
     }
+    /* Modal Editor Planilha */
+    .modal-editor {
+      display: none;
+      position: fixed;
+      z-index: 1100;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-editor.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-editor-content {
+      background: #fff;
+      max-width: 1000px;
+      width: 100%;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .modal-editor-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-editor-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-editor-close:hover {
+      color: #e74c3c;
+    }
+    .editor-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      font-size: 1.04rem;
+    }
+    .editor-table th, .editor-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .editor-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .editor-table tr:last-child td {
+      border-bottom: none;
+    }
+    .editor-table input[type="text"], .editor-table input[type="number"] {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .editor-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .editor-save {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+    }
+    .editor-save:hover {
+      background: #399c36;
+    }
+    .editor-cancel {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+    }
+    .editor-cancel:hover {
+      background: #c0392b;
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -297,12 +412,12 @@
       .card {
         padding: 16px 8px 12px 8px;
       }
-      .modal-content {
+      .modal-content, .modal-editor-content {
         width: 95%;
         padding: 20px;
         max-height: 90vh;
       }
-      .modal-header {
+      .modal-header, .modal-editor-header {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -325,6 +440,7 @@
         window.location.href = '../plurix.html';
       }
     }
+
     function abrirDetalhes(status, arquivo, data) {
       try {
         var modal = document.getElementById('modal-detalhes');
@@ -338,7 +454,6 @@
           alert('Erro: estrutura do modal inválida.');
           return;
         }
-        // Dados mock detalhados
         var nivelAprovacao = [
           'Gerente Categoria Bandeira',
           'Dir. Comercial Bandeira',
@@ -347,7 +462,7 @@
         ];
         var nivelAtual = 0;
         if (status === 'pendente') {
-          // Exemplo de lógica para determinar o nível atual baseado no arquivo
+          // Exemplo: lógica mock para níveis
           if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
           else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
           else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
@@ -406,6 +521,7 @@
             html += '<div class="motivo-valor">' + motivosReprovada[key] + '</div>';
             html += '</div>';
           });
+          html += '<div style="margin-top: 24px; text-align: right;"><button class="editor-cancel" style="margin-right: 12px;" onclick="fecharModal()">Fechar</button><button class="editor-save" onclick="abrirEditorPlanilha(\'' + arquivo + '\')">Editar Planilha</button></div>';
         } else {
           modalTitle.textContent = 'Detalhes';
           html = '<div>Informações não disponíveis para este status.</div>';
@@ -414,7 +530,8 @@
         modal.style.display = 'flex';
         modal.classList.remove('closing');
         setTimeout(function() {
-          modal.querySelector('.modal-content').focus();
+          var focusEl = modal.querySelector('.modal-content');
+          if (focusEl) focusEl.focus();
         }, 100);
       } catch (e) {
         var modal = document.getElementById('modal-detalhes');
@@ -427,6 +544,7 @@
         }
       }
     }
+
     function fecharModal() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -437,6 +555,106 @@
         }, 250);
       }
     }
+
+    // Modal Editor Planilha
+    function abrirEditorPlanilha(arquivo) {
+      fecharModal();
+      setTimeout(function() {
+        var modalEditor = document.getElementById('modal-editor-planilha');
+        if (!modalEditor) return;
+        var modalEditorBody = modalEditor.querySelector('.modal-editor-body');
+        var modalEditorTitle = modalEditor.querySelector('.modal-editor-title');
+        if (!modalEditorBody || !modalEditorTitle) return;
+        modalEditorTitle.textContent = 'Editar Planilha - ' + arquivo;
+        // Mock de planilha real
+        var mockPlanilha = [
+          {
+            sku: '1001',
+            produto: 'Arroz Branco 5kg',
+            preco_atual: 'R$ 22,90',
+            preco_sugerido: 'R$ 24,90',
+            ultima_atualizacao: '10/01/2024',
+            ic_nielsen: '85.3',
+            ic_objetiva: '79.1'
+          },
+          {
+            sku: '1002',
+            produto: 'Feijão Carioca 1kg',
+            preco_atual: 'R$ 8,50',
+            preco_sugerido: 'R$ 9,20',
+            ultima_atualizacao: '10/01/2024',
+            ic_nielsen: '88.7',
+            ic_objetiva: '81.5'
+          },
+          {
+            sku: '1003',
+            produto: 'Óleo de Soja 900ml',
+            preco_atual: 'R$ 7,80',
+            preco_sugerido: 'R$ 8,30',
+            ultima_atualizacao: '10/01/2024',
+            ic_nielsen: '82.1',
+            ic_objetiva: '77.8'
+          }
+        ];
+        var html = '';
+        html += '<form id="form-editar-planilha" onsubmit="salvarEdicaoPlanilha(event)">';
+        html += '<table class="editor-table" aria-label="Editor de Planilha">';
+        html += '<thead><tr>';
+        html += '<th>SKU</th>';
+        html += '<th>Produto</th>';
+        html += '<th>Preço Atual</th>';
+        html += '<th>Preço Sugerido</th>';
+        html += '<th>Última Atualização</th>';
+        html += '<th>IC Nielsen</th>';
+        html += '<th>IC Objetiva</th>';
+        html += '</tr></thead>';
+        html += '<tbody>';
+        for (var i = 0; i < mockPlanilha.length; i++) {
+          var row = mockPlanilha[i];
+          html += '<tr>';
+          html += '<td><input type="text" name="sku_' + i + '" value="' + row.sku + '" readonly></td>';
+          html += '<td><input type="text" name="produto_' + i + '" value="' + row.produto + '" readonly></td>';
+          html += '<td><input type="text" name="preco_atual_' + i + '" value="' + row.preco_atual + '" readonly></td>';
+          html += '<td><input type="text" name="preco_sugerido_' + i + '" value="' + row.preco_sugerido + '"></td>';
+          html += '<td><input type="text" name="ultima_atualizacao_' + i + '" value="' + row.ultima_atualizacao + '"></td>';
+          html += '<td><input type="text" name="ic_nielsen_' + i + '" value="' + row.ic_nielsen + '" readonly></td>';
+          html += '<td><input type="text" name="ic_objetiva_' + i + '" value="' + row.ic_objetiva + '" readonly></td>';
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+        html += '<div class="editor-actions">';
+        html += '<button type="button" class="editor-cancel" onclick="fecharModalEditor()">Cancelar</button>';
+        html += '<button type="submit" class="editor-save">Salvar Alterações</button>';
+        html += '</div>';
+        html += '</form>';
+        modalEditorBody.innerHTML = html;
+        modalEditor.style.display = 'flex';
+        modalEditor.classList.remove('closing');
+        setTimeout(function() {
+          var focusEl = modalEditor.querySelector('.modal-editor-content');
+          if (focusEl) focusEl.focus();
+        }, 100);
+      }, 300);
+    }
+
+    function fecharModalEditor() {
+      var modalEditor = document.getElementById('modal-editor-planilha');
+      if (modalEditor) {
+        modalEditor.classList.add('closing');
+        setTimeout(function() {
+          modalEditor.style.display = 'none';
+          modalEditor.classList.remove('closing');
+        }, 250);
+      }
+    }
+
+    function salvarEdicaoPlanilha(event) {
+      event.preventDefault();
+      alert('Alterações salvas com sucesso! (mock)');
+      fecharModalEditor();
+    }
+
+    // Event listeners para fechar modais
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -450,8 +668,23 @@
           closeBtn.addEventListener('click', fecharModal);
         }
       }
+      var modalEditor = document.getElementById('modal-editor-planilha');
+      if (modalEditor) {
+        modalEditor.addEventListener('mousedown', function(e) {
+          if (e.target === modalEditor) {
+            fecharModalEditor();
+          }
+        });
+        var closeBtn = modalEditor.querySelector('.modal-editor-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModalEditor);
+        }
+      }
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') fecharModal();
+        if (e.key === 'Escape') {
+          fecharModal();
+          fecharModalEditor();
+        }
       });
     });
   </script>
@@ -569,6 +802,7 @@
       </section>
     </main>
   </div>
+  <!-- Modal Detalhes -->
   <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
     <div class="modal-content" tabindex="0">
       <div class="modal-header">
@@ -576,6 +810,18 @@
         <button class="modal-close" aria-label="Fechar">&times;</button>
       </div>
       <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+  <!-- Modal Editor Planilha -->
+  <div id="modal-editor-planilha" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-editor-content" tabindex="0">
+      <div class="modal-editor-header">
+        <span class="modal-editor-title">Editar Planilha</span>
+        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-editor-body">
         <!-- Conteúdo dinâmico -->
       </div>
     </div>
