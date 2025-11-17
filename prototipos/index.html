@@ -38,6 +38,8 @@
       background: var(--plurix-bg);
       color: var(--plurix-dark);
       font-size: 16px;
+      overflow-y: hidden; /* Remover barra de rolagem vertical */
+      overflow-x: hidden; /* Remover barra de rolagem horizontal */
     }
     header {
       background: var(--plurix-primary);
@@ -90,12 +92,26 @@
       color: var(--plurix-primary);
     }
     /* HERO CTA BUTTONS - REMOVER SUBLINHADO E CENTRALIZAR TEXTO */
-    .hero-cta a {
-      text-decoration: none !important;
-    }
     .hero-cta {
       display: flex;
       gap: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-cta a {
+      text-decoration: none !important;
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      min-width: 180px;
+      /* Para garantir que ambos os botões tenham o mesmo tamanho mínimo */
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+      /* Transição extra para experiência suave */
+      will-change: background, color, box-shadow, transform;
+    }
+    .hero-cta a:active {
+      transform: scale(0.97);
     }
     .btn {
       font-family: inherit;
@@ -105,11 +121,12 @@
       border-radius: var(--plurix-radius);
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
       box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       outline: none;
       text-align: center;
       display: inline-block;
+      will-change: background, color, box-shadow, transform;
     }
     .btn-primary {
       background: var(--plurix-primary);
@@ -117,15 +134,17 @@
       padding: 12px 32px;
       border-radius: var(--plurix-radius);
       font-weight: 700;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
       box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       text-align: center;
       display: inline-block;
+      will-change: background, color, box-shadow, transform;
     }
-    .btn-primary:hover {
+    .btn-primary:hover, .hero-cta a.btn-primary:hover {
       background: #142d4c;
       color: #fff;
       box-shadow: 0 4px 16px rgba(12,35,64,0.12);
+      transform: translateY(-2px) scale(1.03);
     }
     .btn-secondary {
       background: var(--plurix-secondary);
@@ -133,15 +152,17 @@
       padding: 12px 32px;
       border-radius: var(--plurix-radius);
       font-weight: 700;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
       box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       text-align: center;
       display: inline-block;
+      will-change: background, color, box-shadow, transform;
     }
-    .btn-secondary:hover {
+    .btn-secondary:hover, .hero-cta a.btn-secondary:hover {
       background: #ffd600;
       color: var(--plurix-primary);
       box-shadow: 0 4px 16px rgba(245,184,0,0.12);
+      transform: translateY(-2px) scale(1.03);
     }
     .hero {
       display: flex;
@@ -196,9 +217,14 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px 16px 32px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
+      /* Remover overflow-x para evitar barra de rolagem lateral */
+      overflow-x: visible;
+      /* Garantir que não haja barra de rolagem lateral */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .features-grid::-webkit-scrollbar {
+      display: none;
     }
     .feature-card {
       background: var(--plurix-bg);
@@ -210,15 +236,16 @@
       align-items: flex-start;
       min-height: 220px;
       transition: box-shadow 0.2s;
-      flex: 1 1 auto;
-      min-width: 180px;
-      max-width: 260px;
+      flex: 1 1 0;
+      min-width: 160px;
+      max-width: 220px;
+      /* Ajuste para garantir que os cards fiquem em linha e proporcionais */
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
       color: var(--plurix-accent);
       margin-bottom: 12px;
       transition: font-size 0.2s;
@@ -258,13 +285,16 @@
       }
       .features-grid {
         padding: 0 12px 16px 12px;
+        gap: 16px;
+      }
+      .feature-card {
+        min-width: 140px;
+        max-width: 180px;
       }
     }
-    /* Removido grid-template-columns: 1fr para manter os cards em linha */
-    /* Mantém os cards em linha mesmo em telas pequenas */
     @media (max-width: 600px) {
       .features-grid {
-        gap: 16px;
+        gap: 8px;
         padding: 0 4px 16px 4px;
       }
       header, nav {
@@ -277,6 +307,13 @@
       nav {
         margin-right: 12px;
         margin-top: 8px;
+      }
+      .feature-card {
+        min-width: 110px;
+        max-width: 140px;
+      }
+      .feature-icon {
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
       }
     }
   </style>
