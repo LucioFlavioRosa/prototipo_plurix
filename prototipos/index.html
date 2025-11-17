@@ -83,11 +83,26 @@
       font-weight: 700;
       margin-left: 32px;
       box-shadow: 0 2px 8px rgba(245,184,0,0.08);
-      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      transform: translateY(0);
     }
     nav a.cta:hover {
       background: #ffd600;
       color: var(--plurix-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245,184,0,0.20);
+    }
+    nav a.cta:focus {
+      outline: 3px solid var(--plurix-secondary);
+      outline-offset: 2px;
+    }
+    nav a.cta:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(245,184,0,0.12);
     }
     .hero {
       display: flex;
@@ -127,9 +142,22 @@
       border-radius: var(--plurix-radius);
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
       box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       outline: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(0);
+    }
+    .btn:focus {
+      outline: 3px solid var(--plurix-accent);
+      outline-offset: 2px;
+    }
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(12,35,64,0.08);
     }
     .btn-primary {
       background: var(--plurix-primary);
@@ -137,6 +165,8 @@
     }
     .btn-primary:hover {
       background: #142d4c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(12,35,64,0.15);
     }
     .btn-secondary {
       background: var(--plurix-secondary);
@@ -145,22 +175,8 @@
     .btn-secondary:hover {
       background: #ffd600;
       color: var(--plurix-primary);
-    }
-    .hero-image {
-      max-width: 420px;
-      width: 100%;
-      border-radius: var(--plurix-radius);
-      box-shadow: 0 4px 24px rgba(12,35,64,0.07);
-      background: #fff;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-image img {
-      width: 100%;
-      height: auto;
-      border-radius: var(--plurix-radius);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(245,184,0,0.20);
     }
     .features-section {
       background: #fff;
