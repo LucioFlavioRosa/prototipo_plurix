@@ -39,6 +39,11 @@
       color: var(--plurix-dark);
       font-size: 16px;
     }
+    /* Animação de pulso para o logo Plurix */
+    @keyframes pulse-logo {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
     header {
       background: var(--plurix-primary);
       color: #fff;
@@ -58,11 +63,12 @@
       height: 48px;
       width: auto;
       margin-right: 16px;
+      animation: pulse-logo 2s ease-in-out infinite;
     }
     .header-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
     nav {
       margin-right: 32px;
@@ -71,14 +77,14 @@
       color: #fff;
       text-decoration: none;
       margin-left: 24px;
-      font-weight: 500;
-      font-size: 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
       transition: color 0.2s;
     }
     nav a.cta {
       background: var(--plurix-secondary);
       color: var(--plurix-primary);
-      padding: 8px 20px;
+      padding: 10px 24px;
       border-radius: var(--plurix-radius);
       font-weight: 700;
       margin-left: 32px;
@@ -168,8 +174,8 @@
     }
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px;
@@ -178,29 +184,29 @@
       background: var(--plurix-bg);
       border-radius: var(--plurix-radius);
       box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      padding: 32px 24px 24px 24px;
+      padding: 24px 16px 16px 16px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      min-height: 220px;
+      min-height: 200px;
       transition: box-shadow 0.2s;
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       color: var(--plurix-accent);
       margin-bottom: 12px;
     }
     .feature-title {
-      font-size: 1.15rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--plurix-primary);
       margin-bottom: 8px;
     }
     .feature-desc {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #444;
       line-height: 1.4;
     }
@@ -211,6 +217,13 @@
       padding: 24px 0 12px 0;
       font-size: 1rem;
       margin-top: 48px;
+    }
+    /* Media query para telas médias entre 900px e 1200px */
+    @media (max-width: 1200px) and (min-width: 901px) {
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
     }
     @media (max-width: 900px) {
       .hero {
@@ -226,11 +239,21 @@
         max-width: 320px;
         padding: 12px;
       }
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
     }
     @media (max-width: 600px) {
       .features-grid {
         grid-template-columns: 1fr;
         padding: 0 8px;
+      }
+      .feature-title {
+        font-size: 1.15rem;
+      }
+      .feature-desc {
+        font-size: 1rem;
       }
       header, nav {
         flex-direction: column;
