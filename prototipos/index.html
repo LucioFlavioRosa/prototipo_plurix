@@ -191,11 +191,14 @@
     }
     .features-grid {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 32px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px 16px 32px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
     }
     .feature-card {
       background: var(--plurix-bg);
@@ -207,13 +210,15 @@
       align-items: flex-start;
       min-height: 220px;
       transition: box-shadow 0.2s;
-      flex: 1 1 calc(20% - 26px);
+      flex: 1 1 auto;
+      min-width: 180px;
+      max-width: 260px;
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: clamp(1.26rem, 2.1vw, 1.75rem);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
       color: var(--plurix-accent);
       margin-bottom: 12px;
       transition: font-size 0.2s;
@@ -262,10 +267,6 @@
         gap: 16px;
         padding: 0 4px 16px 4px;
       }
-      .feature-card {
-        flex: 1 1 calc(20% - 13px);
-        min-width: 0;
-      }
       header, nav {
         flex-direction: column;
         height: auto;
@@ -293,12 +294,41 @@
         <h1>Centralize, Analise e Aprove Tabelas de Preços com Segurança</h1>
         <p>Uma plataforma completa para fornecedores e gestores da Plurix: upload padronizado, validação automática, workflow de aprovações, análise comercial avançada e integração total com ERPs das bandeiras. Tudo em um só lugar, com máxima conformidade e rastreabilidade.</p>
         <div class="hero-cta">
-          <a href="login-fornecedor.html" class="btn btn-primary" aria-label="Entrar como Fornecedor">Entrar como Fornecedor</a>
-          <a href="login-interno.html" class="btn btn-secondary" aria-label="Entrar como Gestor Interno">Entrar como Gestor Interno</a>
+          <a href="loging-fornecedor.html" class="btn btn-primary" aria-label="Entrar como Fornecedor">Entrar como Fornecedor</a>
+          <a href="loging-interno.html" class="btn btn-secondary" aria-label="Entrar como Gestor Interno">Entrar como Gestor Interno</a>
         </div>
       </div>
       <div class="hero-image">
         <img src="https://static.wixstatic.com/media/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png/v1/fill/w_600,h_340,al_c/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png" alt="Dashboard Plurix" />
+      </div>
+    </section>
+    <section class="features-section">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📤</div>
+          <div class="feature-title">Upload Padronizado</div>
+          <div class="feature-desc">Envie tabelas de preços no formato Excel/CSV, com validação automática e feedback instantâneo.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🔎</div>
+          <div class="feature-title">Análise Comercial</div>
+          <div class="feature-desc">Visualize indicadores críticos, variações de preços e impacto financeiro para decisões assertivas.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">✅</div>
+          <div class="feature-title">Workflow de Aprovação</div>
+          <div class="feature-desc">Aprovação multinível, regras de alçada e rastreabilidade completa das decisões comerciais.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🔗</div>
+          <div class="feature-title">Integração ERP</div>
+          <div class="feature-desc">Atualização automática dos preços aprovados nos sistemas Consinco e Flex das bandeiras.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🔒</div>
+          <div class="feature-title">Segurança & Compliance</div>
+          <div class="feature-desc">Controle de acessos, logs de auditoria e conformidade com SOC 2 e ISO 27001.</div>
+        </div>
       </div>
     </section>
   </main>
