@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajuste Manual de Produtos | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .ajuste-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .ajuste-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 32px 28px 32px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    .ajuste-card h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 180px;
+      min-width: 160px;
+      max-width: 240px;
+    }
+    .form-field label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 5px;
+      font-size: 1.01rem;
+    }
+    .form-field input, .form-field select, .form-field textarea {
+      padding: 8px 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      outline: none;
+      transition: border 0.15s;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: #f9b233;
+    }
+    .form-field textarea {
+      min-height: 38px;
+      resize: vertical;
+    }
+    .btn-add {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .btn-add:hover {
+      background: #e1a12a;
+    }
+    .produtos-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 1rem;
+    }
+    .produtos-table th, .produtos-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .produtos-table th {
+      background: #f7f8fa;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .produtos-table td .btn-edit, .produtos-table td .btn-remove {
+      background: none;
+      border: none;
+      color: #f9b233;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+      font-size: 1.01rem;
+      transition: color 0.15s;
+    }
+    .produtos-table td .btn-remove {
+      color: #e74c3c;
+    }
+    .produtos-table td .btn-edit:hover {
+      color: #1a2340;
+    }
+    .produtos-table td .btn-remove:hover {
+      color: #b71c1c;
+    }
+    .message {
+      margin-top: 18px;
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      display: none;
+    }
+    .message.success {
+      background: #e9f9e7;
+      color: #228c22;
+      display: block;
+    }
+    .message.error {
+      background: #fbeaea;
+      color: #d32f2f;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .ajuste-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../plurix.html';
+      }
+    }
+    let produtos = [
+      {
+        gtin: '7891234567890', descricao: 'Arroz Branco 5kg', precoAtual: 'R$ 18,90', precoNovo: 'R$ 19,90', embalagem: 'PACOTE', uf: 'SC', justificativa: 'Reajuste anual'
+      },
+      {
+        gtin: '7899876543210', descricao: 'Feijão Carioca 1kg', precoAtual: 'R$ 7,49', precoNovo: 'R$ 7,99', embalagem: 'PACOTE', uf: 'PR', justificativa: 'Aumento de custos'
+      }
+    ];
+    let editIndex = -1;
+    function renderTabela() {
+      const tbody = document.getElementById('produtosBody');
+      tbody.innerHTML = '';
+      produtos.forEach((p, idx) => {
+        tbody.innerHTML += `<tr>
+          <td>${p.gtin}</td>
+          <td>${p.descricao}</td>
+          <td>${p.precoAtual}</td>
+          <td>${p.precoNovo}</td>
+          <td>${p.embalagem}</td>
+          <td>${p.uf}</td>
+          <td>${p.justificativa}</td>
+          <td>
+            <button type='button' class='btn-edit' onclick='editarProduto(${idx})'>Editar</button>
+            <button type='button' class='btn-remove' onclick='removerProduto(${idx})'>Remover</button>
+          </td>
+        </tr>`;
+      });
+    }
+    function limparForm() {
+      document.getElementById('gtin').value = '';
+      document.getElementById('descricao').value = '';
+      document.getElementById('precoAtual').value = '';
+      document.getElementById('precoNovo').value = '';
+      document.getElementById('embalagem').value = '';
+      document.getElementById('uf').value = '';
+      document.getElementById('justificativa').value = '';
+      editIndex = -1;
+      document.getElementById('btnAdd').textContent = 'Adicionar Produto';
+    }
+    function editarProduto(idx) {
+      const p = produtos[idx];
+      document.getElementById('gtin').value = p.gtin;
+      document.getElementById('descricao').value = p.descricao;
+      document.getElementById('precoAtual').value = p.precoAtual;
+      document.getElementById('precoNovo').value = p.precoNovo;
+      document.getElementById('embalagem').value = p.embalagem;
+      document.getElementById('uf').value = p.uf;
+      document.getElementById('justificativa').value = p.justificativa;
+      editIndex = idx;
+      document.getElementById('btnAdd').textContent = 'Salvar Alteração';
+    }
+    function removerProduto(idx) {
+      if (confirm('Remover este produto?')) {
+        produtos.splice(idx, 1);
+        renderTabela();
+        limparForm();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTabela();
+      document.getElementById('formAjuste').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const gtin = document.getElementById('gtin').value.trim();
+        const descricao = document.getElementById('descricao').value.trim();
+        const precoAtual = document.getElementById('precoAtual').value.trim();
+        const precoNovo = document.getElementById('precoNovo').value.trim();
+        const embalagem = document.getElementById('embalagem').value.trim();
+        const uf = document.getElementById('uf').value.trim();
+        const justificativa = document.getElementById('justificativa').value.trim();
+        const message = document.getElementById('message');
+        if (!gtin || !descricao || !precoAtual || !precoNovo || !embalagem || !uf || !justificativa) {
+          message.className = 'message error';
+          message.textContent = 'Preencha todos os campos obrigatórios.';
+          return;
+        }
+        const produto = { gtin, descricao, precoAtual, precoNovo, embalagem, uf, justificativa };
+        if (editIndex >= 0) {
+          produtos[editIndex] = produto;
+          message.className = 'message success';
+          message.textContent = 'Produto alterado com sucesso!';
+        } else {
+          produtos.push(produto);
+          message.className = 'message success';
+          message.textContent = 'Produto adicionado com sucesso!';
+        }
+        renderTabela();
+        limparForm();
+        setTimeout(()=>{message.className='message';message.textContent='';}, 1800);
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
+      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
+      <a href="#" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Ajuste Manual de Produtos</h1>
+    </header>
+    <main class="ajuste-section">
+      <form id="formAjuste" class="ajuste-card" autocomplete="off">
+        <h2>Adicionar/Ajustar Produto Individual</h2>
+        <div class="form-group">
+          <div class="form-field">
+            <label for="gtin">GTIN*</label>
+            <input type="text" id="gtin" name="gtin" maxlength="14" placeholder="Ex: 7891234567890" required aria-label="GTIN">
+          </div>
+          <div class="form-field">
+            <label for="descricao">Descrição*</label>
+            <input type="text" id="descricao" name="descricao" maxlength="80" placeholder="Ex: Arroz Branco 5kg" required aria-label="Descrição">
+          </div>
+          <div class="form-field">
+            <label for="precoAtual">Preço Atual*</label>
+            <input type="text" id="precoAtual" name="precoAtual" maxlength="12" placeholder="Ex: R$ 18,90" required aria-label="Preço Atual">
+          </div>
+          <div class="form-field">
+            <label for="precoNovo">Preço Novo*</label>
+            <input type="text" id="precoNovo" name="precoNovo" maxlength="12" placeholder="Ex: R$ 19,90" required aria-label="Preço Novo">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-field">
+            <label for="embalagem">Embalagem*</label>
+            <input type="text" id="embalagem" name="embalagem" maxlength="20" placeholder="Ex: PACOTE" required aria-label="Embalagem">
+          </div>
+          <div class="form-field">
+            <label for="uf">UF/Coligada*</label>
+            <select id="uf" name="uf" required aria-label="UF/Coligada">
+              <option value="">Selecione</option>
+              <option value="SC">SuperSul / SC</option>
+              <option value="PR">SuperSul / PR</option>
+              <option value="RS">SuperSul / RS</option>
+              <option value="AM">MaxiNorte / AM</option>
+              <option value="PA">MaxiNorte / PA</option>
+              <option value="GO">CentroMais / GO</option>
+              <option value="DF">CentroMais / DF</option>
+            </select>
+          </div>
+          <div class="form-field" style="flex:2;min-width:220px;">
+            <label for="justificativa">Justificativa*</label>
+            <textarea id="justificativa" name="justificativa" maxlength="120" placeholder="Descreva o motivo do ajuste" required aria-label="Justificativa"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-add" id="btnAdd">Adicionar Produto</button>
+        <div id="message" class="message"></div>
+      </form>
+      <div class="ajuste-card">
+        <h2>Produtos Adicionados Manualmente</h2>
+        <table class="produtos-table" aria-label="Produtos Adicionados" id="produtosTabela">
+          <thead>
+            <tr>
+              <th>GTIN</th>
+              <th>Descrição</th>
+              <th>Preço Atual</th>
+              <th>Preço Novo</th>
+              <th>Embalagem</th>
+              <th>UF/Coligada</th>
+              <th>Justificativa</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="produtosBody">
+            <!-- Conteúdo dinâmico -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

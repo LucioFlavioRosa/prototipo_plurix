@@ -1,0 +1,162 @@
+[
+  {
+    "cnpj": "12.345.678/0001-90",
+    "razao_social": "Alimentos Brasil Ltda.",
+    "contatos": [{"nome": "João Silva", "email": "joao@alimentosbr.com", "telefone": "(11) 99999-1111"}],
+    "bandeiras_atendidas": ["SuperMais", "Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 98, "qualidade": 95, "aprovacoes": 92}
+  },
+  {
+    "cnpj": "23.456.789/0001-01",
+    "razao_social": "Distribuidora Central S.A.",
+    "contatos": [{"nome": "Maria Souza", "email": "maria@dcentral.com", "telefone": "(21) 98888-2222"}],
+    "bandeiras_atendidas": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 96, "qualidade": 93, "aprovacoes": 90}
+  },
+  {
+    "cnpj": "34.567.890/0001-12",
+    "razao_social": "Bebidas do Sul Ltda.",
+    "contatos": [{"nome": "Carlos Pereira", "email": "carlos@bebidassul.com", "telefone": "(51) 97777-3333"}],
+    "bandeiras_atendidas": ["Econo", "SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 92, "qualidade": 90, "aprovacoes": 88}
+  },
+  {
+    "cnpj": "45.678.901/0001-23",
+    "razao_social": "Produtos Naturais Ltda.",
+    "contatos": [{"nome": "Ana Lima", "email": "ana@pnaturais.com", "telefone": "(31) 96666-4444"}],
+    "bandeiras_atendidas": ["BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 97, "qualidade": 96, "aprovacoes": 95}
+  },
+  {
+    "cnpj": "56.789.012/0001-34",
+    "razao_social": "Laticínios União S.A.",
+    "contatos": [{"nome": "Bruno Costa", "email": "bruno@laticiniosuniao.com", "telefone": "(41) 95555-5555"}],
+    "bandeiras_atendidas": ["SuperMais", "Econo", "BomPreço"],
+    "status": "Inativo",
+    "performance": {"pontualidade": 85, "qualidade": 80, "aprovacoes": 78}
+  },
+  {
+    "cnpj": "67.890.123/0001-45",
+    "razao_social": "Doces & Cia Ltda.",
+    "contatos": [{"nome": "Fernanda Rocha", "email": "fernanda@docesecia.com", "telefone": "(61) 94444-6666"}],
+    "bandeiras_atendidas": ["Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 99, "qualidade": 97, "aprovacoes": 96}
+  },
+  {
+    "cnpj": "78.901.234/0001-56",
+    "razao_social": "Cereais do Campo Ltda.",
+    "contatos": [{"nome": "Eduardo Martins", "email": "eduardo@cereaiscampo.com", "telefone": "(71) 93333-7777"}],
+    "bandeiras_atendidas": ["SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 94, "qualidade": 91, "aprovacoes": 89}
+  },
+  {
+    "cnpj": "89.012.345/0001-67",
+    "razao_social": "Frutas Tropicais S.A.",
+    "contatos": [{"nome": "Gabriela Souza", "email": "gabriela@frutastropicais.com", "telefone": "(81) 92222-8888"}],
+    "bandeiras_atendidas": ["BomPreço", "Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 95, "qualidade": 94, "aprovacoes": 93}
+  },
+  {
+    "cnpj": "90.123.456/0001-78",
+    "razao_social": "Carnes Premium Ltda.",
+    "contatos": [{"nome": "Henrique Alves", "email": "henrique@carnespremium.com", "telefone": "(91) 91111-9999"}],
+    "bandeiras_atendidas": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 93, "qualidade": 90, "aprovacoes": 88}
+  },
+  {
+    "cnpj": "01.234.567/0001-89",
+    "razao_social": "Padaria Moderna Ltda.",
+    "contatos": [{"nome": "Isabela Torres", "email": "isabela@padariamoderna.com", "telefone": "(21) 98888-1010"}],
+    "bandeiras_atendidas": ["Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 97, "qualidade": 96, "aprovacoes": 94}
+  },
+  {
+    "cnpj": "11.223.344/0001-55",
+    "razao_social": "Conservas do Norte Ltda.",
+    "contatos": [{"nome": "Juliana Ramos", "email": "juliana@conservasnorte.com", "telefone": "(92) 97777-1212"}],
+    "bandeiras_atendidas": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 91, "qualidade": 89, "aprovacoes": 87}
+  },
+  {
+    "cnpj": "22.334.455/0001-66",
+    "razao_social": "Massas Italianas Ltda.",
+    "contatos": [{"nome": "Leonardo Bianchi", "email": "leonardo@massasitalianas.com", "telefone": "(11) 96666-1313"}],
+    "bandeiras_atendidas": ["Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 96, "qualidade": 94, "aprovacoes": 93}
+  },
+  {
+    "cnpj": "33.445.566/0001-77",
+    "razao_social": "Temperos do Brasil Ltda.",
+    "contatos": [{"nome": "Marcos Lima", "email": "marcos@temperosbr.com", "telefone": "(31) 95555-1414"}],
+    "bandeiras_atendidas": ["SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 95, "qualidade": 92, "aprovacoes": 90}
+  },
+  {
+    "cnpj": "44.556.677/0001-88",
+    "razao_social": "Hortifruti Verde Ltda.",
+    "contatos": [{"nome": "Nathalia Castro", "email": "nathalia@hortifrutiverde.com", "telefone": "(41) 94444-1515"}],
+    "bandeiras_atendidas": ["BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 98, "qualidade": 97, "aprovacoes": 96}
+  },
+  {
+    "cnpj": "55.667.788/0001-99",
+    "razao_social": "Peixaria Oceano Ltda.",
+    "contatos": [{"nome": "Otávio Mendes", "email": "otavio@peixariaoceano.com", "telefone": "(51) 93333-1616"}],
+    "bandeiras_atendidas": ["Econo", "SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 93, "qualidade": 91, "aprovacoes": 89}
+  },
+  {
+    "cnpj": "66.778.899/0001-00",
+    "razao_social": "Biscoitos do Vale Ltda.",
+    "contatos": [{"nome": "Patrícia Faria", "email": "patricia@biscoitosvale.com", "telefone": "(61) 92222-1717"}],
+    "bandeiras_atendidas": ["BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 94, "qualidade": 92, "aprovacoes": 91}
+  },
+  {
+    "cnpj": "77.889.900/0001-11",
+    "razao_social": "Café Mineiro Ltda.",
+    "contatos": [{"nome": "Rafael Dias", "email": "rafael@cafemineiro.com", "telefone": "(71) 91111-1818"}],
+    "bandeiras_atendidas": ["SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 97, "qualidade": 95, "aprovacoes": 94}
+  },
+  {
+    "cnpj": "88.990.011/0001-22",
+    "razao_social": "Água Cristalina Ltda.",
+    "contatos": [{"nome": "Simone Freitas", "email": "simone@aguacristalina.com", "telefone": "(81) 98888-1919"}],
+    "bandeiras_atendidas": ["Econo"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 99, "qualidade": 98, "aprovacoes": 97}
+  },
+  {
+    "cnpj": "99.001.122/0001-33",
+    "razao_social": "Congelados Express Ltda.",
+    "contatos": [{"nome": "Thiago Nunes", "email": "thiago@congeladosexpress.com", "telefone": "(91) 97777-2020"}],
+    "bandeiras_atendidas": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 92, "qualidade": 90, "aprovacoes": 89}
+  },
+  {
+    "cnpj": "10.112.233/0001-44",
+    "razao_social": "Sabores do Sertão Ltda.",
+    "contatos": [{"nome": "Vanessa Gomes", "email": "vanessa@saboressertao.com", "telefone": "(31) 96666-2121"}],
+    "bandeiras_atendidas": ["Econo", "SuperMais"],
+    "status": "Ativo",
+    "performance": {"pontualidade": 95, "qualidade": 93, "aprovacoes": 91}
+  }
+]

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Administração de Usuários | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; margin: 0; }
+    .container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+    h1 { color: #004aad; font-size: 2rem; margin-bottom: 24px; }
+    form label { display: block; margin-bottom: 8px; font-weight: bold; color: #222; }
+    form input, form select { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    .error-msg { color: #c00; font-size: 0.95em; margin: 4px 0 12px 0; }
+    .success-msg { color: #0a0; font-size: 1em; margin: 12px 0; }
+    button[type="submit"] {
+      background: #004aad;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    button[type="submit"]:disabled { background: #b3c7e6; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cadastro de Usuário</h1>
+    <form id="usuarioForm" novalidate>
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" maxlength="80" required>
+      <div id="nomeError" class="error-msg" style="display:none"></div>
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" maxlength="120" required>
+      <div id="emailError" class="error-msg" style="display:none"></div>
+
+      <label for="perfil">Perfil:</label>
+      <select id="perfil" name="perfil" required>
+        <option value="">Selecione</option>
+        <option value="Fornecedor">Fornecedor</option>
+        <option value="Comprador">Comprador</option>
+        <option value="Gerente">Gerente</option>
+        <option value="Diretor">Diretor</option>
+        <option value="VP">VP</option>
+        <option value="Administrador">Administrador</option>
+      </select>
+      <div id="perfilError" class="error-msg" style="display:none"></div>
+
+      <label for="bandeira">Bandeira:</label>
+      <select id="bandeira" name="bandeira" required>
+        <option value="">Selecione</option>
+        <option value="SuperMais">SuperMais</option>
+        <option value="Maxi">Maxi</option>
+        <option value="BomPreço">BomPreço</option>
+        <option value="Top">Top</option>
+        <option value="Ultra">Ultra</option>
+      </select>
+      <div id="bandeiraError" class="error-msg" style="display:none"></div>
+
+      <button type="submit" id="submitBtn" disabled>Salvar Usuário</button>
+      <div id="formSuccess" class="success-msg" style="display:none"></div>
+    </form>
+  </div>
+  <script>
+    // Validação de formulário
+    const form = document.getElementById('usuarioForm');
+    const nome = document.getElementById('nome');
+    const email = document.getElementById('email');
+    const perfil = document.getElementById('perfil');
+    const bandeira = document.getElementById('bandeira');
+    const submitBtn = document.getElementById('submitBtn');
+    const nomeError = document.getElementById('nomeError');
+    const emailError = document.getElementById('emailError');
+    const perfilError = document.getElementById('perfilError');
+    const bandeiraError = document.getElementById('bandeiraError');
+    const formSuccess = document.getElementById('formSuccess');
+
+    function validarNome() {
+      if (!nome.value.trim()) {
+        nomeError.textContent = 'Nome obrigatório.';
+        nomeError.style.display = 'block';
+        return false;
+      }
+      nomeError.style.display = 'none';
+      return true;
+    }
+    function validarEmail() {
+      const val = email.value.trim();
+      const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/;
+      if (!val) {
+        emailError.textContent = 'E-mail obrigatório.';
+        emailError.style.display = 'block';
+        return false;
+      }
+      if (!regex.test(val)) {
+        emailError.textContent = 'E-mail inválido.';
+        emailError.style.display = 'block';
+        return false;
+      }
+      emailError.style.display = 'none';
+      return true;
+    }
+    function validarPerfil() {
+      if (!perfil.value) {
+        perfilError.textContent = 'Selecione um perfil.';
+        perfilError.style.display = 'block';
+        return false;
+      }
+      perfilError.style.display = 'none';
+      return true;
+    }
+    function validarBandeira() {
+      if (!bandeira.value) {
+        bandeiraError.textContent = 'Selecione uma bandeira.';
+        bandeiraError.style.display = 'block';
+        return false;
+      }
+      bandeiraError.style.display = 'none';
+      return true;
+    }
+    function validarFormulario() {
+      const v1 = validarNome();
+      const v2 = validarEmail();
+      const v3 = validarPerfil();
+      const v4 = validarBandeira();
+      submitBtn.disabled = !(v1 && v2 && v3 && v4);
+    }
+    [nome, email, perfil, bandeira].forEach(input => {
+      input.addEventListener('input', validarFormulario);
+      input.addEventListener('change', validarFormulario);
+    });
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validarNome() && validarEmail() && validarPerfil() && validarBandeira()) {
+        formSuccess.textContent = 'Usuário salvo com sucesso!';
+        formSuccess.style.display = 'block';
+        setTimeout(() => { formSuccess.style.display = 'none'; form.reset(); submitBtn.disabled = true; }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

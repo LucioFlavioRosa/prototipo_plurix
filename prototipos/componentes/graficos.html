@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componentes - Gráficos | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --plurix-primary: #0b2b4b;
+      --plurix-secondary: #f7b32b;
+      --plurix-success: #2ecc71;
+      --plurix-error: #e74c3c;
+      --plurix-info: #3498db;
+      --plurix-gray: #f4f6fa;
+      --plurix-white: #fff;
+      --plurix-font: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      --plurix-radius: 6px;
+      --plurix-shadow: 0 2px 8px rgba(11,43,75,0.08);
+    }
+    body {
+      font-family: var(--plurix-font);
+      background: var(--plurix-gray);
+      color: #222;
+      margin: 0;
+      padding: 0 0 48px 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--plurix-white);
+      border-radius: var(--plurix-radius);
+      box-shadow: var(--plurix-shadow);
+      padding: 32px 32px 24px 32px;
+    }
+    h1, h2 {
+      color: var(--plurix-primary);
+      font-weight: 700;
+      margin-top: 0;
+    }
+    .chart-section {
+      margin-bottom: 44px;
+    }
+    .chart-container {
+      background: #f4f6fa;
+      border-radius: 8px;
+      padding: 24px 16px 8px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(11,43,75,0.04);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    canvas { background: #fff; border-radius: 6px; }
+    .code-block {
+      background: #f4f6fa;
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 13px;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      color: #2d3a4a;
+      margin: 8px 0 0 0;
+      overflow-x: auto;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 16px 2vw; }
+      .chart-container { padding: 12px 2vw 4px 2vw; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header style="display:flex;align-items:center;gap:16px;margin-bottom:32px;">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_80,h_80,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" style="width:48px;height:48px;border-radius:12px;">
+      <h1 style="margin:0;font-size:2rem;">Componentes: Gráficos</h1>
+    </header>
+    <section class="chart-section">
+      <h2>Gráfico de Linha</h2>
+      <div class="chart-container">
+        <canvas id="chartLinha" width="560" height="260" aria-label="Gráfico de linha: Variação de Preço" role="img"></canvas>
+      </div>
+    </section>
+    <section class="chart-section">
+      <h2>Gráfico de Barras</h2>
+      <div class="chart-container">
+        <canvas id="chartBarra" width="560" height="260" aria-label="Gráfico de barras: Volume por Fornecedor" role="img"></canvas>
+      </div>
+    </section>
+    <section class="chart-section">
+      <h2>Gráfico de Pizza</h2>
+      <div class="chart-container">
+        <canvas id="chartPizza" width="560" height="260" aria-label="Gráfico de pizza: Participação de Mercado" role="img"></canvas>
+      </div>
+    </section>
+    <section class="chart-section">
+      <h2>Gráfico de Área</h2>
+      <div class="chart-container">
+        <canvas id="chartArea" width="560" height="260" aria-label="Gráfico de área: Evolução de Vendas" role="img"></canvas>
+      </div>
+    </section>
+    <section>
+      <h2>Código de Uso</h2>
+      <div class="code-block">
+        &lt;canvas id="chartLinha"&gt;&lt;/canvas&gt;<br>
+        &lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;<br>
+        &lt;script&gt;<br>
+        // Exemplo de inicialização Chart.js<br>
+        new Chart(document.getElementById('chartLinha'), { ... });<br>
+        &lt;/script&gt;
+      </div>
+    </section>
+  </div>
+  <script>
+    // Paleta Plurix
+    const plurixColors = {
+      primary: '#0b2b4b',
+      secondary: '#f7b32b',
+      success: '#2ecc71',
+      error: '#e74c3c',
+      info: '#3498db',
+      gray: '#f4f6fa',
+      accent: '#a1c9f7'
+    };
+    // Linha
+    new Chart(document.getElementById('chartLinha'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Preço Médio SKU',
+          data: [8.2, 8.7, 8.5, 9.1, 9.3, 9.0, 9.5],
+          borderColor: plurixColors.primary,
+          backgroundColor: 'rgba(11,43,75,0.08)',
+          tension: 0.35,
+          fill: true,
+          pointBackgroundColor: plurixColors.secondary,
+          pointBorderColor: plurixColors.primary,
+          pointRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, labels: { color: '#222', font: { family: 'helvetica-w01-roman', weight: 'bold' } } },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: { ticks: { color: '#222' } },
+          y: { ticks: { color: '#222' } }
+        }
+      }
+    });
+    // Barras
+    new Chart(document.getElementById('chartBarra'), {
+      type: 'bar',
+      data: {
+        labels: ['Fornecedor A', 'Fornecedor B', 'Fornecedor C', 'Fornecedor D'],
+        datasets: [{
+          label: 'Volume (mil unidades)',
+          data: [120, 90, 60, 40],
+          backgroundColor: [plurixColors.primary, plurixColors.secondary, plurixColors.info, plurixColors.success],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: { ticks: { color: '#222' } },
+          y: { ticks: { color: '#222' } }
+        }
+      }
+    });
+    // Pizza
+    new Chart(document.getElementById('chartPizza'), {
+      type: 'pie',
+      data: {
+        labels: ['Bandeira 1', 'Bandeira 2', 'Bandeira 3', 'Bandeira 4'],
+        datasets: [{
+          label: 'Participação',
+          data: [34, 28, 21, 17],
+          backgroundColor: [plurixColors.primary, plurixColors.secondary, plurixColors.info, plurixColors.accent],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: 'bottom', labels: { color: '#222' } },
+          tooltip: { enabled: true }
+        }
+      }
+    });
+    // Área
+    new Chart(document.getElementById('chartArea'), {
+      type: 'line',
+      data: {
+        labels: ['2020', '2021', '2022', '2023', '2024'],
+        datasets: [{
+          label: 'Vendas (R$ mi)',
+          data: [25, 32, 29, 38, 41],
+          borderColor: plurixColors.secondary,
+          backgroundColor: 'rgba(247,179,43,0.18)',
+          fill: true,
+          tension: 0.25,
+          pointRadius: 4,
+          pointBackgroundColor: plurixColors.secondary,
+          pointBorderColor: '#fff',
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, labels: { color: '#222' } },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: { ticks: { color: '#222' } },
+          y: { ticks: { color: '#222' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

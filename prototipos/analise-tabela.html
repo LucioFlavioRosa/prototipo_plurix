@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise Comercial da Tabela - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #eaeaea;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+    }
+    .sidebar img {
+      width: 60px;
+      margin-bottom: 18px;
+    }
+    .sidebar nav {
+      width: 100%;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sidebar a {
+      display: block;
+      width: 100%;
+      padding: 12px 32px;
+      color: #1a6ae5;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px 0 0 6px;
+      font-size: 1.08rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      background: #eaf2ff;
+      color: #144fa1;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eaeaea;
+      background: #fff;
+      margin-bottom: 32px;
+      padding-left: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      padding: 28px 24px 24px 24px;
+      margin-bottom: 32px;
+    }
+    .panel-header {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .panel-header div {
+      font-size: 1.1rem;
+      color: #444;
+      font-weight: 600;
+    }
+    .panel-header strong {
+      color: #1a6ae5;
+      font-weight: 700;
+    }
+    .filters {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filters label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 6px;
+    }
+    .filters select, .filters input[type="text"] {
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: 1px solid #d9d9d9;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    .data-table th, .data-table td {
+      padding: 12px 10px;
+      text-align: left;
+    }
+    .data-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .data-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .data-table tr:last-child {
+      border-bottom: none;
+    }
+    .btn-drill {
+      background: #fff;
+      color: #1a6ae5;
+      border: 1px solid #1a6ae5;
+      padding: 6px 14px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-drill:hover {
+      background: #eaf2ff;
+    }
+    .chart-section {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      padding: 24px 18px 18px 18px;
+      margin-bottom: 32px;
+    }
+    .chart-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+    .chart-container {
+      width: 100%;
+      max-width: 600px;
+      height: 260px;
+      margin: 0 auto;
+      position: relative;
+    }
+    @media (max-width: 1000px) {
+      .main-content {
+        padding: 0 4vw 24px 4vw;
+      }
+      .sidebar {
+        width: 60px;
+        padding: 10px 0;
+      }
+      .sidebar nav a {
+        font-size: 0.95rem;
+        padding: 10px 10px;
+        text-align: center;
+      }
+      .sidebar img { width: 38px; }
+    }
+    @media (max-width: 700px) {
+      .main-header { font-size: 1.1rem; }
+      .sidebar { display: none; }
+      .main-content { padding: 0 2vw 18px 2vw; }
+      .panel-header { flex-direction: column; gap: 8px; }
+      .chart-container { max-width: 98vw; }
+    }
+  </style>
+  <script>
+    // Gráfico simples de variação ponderada
+    window.addEventListener('DOMContentLoaded', function() {
+      var canvas = document.getElementById('chartVaria');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var data = [4.2, 5.1, 3.6, 7.3, 2.8, 1.8, 4.9];
+      var labels = ['SKU 1','SKU 2','SKU 3','SKU 4','SKU 5','SKU 6','SKU 7'];
+      var w = canvas.width, h = canvas.height;
+      var max = Math.max(...data, 0);
+      var min = Math.min(...data, 0);
+      ctx.clearRect(0,0,w,h);
+      // Eixos
+      ctx.strokeStyle = '#eaeaea';
+      ctx.beginPath();
+      ctx.moveTo(40, 20); ctx.lineTo(40, h-40); ctx.lineTo(w-20, h-40);
+      ctx.stroke();
+      // Barras
+      var barW = (w-80)/data.length;
+      for (var i=0; i<data.length; i++) {
+        var val = data[i];
+        var barH = ((val-min)/(max-min+0.01))*(h-80);
+        ctx.fillStyle = val >= 0 ? '#1a6ae5' : '#d4380d';
+        ctx.fillRect(40 + i*barW + 10, h-40-barH, barW-20, barH);
+        ctx.fillStyle = '#222';
+        ctx.font = 'bold 13px Helvetica';
+        ctx.fillText(val+'%', 40 + i*barW + 14, h-45-barH);
+        ctx.save();
+        ctx.translate(40 + i*barW + 14, h-25);
+        ctx.rotate(-0.35);
+        ctx.font = '11px Helvetica';
+        ctx.fillStyle = '#555';
+        ctx.fillText(labels[i], 0, 0);
+        ctx.restore();
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Menu principal">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <nav>
+        <a href="dashboard-comprador.html">Dashboard</a>
+        <a href="#">Aprovações Pendentes</a>
+        <a href="#">Histórico</a>
+        <a href="#">Fornecedores</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Perfil</a>
+        <a href="#" style="color:#d4380d;">Sair</a>
+      </nav>
+    </aside>
+    <main class="main-content">
+      <header class="main-header">Análise Comercial da Tabela</header>
+      <section class="panel">
+        <div class="panel-header">
+          <div>Fornecedor: <strong>Fornecedor A</strong></div>
+          <div>Bandeira: <strong>SuperMais</strong></div>
+          <div>UF: <strong>SP</strong></div>
+          <div>Data Submissão: <strong>2024-06-10</strong></div>
+        </div>
+        <form class="filters" aria-label="Filtros avançados">
+          <label>SKU:
+            <input type="text" placeholder="Buscar SKU">
+          </label>
+          <label>Descrição:
+            <input type="text" placeholder="Buscar descrição">
+          </label>
+          <label>IC Nielsen:
+            <select>
+              <option>Todos</option>
+              <option>&lt; 80</option>
+              <option>80 - 90</option>
+              <option>&gt; 90</option>
+            </select>
+          </label>
+          <label>IC Objetiva:
+            <select>
+              <option>Todos</option>
+              <option>&lt; 80</option>
+              <option>80 - 90</option>
+              <option>&gt; 90</option>
+            </select>
+          </label>
+        </form>
+        <table class="data-table" aria-label="Tabela comparativa de preços">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Descrição</th>
+              <th>Preço Antigo</th>
+              <th>Preço Novo</th>
+              <th>Variação (%)</th>
+              <th>IC Nielsen</th>
+              <th>IC Objetiva</th>
+              <th>Impacto DRE</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7891234567890</td>
+              <td>Arroz Tipo 1 5kg</td>
+              <td>R$ 19,90</td>
+              <td>R$ 21,50</td>
+              <td style="color:#d4380d;">+8,0%</td>
+              <td>95</td>
+              <td>92</td>
+              <td>R$ 350</td>
+              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567890')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7891234567891</td>
+              <td>Feijão Carioca 1kg</td>
+              <td>R$ 8,50</td>
+              <td>R$ 8,40</td>
+              <td style="color:#16a34a;">-1,2%</td>
+              <td>88</td>
+              <td>85</td>
+              <td>R$ 120</td>
+              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567891')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7891234567892</td>
+              <td>Açúcar Refinado 1kg</td>
+              <td>R$ 4,10</td>
+              <td>R$ 4,30</td>
+              <td style="color:#d4380d;">+4,9%</td>
+              <td>91</td>
+              <td>87</td>
+              <td>R$ 80</td>
+              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567892')">Ver</button></td>
+            </tr>
+            <tr>
+              <td>7891234567893</td>
+              <td>Óleo de Soja 900ml</td>
+              <td>R$ 7,80</td>
+              <td>R$ 8,10</td>
+              <td style="color:#d4380d;">+3,8%</td>
+              <td>90</td>
+              <td>89</td>
+              <td>R$ 60</td>
+              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567893')">Ver</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="chart-section">
+        <div class="chart-title">Variação Ponderada por SKU</div>
+        <div class="chart-container">
+          <canvas id="chartVaria" width="600" height="260" aria-label="Gráfico de variação" role="img"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

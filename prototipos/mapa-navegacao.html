@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" id="wixDesktopViewport" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mapa de Navegação - Protótipo Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: wf_1973fffd9707483bb7143c4dc;
+      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
+           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
+    }
+    body, html {
+      background: #f4f4f7;
+      margin: 0;
+      padding: 0;
+      font-family: wf_1973fffd9707483bb7143c4dc, Arial, Helvetica, sans-serif;
+      color: #222;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e6e6e6;
+      padding: 24px 0 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    header img {
+      height: 48px;
+      margin-right: 24px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+    main {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      padding: 0 16px 32px 16px;
+    }
+    .legend {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+    }
+    .legend-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid #bbb;
+    }
+    .fornecedor { background: #e8f0fe; border-color: #4285f4; }
+    .comprador { background: #fff3cd; border-color: #ffc107; }
+    .gestor { background: #e6f4ea; border-color: #34a853; }
+    .admin { background: #fce8e6; border-color: #ea4335; }
+    .pagina { background: #fff; border: 2px solid #bdbdbd; }
+    .link {
+      stroke: #bdbdbd;
+      stroke-width: 2;
+      marker-end: url(#arrowhead);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .link.active { stroke: #4285f4; opacity: 1; }
+    .node {
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      box-shadow: 0 2px 8px rgba(66,133,244,0.07);
+    }
+    .node:hover {
+      box-shadow: 0 4px 16px rgba(66,133,244,0.15);
+      border-color: #4285f4 !important;
+      z-index: 2;
+    }
+    .node.selected {
+      border-color: #4285f4 !important;
+      background: #e8f0fe !important;
+    }
+    .node .title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #222;
+    }
+    .node .desc {
+      font-size: 0.92rem;
+      color: #555;
+    }
+    .profile-path {
+      stroke-dasharray: 6 4;
+      stroke-width: 3;
+      opacity: 0.7;
+    }
+    .profile-fornecedor { stroke: #4285f4; }
+    .profile-comprador { stroke: #ffc107; }
+    .profile-gestor { stroke: #34a853; }
+    .profile-admin { stroke: #ea4335; }
+    .sitemap-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 32px;
+      overflow-x: auto;
+      margin-bottom: 32px;
+    }
+    .sitemap-svg {
+      width: 100%;
+      min-width: 900px;
+      height: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+    .info-panel {
+      margin-top: 24px;
+      background: #f9fafc;
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+      padding: 20px;
+      font-size: 1.05rem;
+      color: #333;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 900px) {
+      .sitemap-svg { height: 900px; min-width: 600px; }
+      .sitemap-container { padding: 8px; }
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      .sitemap-svg { height: 1200px; min-width: 350px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" />
+    <h1>Mapa de Navegação do Protótipo Plurix</h1>
+  </header>
+  <main>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-circle fornecedor"></span>Fornecedor</span>
+      <span class="legend-item"><span class="legend-circle comprador"></span>Comprador</span>
+      <span class="legend-item"><span class="legend-circle gestor"></span>Gestor</span>
+      <span class="legend-item"><span class="legend-circle admin"></span>Administrador</span>
+      <span class="legend-item"><span class="legend-circle pagina"></span>Página do Sistema</span>
+      <span class="legend-item"><svg width="28" height="12"><line x1="2" y1="6" x2="26" y2="6" stroke="#bdbdbd" stroke-width="2" marker-end="url(#arrowhead)"></line></svg> Navegação</span>
+      <span class="legend-item"><svg width="28" height="12"><line x1="2" y1="6" x2="26" y2="6" stroke="#4285f4" stroke-width="3" stroke-dasharray="6 4"></line></svg> Fluxo do Perfil</span>
+    </div>
+    <div class="sitemap-container">
+      <svg class="sitemap-svg" viewBox="0 0 1200 600" aria-label="Mapa de navegação do protótipo" role="img">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#bdbdbd" />
+          </marker>
+        </defs>
+        <!-- NODES -->
+        <g id="nodes">
+          <!-- Login -->
+          <g class="node" id="login" tabindex="0" aria-label="Login" style="transform: translate(80px, 260px);">
+            <rect x="0" y="0" width="120" height="56" rx="12" fill="#fff" stroke="#bdbdbd" stroke-width="2" />
+            <text x="60" y="26" text-anchor="middle" font-size="1.05rem" font-family="Arial, Helvetica, sans-serif" font-weight="600" fill="#222">Login</text>
+            <text x="60" y="44" text-anchor="middle" font-size="0.92rem" fill="#555">Acesso</text>
+          </g>
+          <!-- Dashboard -->
+          <g class="node" id="dashboard" tabindex="0" aria-label="Dashboard" style="transform: translate(260px, 260px);">
+            <rect x="0" y="0" width="160" height="56" rx="12" fill="#fff" stroke="#bdbdbd" stroke-width="2" />
+            <text x="80" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Dashboard</text>
+            <text x="80" y="44" text-anchor="middle" font-size="0.92rem" fill="#555">Visão Geral</text>
+          </g>
+          <!-- Upload Tabela -->
+          <g class="node fornecedor" id="upload-tabela" tabindex="0" aria-label="Upload de Tabela" style="transform: translate(480px, 120px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Upload Tabela Preços</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#4285f4">Fornecedor</text>
+          </g>
+          <!-- Validação Tabela -->
+          <g class="node fornecedor" id="validacao-tabela" tabindex="0" aria-label="Validação de Tabela" style="transform: translate(720px, 120px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Validação Tabela</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#4285f4">Fornecedor</text>
+          </g>
+          <!-- Ajuste Manual -->
+          <g class="node fornecedor" id="ajuste-manual" tabindex="0" aria-label="Ajuste Manual" style="transform: translate(960px, 120px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Ajuste Manual</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#4285f4">Fornecedor</text>
+          </g>
+          <!-- Workflow Aprovação -->
+          <g class="node gestor" id="workflow-aprovacao" tabindex="0" aria-label="Workflow de Aprovação" style="transform: translate(600px, 260px);">
+            <rect x="0" y="0" width="220" height="56" rx="12" fill="#e6f4ea" stroke="#34a853" stroke-width="2" />
+            <text x="110" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Workflow de Aprovação</text>
+            <text x="110" y="44" text-anchor="middle" font-size="0.92rem" fill="#34a853">Gestor/Comprador</text>
+          </g>
+          <!-- Painel Análise Comercial -->
+          <g class="node gestor" id="painel-analise" tabindex="0" aria-label="Painel de Análise Comercial" style="transform: translate(900px, 260px);">
+            <rect x="0" y="0" width="220" height="56" rx="12" fill="#e6f4ea" stroke="#34a853" stroke-width="2" />
+            <text x="110" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Painel Análise Comercial</text>
+            <text x="110" y="44" text-anchor="middle" font-size="0.92rem" fill="#34a853">Gestor/Comprador</text>
+          </g>
+          <!-- Gestão Identidade -->
+          <g class="node admin" id="gestao-identidade" tabindex="0" aria-label="Gestão de Identidade" style="transform: translate(260px, 420px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#fce8e6" stroke="#ea4335" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Gestão de Identidade</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#ea4335">Administrador</text>
+          </g>
+          <!-- Gestão Fornecedores -->
+          <g class="node admin" id="gestao-fornecedores" tabindex="0" aria-label="Gestão de Fornecedores" style="transform: translate(480px, 420px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#fce8e6" stroke="#ea4335" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Gestão de Fornecedores</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#ea4335">Administrador</text>
+          </g>
+          <!-- Logs e Auditoria -->
+          <g class="node admin" id="logs-auditoria" tabindex="0" aria-label="Logs e Auditoria" style="transform: translate(700px, 420px);">
+            <rect x="0" y="0" width="180" height="56" rx="12" fill="#fce8e6" stroke="#ea4335" stroke-width="2" />
+            <text x="90" y="26" text-anchor="middle" font-size="1.05rem" font-weight="600" fill="#222">Logs & Auditoria</text>
+            <text x="90" y="44" text-anchor="middle" font-size="0.92rem" fill="#ea4335">Administrador</text>
+          </g>
+        </g>
+        <!-- LINKS (Navegação) -->
+        <g id="links">
+          <!-- Login -> Dashboard -->
+          <line class="link" x1="200" y1="288" x2="260" y2="288" />
+          <!-- Dashboard -> Upload Tabela -->
+          <line class="link" x1="420" y1="288" x2="570" y2="148" />
+          <!-- Upload Tabela -> Validação Tabela -->
+          <line class="link" x1="660" y1="148" x2="810" y2="148" />
+          <!-- Validação Tabela -> Ajuste Manual -->
+          <line class="link" x1="900" y1="148" x2="1050" y2="148" />
+          <!-- Ajuste Manual -> Workflow Aprovação -->
+          <line class="link" x1="1050" y1="148" x2="710" y2="288" />
+          <!-- Dashboard -> Workflow Aprovação -->
+          <line class="link" x1="420" y1="288" x2="600" y2="288" />
+          <!-- Workflow Aprovação -> Painel Análise -->
+          <line class="link" x1="820" y1="288" x2="900" y2="288" />
+          <!-- Dashboard -> Gestão Identidade -->
+          <line class="link" x1="340" y1="316" x2="350" y2="420" />
+          <!-- Dashboard -> Gestão Fornecedores -->
+          <line class="link" x1="420" y1="316" x2="570" y2="420" />
+          <!-- Dashboard -> Logs Auditoria -->
+          <line class="link" x1="420" y1="316" x2="790" y2="420" />
+        </g>
+        <!-- FLUXOS DE PERFIL (dashed) -->
+        <g id="fluxos">
+          <!-- Fornecedor: Login -> Dashboard -> Upload -> Validação -> Ajuste Manual -->
+          <polyline class="profile-path profile-fornecedor" points="140,288 340,288 570,148 810,148 1050,148" fill="none" />
+          <!-- Comprador/Gestor: Login -> Dashboard -> Workflow -> Painel -->
+          <polyline class="profile-path profile-gestor" points="140,288 340,288 710,288 1020,288" fill="none" />
+          <!-- Admin: Login -> Dashboard -> Gestão Identidade/Fornecedores/Logs -->
+          <polyline class="profile-path profile-admin" points="140,288 340,288 350,420" fill="none" />
+          <polyline class="profile-path profile-admin" points="140,288 340,288 570,420" fill="none" />
+          <polyline class="profile-path profile-admin" points="140,288 340,288 790,420" fill="none" />
+        </g>
+      </svg>
+    </div>
+    <div class="info-panel" id="info-panel">
+      <strong>Como usar:</strong><br>
+      Clique ou toque em qualquer página do mapa para ver detalhes do fluxo, permissões e exemplos de navegação.<br><br>
+      <strong>Perfis:</strong> <span style="color:#4285f4">Fornecedor</span>, <span style="color:#ffc107">Comprador</span>, <span style="color:#34a853">Gestor</span>, <span style="color:#ea4335">Administrador</span>.<br>
+      <strong>Fluxos:</strong> As linhas tracejadas coloridas representam o caminho típico de cada perfil. As setas cinzas indicam navegação possível entre páginas.<br>
+      <strong>Hierarquia:</strong> O Dashboard centraliza o acesso às principais funcionalidades. Cada módulo pode ser acessado conforme o perfil do usuário.
+    </div>
+  </main>
+  <script>
+    // Interatividade: seleção de nós e exibição de detalhes
+    const nodeData = {
+      'login': {
+        title: 'Login',
+        desc: 'Página inicial para autenticação. Acesso para todos os perfis. Redireciona ao Dashboard após login bem-sucedido.'
+      },
+      'dashboard': {
+        title: 'Dashboard',
+        desc: 'Visão geral do sistema, com acesso rápido aos principais módulos conforme permissões do usuário.'
+      },
+      'upload-tabela': {
+        title: 'Upload Tabela de Preços',
+        desc: 'Fornecedor faz upload de arquivos Excel/CSV conforme template padrão. Validação automática da estrutura.'
+      },
+      'validacao-tabela': {
+        title: 'Validação de Tabela',
+        desc: 'Sistema valida colunas, formatos e códigos. Fornecedor recebe feedback imediato e pode corrigir erros.'
+      },
+      'ajuste-manual': {
+        title: 'Ajuste Manual',
+        desc: 'Fornecedor pode ajustar produtos individualmente em formulário web antes de submeter para aprovação.'
+      },
+      'workflow-aprovacao': {
+        title: 'Workflow de Aprovação',
+        desc: 'Fluxo multinível para aprovação/reprovação das tabelas. Gestores e compradores participam conforme regras de alçada.'
+      },
+      'painel-analise': {
+        title: 'Painel de Análise Comercial',
+        desc: 'Gestores e compradores analisam indicadores, comparações de preços e impactos financeiros antes da decisão.'
+      },
+      'gestao-identidade': {
+        title: 'Gestão de Identidade',
+        desc: 'Administradores gerenciam usuários, perfis, permissões e integrações SSO.'
+      },
+      'gestao-fornecedores': {
+        title: 'Gestão de Fornecedores',
+        desc: 'Cadastro, manutenção e histórico de fornecedores. Integração com módulo de tabelas.'
+      },
+      'logs-auditoria': {
+        title: 'Logs & Auditoria',
+        desc: 'Registro de todas as operações críticas, busca avançada e relatórios de conformidade.'
+      }
+    };
+    document.querySelectorAll('.node').forEach(function(node) {
+      node.addEventListener('click', function() {
+        document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+        node.classList.add('selected');
+        const id = node.id;
+        const info = nodeData[id];
+        if (info) {
+          document.getElementById('info-panel').innerHTML =
+            '<strong>' + info.title + '</strong><br>' +
+            info.desc + '<br><br>' +
+            '<a href="#" onclick="window.scrollTo({top:0,behavior:\'smooth\'});return false;" style="color:#4285f4;text-decoration:underline">Voltar ao topo</a>';
+        }
+      });
+      node.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          node.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

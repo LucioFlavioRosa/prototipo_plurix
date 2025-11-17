@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Guia de Estilos - Plurix Plataforma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --color-primary: #1a237e;
+      --color-secondary: #fbc02d;
+      --color-accent: #43a047;
+      --color-danger: #e53935;
+      --color-info: #039be5;
+      --color-bg: #f5f6fa;
+      --color-surface: #fff;
+      --color-border: #e0e0e0;
+      --color-text: #222;
+      --color-muted: #757575;
+      --color-header: #252f3f;
+      --color-footer: #222b3a;
+      --color-link: #1a237e;
+      --color-link-hover: #3949ab;
+      --radius: 6px;
+      --shadow: 0 2px 8px rgba(40,40,40,0.08);
+      --font-main: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+      --font-alt: 'helvetica-w01-roman', Arial, sans-serif;
+      --font-size-base: 16px;
+      --font-size-lg: 20px;
+      --font-size-sm: 13px;
+      --font-weight-normal: 400;
+      --font-weight-bold: 700;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 32px;
+      --spacing-xl: 48px;
+    }
+    body {
+      background: var(--color-bg);
+      font-family: var(--font-main);
+      color: var(--color-text);
+      margin: 0;
+      padding: 0;
+      font-size: var(--font-size-base);
+    }
+    header {
+      background: var(--color-header);
+      color: #fff;
+      padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md) var(--spacing-md);
+      border-bottom: 2px solid var(--color-primary);
+      text-align: left;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-alt);
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-sm);
+      color: var(--color-primary);
+    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    h4 { font-size: 1rem; color: var(--color-muted); }
+    section { margin: var(--spacing-lg) auto; max-width: 900px; background: var(--color-surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: var(--spacing-lg); }
+    .color-palette { display: flex; gap: var(--spacing-md); flex-wrap: wrap; }
+    .color-swatch { width: 80px; height: 80px; border-radius: var(--radius); border: 1px solid var(--color-border); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: var(--font-size-sm); margin-bottom: var(--spacing-sm); }
+    .color-label { margin-top: var(--spacing-xs); color: var(--color-muted); font-size: var(--font-size-sm); }
+    .typography-sample { margin-bottom: var(--spacing-md); }
+    .component-row { display: flex; gap: var(--spacing-md); flex-wrap: wrap; align-items: flex-end; margin-bottom: var(--spacing-md); }
+    .btn-primary, .btn-secondary, .btn-danger, .btn-outline {
+      font-family: var(--font-main);
+      font-size: var(--font-size-base);
+      padding: 10px 24px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      margin-right: var(--spacing-sm);
+      transition: background 0.2s, color 0.2s;
+      font-weight: var(--font-weight-bold);
+      box-shadow: var(--shadow);
+    }
+    .btn-primary { background: var(--color-primary); color: #fff; }
+    .btn-primary:hover { background: var(--color-link-hover); }
+    .btn-secondary { background: var(--color-secondary); color: #222; }
+    .btn-secondary:hover { background: #ffd54f; }
+    .btn-danger { background: var(--color-danger); color: #fff; }
+    .btn-danger:hover { background: #b71c1c; }
+    .btn-outline { background: #fff; color: var(--color-primary); border: 2px solid var(--color-primary); box-shadow: none; }
+    .btn-outline:hover { background: var(--color-primary); color: #fff; }
+    .input, input[type='text'], input[type='email'], input[type='password'], select {
+      font-family: var(--font-main);
+      font-size: var(--font-size-base);
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      margin-bottom: var(--spacing-sm);
+      background: #fff;
+      color: var(--color-text);
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input:focus, input:focus, select:focus {
+      border-color: var(--color-primary);
+    }
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--spacing-md);
+      min-width: 220px;
+      max-width: 320px;
+      margin-bottom: var(--spacing-md);
+      border: 1px solid var(--color-border);
+    }
+    .card-title { font-size: var(--font-size-lg); color: var(--color-primary); margin-bottom: var(--spacing-xs); }
+    .card-desc { color: var(--color-muted); font-size: var(--font-size-sm); }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: var(--spacing-md);
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+      font-size: var(--font-size-base);
+    }
+    th {
+      background: var(--color-bg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+    }
+    tr:last-child td { border-bottom: none; }
+    .icon-sample {
+      width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: var(--color-bg); border-radius: 50%; border: 1px solid var(--color-border); margin-right: var(--spacing-xs); font-size: 20px;
+    }
+    .spacing-demo { display: flex; gap: var(--spacing-xs); align-items: center; margin-bottom: var(--spacing-sm); }
+    .spacing-block { width: 24px; height: 24px; background: var(--color-secondary); border-radius: var(--radius); display: inline-block; }
+    .grid-demo { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+    .grid-cell { background: var(--color-accent); color: #fff; padding: var(--spacing-sm); border-radius: var(--radius); text-align: center; }
+    .link { color: var(--color-link); text-decoration: underline; cursor: pointer; }
+    .link:hover { color: var(--color-link-hover); }
+    footer { background: var(--color-footer); color: #fff; text-align: center; padding: var(--spacing-md); margin-top: var(--spacing-lg); border-radius: 0 0 var(--radius) var(--radius); }
+    @media (max-width: 700px) {
+      section { padding: var(--spacing-md); }
+      .color-palette, .component-row { flex-direction: column; gap: var(--spacing-sm); }
+      .grid-demo { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Guia de Estilos - Plataforma Plurix</h1>
+    <p>Referência visual e técnica para desenvolvimento consistente da plataforma.</p>
+  </header>
+  <section>
+    <h2>Paleta de Cores</h2>
+    <div class="color-palette">
+      <div class="color-swatch" style="background:var(--color-primary); color:#fff;">Primária<div class="color-label">#1a237e</div></div>
+      <div class="color-swatch" style="background:var(--color-secondary);">Secundária<div class="color-label">#fbc02d</div></div>
+      <div class="color-swatch" style="background:var(--color-accent); color:#fff;">Acento<div class="color-label">#43a047</div></div>
+      <div class="color-swatch" style="background:var(--color-danger); color:#fff;">Perigo<div class="color-label">#e53935</div></div>
+      <div class="color-swatch" style="background:var(--color-info); color:#fff;">Info<div class="color-label">#039be5</div></div>
+      <div class="color-swatch" style="background:var(--color-bg);">Fundo<div class="color-label">#f5f6fa</div></div>
+      <div class="color-swatch" style="background:var(--color-surface);">Surface<div class="color-label">#fff</div></div>
+      <div class="color-swatch" style="background:var(--color-header); color:#fff;">Header<div class="color-label">#252f3f</div></div>
+      <div class="color-swatch" style="background:var(--color-footer); color:#fff;">Footer<div class="color-label">#222b3a</div></div>
+      <div class="color-swatch" style="background:var(--color-link); color:#fff;">Link<div class="color-label">#1a237e</div></div>
+    </div>
+  </section>
+  <section>
+    <h2>Tipografia</h2>
+    <div class="typography-sample" style="font-family: var(--font-main); font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">Título Grande - Arial Bold 20px</div>
+    <div class="typography-sample" style="font-family: var(--font-alt); font-size: var(--font-size-base);">Texto Padrão - Helvetica 16px</div>
+    <div class="typography-sample" style="font-family: var(--font-main); font-size: var(--font-size-sm); color: var(--color-muted);">Texto Pequeno/Legenda - Arial 13px</div>
+    <div class="typography-sample" style="font-family: var(--font-alt); font-size: 2.2rem; font-weight: var(--font-weight-bold);">Exemplo de H1</div>
+    <div class="typography-sample" style="font-family: var(--font-alt); font-size: 1.5rem;">Exemplo de H2</div>
+    <div class="typography-sample" style="font-family: var(--font-alt); font-size: 1.2rem;">Exemplo de H3</div>
+  </section>
+  <section>
+    <h2>Componentes de UI</h2>
+    <h3>Botões</h3>
+    <div class="component-row">
+      <button class="btn-primary">Primário</button>
+      <button class="btn-secondary">Secundário</button>
+      <button class="btn-danger">Perigo</button>
+      <button class="btn-outline">Outline</button>
+    </div>
+    <h3>Inputs</h3>
+    <div class="component-row">
+      <input class="input" type="text" placeholder="Texto padrão">
+      <input class="input" type="email" placeholder="E-mail">
+      <input class="input" type="password" placeholder="Senha">
+      <select class="input"><option>Selecione</option><option>Opção 1</option></select>
+    </div>
+    <h3>Cards</h3>
+    <div class="component-row">
+      <div class="card">
+        <div class="card-title">Título do Card</div>
+        <div class="card-desc">Descrição breve do conteúdo do card.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Outro Card</div>
+        <div class="card-desc">Outro exemplo de card.</div>
+      </div>
+    </div>
+    <h3>Tabelas</h3>
+    <table>
+      <thead>
+        <tr><th>Coluna 1</th><th>Coluna 2</th><th>Coluna 3</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Valor 1</td><td>Valor 2</td><td>Valor 3</td></tr>
+        <tr><td>Valor A</td><td>Valor B</td><td>Valor C</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Espaçamentos & Grid</h2>
+    <div class="spacing-demo">
+      <div class="spacing-block" style="margin-right: var(--spacing-xs);"></div> XS (4px)
+      <div class="spacing-block" style="margin-left: var(--spacing-sm);"></div> SM (8px)
+      <div class="spacing-block" style="margin-left: var(--spacing-md);"></div> MD (16px)
+      <div class="spacing-block" style="margin-left: var(--spacing-lg);"></div> LG (32px)
+      <div class="spacing-block" style="margin-left: var(--spacing-xl);"></div> XL (48px)
+    </div>
+    <div class="grid-demo">
+      <div class="grid-cell">1</div>
+      <div class="grid-cell">2</div>
+      <div class="grid-cell">3</div>
+      <div class="grid-cell">4</div>
+    </div>
+  </section>
+  <section>
+    <h2>Ícones</h2>
+    <div class="component-row">
+      <span class="icon-sample" title="Upload">⬆</span>
+      <span class="icon-sample" title="Download">⬇</span>
+      <span class="icon-sample" title="Editar">✎</span>
+      <span class="icon-sample" title="Aprovar">✔</span>
+      <span class="icon-sample" title="Reprovar">✖</span>
+      <span class="icon-sample" title="Info">ℹ</span>
+    </div>
+  </section>
+  <footer>
+    Guia de Estilos &copy; 2024 Plurix. Para dúvidas ou sugestões, consulte o time de Design.
+  </footer>
+</body>
+</html>

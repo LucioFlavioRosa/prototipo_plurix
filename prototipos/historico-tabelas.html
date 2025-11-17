@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Histórico de Tabelas | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --color-primary: #004aad;
+      --color-secondary: #f5f7fa;
+      --color-accent: #00b2a9;
+      --color-danger: #e53935;
+      --color-success: #43a047;
+      --color-warning: #ffb300;
+      --color-bg: #fff;
+      --color-border: #e0e3e8;
+      --color-text: #222;
+      --color-muted: #6b7684;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--color-secondary); font-family: var(--font-main); font-size: 16px; color: var(--color-text); height: 100%; min-height: 100vh;
+    }
+    header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 70px;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; }
+    .logo {
+      height: 38px;
+      margin-right: 18px;
+    }
+    nav a {
+      color: var(--color-text);
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      color: var(--color-primary);
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: var(--color-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 32px 36px 36px 36px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 18px;
+      color: var(--color-primary);
+    }
+    .filters {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filters select, .filters input[type="search"] {
+      padding: 7px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: #f9fafc;
+      font-size: 15px;
+      color: var(--color-text);
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 18px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: var(--color-bg);
+      font-size: 15px;
+      margin-bottom: 0;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+    }
+    th {
+      background: #f5f7fa;
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-aprovado { background: var(--color-success); }
+    .status-reprovado { background: var(--color-danger); }
+    .status-pendente { background: var(--color-warning); color: #222; }
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-table {
+      background: var(--color-bg);
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-table:hover {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .compare-section {
+      background: #f9fafc;
+      border-radius: 8px;
+      padding: 20px 18px;
+      margin-top: 18px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .compare-section h2 {
+      font-size: 1.2rem;
+      color: var(--color-primary);
+      margin-bottom: 10px;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare-table th, .compare-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .compare-table th {
+      background: #e8f0fe;
+      color: var(--color-primary);
+    }
+    .compare-up { color: var(--color-success); font-weight: bold; }
+    .compare-down { color: var(--color-danger); font-weight: bold; }
+    @media (max-width: 900px) {
+      main { padding: 16px 6px; }
+      header { padding: 0 8px; }
+      .table-container { padding-bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_80,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+      <nav aria-label="Navegação principal">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="historico-tabelas.html" class="active">Histórico</a>
+        <a href="notificacoes.html">Notificações</a>
+        <a href="perfil.html">Perfil</a>
+        <a href="logout.html">Sair</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1>Histórico de Tabelas</h1>
+    <div class="filters">
+      <select id="filter-bandeira" aria-label="Filtrar por bandeira">
+        <option value="all">Todas as bandeiras</option>
+        <option value="supersul">SuperSul</option>
+        <option value="maxplus">MaxPlus</option>
+      </select>
+      <select id="filter-status" aria-label="Filtrar por status">
+        <option value="all">Todos os status</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="reprovado">Reprovado</option>
+        <option value="pendente">Pendente</option>
+      </select>
+      <input type="search" id="filter-search" placeholder="Buscar fornecedor ou aprovador..." aria-label="Buscar fornecedor ou aprovador">
+      <input type="date" id="filter-date-from" aria-label="Data inicial">
+      <input type="date" id="filter-date-to" aria-label="Data final">
+    </div>
+    <div class="table-container">
+      <table id="historico-table" aria-label="Tabela de histórico de tabelas">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Fornecedor</th>
+            <th>Bandeira</th>
+            <th>Status</th>
+            <th>Aprovador</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-bandeira="supersul" data-status="aprovado">
+            <td>17/06/2024</td>
+            <td>Fornecedor XPTO</td>
+            <td>SuperSul</td>
+            <td><span class="status-badge status-aprovado">Aprovado</span></td>
+            <td>Maria Souza</td>
+            <td class="table-actions">
+              <button class="btn-table" onclick="visualizarHistorico(0)">Visualizar</button>
+              <button class="btn-table" onclick="compararVersoes(0)">Comparar</button>
+            </td>
+          </tr>
+          <tr data-bandeira="maxplus" data-status="pendente">
+            <td>16/06/2024</td>
+            <td>Fornecedor ABC</td>
+            <td>MaxPlus</td>
+            <td><span class="status-badge status-pendente">Pendente</span></td>
+            <td>João Lima</td>
+            <td class="table-actions">
+              <button class="btn-table" onclick="visualizarHistorico(1)">Visualizar</button>
+              <button class="btn-table" onclick="compararVersoes(1)">Comparar</button>
+            </td>
+          </tr>
+          <tr data-bandeira="supersul" data-status="reprovado">
+            <td>14/06/2024</td>
+            <td>Fornecedor XPTO</td>
+            <td>SuperSul</td>
+            <td><span class="status-badge status-reprovado">Reprovado</span></td>
+            <td>Lucas Prado</td>
+            <td class="table-actions">
+              <button class="btn-table" onclick="visualizarHistorico(2)">Visualizar</button>
+              <button class="btn-table" onclick="compararVersoes(2)">Comparar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="compare-section" id="compare-section" style="display:none;">
+      <h2>Comparação entre versões</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Produto</th>
+            <th>Preço Antigo</th>
+            <th>Preço Novo</th>
+            <th>Variação</th>
+          </tr>
+        </thead>
+        <tbody id="compare-table-body">
+          <!-- Exemplo preenchido via JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    // Filtros avançados
+    const filterBandeira = document.getElementById('filter-bandeira');
+    const filterStatus = document.getElementById('filter-status');
+    const filterSearch = document.getElementById('filter-search');
+    const filterDateFrom = document.getElementById('filter-date-from');
+    const filterDateTo = document.getElementById('filter-date-to');
+    const historicoTable = document.getElementById('historico-table');
+    function filterHistorico() {
+      let bandeira = filterBandeira.value;
+      let status = filterStatus.value;
+      let search = filterSearch.value.trim().toLowerCase();
+      let dateFrom = filterDateFrom.value;
+      let dateTo = filterDateTo.value;
+      Array.from(historicoTable.tBodies[0].rows).forEach(row => {
+        let show = true;
+        if (bandeira !== 'all' && row.getAttribute('data-bandeira') !== bandeira) show = false;
+        if (status !== 'all' && row.getAttribute('data-status') !== status) show = false;
+        let text = row.textContent.toLowerCase();
+        if (search && !text.includes(search)) show = false;
+        let data = row.cells[0].textContent.split('/').reverse().join('-');
+        if (dateFrom && data < dateFrom) show = false;
+        if (dateTo && data > dateTo) show = false;
+        row.style.display = show ? '' : 'none';
+      });
+    }
+    filterBandeira.addEventListener('change', filterHistorico);
+    filterStatus.addEventListener('change', filterHistorico);
+    filterSearch.addEventListener('input', filterHistorico);
+    filterDateFrom.addEventListener('change', filterHistorico);
+    filterDateTo.addEventListener('change', filterHistorico);
+
+    // Dados de exemplo para comparação
+    const comparacoes = [
+      [
+        { sku: '7891001', produto: 'Arroz Tipo 1', antigo: 25.90, novo: 27.50 },
+        { sku: '7891002', produto: 'Feijão Carioca', antigo: 8.99, novo: 8.99 },
+        { sku: '7891003', produto: 'Óleo de Soja', antigo: 6.49, novo: 6.99 }
+      ],
+      [
+        { sku: '7892001', produto: 'Açúcar Refinado', antigo: 4.50, novo: 4.80 },
+        { sku: '7892002', produto: 'Leite Integral', antigo: 3.99, novo: 4.09 }
+      ],
+      [
+        { sku: '7891001', produto: 'Arroz Tipo 1', antigo: 26.50, novo: 25.90 },
+        { sku: '7891003', produto: 'Óleo de Soja', antigo: 7.19, novo: 6.49 }
+      ]
+    ];
+    function compararVersoes(idx) {
+      const section = document.getElementById('compare-section');
+      const tbody = document.getElementById('compare-table-body');
+      tbody.innerHTML = '';
+      comparacoes[idx].forEach(item => {
+        let variacao = item.novo - item.antigo;
+        let variacaoPct = item.antigo ? ((variacao / item.antigo) * 100).toFixed(1) : '0';
+        let cls = variacao > 0 ? 'compare-up' : (variacao < 0 ? 'compare-down' : '');
+        tbody.innerHTML += `<tr>
+          <td>${item.sku}</td>
+          <td>${item.produto}</td>
+          <td>R$ ${item.antigo.toFixed(2)}</td>
+          <td>R$ ${item.novo.toFixed(2)}</td>
+          <td class="${cls}">${variacao > 0 ? '+' : ''}${variacao.toFixed(2)} (${variacaoPct}%)</td>
+        </tr>`;
+      });
+      section.style.display = '';
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+    function visualizarHistorico(idx) {
+      alert('Visualização detalhada da tabela histórica (wireframe - protótipo).');
+    }
+  </script>
+</body>
+</html>

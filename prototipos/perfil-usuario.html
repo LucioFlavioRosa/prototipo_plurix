@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfil do Usuário | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      background: #fff;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 72px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav a {
+      color: #222;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color .2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0082e0;
+      border-bottom: 2px solid #0082e0;
+      padding-bottom: 4px;
+    }
+    main {
+      max-width: 900px;
+      margin: 32px auto 0 auto;
+      padding: 24px 16px 48px 16px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+      min-height: 70vh;
+    }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0082e0;
+      margin-bottom: 16px;
+    }
+    .perfil-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .perfil-form, .perfil-historico {
+      flex: 1 1 340px;
+      min-width: 300px;
+      background: #f6f8fa;
+      border-radius: 12px;
+      padding: 24px 20px;
+      box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+    }
+    .perfil-form h2, .perfil-historico h2 {
+      font-size: 1.2rem;
+      color: #0082e0;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+    label {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #222;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+      padding: 8px 12px;
+      border: 1px solid #d5d5d5;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fafbfc;
+      transition: border .2s;
+    }
+    input:focus {
+      border-color: #0082e0;
+      outline: none;
+    }
+    .btn-primary {
+      background: #0082e0;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      margin-right: 8px;
+    }
+    .btn-primary:hover {
+      background: #005fa3;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #0082e0;
+      border: 1px solid #0082e0;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-secondary:hover {
+      background: #eaf6fd;
+      color: #005fa3;
+    }
+    .preferencias {
+      margin-top: 12px;
+      font-size: 1rem;
+    }
+    .preferencias label {
+      font-weight: 400;
+      margin-bottom: 0;
+      margin-right: 12px;
+      color: #222;
+    }
+    .historico-lista {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .historico-lista li {
+      padding: 10px 0 10px 0;
+      border-bottom: 1px solid #e5e5e5;
+      font-size: 0.98rem;
+      color: #444;
+    }
+    .historico-lista li:last-child { border-bottom: none; }
+    .logout-btn {
+      margin-top: 24px;
+      background: #e03a3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .logout-btn:hover {
+      background: #b91d1d;
+    }
+    @media (max-width: 900px) {
+      .perfil-container { flex-direction: column; gap: 18px; }
+      .perfil-form, .perfil-historico { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../plurix.html"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"></a>
+    <nav aria-label="Navegação principal">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload-tabela.html">Upload de Tabelas</a>
+      <a href="workflow-aprovacao.html">Aprovações</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="integracao-erps.html">Integração ERPs</a>
+      <a href="perfil-usuario.html" class="active">Perfil</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Perfil do Usuário</h1>
+    <div class="perfil-container">
+      <form class="perfil-form" id="formPerfil" autocomplete="off">
+        <h2>Dados Pessoais</h2>
+        <div class="form-group">
+          <label for="nome">Nome Completo</label>
+          <input type="text" id="nome" name="nome" value="João da Silva" required>
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" value="joao.silva@plurix.com" required>
+        </div>
+        <div class="form-group">
+          <label for="cargo">Cargo</label>
+          <input type="text" id="cargo" name="cargo" value="Gerente de Compras" disabled>
+        </div>
+        <h2 style="margin-top:28px;">Alterar Senha</h2>
+        <div class="form-group">
+          <label for="senhaAtual">Senha Atual</label>
+          <input type="password" id="senhaAtual" name="senhaAtual" autocomplete="current-password">
+        </div>
+        <div class="form-group">
+          <label for="novaSenha">Nova Senha</label>
+          <input type="password" id="novaSenha" name="novaSenha" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="confirmaSenha">Confirmar Nova Senha</label>
+          <input type="password" id="confirmaSenha" name="confirmaSenha" autocomplete="new-password">
+        </div>
+        <h2 style="margin-top:28px;">Preferências de Notificação</h2>
+        <div class="preferencias">
+          <label><input type="checkbox" name="notif_email" checked> Notificações por e-mail</label>
+          <label><input type="checkbox" name="notif_sms"> Notificações por SMS</label>
+          <label><input type="checkbox" name="notif_push"> Notificações push</label>
+        </div>
+        <div style="margin-top:24px;">
+          <button type="submit" class="btn-primary">Salvar Alterações</button>
+        </div>
+        <button type="button" class="logout-btn" onclick="logout()">Sair</button>
+      </form>
+      <aside class="perfil-historico">
+        <h2>Histórico de Atividades Recentes</h2>
+        <ul class="historico-lista" id="historicoAtividades">
+          <li>10/06/2024 09:12 - Login realizado</li>
+          <li>10/06/2024 08:55 - Submissão de tabela de preços (Nestlé)</li>
+          <li>09/06/2024 17:22 - Aprovação de tabela (Ambev)</li>
+          <li>09/06/2024 16:10 - Exportação de relatório DRE</li>
+          <li>09/06/2024 15:44 - Alteração de senha</li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+  <script>
+    document.getElementById('formPerfil').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Alterações salvas com sucesso (protótipo).');
+    });
+    function logout() {
+      alert('Logout simulado para protótipo.');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

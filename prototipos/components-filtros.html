@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Painel de Filtros</title>
+  <style>
+    :root {
+      --primary: #2e3192;
+      --secondary: #00a9e0;
+      --bg: #f7f8fa;
+      --header-bg: #fff;
+      --text: #222;
+      --border: #e0e2e7;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      font-family: var(--font-main);
+      margin: 0;
+      padding: 40px;
+      color: var(--text);
+      font-size: 16px;
+    }
+    .filtros-container {
+      background: var(--header-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(46,49,146,0.06);
+      padding: 28px 24px 18px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .filtros-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 24px;
+      align-items: flex-end;
+    }
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 180px;
+      flex: 1 1 180px;
+    }
+    .filtro-item label {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .filtro-item input[type="text"],
+    .filtro-item input[type="date"],
+    .filtro-item select {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 15px;
+      background: #fafbfc;
+      transition: border 0.2s;
+    }
+    .filtro-item input:focus,
+    .filtro-item select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .filtro-checkboxes {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .filtro-checkboxes label {
+      font-weight: 400;
+      color: #444;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+    .filtros-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .btn-filtro {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: background 0.2s;
+    }
+    .btn-filtro.reset {
+      background: #f0f0f6;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-filtro:active { background: var(--secondary); }
+    @media (max-width: 700px) {
+      .filtros-container { padding: 10px; }
+      .filtros-form { flex-direction: column; gap: 10px; }
+      .filtro-item { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="filtros-container">
+    <form class="filtros-form" id="formFiltros" autocomplete="off" onsubmit="return false;">
+      <div class="filtro-item">
+        <label for="filtroDataIni">Data Inicial</label>
+        <input type="date" id="filtroDataIni" name="dataIni">
+      </div>
+      <div class="filtro-item">
+        <label for="filtroDataFim">Data Final</label>
+        <input type="date" id="filtroDataFim" name="dataFim">
+      </div>
+      <div class="filtro-item">
+        <label for="filtroBandeira">Bandeira</label>
+        <select id="filtroBandeira" name="bandeira">
+          <option value="">Todas</option>
+          <option value="bandeira1">Bandeira 1</option>
+          <option value="bandeira2">Bandeira 2</option>
+          <option value="bandeira3">Bandeira 3</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtroFornecedor">Fornecedor</label>
+        <select id="filtroFornecedor" name="fornecedor">
+          <option value="">Todos</option>
+          <option value="fornecedorA">Fornecedor A</option>
+          <option value="fornecedorB">Fornecedor B</option>
+          <option value="fornecedorC">Fornecedor C</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtroBusca">Busca</label>
+        <input type="text" id="filtroBusca" name="busca" placeholder="SKU, Produto, etc...">
+      </div>
+      <div class="filtro-item" style="min-width:220px;">
+        <label>Status</label>
+        <div class="filtro-checkboxes">
+          <label><input type="checkbox" name="status" value="Aprovado" checked> Aprovado</label>
+          <label><input type="checkbox" name="status" value="Pendente" checked> Pendente</label>
+          <label><input type="checkbox" name="status" value="Reprovado" checked> Reprovado</label>
+        </div>
+      </div>
+    </form>
+    <div class="filtros-actions">
+      <button class="btn-filtro" id="btnAplicarFiltros">Aplicar Filtros</button>
+      <button class="btn-filtro reset" id="btnResetFiltros" type="button">Limpar</button>
+    </div>
+  </div>
+  <script>
+    // Estado dos filtros
+    let filtros = {
+      dataIni: '',
+      dataFim: '',
+      bandeira: '',
+      fornecedor: '',
+      busca: '',
+      status: ['Aprovado', 'Pendente', 'Reprovado']
+    };
+    function lerFiltros() {
+      const form = document.getElementById('formFiltros');
+      filtros.dataIni = form.dataIni.value;
+      filtros.dataFim = form.dataFim.value;
+      filtros.bandeira = form.bandeira.value;
+      filtros.fornecedor = form.fornecedor.value;
+      filtros.busca = form.busca.value;
+      filtros.status = Array.from(form.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value);
+    }
+    document.getElementById('btnAplicarFiltros').addEventListener('click', function() {
+      lerFiltros();
+      alert('Filtros aplicados:\n' + JSON.stringify(filtros, null, 2));
+      // Aqui pode-se disparar evento customizado para integração com tabela
+    });
+    document.getElementById('btnResetFiltros').addEventListener('click', function() {
+      document.getElementById('formFiltros').reset();
+      // Resetar checkboxes manualmente
+      document.querySelectorAll('input[name="status"]').forEach(cb => cb.checked = true);
+      lerFiltros();
+    });
+    // Integração dinâmica: disparar evento ao alterar qualquer filtro
+    document.getElementById('formFiltros').addEventListener('change', function() {
+      lerFiltros();
+      // Aqui pode-se disparar evento para atualizar tabela em tempo real
+    });
+  </script>
+</body>
+</html>

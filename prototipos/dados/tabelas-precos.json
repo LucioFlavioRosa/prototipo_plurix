@@ -1,0 +1,137 @@
+[
+  {
+    "id": "TP-202406-001",
+    "fornecedor": "Alimentos Brasil Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "SP",
+    "data_submissao": "2024-06-01T09:15:00Z",
+    "status": "Aguardando Aprovação",
+    "aprovador": "Carlos Gerente",
+    "skus": [
+      {"gtin": "7891000000011", "descricao": "Arroz Branco Tipo 1 5kg", "preco_antigo": 22.90, "preco_novo": 23.50, "variacao": 2.62, "ic_nielsen": 85, "ic_objetiva": 88},
+      {"gtin": "7891000000028", "descricao": "Feijão Carioca 1kg", "preco_antigo": 9.80, "preco_novo": 10.20, "variacao": 4.08, "ic_nielsen": 80, "ic_objetiva": 82},
+      {"gtin": "7891000000035", "descricao": "Óleo de Soja 900ml", "preco_antigo": 7.90, "preco_novo": 8.10, "variacao": 2.53, "ic_nielsen": 78, "ic_objetiva": 80},
+      {"gtin": "7891000000042", "descricao": "Açúcar Refinado 1kg", "preco_antigo": 4.50, "preco_novo": 4.60, "variacao": 2.22, "ic_nielsen": 77, "ic_objetiva": 79},
+      {"gtin": "7891000000059", "descricao": "Café Torrado 500g", "preco_antigo": 14.90, "preco_novo": 15.20, "variacao": 2.01, "ic_nielsen": 88, "ic_objetiva": 90}
+      // ...45 SKUs adicionais omitidos por brevidade
+    ]
+  },
+  {
+    "id": "TP-202406-002",
+    "fornecedor": "Distribuidora Central S.A.",
+    "bandeira": "BomPreço",
+    "uf": "RJ",
+    "data_submissao": "2024-06-02T10:30:00Z",
+    "status": "Aprovada",
+    "aprovador": "Fernanda Diretora",
+    "skus": [
+      {"gtin": "7892000000012", "descricao": "Leite Integral 1L", "preco_antigo": 4.20, "preco_novo": 4.40, "variacao": 4.76, "ic_nielsen": 90, "ic_objetiva": 92},
+      {"gtin": "7892000000029", "descricao": "Manteiga 200g", "preco_antigo": 8.50, "preco_novo": 8.80, "variacao": 3.53, "ic_nielsen": 87, "ic_objetiva": 89}
+      // ...48 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-003",
+    "fornecedor": "Bebidas do Sul Ltda.",
+    "bandeira": "Econo",
+    "uf": "RS",
+    "data_submissao": "2024-06-03T11:45:00Z",
+    "status": "Reprovada",
+    "aprovador": "Bruno VP",
+    "skus": [
+      {"gtin": "7893000000013", "descricao": "Refrigerante Cola 2L", "preco_antigo": 6.50, "preco_novo": 6.80, "variacao": 4.62, "ic_nielsen": 75, "ic_objetiva": 77}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-004",
+    "fornecedor": "Produtos Naturais Ltda.",
+    "bandeira": "BomPreço",
+    "uf": "MG",
+    "data_submissao": "2024-06-04T13:00:00Z",
+    "status": "Aguardando Aprovação",
+    "aprovador": "Ana Gerente",
+    "skus": [
+      {"gtin": "7894000000014", "descricao": "Granola 1kg", "preco_antigo": 18.90, "preco_novo": 19.50, "variacao": 3.17, "ic_nielsen": 82, "ic_objetiva": 84}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-005",
+    "fornecedor": "Laticínios União S.A.",
+    "bandeira": "SuperMais",
+    "uf": "PR",
+    "data_submissao": "2024-06-05T14:15:00Z",
+    "status": "Aprovada",
+    "aprovador": "Juliana Diretora",
+    "skus": [
+      {"gtin": "7895000000015", "descricao": "Queijo Mussarela 1kg", "preco_antigo": 39.90, "preco_novo": 41.00, "variacao": 2.75, "ic_nielsen": 89, "ic_objetiva": 91}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-006",
+    "fornecedor": "Doces & Cia Ltda.",
+    "bandeira": "Econo",
+    "uf": "DF",
+    "data_submissao": "2024-06-06T15:30:00Z",
+    "status": "Aguardando Aprovação",
+    "aprovador": "Leonardo Gerente",
+    "skus": [
+      {"gtin": "7896000000016", "descricao": "Bala de Goma 500g", "preco_antigo": 12.50, "preco_novo": 13.00, "variacao": 4.00, "ic_nielsen": 80, "ic_objetiva": 83}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-007",
+    "fornecedor": "Cereais do Campo Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "BA",
+    "data_submissao": "2024-06-07T16:45:00Z",
+    "status": "Aprovada",
+    "aprovador": "Marcos Diretor",
+    "skus": [
+      {"gtin": "7897000000017", "descricao": "Aveia em Flocos 500g", "preco_antigo": 7.20, "preco_novo": 7.50, "variacao": 4.17, "ic_nielsen": 85, "ic_objetiva": 87}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-008",
+    "fornecedor": "Frutas Tropicais S.A.",
+    "bandeira": "BomPreço",
+    "uf": "PE",
+    "data_submissao": "2024-06-08T18:00:00Z",
+    "status": "Reprovada",
+    "aprovador": "Nathalia VP",
+    "skus": [
+      {"gtin": "7898000000018", "descricao": "Banana Prata 1kg", "preco_antigo": 5.90, "preco_novo": 6.10, "variacao": 3.39, "ic_nielsen": 90, "ic_objetiva": 93}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-009",
+    "fornecedor": "Carnes Premium Ltda.",
+    "bandeira": "SuperMais",
+    "uf": "PA",
+    "data_submissao": "2024-06-09T19:15:00Z",
+    "status": "Aguardando Aprovação",
+    "aprovador": "Rafael Gerente",
+    "skus": [
+      {"gtin": "7899000000019", "descricao": "Picanha Bovina 1kg", "preco_antigo": 79.90, "preco_novo": 81.50, "variacao": 2.00, "ic_nielsen": 88, "ic_objetiva": 90}
+      // ...49 SKUs adicionais omitidos
+    ]
+  },
+  {
+    "id": "TP-202406-010",
+    "fornecedor": "Padaria Moderna Ltda.",
+    "bandeira": "Econo",
+    "uf": "RJ",
+    "data_submissao": "2024-06-10T20:30:00Z",
+    "status": "Aprovada",
+    "aprovador": "Patrícia Diretora",
+    "skus": [
+      {"gtin": "7890100000020", "descricao": "Pão Francês 1kg", "preco_antigo": 10.90, "preco_novo": 11.20, "variacao": 2.75, "ic_nielsen": 95, "ic_objetiva": 97}
+      // ...49 SKUs adicionais omitidos
+    ]
+  }
+]

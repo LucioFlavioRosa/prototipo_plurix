@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalhes do SKU | Plurix Plataforma de Preços</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f6f7fb;
+      margin: 0;
+      color: #222;
+    }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .header img {
+      height: 40px;
+      margin-right: 24px;
+    }
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2e3a59;
+      letter-spacing: 1px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px 0 rgba(46,58,89,0.08);
+      padding: 32px 40px 40px 40px;
+    }
+    .sku-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .sku-info {
+      flex: 1;
+    }
+    .sku-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2e3a59;
+      margin-bottom: 8px;
+    }
+    .sku-meta {
+      font-size: 1rem;
+      color: #556;
+      margin-bottom: 4px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e6f3ff;
+      color: #1976d2;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 4px 12px;
+      margin-right: 8px;
+      margin-bottom: 4px;
+    }
+    .sku-prices {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-top: 8px;
+    }
+    .price-block {
+      background: #f6f7fb;
+      border-radius: 8px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+    .price-label {
+      font-size: 0.95rem;
+      color: #888;
+      margin-bottom: 2px;
+    }
+    .price-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1976d2;
+    }
+    .price-variation {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #43a047;
+      margin-left: 12px;
+    }
+    .price-variation.neg {
+      color: #d32f2f;
+    }
+    .sku-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px 32px;
+      margin: 32px 0 24px 0;
+    }
+    .detail-label {
+      font-size: 0.97rem;
+      color: #888;
+      margin-bottom: 2px;
+    }
+    .detail-value {
+      font-size: 1.07rem;
+      font-weight: 600;
+      color: #2e3a59;
+    }
+    .chart-container {
+      background: #f6f7fb;
+      border-radius: 10px;
+      padding: 18px 24px 8px 24px;
+      margin-bottom: 24px;
+    }
+    .chart-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1976d2;
+      margin-bottom: 8px;
+    }
+    .back-btn {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 18px;
+    }
+    .back-btn:hover {
+      background: #125ca1;
+    }
+    @media (max-width: 900px) {
+      .container { padding: 18px 8px; }
+      .sku-details-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 8px 2px; }
+      .sku-details-grid { grid-template-columns: 1fr; }
+      .sku-header { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="../index.html" aria-label="Ir para o início"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.webp" alt="Logo Plurix"></a>
+    <span class="header-title">Plataforma de Preços - Detalhes do SKU</span>
+  </header>
+  <main class="container">
+    <button class="back-btn" onclick="window.history.back()">&larr; Voltar</button>
+    <section class="sku-header">
+      <div class="sku-info">
+        <div class="sku-title">Arroz Branco Tipo 1 5kg</div>
+        <div class="sku-meta">GTIN: <b>7891234567890</b></div>
+        <div class="sku-meta">SKU: <b>ARZ-00123</b></div>
+        <div class="badge">Fornecedor: Cerealista Brasil</div>
+        <div class="badge">Bandeira: SuperMax</div>
+        <div class="badge">UF: SP</div>
+        <div class="sku-prices">
+          <div class="price-block">
+            <div class="price-label">Preço Atual</div>
+            <div class="price-value">R$ 19,90</div>
+          </div>
+          <div class="price-block">
+            <div class="price-label">Novo Preço</div>
+            <div class="price-value">R$ 21,50</div>
+          </div>
+          <span class="price-variation">+8,04%</span>
+        </div>
+      </div>
+    </section>
+    <div class="sku-details-grid">
+      <div>
+        <div class="detail-label">Embalagem</div>
+        <div class="detail-value">Saco 5kg</div>
+      </div>
+      <div>
+        <div class="detail-label">IC Nielsen</div>
+        <div class="detail-value">89</div>
+      </div>
+      <div>
+        <div class="detail-label">IC Objetiva</div>
+        <div class="detail-value">92</div>
+      </div>
+      <div>
+        <div class="detail-label">Peso nas Vendas do Fornecedor</div>
+        <div class="detail-value">4,2%</div>
+      </div>
+      <div>
+        <div class="detail-label">Impostos</div>
+        <div class="detail-value">R$ 2,10</div>
+      </div>
+      <div>
+        <div class="detail-label">Custos</div>
+        <div class="detail-value">R$ 16,00</div>
+      </div>
+      <div>
+        <div class="detail-label">Data Última Atualização</div>
+        <div class="detail-value">12/06/2024</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">Histórico de Preços (últimos 6 meses)</div>
+      <canvas id="priceHistoryChart" height="120" aria-label="Gráfico de histórico de preços"></canvas>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    const ctx = document.getElementById('priceHistoryChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        datasets: [{
+          label: 'Preço (R$)',
+          data: [18.90, 18.90, 19.20, 19.90, 19.90, 21.50],
+          borderColor: '#1976d2',
+          backgroundColor: 'rgba(25,118,210,0.08)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: '#1976d2',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: { color: '#1976d2', font: { size: 13 } }
+          },
+          x: {
+            ticks: { color: '#888', font: { size: 13 } }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Modal Reutilizável | Plurix</title>
+  <style>
+    :root {
+      --primary: #0055b8;
+      --accent: #00b8a9;
+      --danger: #e74c3c;
+      --text: #222;
+      --text-light: #fff;
+      --border: #e0e0e0;
+      --radius: 6px;
+      --font: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      --overlay: rgba(0, 24, 64, 0.35);
+    }
+    body {
+      font-family: var(--font);
+      background: #f5f7fa;
+      color: var(--text);
+      margin: 0;
+      padding: 32px 0;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      min-width: 320px;
+      max-width: 96vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      transition: opacity .25s, transform .25s;
+    }
+    .modal-overlay.active .modal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .modal.size-sm { width: 340px; }
+    .modal.size-md { width: 520px; }
+    .modal.size-lg { width: 800px; }
+    .modal.size-xl { width: 1100px; }
+    .modal-header {
+      padding: 18px 28px 12px 28px;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.18rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f5f7fa;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .modal-title {
+      margin: 0;
+      font-size: 1.18rem;
+      font-weight: 600;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: #888;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+    .modal-close:hover {
+      background: #e0e0e0;
+      color: var(--danger);
+    }
+    .modal-body {
+      padding: 22px 28px;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      font-size: 1rem;
+    }
+    .modal-footer {
+      padding: 14px 28px;
+      border-top: 1px solid var(--border);
+      background: #f5f7fa;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .modal-btn {
+      padding: 8px 20px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .modal-btn.primary {
+      background: var(--primary);
+      color: var(--text-light);
+    }
+    .modal-btn.primary:hover {
+      background: #003a7d;
+    }
+    .modal-btn.secondary {
+      background: #e0e0e0;
+      color: var(--text);
+    }
+    .modal-btn.secondary:hover {
+      background: #c9d6e3;
+    }
+    .modal-btn.danger {
+      background: var(--danger);
+      color: var(--text-light);
+    }
+    .modal-btn.danger:hover {
+      background: #c0392b;
+    }
+    @media (max-width: 600px) {
+      .modal { min-width: 0; width: 98vw !important; }
+      .modal-header, .modal-body, .modal-footer { padding-left: 10px; padding-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h2 style="margin-bottom:24px;">Demonstração do Componente Modal Reutilizável</h2>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <button class="modal-btn primary" onclick="openModal('sm')">Abrir Modal Pequeno</button>
+      <button class="modal-btn primary" onclick="openModal('md')">Abrir Modal Médio</button>
+      <button class="modal-btn primary" onclick="openModal('lg')">Abrir Modal Grande</button>
+      <button class="modal-btn primary" onclick="openModal('xl')">Abrir Modal Extra Grande</button>
+    </div>
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" aria-modal="true" role="dialog" tabindex="-1">
+      <div class="modal size-md" id="modal">
+        <div class="modal-header">
+          <span class="modal-title" id="modalTitle">Título do Modal</span>
+          <button class="modal-close" aria-label="Fechar modal" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          Conteúdo do modal.
+        </div>
+        <div class="modal-footer">
+          <button class="modal-btn secondary" onclick="closeModal()">Cancelar</button>
+          <button class="modal-btn primary">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Modal API
+    function openModal(size) {
+      const overlay = document.getElementById('modalOverlay');
+      const modal = document.getElementById('modal');
+      modal.className = 'modal size-' + size;
+      document.getElementById('modalTitle').textContent = 'Exemplo Modal (' + size.toUpperCase() + ')';
+      document.getElementById('modalBody').innerHTML =
+        '<p>Este é um exemplo de modal reutilizável com tamanho <b>' + size.toUpperCase() + '</b>.\nVocê pode customizar o conteúdo, botões e ações conforme necessário.</p>';
+      overlay.classList.add('active');
+      setTimeout(()=>{modal.focus && modal.focus();}, 100);
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+    // Fechar ao clicar fora
+    document.getElementById('modalOverlay').addEventListener('mousedown', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>

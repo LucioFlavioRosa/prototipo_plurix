@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa do Site - Plataforma Plurix</title>
+  <style>
+    :root {
+      --primary: #2e3192;
+      --secondary: #00a9e0;
+      --bg: #f7f8fa;
+      --header-bg: #fff;
+      --text: #222;
+      --border: #e0e2e7;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      font-family: var(--font-main);
+      margin: 0;
+      padding: 40px;
+      color: var(--text);
+      font-size: 16px;
+    }
+    .sitemap-container {
+      background: var(--header-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(46,49,146,0.06);
+      padding: 32px 24px 24px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 2.1rem;
+      margin-bottom: 18px;
+    }
+    .sitemap-diagrama {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .sitemap-nivel {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      margin-left: 0;
+    }
+    .sitemap-pagina {
+      background: var(--bg);
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 14px 22px;
+      min-width: 180px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+      text-decoration: none;
+      box-shadow: 0 1px 4px rgba(46,49,146,0.04);
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 6px;
+    }
+    .sitemap-pagina:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .sitemap-seta {
+      font-size: 2.2rem;
+      color: var(--secondary);
+      margin: 0 12px;
+      align-self: center;
+    }
+    .sitemap-legenda {
+      margin-top: 18px;
+      font-size: 1rem;
+      color: #555;
+    }
+    .sitemap-casos {
+      margin-top: 26px;
+    }
+    .sitemap-casos h2 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      margin-top: 18px;
+    }
+    .sitemap-casos ul {
+      margin: 0 0 12px 18px;
+      padding: 0;
+    }
+    .sitemap-casos li {
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+    @media (max-width: 800px) {
+      .sitemap-diagrama { gap: 8px; }
+      .sitemap-nivel { flex-direction: column; gap: 8px; }
+      .sitemap-pagina { min-width: 120px; padding: 8px 8px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sitemap-container">
+    <h1>Mapa do Site - Plataforma Plurix</h1>
+    <div class="sitemap-diagrama">
+      <div class="sitemap-nivel">
+        <a href="../login.html" class="sitemap-pagina">Login</a>
+        <span class="sitemap-seta">→</span>
+        <a href="../dashboard.html" class="sitemap-pagina">Dashboard</a>
+      </div>
+      <div class="sitemap-nivel">
+        <a href="../upload-tabela.html" class="sitemap-pagina">Upload Tabela Preços</a>
+        <a href="../ajuste-manual.html" class="sitemap-pagina">Ajuste Manual Produtos</a>
+        <a href="../painel-aprovacoes.html" class="sitemap-pagina">Painel Aprovações</a>
+        <a href="../painel-analise.html" class="sitemap-pagina">Painel Análise Comercial</a>
+        <a href="../gestao-usuarios.html" class="sitemap-pagina">Gestão Usuários</a>
+        <a href="../logs-auditoria.html" class="sitemap-pagina">Logs & Auditoria</a>
+        <a href="../integracao-erps.html" class="sitemap-pagina">Integração ERPs</a>
+        <a href="../fornecedores.html" class="sitemap-pagina">Gestão Fornecedores</a>
+        <a href="../components-tabela.html" class="sitemap-pagina">Componente Tabela</a>
+        <a href="../components-filtros.html" class="sitemap-pagina">Componente Filtros</a>
+      </div>
+    </div>
+    <div class="sitemap-legenda">
+      <b>Perfis de Usuário:</b> Fornecedor, Comprador, Gestor, Admin.<br>
+      <b>Fluxos:</b> O acesso começa pelo Login. Fornecedor pode fazer upload de tabelas e acompanhar status. Comprador e Gestor acessam dashboards, aprovam/reprovam tabelas e analisam indicadores. Admin gerencia usuários, permissões, logs e integrações.
+    </div>
+    <div class="sitemap-casos">
+      <h2>Principais Jornadas de Usuário</h2>
+      <ul>
+        <li><b>Fornecedor:</b> Login → Upload Tabela → Acompanhar Status → Ajuste Manual (se necessário)</li>
+        <li><b>Comprador/Gestor:</b> Login → Dashboard → Painel Aprovações → Análise Comercial → Aprovação/Reprovação</li>
+        <li><b>Admin:</b> Login → Gestão Usuários → Logs & Auditoria → Integração ERPs</li>
+      </ul>
+      <h2>Casos de Uso</h2>
+      <ul>
+        <li>Upload de tabela de preços com validação automática</li>
+        <li>Ajuste manual de produtos individuais</li>
+        <li>Visualização de indicadores comerciais e análise de impacto</li>
+        <li>Aprovação multinível de tabelas</li>
+        <li>Gestão de usuários, permissões e logs</li>
+        <li>Integração automática com ERPs das bandeiras</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

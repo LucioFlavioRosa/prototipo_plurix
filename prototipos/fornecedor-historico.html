@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Submissões | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .classic-section {
+      background: #fff;
+      margin: 40px auto 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+      max-width: 1100px;
+      padding: 32px 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .section-header img {
+      height: 40px;
+      width: 40px;
+    }
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0057b8;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+    .filtros {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .filtros label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 8px;
+    }
+    .filtros input, .filtros select {
+      padding: 7px 12px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fafbfc;
+      color: #222;
+      margin-right: 16px;
+    }
+    .tabela-responsiva {
+      overflow-x: auto;
+      border-radius: 12px;
+      background: #fafbfc;
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.04);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    th {
+      background: #e5eaf0;
+      color: #0057b8;
+      font-weight: 700;
+      border-bottom: 2px solid #bfc9d1;
+    }
+    tr {
+      border-bottom: 1px solid #e5e5e5;
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+    td.status-aprovado {
+      color: #1ca05a;
+      font-weight: 700;
+    }
+    td.status-reprovado {
+      color: #d32f2f;
+      font-weight: 700;
+    }
+    td.status-pendente {
+      color: #f9a825;
+      font-weight: 700;
+    }
+    .acoes-btn {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-table {
+      background: #0057b8;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 18px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      box-shadow: 0 1px 4px 0 rgba(0,87,184,0.07);
+    }
+    .btn-table:hover {
+      background: #008ed6;
+    }
+    .paginacao {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .paginacao button {
+      background: #f3f5f7;
+      color: #0057b8;
+      border: 1px solid #bfc9d1;
+      border-radius: 5px;
+      padding: 6px 14px;
+      font-size: 0.97rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .paginacao button.active, .paginacao button:focus {
+      background: #0057b8;
+      color: #fff;
+      outline: none;
+    }
+    @media (max-width: 1200px) {
+      .classic-section {
+        padding: 18px 4vw 24px 4vw;
+        max-width: 99vw;
+      }
+      table {
+        min-width: 700px;
+      }
+    }
+    @media (max-width: 700px) {
+      .filtros {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      table {
+        min-width: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="classic-section">
+    <div class="section-header">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_80,h_80,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <h2>Histórico de Submissões</h2>
+    </div>
+    <div class="filtros">
+      <label for="filtro-data">Período:</label>
+      <input type="date" id="data-inicio" aria-label="Data início">
+      <span style="margin-right:8px;">a</span>
+      <input type="date" id="data-fim" aria-label="Data fim">
+      <label for="filtro-status">Status:</label>
+      <select id="filtro-status" aria-label="Status">
+        <option value="">Todos</option>
+        <option value="aprovado">Aprovado</option>
+        <option value="reprovado">Reprovado</option>
+        <option value="pendente">Pendente</option>
+      </select>
+      <button class="btn-table" id="btn-filtrar" type="button">Filtrar</button>
+    </div>
+    <div class="tabela-responsiva">
+      <table id="tabela-historico" aria-label="Histórico de submissões">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Bandeira</th>
+            <th>UF</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Conteúdo dinâmico JS -->
+        </tbody>
+      </table>
+    </div>
+    <div class="paginacao" id="paginacao"></div>
+  </div>
+  <script>
+    // Dados simulados
+    const historico = [
+      {data:'2024-06-01', status:'aprovado', bandeira:'SuperSul', uf:'RS'},
+      {data:'2024-05-28', status:'reprovado', bandeira:'SuperSul', uf:'RS'},
+      {data:'2024-05-20', status:'pendente', bandeira:'SuperNorte', uf:'AM'},
+      {data:'2024-05-15', status:'aprovado', bandeira:'SuperNorte', uf:'AM'},
+      {data:'2024-05-10', status:'aprovado', bandeira:'SuperOeste', uf:'MT'},
+      {data:'2024-04-30', status:'pendente', bandeira:'SuperLeste', uf:'MG'},
+      {data:'2024-04-22', status:'reprovado', bandeira:'SuperLeste', uf:'MG'},
+      {data:'2024-04-15', status:'aprovado', bandeira:'SuperSul', uf:'RS'},
+      {data:'2024-04-01', status:'aprovado', bandeira:'SuperNorte', uf:'AM'},
+      {data:'2024-03-28', status:'pendente', bandeira:'SuperOeste', uf:'MT'},
+      {data:'2024-03-20', status:'aprovado', bandeira:'SuperLeste', uf:'MG'},
+      {data:'2024-03-10', status:'aprovado', bandeira:'SuperSul', uf:'RS'}
+    ];
+    const linhasPorPagina = 6;
+    let paginaAtual = 1;
+    let historicoFiltrado = historico;
+
+    function renderTabela() {
+      const tbody = document.querySelector('#tabela-historico tbody');
+      tbody.innerHTML = '';
+      const inicio = (paginaAtual-1)*linhasPorPagina;
+      const fim = inicio + linhasPorPagina;
+      historicoFiltrado.slice(inicio, fim).forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.data.split('-').reverse().join('/')}</td>
+          <td class="status-${item.status}">${item.status.charAt(0).toUpperCase()+item.status.slice(1)}</td>
+          <td>${item.bandeira}</td>
+          <td>${item.uf}</td>
+          <td><div class="acoes-btn">
+            <button class="btn-table" aria-label="Visualizar">Visualizar</button>
+            <button class="btn-table" aria-label="Baixar">Baixar</button>
+          </div></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      renderPaginacao();
+    }
+    function renderPaginacao() {
+      const pagDiv = document.getElementById('paginacao');
+      pagDiv.innerHTML = '';
+      const totalPag = Math.ceil(historicoFiltrado.length/linhasPorPagina);
+      for(let i=1;i<=totalPag;i++){
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.className = (i===paginaAtual)?'active':'';
+        btn.onclick = ()=>{paginaAtual=i;renderTabela();};
+        pagDiv.appendChild(btn);
+      }
+    }
+    document.getElementById('btn-filtrar').onclick = function() {
+      const dataIni = document.getElementById('data-inicio').value;
+      const dataFim = document.getElementById('data-fim').value;
+      const status = document.getElementById('filtro-status').value;
+      historicoFiltrado = historico.filter(item => {
+        let ok = true;
+        if (dataIni && item.data < dataIni) ok = false;
+        if (dataFim && item.data > dataFim) ok = false;
+        if (status && item.status !== status) ok = false;
+        return ok;
+      });
+      paginaAtual = 1;
+      renderTabela();
+    };
+    renderTabela();
+  </script>
+</body>
+</html>

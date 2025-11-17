@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios e Exportações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      background: #fff;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 72px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav a {
+      color: #222;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color .2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0082e0;
+      border-bottom: 2px solid #0082e0;
+      padding-bottom: 4px;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto 0 auto;
+      padding: 24px 16px 48px 16px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+      min-height: 70vh;
+    }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0082e0;
+      margin-bottom: 16px;
+    }
+    .report-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 32px;
+      margin-bottom: 32px;
+      align-items: flex-end;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 180px;
+    }
+    label {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #222;
+    }
+    select, input[type="date"] {
+      padding: 8px 12px;
+      border: 1px solid #d5d5d5;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fafbfc;
+      transition: border .2s;
+    }
+    select:focus, input[type="date"]:focus {
+      border-color: #0082e0;
+      outline: none;
+    }
+    .btn-primary {
+      background: #0082e0;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      margin-right: 8px;
+    }
+    .btn-primary:hover {
+      background: #005fa3;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #0082e0;
+      border: 1px solid #0082e0;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-secondary:hover {
+      background: #eaf6fd;
+      color: #005fa3;
+    }
+    .export-options {
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+    }
+    .report-preview {
+      margin-top: 32px;
+      background: #f6f8fa;
+      border-radius: 10px;
+      padding: 24px 16px;
+      box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+    }
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid #e5e5e5;
+      text-align: left;
+      font-size: 1rem;
+    }
+    th {
+      background: #f0f7fa;
+      color: #0082e0;
+      font-weight: 700;
+    }
+    tr:nth-child(even) td {
+      background: #f9fbfc;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.95em;
+      font-weight: 600;
+      background: #eaf6fd;
+      color: #0082e0;
+    }
+    .status-badge.aprovado {
+      background: #d2f5e6;
+      color: #1db67c;
+    }
+    .status-badge.reprovado {
+      background: #ffe3e3;
+      color: #e03a3a;
+    }
+    @media (max-width: 800px) {
+      main { padding: 8px 2vw; }
+      .report-filters { gap: 12px 0; }
+      .form-group { min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../plurix.html"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"></a>
+    <nav aria-label="Navegação principal">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload-tabela.html">Upload de Tabelas</a>
+      <a href="workflow-aprovacao.html">Aprovações</a>
+      <a href="relatorios.html" class="active">Relatórios</a>
+      <a href="perfil-usuario.html">Perfil</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Relatórios e Exportações</h1>
+    <form class="report-filters" id="reportForm" autocomplete="off">
+      <div class="form-group">
+        <label for="tipoRelatorio">Tipo de Relatório</label>
+        <select id="tipoRelatorio" name="tipoRelatorio" required>
+          <option value="variacao">Variação de Preços</option>
+          <option value="impacto">Impacto DRE</option>
+          <option value="aprovacoes">Aprovações por Período</option>
+          <option value="performance">Performance de Fornecedores</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="periodoInicio">Período (Início)</label>
+        <input type="date" id="periodoInicio" name="periodoInicio" required>
+      </div>
+      <div class="form-group">
+        <label for="periodoFim">Período (Fim)</label>
+        <input type="date" id="periodoFim" name="periodoFim" required>
+      </div>
+      <div class="form-group">
+        <label for="bandeira">Bandeira</label>
+        <select id="bandeira" name="bandeira">
+          <option value="todas">Todas</option>
+          <option value="supermax">Supermax</option>
+          <option value="hiperplus">Hiperplus</option>
+          <option value="mercadomais">MercadoMais</option>
+          <option value="atacadao">Atacadão</option>
+          <option value="express">Express</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fornecedor">Fornecedor</label>
+        <select id="fornecedor" name="fornecedor">
+          <option value="todos">Todos</option>
+          <option value="nestle">Nestlé</option>
+          <option value="unilever">Unilever</option>
+          <option value="ambev">Ambev</option>
+          <option value="jbs">JBS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn-primary">Gerar Relatório</button>
+      </div>
+    </form>
+    <div class="export-options" style="display:none" id="exportOptions">
+      <button class="btn-secondary" onclick="exportReport('pdf')">Exportar PDF</button>
+      <button class="btn-secondary" onclick="exportReport('excel')">Exportar Excel</button>
+      <button class="btn-secondary" onclick="exportReport('csv')">Exportar CSV</button>
+    </div>
+    <section class="report-preview" id="reportPreview" aria-live="polite" style="display:none">
+      <h2 style="margin-top:0;font-size:1.3rem;color:#0082e0">Prévia do Relatório</h2>
+      <div id="previewTable"></div>
+    </section>
+  </main>
+  <script>
+    // Exemplo de dados para cada tipo de relatório
+    const exemplos = {
+      variacao: {
+        cabecalho: ['SKU', 'Produto', 'Fornecedor', 'Preço Antigo', 'Preço Novo', 'Variação (%)', 'Status'],
+        linhas: [
+          ['7891000055128', 'Leite Integral 1L', 'Nestlé', 'R$ 4,99', 'R$ 5,29', '+6,0%', '<span class="status-badge aprovado">Aprovado</span>'],
+          ['7891910000197', 'Café Torrado 500g', 'Melitta', 'R$ 12,50', 'R$ 12,10', '-3,2%', '<span class="status-badge reprovado">Reprovado</span>'],
+          ['7894900700103', 'Arroz Branco 5kg', 'Camil', 'R$ 22,90', 'R$ 23,90', '+4,4%', '<span class="status-badge aprovado">Aprovado</span>']
+        ]
+      },
+      impacto: {
+        cabecalho: ['Fornecedor', 'Bandeira', 'Total SKUs', 'Impacto DRE (R$)', 'Impacto (%)', 'Data'],
+        linhas: [
+          ['Nestlé', 'Supermax', '120', '+R$ 12.500', '+1,2%', '2024-06-10'],
+          ['Unilever', 'Hiperplus', '85', '-R$ 3.200', '-0,5%', '2024-06-09'],
+          ['Ambev', 'Atacadão', '65', '+R$ 7.800', '+0,8%', '2024-06-08']
+        ]
+      },
+      aprovacoes: {
+        cabecalho: ['Data', 'Fornecedor', 'Bandeira', 'Aprovador', 'Status', 'Justificativa'],
+        linhas: [
+          ['2024-06-10', 'Nestlé', 'Supermax', 'Maria Souza', '<span class="status-badge aprovado">Aprovado</span>', 'OK'],
+          ['2024-06-09', 'Unilever', 'Hiperplus', 'João Lima', '<span class="status-badge reprovado">Reprovado</span>', 'Variação acima do limite'],
+          ['2024-06-08', 'Ambev', 'Atacadão', 'Carlos Dias', '<span class="status-badge aprovado">Aprovado</span>', '']
+        ]
+      },
+      performance: {
+        cabecalho: ['Fornecedor', 'Pontualidade (%)', 'Qualidade Dados', 'Tabelas Submetidas', 'Aprovações (%)', 'Última Atualização'],
+        linhas: [
+          ['Nestlé', '98%', 'Ótima', '12', '92%', '2024-06-10'],
+          ['Unilever', '89%', 'Boa', '9', '78%', '2024-06-09'],
+          ['Ambev', '95%', 'Ótima', '10', '88%', '2024-06-08']
+        ]
+      }
+    };
+    document.getElementById('reportForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const tipo = document.getElementById('tipoRelatorio').value;
+      const preview = document.getElementById('previewTable');
+      const data = exemplos[tipo];
+      let html = '<table aria-label="Prévia do relatório">';
+      html += '<thead><tr>' + data.cabecalho.map(h=>`<th>${h}</th>`).join('') + '</tr></thead>';
+      html += '<tbody>' + data.linhas.map(l=>'<tr>' + l.map(v=>`<td>${v}</td>`).join('') + '</tr>').join('') + '</tbody>';
+      html += '</table>';
+      preview.innerHTML = html;
+      document.getElementById('reportPreview').style.display = '';
+      document.getElementById('exportOptions').style.display = 'flex';
+    });
+    function exportReport(tipo) {
+      alert('Função de exportação ('+tipo+') simulada para protótipo.');
+    }
+  </script>
+</body>
+</html>

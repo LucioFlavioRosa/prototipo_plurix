@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload de Tabela de Preços | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; margin: 0; }
+    .container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+    h1 { color: #004aad; font-size: 2rem; margin-bottom: 24px; }
+    form label { display: block; margin-bottom: 8px; font-weight: bold; color: #222; }
+    form input[type="file"] { display: block; margin-bottom: 12px; }
+    .checkbox-group { margin-bottom: 16px; }
+    .checkbox-group label { font-weight: normal; margin-right: 16px; }
+    .error-msg { color: #c00; font-size: 0.95em; margin: 4px 0 12px 0; }
+    .success-msg { color: #0a0; font-size: 1em; margin: 12px 0; }
+    button[type="submit"] {
+      background: #004aad;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    button[type="submit"]:disabled { background: #b3c7e6; cursor: not-allowed; }
+    .template-link { display: block; margin-bottom: 16px; color: #004aad; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload de Tabela de Preços</h1>
+    <a class="template-link" href="template-tabela.xlsx" download>Baixar template padrão (.xlsx)</a>
+    <form id="uploadForm" novalidate>
+      <label for="arquivo">Arquivo (.xlsx ou .csv):</label>
+      <input type="file" id="arquivo" name="arquivo" accept=".xlsx,.csv" required>
+      <div id="arquivoError" class="error-msg" style="display:none"></div>
+
+      <label>Coligadas/UF:</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="coligadas" value="SP"> SP</label>
+        <label><input type="checkbox" name="coligadas" value="RJ"> RJ</label>
+        <label><input type="checkbox" name="coligadas" value="MG"> MG</label>
+        <label><input type="checkbox" name="coligadas" value="RS"> RS</label>
+        <label><input type="checkbox" name="coligadas" value="BA"> BA</label>
+      </div>
+      <div id="coligadasError" class="error-msg" style="display:none"></div>
+      <button type="submit" id="submitBtn" disabled>Enviar</button>
+      <div id="formSuccess" class="success-msg" style="display:none"></div>
+    </form>
+  </div>
+  <script>
+    // Validação de formulário
+    const form = document.getElementById('uploadForm');
+    const arquivoInput = document.getElementById('arquivo');
+    const coligadasInputs = document.querySelectorAll('input[name="coligadas"]');
+    const submitBtn = document.getElementById('submitBtn');
+    const arquivoError = document.getElementById('arquivoError');
+    const coligadasError = document.getElementById('coligadasError');
+    const formSuccess = document.getElementById('formSuccess');
+
+    function validarArquivo() {
+      const file = arquivoInput.files[0];
+      if (!file) {
+        arquivoError.textContent = 'Selecione um arquivo (.xlsx ou .csv).';
+        arquivoError.style.display = 'block';
+        return false;
+      }
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!["xlsx", "csv"].includes(ext)) {
+        arquivoError.textContent = 'Formato inválido. Apenas .xlsx ou .csv são aceitos.';
+        arquivoError.style.display = 'block';
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) { // 5MB
+        arquivoError.textContent = 'Arquivo excede o tamanho máximo de 5MB.';
+        arquivoError.style.display = 'block';
+        return false;
+      }
+      arquivoError.style.display = 'none';
+      return true;
+    }
+
+    function validarColigadas() {
+      const checked = Array.from(coligadasInputs).some(i => i.checked);
+      if (!checked) {
+        coligadasError.textContent = 'Selecione pelo menos uma coligada/UF.';
+        coligadasError.style.display = 'block';
+        return false;
+      }
+      coligadasError.style.display = 'none';
+      return true;
+    }
+
+    function validarFormulario() {
+      const v1 = validarArquivo();
+      const v2 = validarColigadas();
+      submitBtn.disabled = !(v1 && v2);
+    }
+
+    arquivoInput.addEventListener('change', validarFormulario);
+    coligadasInputs.forEach(i => i.addEventListener('change', validarFormulario));
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validarArquivo() && validarColigadas()) {
+        formSuccess.textContent = 'Tabela enviada com sucesso!';
+        formSuccess.style.display = 'block';
+        setTimeout(() => { formSuccess.style.display = 'none'; form.reset(); submitBtn.disabled = true; }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

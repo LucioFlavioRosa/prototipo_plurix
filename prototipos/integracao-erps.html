@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Integração com ERPs | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      background: #fff;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 72px;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav a {
+      color: #222;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color .2s;
+    }
+    nav a.active, nav a:hover {
+      color: #0082e0;
+      border-bottom: 2px solid #0082e0;
+      padding-bottom: 4px;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto 0 auto;
+      padding: 24px 16px 48px 16px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+      min-height: 70vh;
+    }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0082e0;
+      margin-bottom: 16px;
+    }
+    .erp-status-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #f6f8fa;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+      padding: 20px 28px;
+      min-width: 220px;
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border-left: 6px solid #0082e0;
+      position: relative;
+    }
+    .card .bandeira {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0082e0;
+      margin-bottom: 4px;
+    }
+    .card .erp {
+      font-size: 0.97rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .card .status {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .ok { background: #1db67c; }
+    .erro { background: #e03a3a; }
+    .pendente { background: #ffb300; }
+    .card .ultima {
+      font-size: 0.95rem;
+      color: #888;
+    }
+    .card .retry-btn {
+      margin-top: 10px;
+      background: #fff;
+      color: #0082e0;
+      border: 1px solid #0082e0;
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .card .retry-btn:hover {
+      background: #eaf6fd;
+      color: #005fa3;
+    }
+    .sync-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fff;
+    }
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid #e5e5e5;
+      text-align: left;
+      font-size: 1rem;
+    }
+    th {
+      background: #f0f7fa;
+      color: #0082e0;
+      font-weight: 700;
+    }
+    tr:nth-child(even) td {
+      background: #f9fbfc;
+    }
+    .erro-msg {
+      color: #e03a3a;
+      font-weight: 600;
+      margin-top: 6px;
+      font-size: 0.98rem;
+    }
+    @media (max-width: 900px) {
+      .erp-status-cards { flex-direction: column; gap: 14px; }
+      .card { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../plurix.html"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo"></a>
+    <nav aria-label="Navegação principal">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload-tabela.html">Upload de Tabelas</a>
+      <a href="workflow-aprovacao.html">Aprovações</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="integracao-erps.html" class="active">Integração ERPs</a>
+      <a href="perfil-usuario.html">Perfil</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Painel de Integração com ERPs</h1>
+    <section class="erp-status-cards" id="erpCards">
+      <!-- Cards de status por bandeira -->
+    </section>
+    <section>
+      <h2 style="font-size:1.3rem;color:#0082e0;margin-top:36px;">Histórico de Sincronizações</h2>
+      <table class="sync-table" aria-label="Histórico de sincronizações">
+        <thead>
+          <tr>
+            <th>Bandeira</th>
+            <th>ERP</th>
+            <th>Data/Hora</th>
+            <th>Status</th>
+            <th>Registros Processados</th>
+            <th>Detalhes</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="syncTableBody">
+          <!-- Linhas dinâmicas -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+    // Dados de exemplo para cards e tabela
+    const bandeiras = [
+      { nome: 'Supermax', erp: 'Consinco', status: 'ok', ultima: '2024-06-10 08:32', erro: '' },
+      { nome: 'Hiperplus', erp: 'Flex', status: 'erro', ultima: '2024-06-10 07:58', erro: 'Timeout na integração.' },
+      { nome: 'MercadoMais', erp: 'Consinco', status: 'ok', ultima: '2024-06-09 18:40', erro: '' },
+      { nome: 'Atacadão', erp: 'Flex', status: 'pendente', ultima: '2024-06-10 09:12', erro: '' },
+      { nome: 'Express', erp: 'Consinco', status: 'ok', ultima: '2024-06-10 06:55', erro: '' },
+    ];
+    const syncs = [
+      { bandeira: 'Supermax', erp: 'Consinco', data: '2024-06-10 08:32', status: 'ok', registros: 120, detalhes: 'Sucesso', erro: '' },
+      { bandeira: 'Hiperplus', erp: 'Flex', data: '2024-06-10 07:58', status: 'erro', registros: 0, detalhes: 'Timeout', erro: 'Timeout na integração.' },
+      { bandeira: 'MercadoMais', erp: 'Consinco', data: '2024-06-09 18:40', status: 'ok', registros: 98, detalhes: 'Sucesso', erro: '' },
+      { bandeira: 'Atacadão', erp: 'Flex', data: '2024-06-10 09:12', status: 'pendente', registros: 0, detalhes: 'Aguardando resposta', erro: '' },
+      { bandeira: 'Express', erp: 'Consinco', data: '2024-06-10 06:55', status: 'ok', registros: 87, detalhes: 'Sucesso', erro: '' },
+    ];
+    function statusDot(st) {
+      if(st==='ok') return '<span class="status-dot ok" aria-label="Sincronizado"></span>Sincronizado';
+      if(st==='erro') return '<span class="status-dot erro" aria-label="Erro"></span>Erro';
+      return '<span class="status-dot pendente" aria-label="Pendente"></span>Pendente';
+    }
+    function retryBtn(idx) {
+      return `<button class="retry-btn" onclick="retrySync(${idx})">Retry</button>`;
+    }
+    // Render cards
+    document.getElementById('erpCards').innerHTML = bandeiras.map((b, i) => `
+      <div class="card">
+        <span class="bandeira">${b.nome}</span>
+        <span class="erp">ERP: ${b.erp}</span>
+        <span class="status">${statusDot(b.status)}</span>
+        <span class="ultima">Última: ${b.ultima}</span>
+        ${b.status==='erro' ? `<span class="erro-msg">${b.erro}</span>` : ''}
+        ${(b.status==='erro'||b.status==='pendente') ? retryBtn(i) : ''}
+      </div>
+    `).join('');
+    // Render tabela
+    document.getElementById('syncTableBody').innerHTML = syncs.map((s, i) => `
+      <tr>
+        <td>${s.bandeira}</td>
+        <td>${s.erp}</td>
+        <td>${s.data}</td>
+        <td>${statusDot(s.status)}</td>
+        <td>${s.registros}</td>
+        <td>${s.detalhes}${s.erro ? `<br><span class='erro-msg'>${s.erro}</span>` : ''}</td>
+        <td>${(s.status==='erro'||s.status==='pendente') ? retryBtn(i) : ''}</td>
+      </tr>
+    `).join('');
+    window.retrySync = function(idx) {
+      alert('Ação de retry simulada para protótipo (bandeira: '+bandeiras[idx].nome+').');
+    }
+  </script>
+</body>
+</html>

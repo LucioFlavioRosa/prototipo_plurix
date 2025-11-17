@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão de Fornecedores - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --primary: #1b2e59;
+      --secondary: #f7b731;
+      --bg: #f5f6fa;
+      --white: #fff;
+      --gray: #e4e7ed;
+      --text: #222;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --info: #2980b9;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--bg); font-family: var(--font-main); font-size: 16px; color: var(--text); height: 100%; min-height: 100vh;
+    }
+    header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      box-shadow: 0 2px 8px rgba(27,46,89,0.08);
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    nav {
+      display: flex; gap: 32px;
+    }
+    nav a {
+      color: var(--white); text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid var(--secondary);
+    }
+    main {
+      max-width: 1280px; margin: 32px auto; padding: 0 24px;
+    }
+    .page-title {
+      font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: var(--primary);
+    }
+    .page-subtitle {
+      font-size: 1.1rem; color: #555; margin-bottom: 32px;
+    }
+    .filters-bar {
+      display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .filters-bar input, .filters-bar select {
+      padding: 8px 12px; border: 1px solid var(--gray); border-radius: 6px; background: var(--white); font-size: 1rem;
+    }
+    .fornecedores-table {
+      width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(27,46,89,0.06); overflow: hidden;
+    }
+    .fornecedores-table th, .fornecedores-table td {
+      padding: 12px 14px; border-bottom: 1px solid var(--gray); text-align: left; font-size: 1rem;
+    }
+    .fornecedores-table th {
+      background: #f0f2f7; color: #444; font-weight: 600;
+    }
+    .fornecedores-table tr:last-child td {
+      border-bottom: none;
+    }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: var(--gray); color: var(--primary); margin-right: 4px;
+    }
+    .badge.b1 { background: #f7b73122; color: #f7b731; }
+    .badge.b2 { background: #1b2e5911; color: #1b2e59; }
+    .badge.b3 { background: #27ae6011; color: #27ae60; }
+    .actions {
+      display: flex; gap: 12px;
+    }
+    .btn {
+      padding: 6px 16px; border-radius: 6px; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.18s;
+    }
+    .btn-edit { background: var(--secondary); color: var(--primary); }
+    .btn-edit:hover { background: #ffe082; }
+    .btn-disable { background: var(--danger); color: var(--white); }
+    .btn-disable:hover { background: #c0392b; }
+    .fornecedor-card {
+      background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(27,46,89,0.07); padding: 24px 20px; margin: 32px 0 0 0; display: flex; flex-direction: row; gap: 32px; align-items: flex-start;
+    }
+    .fornecedor-info {
+      flex: 1;
+    }
+    .fornecedor-info h3 {
+      margin: 0 0 8px 0; color: var(--primary); font-size: 1.3rem;
+    }
+    .fornecedor-info p {
+      margin: 4px 0; color: #444;
+    }
+    .fornecedor-performance {
+      min-width: 220px;
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      color: #333;
+    }
+    .fornecedor-performance strong { color: var(--primary); }
+    .historico-tabelas {
+      margin-top: 18px;
+    }
+    .footer {
+      text-align: center; color: #888; font-size: 0.98rem; margin: 48px 0 12px 0;
+    }
+    @media (max-width: 900px) {
+      .fornecedor-card { flex-direction: column; gap: 12px; }
+      main { padding: 0 8px; }
+    }
+  </style>
+  <script>
+    function mostrarDetalhesFornecedor(id) {
+      const detalhes = document.getElementById('detalhes-fornecedor');
+      const nomes = ['Alfa Distribuidora', 'Beta Alimentos', 'Gamma Bebidas'];
+      const cnpjs = ['12.345.678/0001-90', '98.765.432/0001-10', '11.222.333/0001-44'];
+      const contatos = ['contato@alfa.com.br', 'relacionamento@beta.com', 'suporte@gammabebidas.com'];
+      const bandeiras = [
+        '<span class="badge b1">SuperMaxi</span><span class="badge b2">BomPreço</span>',
+        '<span class="badge b3">UltraMais</span>',
+        '<span class="badge b2">Mercadão</span><span class="badge b1">Popular</span>'
+      ];
+      const pontualidade = ['98%', '92%', '95%'];
+      const qualidade = ['99%', '97%', '98%'];
+      detalhes.innerHTML = `
+        <div class='fornecedor-card'>
+          <div class='fornecedor-info'>
+            <h3>${nomes[id]}</h3>
+            <p><strong>CNPJ:</strong> ${cnpjs[id]}</p>
+            <p><strong>Contato:</strong> ${contatos[id]}</p>
+            <p><strong>Bandeiras Atendidas:</strong> ${bandeiras[id]}</p>
+            <div class='historico-tabelas'>
+              <strong>Histórico de Tabelas:</strong>
+              <ul style='margin:8px 0 0 16px;padding:0;'>
+                <li>05/2024 - Submissão aprovada</li>
+                <li>04/2024 - Submissão reprovada</li>
+                <li>03/2024 - Submissão aprovada</li>
+              </ul>
+            </div>
+          </div>
+          <div class='fornecedor-performance'>
+            <div><strong>Pontualidade:</strong> ${pontualidade[id]}</div>
+            <div><strong>Qualidade Dados:</strong> ${qualidade[id]}</div>
+            <div><strong>Performance Geral:</strong> <span style='color:#27ae60;font-weight:600;'>Excelente</span></div>
+          </div>
+        </div>
+      `;
+      detalhes.scrollIntoView({ behavior: 'smooth' });
+    }
+    function limparDetalhesFornecedor() {
+      document.getElementById('detalhes-fornecedor').innerHTML = '';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span style="font-size:1.35rem;font-weight:700;letter-spacing:0.5px;">Plurix Plataforma</span>
+    </div>
+    <nav>
+      <a href="dashboard-diretor.html">Dashboard Executivo</a>
+      <a href="gestao-fornecedores.html" class="active">Gestão de Fornecedores</a>
+      <a href="cadastro-fornecedor.html">Novo Fornecedor</a>
+      <a href="#" style="color:#f7b731;font-weight:700;">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="page-title">Gestão de Fornecedores</div>
+    <div class="page-subtitle">Visualize, filtre e gerencie fornecedores do ecossistema Plurix</div>
+    <form class="filters-bar" aria-label="Filtros de Fornecedores">
+      <input type="text" placeholder="Buscar por nome ou CNPJ" aria-label="Buscar fornecedor">
+      <select aria-label="Filtrar por bandeira">
+        <option value="">Todas as Bandeiras</option>
+        <option>SuperMaxi</option>
+        <option>BomPreço</option>
+        <option>UltraMais</option>
+        <option>Mercadão</option>
+        <option>Popular</option>
+      </select>
+      <select aria-label="Filtrar por status">
+        <option value="">Status</option>
+        <option>Ativo</option>
+        <option>Inativo</option>
+      </select>
+    </form>
+    <table class="fornecedores-table" aria-label="Tabela de Fornecedores">
+      <thead>
+        <tr>
+          <th>Fornecedor</th>
+          <th>CNPJ</th>
+          <th>Bandeiras Atendidas</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Alfa Distribuidora</td>
+          <td>12.345.678/0001-90</td>
+          <td><span class="badge b1">SuperMaxi</span><span class="badge b2">BomPreço</span></td>
+          <td><span style="color:#27ae60;font-weight:600;">Ativo</span></td>
+          <td class="actions">
+            <button class="btn btn-edit" onclick="mostrarDetalhesFornecedor(0)">Detalhes</button>
+            <button class="btn btn-disable">Desativar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Beta Alimentos</td>
+          <td>98.765.432/0001-10</td>
+          <td><span class="badge b3">UltraMais</span></td>
+          <td><span style="color:#27ae60;font-weight:600;">Ativo</span></td>
+          <td class="actions">
+            <button class="btn btn-edit" onclick="mostrarDetalhesFornecedor(1)">Detalhes</button>
+            <button class="btn btn-disable">Desativar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Gamma Bebidas</td>
+          <td>11.222.333/0001-44</td>
+          <td><span class="badge b2">Mercadão</span><span class="badge b1">Popular</span></td>
+          <td><span style="color:#e74c3c;font-weight:600;">Inativo</span></td>
+          <td class="actions">
+            <button class="btn btn-edit" onclick="mostrarDetalhesFornecedor(2)">Detalhes</button>
+            <button class="btn btn-disable">Ativar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="detalhes-fornecedor" aria-live="polite"></div>
+  </main>
+  <div class="footer">&copy; 2024 Plurix. Todos os direitos reservados.</div>
+</body>
+</html>

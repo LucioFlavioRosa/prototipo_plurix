@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Componente Tabela Reutilizável | Plurix</title>
+  <style>
+    :root {
+      --primary: #0055b8;
+      --secondary: #f5f7fa;
+      --accent: #00b8a9;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --text: #222;
+      --text-light: #fff;
+      --border: #e0e0e0;
+      --radius: 6px;
+      --font: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    body {
+      font-family: var(--font);
+      background: var(--secondary);
+      color: var(--text);
+      margin: 0;
+      padding: 32px 0;
+    }
+    .table-container {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 32px;
+      max-width: 100%;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    .table-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      align-items: center;
+    }
+    .table-search {
+      flex: 1 1 220px;
+      max-width: 320px;
+      position: relative;
+    }
+    .table-search input {
+      width: 100%;
+      padding: 8px 36px 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-family: var(--font);
+      background: #f9fafb;
+      transition: border .2s;
+    }
+    .table-search svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      pointer-events: none;
+    }
+    .table-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .table-filters select {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      background: #f9fafb;
+      font-family: var(--font);
+    }
+    .responsive-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+    .responsive-table th, .responsive-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 1rem;
+    }
+    .responsive-table th {
+      background: var(--secondary);
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .responsive-table th.sortable:after {
+      content: '\25B2';
+      font-size: 0.8em;
+      margin-left: 6px;
+      opacity: 0.5;
+      transition: transform .2s;
+    }
+    .responsive-table th.sortable.sorted-desc:after {
+      content: '\25BC';
+      opacity: 1;
+    }
+    .responsive-table tr.selected {
+      background: #eaf6ff;
+    }
+    .responsive-table td.actions {
+      text-align: right;
+      min-width: 120px;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 1.1em;
+      margin-left: 6px;
+      transition: color .2s;
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+    .action-btn:hover {
+      background: var(--secondary);
+      color: var(--accent);
+    }
+    .pagination {
+      display: flex;
+      gap: 6px;
+      margin-top: 20px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      background: var(--primary);
+      color: var(--text-light);
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .pagination button:disabled {
+      background: #b7c9e2;
+      cursor: not-allowed;
+    }
+    .pagination .current {
+      background: var(--accent);
+      font-weight: bold;
+    }
+    @media (max-width: 900px) {
+      .table-container {
+        padding: 12px;
+      }
+      .responsive-table {
+        min-width: 600px;
+      }
+    }
+    @media (max-width: 600px) {
+      .table-container {
+        padding: 4px;
+      }
+      .responsive-table {
+        min-width: 500px;
+      }
+      .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .pagination {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="table-container">
+      <div class="table-toolbar">
+        <div class="table-search">
+          <input type="text" id="searchInput" placeholder="Buscar por produto, GTIN ou fornecedor..." aria-label="Buscar">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m2.1-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="table-filters">
+          <select id="filterFornecedor" aria-label="Filtrar por fornecedor">
+            <option value="">Todos Fornecedores</option>
+            <option value="Fornecedor A">Fornecedor A</option>
+            <option value="Fornecedor B">Fornecedor B</option>
+          </select>
+          <select id="filterUF" aria-label="Filtrar por UF">
+            <option value="">Todas UFs</option>
+            <option value="SP">SP</option>
+            <option value="RJ">RJ</option>
+            <option value="MG">MG</option>
+          </select>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="responsive-table" id="tabelaExemplo">
+          <thead>
+            <tr>
+              <th style="width:36px;"><input type="checkbox" id="selectAll" aria-label="Selecionar todos"></th>
+              <th class="sortable" data-sort="gtin">GTIN</th>
+              <th class="sortable" data-sort="descricao">Descrição</th>
+              <th class="sortable" data-sort="fornecedor">Fornecedor</th>
+              <th class="sortable" data-sort="uf">UF</th>
+              <th class="sortable" data-sort="preco_antigo">Preço Antigo</th>
+              <th class="sortable" data-sort="preco_novo">Preço Novo</th>
+              <th class="sortable" data-sort="variacao">Variação (%)</th>
+              <th class="sortable" data-sort="ic">IC Nielsen</th>
+              <th class="sortable" data-sort="impacto">Impacto Financeiro</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Conteúdo gerado por JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </main>
+  <script>
+    // Dados de exemplo
+    const dados = [
+      {gtin:'7891000055123', descricao:'Arroz Branco 5kg', fornecedor:'Fornecedor A', uf:'SP', preco_antigo: '19,90', preco_novo: '21,50', variacao: 8, ic: 'Alta', impacto: 'R$ 1.600,00'},
+      {gtin:'7891000055124', descricao:'Feijão Carioca 1kg', fornecedor:'Fornecedor B', uf:'RJ', preco_antigo: '7,50', preco_novo: '7,80', variacao: 4, ic: 'Média', impacto: 'R$ 500,00'},
+      {gtin:'7891000055125', descricao:'Óleo de Soja 900ml', fornecedor:'Fornecedor A', uf:'MG', preco_antigo: '8,20', preco_novo: '8,00', variacao: -2, ic: 'Baixa', impacto: 'R$ -200,00'},
+      {gtin:'7891000055126', descricao:'Açúcar Refinado 1kg', fornecedor:'Fornecedor B', uf:'SP', preco_antigo: '4,10', preco_novo: '4,50', variacao: 10, ic: 'Alta', impacto: 'R$ 800,00'},
+      {gtin:'7891000055127', descricao:'Café Torrado 500g', fornecedor:'Fornecedor A', uf:'RJ', preco_antigo: '13,90', preco_novo: '14,90', variacao: 7, ic: 'Média', impacto: 'R$ 1.000,00'},
+      {gtin:'7891000055128', descricao:'Leite Integral 1L', fornecedor:'Fornecedor B', uf:'MG', preco_antigo: '5,60', preco_novo: '5,90', variacao: 5, ic: 'Alta', impacto: 'R$ 600,00'},
+      {gtin:'7891000055129', descricao:'Farinha de Trigo 1kg', fornecedor:'Fornecedor A', uf:'SP', preco_antigo: '4,80', preco_novo: '5,10', variacao: 6, ic: 'Baixa', impacto: 'R$ 350,00'},
+      {gtin:'7891000055130', descricao:'Macarrão Espaguete 500g', fornecedor:'Fornecedor B', uf:'RJ', preco_antigo: '3,90', preco_novo: '4,20', variacao: 8, ic: 'Média', impacto: 'R$ 250,00'},
+      {gtin:'7891000055131', descricao:'Molho de Tomate 340g', fornecedor:'Fornecedor A', uf:'MG', preco_antigo: '2,80', preco_novo: '3,10', variacao: 11, ic: 'Alta', impacto: 'R$ 120,00'},
+      {gtin:'7891000055132', descricao:'Biscoito Cream Cracker 200g', fornecedor:'Fornecedor B', uf:'SP', preco_antigo: '2,50', preco_novo: '2,80', variacao: 12, ic: 'Baixa', impacto: 'R$ 90,00'}
+    ];
+    let currentPage = 1;
+    const rowsPerPage = 5;
+    let currentSort = {col: null, dir: 'asc'};
+    let selectedRows = new Set();
+    function renderTable() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtroFornecedor = document.getElementById('filterFornecedor').value;
+      const filtroUF = document.getElementById('filterUF').value;
+      let filtered = dados.filter(row => {
+        let match = true;
+        if (search) {
+          match = Object.values(row).some(val => String(val).toLowerCase().includes(search));
+        }
+        if (filtroFornecedor && row.fornecedor !== filtroFornecedor) match = false;
+        if (filtroUF && row.uf !== filtroUF) match = false;
+        return match;
+      });
+      // Ordenação
+      if (currentSort.col) {
+        filtered.sort((a, b) => {
+          let vA = a[currentSort.col], vB = b[currentSort.col];
+          if (!isNaN(parseFloat(vA)) && !isNaN(parseFloat(vB))) {
+            vA = parseFloat(vA); vB = parseFloat(vB);
+          }
+          if (vA < vB) return currentSort.dir === 'asc' ? -1 : 1;
+          if (vA > vB) return currentSort.dir === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+      // Paginação
+      const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const pageRows = filtered.slice(start, end);
+      // Renderizar linhas
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+      pageRows.forEach(row => {
+        const checked = selectedRows.has(row.gtin) ? 'checked' : '';
+        tbody.innerHTML += `
+          <tr class="${selectedRows.has(row.gtin) ? 'selected' : ''}">
+            <td><input type="checkbox" class="row-select" data-gtin="${row.gtin}" aria-label="Selecionar linha" ${checked}></td>
+            <td>${row.gtin}</td>
+            <td>${row.descricao}</td>
+            <td>${row.fornecedor}</td>
+            <td>${row.uf}</td>
+            <td>R$ ${row.preco_antigo}</td>
+            <td>R$ ${row.preco_novo}</td>
+            <td style="color:${row.variacao>0?'#27ae60':row.variacao<0?'#e74c3c':'#222'};font-weight:600;">${row.variacao > 0 ? '+' : ''}${row.variacao}%</td>
+            <td>${row.ic}</td>
+            <td>${row.impacto}</td>
+            <td class="actions">
+              <button class="action-btn" title="Editar" aria-label="Editar"><span aria-hidden="true">✏️</span></button>
+              <button class="action-btn" title="Excluir" aria-label="Excluir"><span aria-hidden="true">🗑️</span></button>
+            </td>
+          </tr>
+        `;
+      });
+      // Paginação
+      const pagDiv = document.getElementById('pagination');
+      pagDiv.innerHTML = '';
+      pagDiv.innerHTML += `<button onclick="gotoPage(1)" ${currentPage===1?'disabled':''} aria-label="Primeira página">«</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        pagDiv.innerHTML += `<button onclick="gotoPage(${i})" class="${i===currentPage?'current':''}" aria-label="Página ${i}">${i}</button>`;
+      }
+      pagDiv.innerHTML += `<button onclick="gotoPage(${totalPages})" ${currentPage===totalPages?'disabled':''} aria-label="Última página">»</button>`;
+      // SelectAll
+      document.getElementById('selectAll').checked = pageRows.length>0 && pageRows.every(r=>selectedRows.has(r.gtin));
+    }
+    function gotoPage(p) {
+      currentPage = p;
+      renderTable();
+    }
+    document.getElementById('searchInput').addEventListener('input', ()=>{currentPage=1;renderTable();});
+    document.getElementById('filterFornecedor').addEventListener('change', ()=>{currentPage=1;renderTable();});
+    document.getElementById('filterUF').addEventListener('change', ()=>{currentPage=1;renderTable();});
+    document.getElementById('selectAll').addEventListener('change', function() {
+      const tbody = document.getElementById('tableBody');
+      const checkboxes = tbody.querySelectorAll('.row-select');
+      checkboxes.forEach(cb => {
+        if(this.checked) selectedRows.add(cb.dataset.gtin);
+        else selectedRows.delete(cb.dataset.gtin);
+      });
+      renderTable();
+    });
+    document.getElementById('tableBody').addEventListener('change', function(e) {
+      if (e.target.classList.contains('row-select')) {
+        if (e.target.checked) selectedRows.add(e.target.dataset.gtin);
+        else selectedRows.delete(e.target.dataset.gtin);
+        renderTable();
+      }
+    });
+    // Ordenação
+    document.querySelectorAll('.responsive-table th.sortable').forEach(th => {
+      th.addEventListener('click', function() {
+        const col = th.getAttribute('data-sort');
+        if (currentSort.col === col) {
+          currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSort.col = col;
+          currentSort.dir = 'asc';
+        }
+        document.querySelectorAll('.responsive-table th.sortable').forEach(t=>t.classList.remove('sorted-desc'));
+        if(currentSort.dir==='desc') th.classList.add('sorted-desc');
+        else th.classList.remove('sorted-desc');
+        renderTable();
+      });
+    });
+    renderTable();
+  </script>
+</body>
+</html>

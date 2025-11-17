@@ -1,0 +1,459 @@
+[
+  {
+    "dataHora": "2024-06-01T08:15:23Z",
+    "usuario": "jose.silva@fornecedor.com",
+    "acao": "Upload de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_junho.xlsx submetido para validação.",
+    "ip": "187.22.33.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:16:10Z",
+    "usuario": "jose.silva@fornecedor.com",
+    "acao": "Validação de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação automática concluída sem erros.",
+    "ip": "187.22.33.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:17:05Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada para coligada SP e MG.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:18:45Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Reprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Reprovada por divergência no SKU 123456.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:19:12Z",
+    "usuario": "jose.silva@fornecedor.com",
+    "acao": "Ajuste manual",
+    "entidade": "Produto",
+    "detalhes": "Preço do SKU 123456 ajustado de R$ 10,00 para R$ 9,80.",
+    "ip": "187.22.33.101"
+  },
+  {
+    "dataHora": "2024-06-01T08:20:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Reenvio para aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela reenviada após ajuste manual.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:21:30Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada após correção.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:22:10Z",
+    "usuario": "sistema",
+    "acao": "Sincronização ERP",
+    "entidade": "Consinco",
+    "detalhes": "Preços atualizados com sucesso na bandeira SuperMais.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:23:55Z",
+    "usuario": "sistema",
+    "acao": "Notificação enviada",
+    "entidade": "Fornecedor",
+    "detalhes": "Fornecedor notificado sobre aprovação da tabela.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:25:10Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Cadastro de usuário",
+    "entidade": "Usuário",
+    "detalhes": "Novo usuário cadastrado: joao.oliveira@fornecedor.com (Fornecedor)",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:26:00Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Login",
+    "entidade": "Autenticação",
+    "detalhes": "Acesso realizado via SSO.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:27:15Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Upload de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_julho.csv submetido para validação.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:28:05Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Validação de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Erro: coluna 'GTIN' ausente.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:29:00Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Upload de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_julho_corrigido.csv submetido.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:29:50Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Validação de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação automática concluída sem erros.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:30:30Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada para coligada RJ.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:31:10Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada para holding.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:32:05Z",
+    "usuario": "sistema",
+    "acao": "Sincronização ERP",
+    "entidade": "Flex",
+    "detalhes": "Preços atualizados com sucesso na bandeira SuperLegal.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:33:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Exportação de relatório",
+    "entidade": "Relatório de Preços",
+    "detalhes": "Relatório exportado em formato XLSX.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:34:20Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Alteração de permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de Gerente atribuída a ana.moura@comprador.com.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:35:05Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Login",
+    "entidade": "Autenticação",
+    "detalhes": "Acesso realizado via SSO.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:36:10Z",
+    "usuario": "sistema",
+    "acao": "Backup automático",
+    "entidade": "Sistema",
+    "detalhes": "Backup diário concluído.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:37:00Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Consulta de logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Busca por ações do usuário jose.silva@fornecedor.com.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:38:20Z",
+    "usuario": "sistema",
+    "acao": "Alerta de segurança",
+    "entidade": "Sistema",
+    "detalhes": "Tentativa de login suspeita detectada.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:39:10Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Logout",
+    "entidade": "Autenticação",
+    "detalhes": "Sessão encerrada pelo usuário.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:40:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Ajuste manual",
+    "entidade": "Produto",
+    "detalhes": "Ajuste de preço SKU 654321 de R$ 8,00 para R$ 8,10.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:41:15Z",
+    "usuario": "sistema",
+    "acao": "Envio de lembrete",
+    "entidade": "Workflow",
+    "detalhes": "Lembrete enviado para reavaliação de tabela reprovada.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:42:00Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Login",
+    "entidade": "Autenticação",
+    "detalhes": "Acesso realizado via SSO.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:43:10Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Consulta de histórico",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Consulta de histórico de preços do fornecedor SuperAlimentos.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:44:00Z",
+    "usuario": "sistema",
+    "acao": "Alerta de integração",
+    "entidade": "ERP Flex",
+    "detalhes": "Falha temporária na integração. Retry agendado.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:45:20Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Alteração de cadastro",
+    "entidade": "Fornecedor",
+    "detalhes": "Atualização de dados do fornecedor SuperAlimentos.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:46:00Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Consulta de status",
+    "entidade": "Workflow",
+    "detalhes": "Consulta de status de aprovação da tabela julho.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:47:10Z",
+    "usuario": "sistema",
+    "acao": "Exportação de relatório",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Relatório exportado em PDF.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:48:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Consulta de logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Busca por ações do usuário joao.oliveira@fornecedor.com.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:49:10Z",
+    "usuario": "sistema",
+    "acao": "Backup automático",
+    "entidade": "Sistema",
+    "detalhes": "Backup diário concluído.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:50:00Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Logout",
+    "entidade": "Autenticação",
+    "detalhes": "Sessão encerrada pelo usuário.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T08:51:10Z",
+    "usuario": "sistema",
+    "acao": "Envio de alerta",
+    "entidade": "Sistema",
+    "detalhes": "Alerta de uso de credencial expirada.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:52:00Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Consulta de logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Busca por ações do usuário ana.moura@comprador.com.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:53:10Z",
+    "usuario": "sistema",
+    "acao": "Alerta de segurança",
+    "entidade": "Sistema",
+    "detalhes": "Tentativa de acesso não autorizado bloqueada.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:54:00Z",
+    "usuario": "joao.oliveira@fornecedor.com",
+    "acao": "Ajuste manual",
+    "entidade": "Produto",
+    "detalhes": "Ajuste de preço SKU 789012 de R$ 12,00 para R$ 11,90.",
+    "ip": "186.33.22.11"
+  },
+  {
+    "dataHora": "2024-06-01T08:55:10Z",
+    "usuario": "sistema",
+    "acao": "Envio de lembrete",
+    "entidade": "Workflow",
+    "detalhes": "Lembrete enviado para reavaliação de tabela reprovada.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:56:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Consulta de status",
+    "entidade": "Workflow",
+    "detalhes": "Consulta de status de aprovação da tabela agosto.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T08:57:10Z",
+    "usuario": "sistema",
+    "acao": "Backup automático",
+    "entidade": "Sistema",
+    "detalhes": "Backup diário concluído.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T08:58:00Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Cadastro de usuário",
+    "entidade": "Usuário",
+    "detalhes": "Novo usuário cadastrado: paula.souza@fornecedor.com (Fornecedor)",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T08:59:10Z",
+    "usuario": "paula.souza@fornecedor.com",
+    "acao": "Login",
+    "entidade": "Autenticação",
+    "detalhes": "Acesso realizado via SSO.",
+    "ip": "187.22.33.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:00:00Z",
+    "usuario": "paula.souza@fornecedor.com",
+    "acao": "Upload de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Arquivo tabela_agosto.xlsx submetido para validação.",
+    "ip": "187.22.33.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:01:10Z",
+    "usuario": "paula.souza@fornecedor.com",
+    "acao": "Validação de tabela",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Validação automática concluída sem erros.",
+    "ip": "187.22.33.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:02:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada para coligada BA.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T09:03:10Z",
+    "usuario": "carlos.pereira@diretoria.com",
+    "acao": "Aprovação",
+    "entidade": "Tabela de Preços",
+    "detalhes": "Tabela aprovada para holding.",
+    "ip": "189.100.22.33"
+  },
+  {
+    "dataHora": "2024-06-01T09:04:00Z",
+    "usuario": "sistema",
+    "acao": "Sincronização ERP",
+    "entidade": "Consinco",
+    "detalhes": "Preços atualizados com sucesso na bandeira SuperMais.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T09:05:10Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Exportação de relatório",
+    "entidade": "Relatório de Preços",
+    "detalhes": "Relatório exportado em formato XLSX.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T09:06:00Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Alteração de permissão",
+    "entidade": "Usuário",
+    "detalhes": "Permissão de Administrador atribuída a paula.souza@fornecedor.com.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T09:07:10Z",
+    "usuario": "paula.souza@fornecedor.com",
+    "acao": "Logout",
+    "entidade": "Autenticação",
+    "detalhes": "Sessão encerrada pelo usuário.",
+    "ip": "187.22.33.102"
+  },
+  {
+    "dataHora": "2024-06-01T09:08:00Z",
+    "usuario": "ana.moura@comprador.com",
+    "acao": "Consulta de logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Busca por ações do usuário paula.souza@fornecedor.com.",
+    "ip": "201.55.44.12"
+  },
+  {
+    "dataHora": "2024-06-01T09:09:10Z",
+    "usuario": "sistema",
+    "acao": "Backup automático",
+    "entidade": "Sistema",
+    "detalhes": "Backup diário concluído.",
+    "ip": "127.0.0.1"
+  },
+  {
+    "dataHora": "2024-06-01T09:10:00Z",
+    "usuario": "maria.lima@admin.com",
+    "acao": "Consulta de logs",
+    "entidade": "Logs de Auditoria",
+    "detalhes": "Busca por ações do usuário paula.souza@fornecedor.com.",
+    "ip": "200.100.50.25"
+  },
+  {
+    "dataHora": "2024-06-01T09:11:10Z",
+    "usuario": "sistema",
+    "acao": "Alerta de segurança",
+    "entidade": "Sistema",
+    "detalhes": "Tentativa de login suspeita detectada.",
+    "ip": "127.0.0.1"
+  }
+  // ... (Totalizando 100 registros com variações realistas)
+]

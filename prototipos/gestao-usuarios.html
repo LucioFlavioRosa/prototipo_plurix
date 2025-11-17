@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão de Usuários | Plataforma Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      color: #222;
+      font-size: 16px;
+    }
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7eb;
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      height: 48px;
+    }
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+    nav a {
+      color: #2b3a4a;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid #0096d6;
+      color: #0096d6;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.05);
+      padding: 32px 40px 40px 40px;
+    }
+    .titulo-pagina {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0096d6;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    .filtros-usuarios {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filtros-usuarios label {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .filtros-usuarios input, .filtros-usuarios select {
+      padding: 7px 12px;
+      border: 1px solid #cfd8dc;
+      border-radius: 6px;
+      background: #fafbfc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .filtros-usuarios input:focus, .filtros-usuarios select:focus {
+      border-color: #0096d6;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #0096d6 0%, #00c2cb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,150,214,0.07);
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #00c2cb 0%, #0096d6 100%);
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #2b3a4a;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover {
+      background: #cfd8dc;
+    }
+    .tabela-usuarios {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+    }
+    .tabela-usuarios th, .tabela-usuarios td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 1rem;
+    }
+    .tabela-usuarios th {
+      background: #f5f6fa;
+      color: #0096d6;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .tabela-usuarios tr:last-child td {
+      border-bottom: none;
+    }
+    .tabela-usuarios td.status-ativo {
+      color: #1abc9c;
+      font-weight: 600;
+    }
+    .tabela-usuarios td.status-inativo {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+    .acoes-usuario button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      font-size: 1.1rem;
+      color: #0096d6;
+      transition: color 0.2s;
+    }
+    .acoes-usuario button:hover {
+      color: #00c2cb;
+    }
+    .badge-perfil {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.95em;
+      font-weight: 600;
+      background: #e0f7fa;
+      color: #0096d6;
+      margin-right: 4px;
+    }
+    .badge-admin {
+      background: #ffe082;
+      color: #b28900;
+    }
+    .badge-fornecedor {
+      background: #e0f2f1;
+      color: #009688;
+    }
+    .badge-comprador {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .badge-gerente {
+      background: #fce4ec;
+      color: #c2185b;
+    }
+    .badge-diretor {
+      background: #ede7f6;
+      color: #512da8;
+    }
+    .badge-vp {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+    .badge-inativo {
+      background: #fbe9e7;
+      color: #d84315;
+    }
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(44,62,80,0.18);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+      padding: 32px 28px 24px 28px;
+      min-width: 350px;
+      max-width: 95vw;
+      position: relative;
+      animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    .modal .close {
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      font-size: 1.5rem;
+      color: #bbb;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .modal .close:hover {
+      color: #0096d6;
+    }
+    .modal .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0096d6;
+      margin-bottom: 18px;
+    }
+    .modal .modal-content {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 18px;
+    }
+    .modal .modal-actions {
+      text-align: right;
+    }
+    .footer {
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      padding: 18px 0 10px 0;
+      color: #7b8a99;
+      font-size: 0.98rem;
+      margin-top: 48px;
+    }
+    @media (max-width: 900px) {
+      main { padding: 18px 2vw 24px 2vw; }
+      .tabela-usuarios th, .tabela-usuarios td { font-size: 0.95rem; }
+      .filtros-usuarios { flex-direction: column; gap: 10px; }
+    }
+  </style>
+  <script>
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    function irParaCadastroUsuario(id) {
+      window.location.href = 'cadastro-usuario.html' + (id ? ('?id=' + id) : '');
+    }
+    function desativarUsuario(nome) {
+      document.getElementById('modalDesativarUsuarioNome').textContent = nome;
+      abrirModal('modalDesativarUsuario');
+    }
+    function confirmarDesativacao() {
+      fecharModal('modalDesativarUsuario');
+      alert('Usuário desativado com sucesso!');
+    }
+    function filtrarUsuarios() {
+      // Simulação de filtro (apenas visual)
+      alert('Filtro aplicado (apenas protótipo).');
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <nav aria-label="Menu principal">
+      <a href="../dashboard.html">Início</a>
+      <a href="../gestao-tabelas.html">Tabelas de Preços</a>
+      <a href="gestao-usuarios.html" class="active">Gestão de Usuários</a>
+      <a href="logs-auditoria.html">Logs & Auditoria</a>
+      <a href="../logout.html">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="titulo-pagina">Gestão de Usuários e Permissões</div>
+    <div class="filtros-usuarios">
+      <div>
+        <label for="busca-nome">Buscar por nome ou e-mail</label>
+        <input type="text" id="busca-nome" placeholder="Digite nome ou e-mail">
+      </div>
+      <div>
+        <label for="filtro-perfil">Perfil</label>
+        <select id="filtro-perfil">
+          <option value="">Todos</option>
+          <option value="Fornecedor">Fornecedor</option>
+          <option value="Comprador">Comprador</option>
+          <option value="Gerente">Gerente</option>
+          <option value="Diretor">Diretor</option>
+          <option value="VP">VP</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div>
+        <label for="filtro-bandeira">Bandeira/Coligada</label>
+        <select id="filtro-bandeira">
+          <option value="">Todas</option>
+          <option value="Bandeira Norte">Bandeira Norte</option>
+          <option value="Bandeira Sul">Bandeira Sul</option>
+          <option value="Bandeira Centro">Bandeira Centro</option>
+          <option value="Bandeira Leste">Bandeira Leste</option>
+          <option value="Bandeira Oeste">Bandeira Oeste</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="filtrarUsuarios()">Filtrar</button>
+      <button class="btn-primary" style="margin-left:auto;" onclick="irParaCadastroUsuario()">+ Novo Usuário</button>
+    </div>
+    <table class="tabela-usuarios" aria-label="Tabela de usuários">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Perfil</th>
+          <th>Bandeira/Coligada</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Maria Oliveira</td>
+          <td>maria.oliveira@fornecedor.com</td>
+          <td><span class="badge-perfil badge-fornecedor">Fornecedor</span></td>
+          <td>Bandeira Norte</td>
+          <td class="status-ativo">Ativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(1)">&#9998;</button>
+            <button title="Desativar" aria-label="Desativar usuário" onclick="desativarUsuario('Maria Oliveira')">&#10060;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>João Silva</td>
+          <td>joao.silva@empresa.com</td>
+          <td><span class="badge-perfil badge-comprador">Comprador</span></td>
+          <td>Bandeira Sul</td>
+          <td class="status-inativo">Inativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(2)">&#9998;</button>
+            <button title="Ativar" aria-label="Ativar usuário">&#9989;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Fernanda Souza</td>
+          <td>fernanda.souza@plurix.com</td>
+          <td><span class="badge-perfil badge-gerente">Gerente</span></td>
+          <td>Bandeira Centro</td>
+          <td class="status-ativo">Ativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(3)">&#9998;</button>
+            <button title="Desativar" aria-label="Desativar usuário" onclick="desativarUsuario('Fernanda Souza')">&#10060;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Lucas Pereira</td>
+          <td>lucas.pereira@plurix.com</td>
+          <td><span class="badge-perfil badge-diretor">Diretor</span></td>
+          <td>Bandeira Leste</td>
+          <td class="status-ativo">Ativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(4)">&#9998;</button>
+            <button title="Desativar" aria-label="Desativar usuário" onclick="desativarUsuario('Lucas Pereira')">&#10060;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Ana Costa</td>
+          <td>ana.costa@plurix.com</td>
+          <td><span class="badge-perfil badge-vp">VP</span></td>
+          <td>Bandeira Oeste</td>
+          <td class="status-ativo">Ativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(5)">&#9998;</button>
+            <button title="Desativar" aria-label="Desativar usuário" onclick="desativarUsuario('Ana Costa')">&#10060;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Rafael Lima</td>
+          <td>rafael.lima@plurix.com</td>
+          <td><span class="badge-perfil badge-admin">Admin</span></td>
+          <td>Todas</td>
+          <td class="status-ativo">Ativo</td>
+          <td class="acoes-usuario">
+            <button title="Editar" aria-label="Editar usuário" onclick="irParaCadastroUsuario(6)">&#9998;</button>
+            <button title="Desativar" aria-label="Desativar usuário" onclick="desativarUsuario('Rafael Lima')">&#10060;</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Modal de confirmação de desativação -->
+    <div class="modal-bg" id="modalDesativarUsuario" role="dialog" aria-modal="true" aria-labelledby="modalDesativarUsuarioTitulo">
+      <div class="modal">
+        <button class="close" onclick="fecharModal('modalDesativarUsuario')" aria-label="Fechar">&times;</button>
+        <div class="modal-title" id="modalDesativarUsuarioTitulo">Desativar Usuário</div>
+        <div class="modal-content">Tem certeza que deseja desativar o usuário <strong id="modalDesativarUsuarioNome">Nome</strong>? Esta ação pode ser revertida posteriormente.</div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="fecharModal('modalDesativarUsuario')">Cancelar</button>
+          <button class="btn-primary" onclick="confirmarDesativacao()">Desativar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Comercial | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .classic-section {
+      background: #fff;
+      margin: 40px auto 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+      max-width: 1400px;
+      padding: 32px 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .section-header img {
+      height: 40px;
+      width: 40px;
+    }
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0057b8;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 28px;
+      margin-bottom: 18px;
+    }
+    .card-metrica {
+      background: linear-gradient(90deg, #0057b8 0%, #008ed6 100%);
+      color: #fff;
+      border-radius: 12px;
+      padding: 26px 30px 18px 30px;
+      box-shadow: 0 2px 10px 0 rgba(0,87,184,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 220px;
+    }
+    .card-metrica .valor {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    .card-metrica .label {
+      font-size: 1.08rem;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+    .dashboard-charts {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+      margin-bottom: 18px;
+    }
+    .chart-card {
+      background: #fafbfc;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.04);
+      padding: 24px 24px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+    .chart-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #0057b8;
+      margin-bottom: 8px;
+    }
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .bar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bar-label {
+      width: 120px;
+      font-size: 1rem;
+      color: #222;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .bar {
+      height: 22px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #0057b8 0%, #008ed6 100%);
+      min-width: 0;
+      transition: width .6s;
+    }
+    .bar-value {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-left: 10px;
+      color: #0057b8;
+    }
+    .pizza-chart {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(#0057b8 0% 38%, #008ed6 38% 70%, #1ca05a 70% 100%);
+      margin: 0 auto 12px auto;
+      position: relative;
+    }
+    .pizza-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .pizza-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+    }
+    .pizza-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-azul { background: #0057b8; }
+    .dot-ciano { background: #008ed6; }
+    .dot-verde { background: #1ca05a; }
+    .filtros {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .filtros label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 8px;
+    }
+    .filtros select {
+      padding: 7px 12px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fafbfc;
+      color: #222;
+      margin-right: 16px;
+    }
+    .tabela-responsiva {
+      overflow-x: auto;
+      border-radius: 12px;
+      background: #fafbfc;
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.04);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    th {
+      background: #e5eaf0;
+      color: #0057b8;
+      font-weight: 700;
+      border-bottom: 2px solid #bfc9d1;
+    }
+    tr {
+      border-bottom: 1px solid #e5e5e5;
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+    td.status-pendente {
+      color: #f9a825;
+      font-weight: 700;
+    }
+    .acoes-btn {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-table {
+      background: #0057b8;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 18px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      box-shadow: 0 1px 4px 0 rgba(0,87,184,0.07);
+    }
+    .btn-table:hover {
+      background: #008ed6;
+    }
+    @media (max-width: 1400px) {
+      .classic-section {
+        padding: 18px 2vw 24px 2vw;
+        max-width: 99vw;
+      }
+      table {
+        min-width: 700px;
+      }
+      .dashboard-charts {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .classic-section {
+        padding: 10px 2vw 18px 2vw;
+      }
+      .dashboard-charts {
+        grid-template-columns: 1fr;
+      }
+      table {
+        min-width: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="classic-section">
+    <div class="section-header">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_80,h_80,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <h2>Dashboard Comercial</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="card-metrica">
+        <span class="label">Tabelas Pendentes</span>
+        <span class="valor" id="metric-pendentes">12</span>
+      </div>
+      <div class="card-metrica">
+        <span class="label">Aprovadas na Semana</span>
+        <span class="valor" id="metric-aprovadas">8</span>
+      </div>
+      <div class="card-metrica">
+        <span class="label">Impacto DRE Acumulado</span>
+        <span class="valor" id="metric-dre">R$ 1.250.000</span>
+      </div>
+    </div>
+    <div class="dashboard-charts">
+      <div class="chart-card">
+        <div class="chart-title">Top 5 Fornecedores - Volume Submissões</div>
+        <div class="bar-list" id="bar-list"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Distribuição por Bandeira</div>
+        <div class="pizza-chart" aria-label="Distribuição por bandeira"></div>
+        <div class="pizza-legend">
+          <div class="pizza-legend-item"><span class="pizza-dot dot-azul"></span> SuperSul (38%)</div>
+          <div class="pizza-legend-item"><span class="pizza-dot dot-ciano"></span> SuperNorte (32%)</div>
+          <div class="pizza-legend-item"><span class="pizza-dot dot-verde"></span> SuperOeste (30%)</div>
+        </div>
+      </div>
+    </div>
+    <div class="filtros">
+      <label for="filtro-bandeira">Bandeira:</label>
+      <select id="filtro-bandeira">
+        <option value="">Todas</option>
+        <option value="SuperSul">SuperSul</option>
+        <option value="SuperNorte">SuperNorte</option>
+        <option value="SuperOeste">SuperOeste</option>
+      </select>
+      <label for="filtro-status">Status:</label>
+      <select id="filtro-status">
+        <option value="">Todos</option>
+        <option value="pendente">Pendente</option>
+        <option value="aprovado">Aprovado</option>
+      </select>
+    </div>
+    <div class="tabela-responsiva">
+      <table id="tabela-pendentes" aria-label="Tabelas pendentes">
+        <thead>
+          <tr>
+            <th>Fornecedor</th>
+            <th>Bandeira</th>
+            <th>UF</th>
+            <th>Data Submissão</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Conteúdo dinâmico JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    // Simulação de dados para os gráficos
+    const topFornecedores = [
+      {nome:'Alfa Alimentos', valor: 120},
+      {nome:'Beta Distribuidora', valor: 90},
+      {nome:'Gama Foods', valor: 70},
+      {nome:'Delta Import', valor: 55},
+      {nome:'Omega Brasil', valor: 42}
+    ];
+    const maxBar = Math.max(...topFornecedores.map(f=>f.valor));
+    const barList = document.getElementById('bar-list');
+    barList.innerHTML = '';
+    topFornecedores.forEach(f => {
+      const div = document.createElement('div');
+      div.className = 'bar-item';
+      div.innerHTML = `<span class='bar-label'>${f.nome}</span><div class='bar' style='width:${Math.round(f.valor/maxBar*100)}%'></div><span class='bar-value'>${f.valor}</span>`;
+      barList.appendChild(div);
+    });
+    // Simulação de dados para tabela
+    const pendentes = [
+      {fornecedor:'Alfa Alimentos', bandeira:'SuperSul', uf:'RS', data:'2024-06-03', status:'pendente'},
+      {fornecedor:'Beta Distribuidora', bandeira:'SuperNorte', uf:'AM', data:'2024-06-02', status:'pendente'},
+      {fornecedor:'Gama Foods', bandeira:'SuperOeste', uf:'MT', data:'2024-06-01', status:'pendente'},
+      {fornecedor:'Delta Import', bandeira:'SuperSul', uf:'RS', data:'2024-05-30', status:'pendente'},
+      {fornecedor:'Omega Brasil', bandeira:'SuperNorte', uf:'AM', data:'2024-05-29', status:'pendente'},
+      {fornecedor:'Alfa Alimentos', bandeira:'SuperOeste', uf:'MT', data:'2024-05-28', status:'aprovado'},
+      {fornecedor:'Beta Distribuidora', bandeira:'SuperSul', uf:'RS', data:'2024-05-27', status:'aprovado'}
+    ];
+    function renderTabelaPendentes() {
+      const bandeira = document.getElementById('filtro-bandeira').value;
+      const status = document.getElementById('filtro-status').value;
+      const tbody = document.querySelector('#tabela-pendentes tbody');
+      tbody.innerHTML = '';
+      pendentes.filter(item => {
+        let ok = true;
+        if (bandeira && item.bandeira !== bandeira) ok = false;
+        if (status && item.status !== status) ok = false;
+        return ok;
+      }).forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.fornecedor}</td>
+          <td>${item.bandeira}</td>
+          <td>${item.uf}</td>
+          <td>${item.data.split('-').reverse().join('/')}</td>
+          <td class="status-${item.status}">${item.status.charAt(0).toUpperCase()+item.status.slice(1)}</td>
+          <td><div class="acoes-btn">
+            <button class="btn-table" aria-label="Aprovar">Aprovar</button>
+            <button class="btn-table" aria-label="Reprovar">Reprovar</button>
+          </div></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    document.getElementById('filtro-bandeira').onchange = renderTabelaPendentes;
+    document.getElementById('filtro-status').onchange = renderTabelaPendentes;
+    renderTabelaPendentes();
+  </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Fornecedor - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --primary: #1b2e59;
+      --secondary: #f7b731;
+      --bg: #f5f6fa;
+      --white: #fff;
+      --gray: #e4e7ed;
+      --text: #222;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --info: #2980b9;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html, body {
+      margin: 0; padding: 0; background: var(--bg); font-family: var(--font-main); font-size: 16px; color: var(--text); height: 100%; min-height: 100vh;
+    }
+    header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 72px;
+      box-shadow: 0 2px 8px rgba(27,46,89,0.08);
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    nav {
+      display: flex; gap: 32px;
+    }
+    nav a {
+      color: var(--white); text-decoration: none; font-weight: 500; padding: 8px 0; border-bottom: 2px solid transparent; transition: border 0.2s;
+    }
+    nav a.active, nav a:hover {
+      border-bottom: 2px solid var(--secondary);
+    }
+    main {
+      max-width: 640px; margin: 32px auto; padding: 0 24px;
+    }
+    .form-title {
+      font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: var(--primary);
+    }
+    .form-subtitle {
+      font-size: 1.1rem; color: #555; margin-bottom: 32px;
+    }
+    form {
+      background: var(--white); border-radius: 12px; box-shadow: 0 2px 8px rgba(27,46,89,0.06); padding: 32px 24px; display: flex; flex-direction: column; gap: 18px;
+    }
+    label {
+      font-weight: 500; color: #333; margin-bottom: 6px; display: block;
+    }
+    input[type="text"], input[type="email"], input[type="file"], textarea, select {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--gray); border-radius: 6px; font-size: 1rem; margin-bottom: 2px; background: var(--bg);
+    }
+    .checkbox-group {
+      display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;
+    }
+    .checkbox-group label {
+      font-weight: 400; color: #444; margin-bottom: 0; display: flex; align-items: center; gap: 6px;
+    }
+    .form-actions {
+      display: flex; gap: 16px; margin-top: 18px;
+    }
+    .btn {
+      padding: 10px 28px; border-radius: 6px; border: none; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: background 0.18s;
+    }
+    .btn-primary { background: var(--secondary); color: var(--primary); }
+    .btn-primary:hover { background: #ffe082; }
+    .btn-cancel { background: var(--gray); color: #444; }
+    .btn-cancel:hover { background: #d3d7de; }
+    .error-msg {
+      color: var(--danger); font-size: 0.98rem; margin: 2px 0 0 2px; display: none;
+    }
+    .success-msg {
+      color: var(--success); font-size: 1.05rem; margin: 8px 0 0 2px; display: none;
+    }
+    @media (max-width: 700px) {
+      main { padding: 0 6px; }
+      form { padding: 18px 6px; }
+    }
+  </style>
+  <script>
+    function validarCNPJ(cnpj) {
+      cnpj = cnpj.replace(/[\.\/-]/g, '');
+      if (cnpj.length !== 14 || /^\d{14}$/.test(cnpj) === false) return false;
+      let tamanho = cnpj.length - 2, numeros = cnpj.substring(0, tamanho), digitos = cnpj.substring(tamanho), soma = 0, pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+      }
+      let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(0)) return false;
+      tamanho = tamanho + 1;
+      numeros = cnpj.substring(0, tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(1)) return false;
+      return true;
+    }
+    function validarFormulario(event) {
+      event.preventDefault();
+      let valido = true;
+      document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
+      const cnpj = document.getElementById('cnpj').value.trim();
+      if (!validarCNPJ(cnpj)) {
+        document.getElementById('erro-cnpj').style.display = 'block';
+        valido = false;
+      }
+      ['razao','endereco','contato'].forEach(id => {
+        if (!document.getElementById(id).value.trim()) {
+          document.getElementById('erro-'+id).style.display = 'block';
+          valido = false;
+        }
+      });
+      if (valido) {
+        document.getElementById('sucesso').style.display = 'block';
+        setTimeout(()=>{ document.getElementById('sucesso').style.display = 'none'; }, 3000);
+        event.target.reset();
+      }
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span style="font-size:1.35rem;font-weight:700;letter-spacing:0.5px;">Plurix Plataforma</span>
+    </div>
+    <nav>
+      <a href="dashboard-diretor.html">Dashboard Executivo</a>
+      <a href="gestao-fornecedores.html">Gestão de Fornecedores</a>
+      <a href="cadastro-fornecedor.html" class="active">Novo Fornecedor</a>
+      <a href="#" style="color:#f7b731;font-weight:700;">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <div class="form-title">Cadastro de Fornecedor</div>
+    <div class="form-subtitle">Preencha os dados cadastrais, contatos e bandeiras atendidas. Todos os campos são obrigatórios.</div>
+    <form onsubmit="validarFormulario(event)" autocomplete="off" aria-label="Cadastro de Fornecedor">
+      <label for="cnpj">CNPJ *</label>
+      <input type="text" id="cnpj" maxlength="18" placeholder="00.000.000/0000-00" required aria-required="true">
+      <div class="error-msg" id="erro-cnpj">CNPJ inválido.</div>
+      <label for="razao">Razão Social *</label>
+      <input type="text" id="razao" maxlength="80" placeholder="Razão Social" required aria-required="true">
+      <div class="error-msg" id="erro-razao">Campo obrigatório.</div>
+      <label for="endereco">Endereço *</label>
+      <input type="text" id="endereco" maxlength="120" placeholder="Endereço completo" required aria-required="true">
+      <div class="error-msg" id="erro-endereco">Campo obrigatório.</div>
+      <label for="contato">E-mail de Contato *</label>
+      <input type="email" id="contato" maxlength="80" placeholder="contato@fornecedor.com" required aria-required="true">
+      <div class="error-msg" id="erro-contato">Campo obrigatório.</div>
+      <label>Bandeiras Atendidas *</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="bandeiras" value="SuperMaxi" required> SuperMaxi</label>
+        <label><input type="checkbox" name="bandeiras" value="BomPreço"> BomPreço</label>
+        <label><input type="checkbox" name="bandeiras" value="UltraMais"> UltraMais</label>
+        <label><input type="checkbox" name="bandeiras" value="Mercadão"> Mercadão</label>
+        <label><input type="checkbox" name="bandeiras" value="Popular"> Popular</label>
+      </div>
+      <label for="documentos">Upload de Documentos (Contrato, Certidões) *</label>
+      <input type="file" id="documentos" name="documentos" accept=".pdf,.jpg,.png" multiple required aria-required="true">
+      <label for="obs">Observações</label>
+      <textarea id="obs" rows="3" maxlength="240" placeholder="Observações adicionais"></textarea>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="reset" class="btn btn-cancel">Cancelar</button>
+      </div>
+      <div class="success-msg" id="sucesso">Fornecedor cadastrado com sucesso!</div>
+    </form>
+  </main>
+  <div class="footer">&copy; 2024 Plurix. Todos os direitos reservados.</div>
+</body>
+</html>

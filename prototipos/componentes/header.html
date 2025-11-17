@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Componente Header - Plurix</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 0 0 0;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
+      z-index: 1000;
+    }
+    .header .logo {
+      height: 48px;
+      margin-left: 32px;
+    }
+    .header nav {
+      display: flex;
+      align-items: center;
+      margin-right: 32px;
+    }
+    .header nav a {
+      color: #1a1a1a;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 500;
+      font-size: 16px;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .header nav a.active, .header nav a:hover {
+      color: #0077b6;
+    }
+    .header .actions {
+      display: flex;
+      align-items: center;
+      margin-left: 24px;
+    }
+    .header .notification {
+      position: relative;
+      margin-right: 18px;
+      cursor: pointer;
+    }
+    .header .notification .dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 8px;
+      height: 8px;
+      background: #e63946;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: inline-block;
+    }
+    .header .user {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin-right: 12px;
+    }
+    .header .user img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 8px;
+      object-fit: cover;
+      border: 2px solid #0077b6;
+    }
+    .header .user .name {
+      font-size: 15px;
+      color: #222;
+      font-weight: 500;
+    }
+    .header .logout-btn {
+      background: #e63946;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 16px;
+      transition: background 0.2s;
+    }
+    .header .logout-btn:hover {
+      background: #b71c1c;
+    }
+    .header .login-btn {
+      background: #0077b6;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 16px;
+      transition: background 0.2s;
+    }
+    .header .login-btn:hover {
+      background: #005f8e;
+    }
+    @media (max-width: 800px) {
+      .header .logo { margin-left: 8px; height: 36px; }
+      .header nav { margin-right: 8px; }
+      .header nav a { margin-left: 12px; font-size: 14px; }
+      .header .user .name { display: none; }
+      .header .user img { width: 30px; height: 30px; }
+    }
+    @media (max-width: 500px) {
+      .header { flex-direction: column; height: auto; }
+      .header nav { margin: 0; }
+      .header .actions { margin: 0; }
+    }
+  </style>
+  <script>
+    // Exemplo de variação do header para diferentes estados
+    function renderHeader(options) {
+      // options: { loggedIn: true/false, userName: '', userImg: '', perfil: 'Fornecedor'/'Comprador'/etc, notifications: 2 }
+      var header = document.getElementById('header-root');
+      if (!header) return;
+      var html = '';
+      html += '<a href="/" aria-label="Página inicial Plurix">';
+      html += '<img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_60,al_c,lg_1,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo" />';
+      html += '</a>';
+      html += '<nav>';
+      html += '<a href="/dashboard.html" class="' + (options.active === 'dashboard' ? 'active' : '') + '">Dashboard</a>';
+      html += '<a href="/tabelas.html" class="' + (options.active === 'tabelas' ? 'active' : '') + '">Tabelas</a>';
+      if(options.perfil === 'Administrador' || options.perfil === 'Gerente') {
+        html += '<a href="/usuarios.html" class="' + (options.active === 'usuarios' ? 'active' : '') + '">Usuários</a>';
+      }
+      html += '<a href="/ajuda.html" class="' + (options.active === 'ajuda' ? 'active' : '') + '">Ajuda</a>';
+      html += '</nav>';
+      html += '<div class="actions">';
+      if(options.loggedIn) {
+        html += '<div class="notification" aria-label="Notificações">';
+        html += '<svg width="24" height="24" fill="none" stroke="#0077b6" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.63-5.64-5-5.93V4a1 1 0 0 0-2 0v1.07C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A1 1 0 0 0 6 19h12a1 1 0 0 0 .71-1.71L18 16z"></path></svg>';
+        if(options.notifications && options.notifications > 0) {
+          html += '<span class="dot" aria-label="Notificações não lidas"></span>';
+        }
+        html += '</div>';
+        html += '<div class="user" aria-label="Perfil do usuário">';
+        html += '<img src="' + (options.userImg || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(options.userName || 'Usuário') + '&background=0077b6&color=fff&size=128') + '" alt="Avatar do usuário" />';
+        html += '<span class="name">' + (options.userName || 'Usuário') + '</span>';
+        html += '</div>';
+        html += '<button class="logout-btn" onclick="alert(\'Logout\')" aria-label="Sair">Sair</button>';
+      } else {
+        html += '<button class="login-btn" onclick="window.location.href=\'/login.html\'" aria-label="Entrar">Entrar</button>';
+      }
+      html += '</div>';
+      header.innerHTML = html;
+    }
+    // Exemplo de uso:
+    document.addEventListener('DOMContentLoaded', function() {
+      renderHeader({
+        loggedIn: true,
+        userName: 'Ana Souza',
+        userImg: '',
+        perfil: 'Gerente',
+        notifications: 3,
+        active: 'dashboard'
+      });
+    });
+  </script>
+</head>
+<body>
+  <header class="header" id="header-root">
+    <!-- O conteúdo será renderizado dinamicamente pelo JS acima -->
+  </header>
+  <main style="padding:40px 24px;max-width:800px;margin:0 auto;">
+    <h1 style="color:#0077b6;font-size:2rem;margin-bottom:16px;">Componente Header Reutilizável</h1>
+    <p>Este header foi extraído do template Plurix e suporta variações para usuário logado, não logado e diferentes perfis (Fornecedor, Comprador, Gerente, Administrador, etc).</p>
+    <ul style="margin-top:24px;">
+      <li>Logo Plurix à esquerda</li>
+      <li>Menu de navegação com destaque para a página ativa</li>
+      <li>Ícone de notificações com indicador de não lidas</li>
+      <li>Avatar e nome do usuário logado</li>
+      <li>Botão de logout (ou login quando não autenticado)</li>
+      <li>Menu adaptável conforme perfil do usuário</li>
+      <li>Responsivo para dispositivos móveis</li>
+    </ul>
+    <h2 style="margin-top:32px;color:#222;font-size:1.25rem;">Exemplo de variação</h2>
+    <button style="margin:8px 8px 0 0;padding:8px 16px;background:#0077b6;color:#fff;border:none;border-radius:4px;cursor:pointer;" onclick="renderHeader({loggedIn:true,userName:'Carlos Lima',perfil:'Fornecedor',notifications:1,active:'tabelas'})">Fornecedor logado</button>
+    <button style="margin:8px 8px 0 0;padding:8px 16px;background:#0077b6;color:#fff;border:none;border-radius:4px;cursor:pointer;" onclick="renderHeader({loggedIn:false})">Não logado</button>
+    <button style="margin:8px 8px 0 0;padding:8px 16px;background:#0077b6;color:#fff;border:none;border-radius:4px;cursor:pointer;" onclick="renderHeader({loggedIn:true,userName:'Juliana Admin',perfil:'Administrador',notifications:0,active:'usuarios'})">Administrador</button>
+  </main>
+</body>
+</html>

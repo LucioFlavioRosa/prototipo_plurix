@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aprovações | Plurix Gestão de Tabelas</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    :root {
+      --primary: #1d2d44;
+      --accent: #fca311;
+      --bg: #f5f6fa;
+      --sidebar: #16213e;
+      --sidebar-active: #23395d;
+      --text: #22223b;
+      --white: #fff;
+      --success: #3bb273;
+      --danger: #e63946;
+      --font-main: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+    }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      margin: 0;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      z-index: 100;
+      background: var(--accent);
+      color: var(--sidebar);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .skip-link:focus {
+      left: 16px;
+      top: 16px;
+      width: auto;
+      height: auto;
+      outline: 2px solid var(--primary);
+    }
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      padding: 2rem 1.5rem 1rem 1.5rem;
+      border-bottom: 1px solid #23395d;
+    }
+    .sidebar .logo img {
+      width: 48px;
+      height: 48px;
+      margin-right: 1rem;
+    }
+    .sidebar nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+    .sidebar nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      border-left: 4px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .sidebar nav a.active, .sidebar nav a:focus {
+      background: var(--sidebar-active);
+      border-left: 4px solid var(--accent);
+      color: var(--accent);
+      outline: none;
+    }
+    .sidebar nav a:hover {
+      background: #23395d;
+      color: var(--accent);
+    }
+    .sidebar .user {
+      padding: 1rem 2rem;
+      border-top: 1px solid #23395d;
+      font-size: 0.95rem;
+      color: #bfc9d9;
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    header {
+      background: var(--white);
+      padding: 1.5rem 2rem 1rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .breadcrumbs {
+      font-size: 0.95rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .breadcrumbs a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .breadcrumbs a:focus {
+      outline: 2px solid var(--accent);
+      border-radius: 2px;
+    }
+    .breadcrumbs span {
+      color: #aaa;
+    }
+    main {
+      padding: 2rem;
+      flex: 1;
+      background: var(--bg);
+      min-width: 0;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px 0 rgba(34,34,59,0.04);
+      margin-bottom: 2rem;
+    }
+    th, td {
+      padding: 0.9rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    th {
+      background: #f3f3f3;
+      color: var(--primary);
+      font-weight: bold;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .btn {
+      background: var(--accent);
+      color: var(--sidebar);
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 4px 0 rgba(34,34,59,0.04);
+      margin-right: 0.5rem;
+    }
+    .btn:focus {
+      outline: 2px solid var(--primary);
+      background: #ffd166;
+    }
+    .btn:hover {
+      background: #ffd166;
+      color: var(--primary);
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: var(--white);
+    }
+    .btn-danger:hover, .btn-danger:focus {
+      background: #b71c1c;
+      color: var(--white);
+    }
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+    .btn-success:hover, .btn-success:focus {
+      background: #237a4c;
+      color: var(--white);
+    }
+    .form-just {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .form-just input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #e5e5e5;
+      font-size: 1rem;
+    }
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; }
+      .sidebar .logo span { display: none; }
+      .sidebar nav a { font-size: 0.9rem; padding: 1rem 1rem; }
+      .sidebar .user { display: none; }
+      header, main { padding-left: 1rem; padding-right: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      header { padding: 1rem; }
+      main { padding: 1rem; }
+      table, thead, tbody, th, td, tr { display: block; width: 100%; }
+      th, td { padding: 0.7rem 0.5rem; }
+      th { background: #f3f3f3; }
+      tr { margin-bottom: 1rem; }
+    }
+    a:focus, button:focus, input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link" tabindex="1">Pular para o conteúdo principal</a>
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" width="48" height="48">
+      <span style="font-size:1.25rem;font-weight:bold;letter-spacing:1px;">Plurix Gestão</span>
+    </div>
+    <nav aria-label="Navegação lateral">
+      <a href="dashboard.html" tabindex="2">Dashboard</a>
+      <a href="upload.html" tabindex="3">Upload de Tabelas</a>
+      <a href="aprovacoes.html" class="active" aria-current="page" tabindex="4">Aprovações</a>
+      <a href="analise.html" tabindex="5">Painel de Análise</a>
+      <a href="fornecedores.html" tabindex="6">Gestão de Fornecedores</a>
+      <a href="usuarios.html" tabindex="7">Usuários & Permissões</a>
+      <a href="logs.html" tabindex="8">Auditoria & Logs</a>
+      <a href="config.html" tabindex="9">Configurações</a>
+    </nav>
+    <div class="user" aria-label="Usuário logado">
+      <span aria-label="Nome do usuário">João Silva</span><br>
+      <span aria-label="Perfil do usuário">Administrador</span>
+    </div>
+  </aside>
+  <div class="main">
+    <header>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="dashboard.html">Início</a>
+        <span aria-hidden="true">/</span>
+        <a href="dashboard.html">Dashboard</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Aprovações</span>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="0">
+      <div class="section-title">Workflow de Aprovações</div>
+      <table aria-label="Tabela de aprovações pendentes">
+        <thead>
+          <tr>
+            <th scope="col">Fornecedor</th>
+            <th scope="col">Data Submissão</th>
+            <th scope="col">Status</th>
+            <th scope="col">Aprovação</th>
+            <th scope="col">Justificativa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alimentos Brasil</td>
+            <td>12/06/2024</td>
+            <td><span style="color:var(--accent);font-weight:bold;">Pendente</span></td>
+            <td>
+              <button class="btn btn-success" aria-label="Aprovar submissão">Aprovar</button>
+              <button class="btn btn-danger" aria-label="Reprovar submissão">Reprovar</button>
+            </td>
+            <td>
+              <form class="form-just" aria-label="Justificativa reprovação">
+                <input type="text" placeholder="Justificativa" aria-label="Justificativa" required>
+                <button class="btn" aria-label="Enviar justificativa">Enviar</button>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>Distribuidora Sul</td>
+            <td>10/06/2024</td>
+            <td><span style="color:var(--danger);font-weight:bold;">Reprovada</span></td>
+            <td>-</td>
+            <td>Faltam colunas obrigatórias</td>
+          </tr>
+          <tr>
+            <td>Supermercado União</td>
+            <td>09/06/2024</td>
+            <td><span style="color:var(--success);font-weight:bold;">Aprovada</span></td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+  <script>
+    // Skip link foco
+    document.querySelector('.skip-link').addEventListener('click', function(e) {
+      document.getElementById('main-content').focus();
+    });
+    // Menu ativo
+    document.querySelectorAll('.sidebar nav a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.sidebar nav a').forEach(a=>a.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    // Simulação de aprovação/reprovação
+    document.querySelectorAll('.btn-success').forEach(function(btn) {
+      btn.addEventListener('click', function(){
+        alert('Submissão aprovada!');
+      });
+    });
+    document.querySelectorAll('.btn-danger').forEach(function(btn) {
+      btn.addEventListener('click', function(){
+        alert('Submissão reprovada!');
+      });
+    });
+    // Justificativa
+    document.querySelectorAll('.form-just').forEach(function(form) {
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        alert('Justificativa enviada!');
+      });
+    });
+  </script>
+</body>
+</html>

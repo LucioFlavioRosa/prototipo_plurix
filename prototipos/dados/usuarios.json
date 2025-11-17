@@ -1,0 +1,122 @@
+[
+  {
+    "nome": "João Silva",
+    "email": "joao@alimentosbr.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais", "Econo"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T08:45:00Z"
+  },
+  {
+    "nome": "Maria Souza",
+    "email": "maria@dcentral.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-09T10:20:00Z"
+  },
+  {
+    "nome": "Carlos Gerente",
+    "email": "carlos.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T11:00:00Z"
+  },
+  {
+    "nome": "Fernanda Diretora",
+    "email": "fernanda.diretora@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-08T15:30:00Z"
+  },
+  {
+    "nome": "Bruno VP",
+    "email": "bruno.vp@plurix.com",
+    "perfil": "VP",
+    "bandeiras_acesso": ["Econo", "SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-07T09:10:00Z"
+  },
+  {
+    "nome": "Ana Gerente",
+    "email": "ana.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-06T13:50:00Z"
+  },
+  {
+    "nome": "Juliana Diretora",
+    "email": "juliana.diretora@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-05T14:05:00Z"
+  },
+  {
+    "nome": "Leonardo Gerente",
+    "email": "leonardo.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["Econo"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-04T16:40:00Z"
+  },
+  {
+    "nome": "Marcos Diretor",
+    "email": "marcos.diretor@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-03T17:25:00Z"
+  },
+  {
+    "nome": "Nathalia VP",
+    "email": "nathalia.vp@plurix.com",
+    "perfil": "VP",
+    "bandeiras_acesso": ["BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-02T18:10:00Z"
+  },
+  {
+    "nome": "Rafael Gerente",
+    "email": "rafael.gerente@plurix.com",
+    "perfil": "Gerente",
+    "bandeiras_acesso": ["SuperMais"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-01T19:00:00Z"
+  },
+  {
+    "nome": "Patrícia Diretora",
+    "email": "patricia.diretora@plurix.com",
+    "perfil": "Diretor",
+    "bandeiras_acesso": ["Econo"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-05-31T20:45:00Z"
+  },
+  {
+    "nome": "Thiago Nunes",
+    "email": "thiago@congeladosexpress.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["SuperMais", "BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-05-30T21:30:00Z"
+  },
+  {
+    "nome": "Simone Freitas",
+    "email": "simone@aguacristalina.com",
+    "perfil": "Fornecedor",
+    "bandeiras_acesso": ["Econo"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-05-29T22:15:00Z"
+  },
+  {
+    "nome": "Admin Plurix",
+    "email": "admin@plurix.com",
+    "perfil": "Admin",
+    "bandeiras_acesso": ["SuperMais", "Econo", "BomPreço"],
+    "status": "Ativo",
+    "ultima_atividade": "2024-06-10T07:00:00Z"
+  }
+]

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise de Tabela Submetida - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+      font-size: 15px;
+    }
+    .header {
+      background: #fff;
+      border-bottom: 2px solid #e5e7ef;
+      padding: 24px 40px 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header .logo {
+      height: 48px;
+    }
+    .header .titulo {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #2d3a4a;
+      margin-left: 24px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(40, 53, 80, 0.09);
+      padding: 32px 40px 40px 40px;
+    }
+    .strip-columns-container {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .column {
+      flex: 1;
+      background: #f5f6fa;
+      border-radius: 10px;
+      padding: 18px 24px;
+      min-width: 0;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.04);
+    }
+    .dados-fornecedor {
+      font-size: 1.1rem;
+      color: #2d3a4a;
+      margin-bottom: 8px;
+    }
+    .resumo-impactos {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    .impacto-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.07);
+      padding: 16px 24px;
+      min-width: 180px;
+      text-align: center;
+    }
+    .impacto-label {
+      font-size: 0.95rem;
+      color: #6e7a8a;
+      margin-bottom: 4px;
+    }
+    .impacto-valor {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1e88e5;
+    }
+    .tabela-comparativa {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(40,53,80,0.07);
+      margin-bottom: 32px;
+    }
+    .tabela-comparativa th, .tabela-comparativa td {
+      padding: 12px 10px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7ef;
+      font-size: 1rem;
+    }
+    .tabela-comparativa th {
+      background: #f5f6fa;
+      color: #2d3a4a;
+      font-weight: 700;
+    }
+    .tabela-comparativa tr:last-child td {
+      border-bottom: none;
+    }
+    .var-positiva {
+      color: #2ecc71;
+      font-weight: 600;
+    }
+    .var-negativa {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+    .ic-nielsen, .ic-objetiva {
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 2px 8px;
+      display: inline-block;
+    }
+    .ic-nielsen.baixo, .ic-objetiva.baixo {
+      background: #fbe9e7;
+      color: #e74c3c;
+    }
+    .ic-nielsen.medio, .ic-objetiva.medio {
+      background: #fffde7;
+      color: #fbc02d;
+    }
+    .ic-nielsen.alto, .ic-objetiva.alto {
+      background: #e8f5e9;
+      color: #2ecc71;
+    }
+    .btn {
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-right: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 1px 2px rgba(30,136,229,0.08);
+    }
+    .btn.reprovar {
+      background: #e74c3c;
+    }
+    .btn:active {
+      background: #1565c0;
+    }
+    .btn.reprovar:active {
+      background: #b71c1c;
+    }
+    .btn[disabled] {
+      background: #b0bec5;
+      cursor: not-allowed;
+    }
+    .drill-link {
+      color: #1e88e5;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    /* Modal */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(44,62,80,0.18);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(30,136,229,0.13);
+      padding: 32px 40px 24px 40px;
+      min-width: 350px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal .close {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      font-size: 1.5rem;
+      color: #b0bec5;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .modal h3 {
+      margin-top: 0;
+      color: #2d3a4a;
+      font-size: 1.25rem;
+    }
+    .modal label {
+      font-weight: 600;
+      color: #2d3a4a;
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 12px;
+    }
+    .modal input, .modal textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #e5e7ef;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      background: #f5f6fa;
+      resize: vertical;
+    }
+    .modal .btn {
+      margin-right: 0;
+      margin-top: 12px;
+    }
+    @media (max-width: 800px) {
+      .container {
+        padding: 18px 8px;
+      }
+      .header {
+        padding: 12px 8px 8px 8px;
+      }
+      .strip-columns-container {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="logo">
+    <span class="titulo">Análise Detalhada de Tabela Submetida</span>
+  </header>
+  <main class="container">
+    <div class="strip-columns-container">
+      <div class="column">
+        <div class="dados-fornecedor">
+          <strong>Fornecedor:</strong> SuperAlimentos S.A.<br>
+          <strong>CNPJ:</strong> 12.345.678/0001-99<br>
+          <strong>Data Submissão:</strong> 02/07/2024<br>
+          <strong>Coligada:</strong> Sulmax<br>
+          <strong>UF:</strong> RS
+        </div>
+      </div>
+      <div class="column">
+        <div class="resumo-impactos">
+          <div class="impacto-card">
+            <div class="impacto-label">Impacto DRE</div>
+            <div class="impacto-valor">-R$ 12.340,00</div>
+          </div>
+          <div class="impacto-card">
+            <div class="impacto-label">Variação Média (%)</div>
+            <div class="impacto-valor var-negativa">-3,8%</div>
+          </div>
+          <div class="impacto-card">
+            <div class="impacto-label">SKUs Alterados</div>
+            <div class="impacto-valor">124</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section>
+      <h2 style="color:#2d3a4a;font-size:1.15rem;margin-bottom:12px;margin-top:0;">Comparativo de Preços</h2>
+      <table class="tabela-comparativa" aria-label="Tabela comparativa de preços">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Descrição</th>
+            <th>Preço Antigo</th>
+            <th>Preço Novo</th>
+            <th>Variação (%)</th>
+            <th>IC Nielsen</th>
+            <th>IC Objetiva</th>
+            <th>Detalhes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>7891234567890</td>
+            <td>Arroz Premium 5kg</td>
+            <td>R$ 19,90</td>
+            <td>R$ 20,50</td>
+            <td class="var-positiva">+3,0%</td>
+            <td><span class="ic-nielsen medio">Médio</span></td>
+            <td><span class="ic-objetiva alto">Alto</span></td>
+            <td><span class="drill-link" onclick="abrirModalSKU('7891234567890')">Ver</span></td>
+          </tr>
+          <tr>
+            <td>7890987654321</td>
+            <td>Feijão Carioca 1kg</td>
+            <td>R$ 8,50</td>
+            <td>R$ 8,10</td>
+            <td class="var-negativa">-4,7%</td>
+            <td><span class="ic-nielsen baixo">Baixo</span></td>
+            <td><span class="ic-objetiva medio">Médio</span></td>
+            <td><span class="drill-link" onclick="abrirModalSKU('7890987654321')">Ver</span></td>
+          </tr>
+          <tr>
+            <td>7891111222233</td>
+            <td>Açúcar Refinado 1kg</td>
+            <td>R$ 4,20</td>
+            <td>R$ 4,20</td>
+            <td class="var-positiva">0,0%</td>
+            <td><span class="ic-nielsen alto">Alto</span></td>
+            <td><span class="ic-objetiva alto">Alto</span></td>
+            <td><span class="drill-link" onclick="abrirModalSKU('7891111222233')">Ver</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <div style="margin-top:24px;">
+      <button class="btn" onclick="abrirModalAprovar()">Aprovar</button>
+      <button class="btn reprovar" onclick="abrirModalReprovar()">Reprovar</button>
+    </div>
+  </main>
+  <!-- Modal Drill-down SKU -->
+  <div class="modal-bg" id="modalSKU">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalSKUtitle">
+      <button class="close" onclick="fecharModalSKU()" aria-label="Fechar">&times;</button>
+      <h3 id="modalSKUtitle">Detalhes do SKU</h3>
+      <div id="modalSKUcontent">
+        <!-- Conteúdo preenchido via JS -->
+      </div>
+    </div>
+  </div>
+  <!-- Modal Aprovação/Reprovação -->
+  <div class="modal-bg" id="modalAprovar">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalAprovarTitle">
+      <button class="close" onclick="fecharModalAprovar()" aria-label="Fechar">&times;</button>
+      <h3 id="modalAprovarTitle">Confirmação de Aprovação</h3>
+      <p>Tem certeza que deseja aprovar esta tabela?</p>
+      <button class="btn" onclick="confirmarAprovar()">Confirmar Aprovação</button>
+    </div>
+  </div>
+  <div class="modal-bg" id="modalReprovar">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalReprovarTitle">
+      <button class="close" onclick="fecharModalReprovar()" aria-label="Fechar">&times;</button>
+      <h3 id="modalReprovarTitle">Justificativa de Reprovação</h3>
+      <form onsubmit="return confirmarReprovar()">
+        <label for="justificativa">Informe o motivo da reprovação:</label>
+        <textarea id="justificativa" required rows="4" maxlength="300"></textarea>
+        <button class="btn reprovar" type="submit">Enviar Reprovação</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Drill-down SKU
+    const skuDetalhes = {
+      '7891234567890': {
+        gtin: '7891234567890',
+        descricao: 'Arroz Premium 5kg',
+        embalagem: 'Saco 5kg',
+        impostos: 'ICMS 7%',
+        custos: 'R$ 17,20',
+        precoAntigo: 'R$ 19,90',
+        precoNovo: 'R$ 20,50',
+        icNielsen: 'Médio',
+        icObjetiva: 'Alto',
+        ultimaAtualizacao: '01/06/2024',
+        pesoFornecedor: '2,4%'
+      },
+      '7890987654321': {
+        gtin: '7890987654321',
+        descricao: 'Feijão Carioca 1kg',
+        embalagem: 'Pacote 1kg',
+        impostos: 'ICMS 12%',
+        custos: 'R$ 6,90',
+        precoAntigo: 'R$ 8,50',
+        precoNovo: 'R$ 8,10',
+        icNielsen: 'Baixo',
+        icObjetiva: 'Médio',
+        ultimaAtualizacao: '28/05/2024',
+        pesoFornecedor: '1,2%'
+      },
+      '7891111222233': {
+        gtin: '7891111222233',
+        descricao: 'Açúcar Refinado 1kg',
+        embalagem: 'Pacote 1kg',
+        impostos: 'ICMS 7%',
+        custos: 'R$ 3,60',
+        precoAntigo: 'R$ 4,20',
+        precoNovo: 'R$ 4,20',
+        icNielsen: 'Alto',
+        icObjetiva: 'Alto',
+        ultimaAtualizacao: '15/05/2024',
+        pesoFornecedor: '0,7%'
+      }
+    };
+    function abrirModalSKU(sku) {
+      const d = skuDetalhes[sku];
+      let html = `<strong>GTIN:</strong> ${d.gtin}<br>
+        <strong>Descrição:</strong> ${d.descricao}<br>
+        <strong>Embalagem:</strong> ${d.embalagem}<br>
+        <strong>Impostos:</strong> ${d.impostos}<br>
+        <strong>Custos:</strong> ${d.custos}<br>
+        <strong>Preço Antigo:</strong> ${d.precoAntigo}<br>
+        <strong>Preço Novo:</strong> ${d.precoNovo}<br>
+        <strong>IC Nielsen:</strong> ${d.icNielsen}<br>
+        <strong>IC Objetiva:</strong> ${d.icObjetiva}<br>
+        <strong>Última Atualização:</strong> ${d.ultimaAtualizacao}<br>
+        <strong>Peso nas Vendas do Fornecedor:</strong> ${d.pesoFornecedor}`;
+      document.getElementById('modalSKUcontent').innerHTML = html;
+      document.getElementById('modalSKU').classList.add('active');
+    }
+    function fecharModalSKU() {
+      document.getElementById('modalSKU').classList.remove('active');
+    }
+    // Aprovação/Reprovação
+    function abrirModalAprovar() {
+      document.getElementById('modalAprovar').classList.add('active');
+    }
+    function fecharModalAprovar() {
+      document.getElementById('modalAprovar').classList.remove('active');
+    }
+    function confirmarAprovar() {
+      fecharModalAprovar();
+      alert('Tabela aprovada com sucesso!');
+    }
+    function abrirModalReprovar() {
+      document.getElementById('modalReprovar').classList.add('active');
+    }
+    function fecharModalReprovar() {
+      document.getElementById('modalReprovar').classList.remove('active');
+    }
+    function confirmarReprovar() {
+      const justificativa = document.getElementById('justificativa').value.trim();
+      if (!justificativa) {
+        alert('Por favor, informe a justificativa.');
+        return false;
+      }
+      fecharModalReprovar();
+      alert('Tabela reprovada. Justificativa registrada.');
+      return false;
+    }
+    // Fechar modal ao clicar fora
+    document.querySelectorAll('.modal-bg').forEach(bg => {
+      bg.addEventListener('click', function(e) {
+        if (e.target === bg) bg.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>

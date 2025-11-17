@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Administração de Fornecedores | Plurix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f7f7f7; margin: 0; }
+    .container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+    h1 { color: #004aad; font-size: 2rem; margin-bottom: 24px; }
+    form label { display: block; margin-bottom: 8px; font-weight: bold; color: #222; }
+    form input, form select { width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    .error-msg { color: #c00; font-size: 0.95em; margin: 4px 0 12px 0; }
+    .success-msg { color: #0a0; font-size: 1em; margin: 12px 0; }
+    button[type="submit"] {
+      background: #004aad;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    button[type="submit"]:disabled { background: #b3c7e6; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cadastro de Fornecedor</h1>
+    <form id="fornecedorForm" novalidate>
+      <label for="nome">Nome do Fornecedor:</label>
+      <input type="text" id="nome" name="nome" maxlength="80" required>
+      <div id="nomeError" class="error-msg" style="display:none"></div>
+
+      <label for="cnpj">CNPJ:</label>
+      <input type="text" id="cnpj" name="cnpj" maxlength="18" required pattern="\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}">
+      <div id="cnpjError" class="error-msg" style="display:none"></div>
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" maxlength="120" required>
+      <div id="emailError" class="error-msg" style="display:none"></div>
+
+      <label for="uf">UF:</label>
+      <select id="uf" name="uf" required>
+        <option value="">Selecione</option>
+        <option value="SP">SP</option>
+        <option value="RJ">RJ</option>
+        <option value="MG">MG</option>
+        <option value="RS">RS</option>
+        <option value="BA">BA</option>
+      </select>
+      <div id="ufError" class="error-msg" style="display:none"></div>
+
+      <label for="bandeira">Bandeira:</label>
+      <select id="bandeira" name="bandeira" required>
+        <option value="">Selecione</option>
+        <option value="SuperMais">SuperMais</option>
+        <option value="Maxi">Maxi</option>
+        <option value="BomPreço">BomPreço</option>
+        <option value="Top">Top</option>
+        <option value="Ultra">Ultra</option>
+      </select>
+      <div id="bandeiraError" class="error-msg" style="display:none"></div>
+
+      <button type="submit" id="submitBtn" disabled>Salvar Fornecedor</button>
+      <div id="formSuccess" class="success-msg" style="display:none"></div>
+    </form>
+  </div>
+  <script>
+    // Validação de formulário
+    const form = document.getElementById('fornecedorForm');
+    const nome = document.getElementById('nome');
+    const cnpj = document.getElementById('cnpj');
+    const email = document.getElementById('email');
+    const uf = document.getElementById('uf');
+    const bandeira = document.getElementById('bandeira');
+    const submitBtn = document.getElementById('submitBtn');
+    const nomeError = document.getElementById('nomeError');
+    const cnpjError = document.getElementById('cnpjError');
+    const emailError = document.getElementById('emailError');
+    const ufError = document.getElementById('ufError');
+    const bandeiraError = document.getElementById('bandeiraError');
+    const formSuccess = document.getElementById('formSuccess');
+
+    function validarNome() {
+      if (!nome.value.trim()) {
+        nomeError.textContent = 'Nome obrigatório.';
+        nomeError.style.display = 'block';
+        return false;
+      }
+      nomeError.style.display = 'none';
+      return true;
+    }
+    function validarCNPJ() {
+      const val = cnpj.value.trim();
+      const regex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+      if (!val) {
+        cnpjError.textContent = 'CNPJ obrigatório.';
+        cnpjError.style.display = 'block';
+        return false;
+      }
+      if (!regex.test(val)) {
+        cnpjError.textContent = 'CNPJ inválido. Use o formato 00.000.000/0000-00.';
+        cnpjError.style.display = 'block';
+        return false;
+      }
+      cnpjError.style.display = 'none';
+      return true;
+    }
+    function validarEmail() {
+      const val = email.value.trim();
+      const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/;
+      if (!val) {
+        emailError.textContent = 'E-mail obrigatório.';
+        emailError.style.display = 'block';
+        return false;
+      }
+      if (!regex.test(val)) {
+        emailError.textContent = 'E-mail inválido.';
+        emailError.style.display = 'block';
+        return false;
+      }
+      emailError.style.display = 'none';
+      return true;
+    }
+    function validarUF() {
+      if (!uf.value) {
+        ufError.textContent = 'Selecione uma UF.';
+        ufError.style.display = 'block';
+        return false;
+      }
+      ufError.style.display = 'none';
+      return true;
+    }
+    function validarBandeira() {
+      if (!bandeira.value) {
+        bandeiraError.textContent = 'Selecione uma bandeira.';
+        bandeiraError.style.display = 'block';
+        return false;
+      }
+      bandeiraError.style.display = 'none';
+      return true;
+    }
+    function validarFormulario() {
+      const v1 = validarNome();
+      const v2 = validarCNPJ();
+      const v3 = validarEmail();
+      const v4 = validarUF();
+      const v5 = validarBandeira();
+      submitBtn.disabled = !(v1 && v2 && v3 && v4 && v5);
+    }
+    [nome, cnpj, email, uf, bandeira].forEach(input => {
+      input.addEventListener('input', validarFormulario);
+      input.addEventListener('change', validarFormulario);
+    });
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (validarNome() && validarCNPJ() && validarEmail() && validarUF() && validarBandeira()) {
+        formSuccess.textContent = 'Fornecedor salvo com sucesso!';
+        formSuccess.style.display = 'block';
+        setTimeout(() => { formSuccess.style.display = 'none'; form.reset(); submitBtn.disabled = true; }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
