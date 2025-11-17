@@ -13,91 +13,30 @@
       height: 100%;
       margin: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f7f8fa;
+      background: #f5f6fa;
       color: #222;
-    }
-    body {
-      display: flex;
-      min-height: 100vh;
-    }
-    .sidebar {
-      width: 260px;
-      background: #1a2340;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      padding-top: 32px;
-      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-    }
-    .sidebar .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 40px;
-    }
-    .sidebar .logo img {
-      width: 120px;
-      height: auto;
-    }
-    .sidebar nav {
-      flex: 1;
-    }
-    .sidebar nav a {
-      display: flex;
-      align-items: center;
-      padding: 14px 32px;
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.08rem;
-      border-left: 4px solid transparent;
-      transition: background 0.15s, border-color 0.15s;
-      margin-bottom: 2px;
-    }
-    .sidebar nav a.active, .sidebar nav a:hover {
-      background: #222b4a;
-      border-left: 4px solid #f9b233;
-      color: #f9b233;
-    }
-    .sidebar .bottom {
-      margin-bottom: 32px;
-      text-align: center;
-      font-size: 0.95rem;
-      color: #b7b9c6;
-    }
-    .main-content {
-      flex: 1;
-      padding: 0 0 0 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
     .header {
       background: #fff;
-      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
-      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 0 32px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      position: sticky;
-      top: 0;
-      z-index: 1;
     }
     .header img {
       height: 40px;
       margin-right: 16px;
     }
     .header-title {
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      color: #1a2340;
+      color: #1a1a1a;
       letter-spacing: 0.5px;
-      margin: 0;
     }
     .container {
-      max-width: 700px;
+      max-width: 600px;
       margin: 48px auto 0 auto;
       background: #fff;
       border-radius: 16px;
@@ -121,6 +60,7 @@
       background: #e7f9ed;
       color: #1e7e34;
       border: 1px solid #b7e7c2;
+      display: none;
     }
     .alert-error {
       background: #fff2f0;
@@ -147,7 +87,7 @@
       font-size: 1rem;
     }
     .error-table th {
-      background: #f7f8fa;
+      background: #f5f6fa;
       color: #222;
       font-weight: 700;
       border-bottom: 2px solid #eaeaea;
@@ -190,266 +130,234 @@
       background: #f0f5ff;
     }
     /* Modal Styles */
-    .modal-correction {
+    .modal {
       display: none;
       position: fixed;
-      z-index: 9999;
+      z-index: 1000;
       left: 0;
       top: 0;
       width: 100vw;
       height: 100vh;
       overflow: auto;
-      background: rgba(30,40,80,0.14);
-      justify-content: center;
+      background: rgba(0,0,0,0.32);
       align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s;
     }
-    .modal-correction.active {
+    .modal.show {
       display: flex;
     }
-    .modal-content-correction {
+    .modal-content {
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 32px rgba(30,40,80,0.16);
-      padding: 32px 28px 24px 28px;
-      max-width: 680px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+      max-width: 520px;
+      width: 98vw;
+      padding: 0;
       display: flex;
       flex-direction: column;
+      animation: slideDown 0.2s;
     }
-    .modal-header-correction {
-      font-size: 1.32rem;
+    .modal-header {
+      padding: 20px 28px 10px 28px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 1.3rem;
       font-weight: 700;
-      color: #1a2340;
-      margin-bottom: 18px;
+      color: #1a1a1a;
+    }
+    .modal-body {
+      padding: 18px 28px 10px 28px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      padding: 16px 28px 20px 28px;
+      border-top: 1px solid #f0f0f0;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      gap: 16px;
+      justify-content: flex-end;
     }
-    .modal-header-correction .close-modal {
-      background: none;
-      border: none;
-      font-size: 1.7rem;
-      color: #888;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .correction-table {
+    .modal-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1rem;
-      margin-bottom: 18px;
+      margin-top: 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .correction-table th, .correction-table td {
-      padding: 8px 10px;
+    .modal-table th, .modal-table td {
+      padding: 10px 8px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .modal-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .modal-table tr {
       border-bottom: 1px solid #f0f0f0;
     }
-    .correction-table th {
-      background: #f7f8fa;
-      color: #1a2340;
-      font-weight: 700;
+    .modal-table tr:last-child {
+      border-bottom: none;
     }
-    .correction-table .required {
-      color: #e74c3c;
-      font-weight: 700;
+    .campo-editavel {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 5px;
+      border: 1px solid #b7e7c2;
+      font-size: 1rem;
+      background: #f9fffc;
+      color: #222;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.2s;
     }
-    .modal-footer-correction {
-      display: flex;
-      justify-content: flex-end;
-      gap: 14px;
+    .campo-editavel:focus {
+      border: 1.5px solid #1a6ae5;
+      background: #f0f5ff;
     }
-    .modal-footer-correction .btn {
-      min-width: 120px;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
-    @media (max-width: 900px) {
-      .main-content {
+    @keyframes slideDown {
+      from { transform: translateY(-32px); }
+      to   { transform: translateY(0); }
+    }
+    @media (max-width: 700px) {
+      .container {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+      .modal-content {
+        max-width: 99vw;
         padding: 0;
-      }
-      .header {
-        padding: 18px 10px 12px 10px;
-      }
-      .sidebar {
-        width: 70px;
-        padding-top: 12px;
-      }
-      .sidebar .logo img {
-        width: 44px;
-      }
-      .sidebar nav a {
-        padding: 10px 10px;
-        font-size: 0.98rem;
-      }
-      .modal-content-correction {
-        padding: 16px 4vw 16px 4vw;
       }
     }
   </style>
-  <script>
-    function goTo(page) {
-      window.location.href = page;
-    }
-    function sair() {
-      if (confirm('Deseja realmente sair?')) {
-        window.location.href = '../plurix.html';
-      }
-    }
-    // Modal logic
-    function openCorrectionModal() {
-      document.getElementById('modalCorrection').classList.add('active');
-    }
-    function closeCorrectionModal() {
-      document.getElementById('modalCorrection').classList.remove('active');
-    }
-    // Preenche a tabela de correção com os erros detectados (mock)
-    function fillCorrectionTable() {
-      // Simula as linhas com erro conforme tabela de erros
-      var rows = [
-        {linha: 12, gtin: '', descricao: 'Arroz Branco 5kg', preco: 'R$ 19,90', embalagem: 'PACOTE', erro: 'GTIN inválido (deve conter 13 dígitos numéricos)'},
-        {linha: 27, gtin: '7899876543210', descricao: 'Feijão Carioca 1kg', preco: '-7,99', embalagem: 'PACOTE', erro: 'Valor negativo não permitido'},
-        {linha: 45, gtin: '7891234567890', descricao: '', preco: 'R$ 8,99', embalagem: 'PACOTE', erro: 'Campo obrigatório não preenchido'}
-      ];
-      var table = document.getElementById('correctionTableBody');
-      table.innerHTML = '';
-      rows.forEach(function(r, idx) {
-        table.innerHTML += `<tr>
-          <td>${r.linha}</td>
-          <td><input type="text" name="gtin_${idx}" value="${r.gtin}" maxlength="13" style="width:120px;" required></td>
-          <td><input type="text" name="descricao_${idx}" value="${r.descricao}" style="width:180px;" required></td>
-          <td><input type="text" name="preco_${idx}" value="${r.preco}" style="width:100px;" required></td>
-          <td><input type="text" name="embalagem_${idx}" value="${r.embalagem}" style="width:100px;" required></td>
-          <td style="color:#e74c3c;font-size:0.98rem;">${r.erro}</td>
-        </tr>`;
-      });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      // Botão para abrir modal
-      var btnCorrigir = document.getElementById('btnCorrigirReenviar');
-      if (btnCorrigir) {
-        btnCorrigir.addEventListener('click', function(e) {
-          e.preventDefault();
-          fillCorrectionTable();
-          openCorrectionModal();
-        });
-      }
-      // Botão fechar modal
-      var btnClose = document.getElementById('closeModalCorrection');
-      if (btnClose) {
-        btnClose.addEventListener('click', function() {
-          closeCorrectionModal();
-        });
-      }
-      // Botão cancelar no modal
-      var btnCancel = document.getElementById('btnCancelCorrection');
-      if (btnCancel) {
-        btnCancel.addEventListener('click', function(e) {
-          e.preventDefault();
-          closeCorrectionModal();
-        });
-      }
-      // Botão salvar correções (apenas fecha o modal)
-      var btnSave = document.getElementById('btnSaveCorrection');
-      if (btnSave) {
-        btnSave.addEventListener('click', function(e) {
-          e.preventDefault();
-          closeCorrectionModal();
-          // Aqui você pode adicionar lógica para processar as correções
-        });
-      }
-    });
-  </script>
 </head>
 <body>
-  <aside class="sidebar">
-    <div class="logo">
-      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <span class="header-title">Validação de Arquivo de Preços</span>
+  </header>
+  <main class="container">
+    <div class="alert alert-error" role="alert">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
     </div>
-    <nav>
-      <a href="#" onclick="goTo('dashboard-fornecedor.html')">Dashboard</a>
-      <a href="#" onclick="goTo('upload-tabela.html')">Nova Tabela</a>
-      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
-      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
-      <a href="#" onclick="sair()">Sair</a>
-    </nav>
-    <div class="bottom">&copy; 2024 Plurix</div>
-  </aside>
-  <div class="main-content">
-    <header class="header">
-      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
-      <span class="header-title">Validação de Arquivo de Preços</span>
-    </header>
-    <main class="container">
-      <!-- Exemplo de alerta de erro -->
-      <div class="alert alert-error" role="alert">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
-      </div>
-      <table class="error-table" aria-label="Erros de validação">
-        <thead>
-          <tr>
-            <th>Linha</th>
-            <th>Coluna</th>
-            <th>Descrição do Erro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>12</td>
-            <td>GTIN</td>
-            <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
-          </tr>
-          <tr>
-            <td>27</td>
-            <td>Preço Novo</td>
-            <td>Valor negativo não permitido</td>
-          </tr>
-          <tr>
-            <td>45</td>
-            <td>Descrição</td>
-            <td>Campo obrigatório não preenchido</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="actions">
-        <button class="btn btn-primary" id="btnCorrigirReenviar">Corrigir e reenviar</button>
-        <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
-      </div>
-      <!-- Exemplo de alerta de sucesso (descomentar para exibir sucesso)
-      <div class="alert alert-success" role="alert">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-        <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
-      </div>
-      -->
-    </main>
+    <div class="alert alert-success" role="alert" style="display: none;">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+    </div>
+    <table class="error-table" aria-label="Erros de validação">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Coluna</th>
+          <th>Descrição do Erro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-linha="12" data-coluna="GTIN">
+          <td>12</td>
+          <td>GTIN</td>
+          <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
+        </tr>
+        <tr data-linha="27" data-coluna="Preço Novo">
+          <td>27</td>
+          <td>Preço Novo</td>
+          <td>Valor negativo não permitido</td>
+        </tr>
+        <tr data-linha="45" data-coluna="Descrição">
+          <td>45</td>
+          <td>Descrição</td>
+          <td>Campo obrigatório não preenchido</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="abrirModalCorrecao()">Corrigir e reenviar</button>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+    </div>
     <!-- Modal de Correção -->
-    <div class="modal-correction" id="modalCorrection" role="dialog" aria-modal="true" aria-labelledby="modalCorrectionTitle">
-      <div class="modal-content-correction">
-        <div class="modal-header-correction">
-          <span id="modalCorrectionTitle">Corrigir Erros de Validação</span>
-          <button class="close-modal" id="closeModalCorrection" aria-label="Fechar">&times;</button>
+    <div id="modalCorrecao" class="modal" tabindex="-1" aria-modal="true" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          Corrigir Dados com Erro
         </div>
-        <table class="correction-table" aria-label="Tabela para correção de erros">
-          <thead>
-            <tr>
-              <th>Linha</th>
-              <th><span class="required">*</span>GTIN</th>
-              <th><span class="required">*</span>Descrição</th>
-              <th><span class="required">*</span>Preço Novo</th>
-              <th><span class="required">*</span>Embalagem</th>
-              <th>Erro</th>
-            </tr>
-          </thead>
-          <tbody id="correctionTableBody">
-            <!-- Preenchido via JS -->
-          </tbody>
-        </table>
-        <div class="modal-footer-correction">
-          <button class="btn btn-primary" id="btnSaveCorrection">Salvar Correções</button>
-          <button class="btn btn-secondary" id="btnCancelCorrection">Cancelar</button>
+        <div class="modal-body">
+          <table class="modal-table" aria-label="Correção dos erros">
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Coluna</th>
+                <th>Descrição do Erro</th>
+                <th>Valor Corrigido</th>
+              </tr>
+            </thead>
+            <tbody id="modalCorrecaoBody">
+              <!-- Conteúdo gerado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="salvarCorrecoes()">Salvar Correções</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('modalCorrecao').style.display='none'">Cancelar</button>
         </div>
       </div>
     </div>
-    <!-- Fim Modal -->
-  </div>
+  </main>
+  <script>
+    function abrirModalCorrecao() {
+      // Preencher a tabela do modal com base na error-table
+      var errorRows = document.querySelectorAll('.error-table tbody tr');
+      var modalBody = document.getElementById('modalCorrecaoBody');
+      modalBody.innerHTML = '';
+      errorRows.forEach(function(row) {
+        var linha = row.querySelector('td:nth-child(1)').textContent;
+        var coluna = row.querySelector('td:nth-child(2)').textContent;
+        var descricao = row.querySelector('td:nth-child(3)').textContent;
+        // Campo editável apenas para a coluna com erro
+        var input = '<input type="text" class="campo-editavel" name="correcao_' + linha + '_' + coluna + '" placeholder="Insira o valor corrigido">';
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + linha + '</td>' +
+          '<td>' + coluna + '</td>' +
+          '<td>' + descricao + '</td>' +
+          '<td>' + input + '</td>';
+        modalBody.appendChild(tr);
+      });
+      var modal = document.getElementById('modalCorrecao');
+      modal.style.display = 'flex';
+      modal.classList.add('show');
+    }
+
+    function salvarCorrecoes() {
+      // Captura dos valores editados (poderia ser enviado para backend, aqui apenas simula)
+      var campos = document.querySelectorAll('.campo-editavel');
+      var correcoes = {};
+      campos.forEach(function(input) {
+        correcoes[input.name] = input.value;
+      });
+      // Fecha o modal
+      var modal = document.getElementById('modalCorrecao');
+      modal.style.display = 'none';
+      modal.classList.remove('show');
+      // Oculta alerta de erro
+      var alertErro = document.querySelector('.alert-error');
+      if (alertErro) alertErro.style.display = 'none';
+      // Exibe alerta de sucesso
+      var alertSucesso = document.querySelector('.alert-success');
+      if (alertSucesso) alertSucesso.style.display = 'flex';
+      // Redireciona após 2 segundos
+      setTimeout(function() {
+        window.location.href = 'dashboard-fornecedor.html';
+      }, 2000);
+    }
+  </script>
 </body>
 </html>
