@@ -13,30 +13,91 @@
       height: 100%;
       margin: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f5f6fa;
+      background: #f7f8fa;
       color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     .header {
       background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      padding: 0 32px;
-      height: 64px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      padding: 24px 40px 16px 40px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
     .header img {
       height: 40px;
       margin-right: 16px;
     }
     .header-title {
-      font-size: 1.6rem;
+      font-size: 2rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #1a2340;
       letter-spacing: 0.5px;
+      margin: 0;
     }
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 48px auto 0 auto;
       background: #fff;
       border-radius: 16px;
@@ -86,7 +147,7 @@
       font-size: 1rem;
     }
     .error-table th {
-      background: #f5f6fa;
+      background: #f7f8fa;
       color: #222;
       font-weight: 700;
       border-bottom: 2px solid #eaeaea;
@@ -128,61 +189,267 @@
     .btn-secondary:hover {
       background: #f0f5ff;
     }
-    @media (max-width: 700px) {
-      .container {
-        max-width: 98vw;
-        padding: 18px 4vw 18px 4vw;
+    /* Modal Styles */
+    .modal-correction {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+      background: rgba(30,40,80,0.14);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-correction.active {
+      display: flex;
+    }
+    .modal-content-correction {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 32px rgba(30,40,80,0.16);
+      padding: 32px 28px 24px 28px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header-correction {
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header-correction .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.7rem;
+      color: #888;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .correction-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+    .correction-table th, .correction-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .correction-table th {
+      background: #f7f8fa;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .correction-table .required {
+      color: #e74c3c;
+      font-weight: 700;
+    }
+    .modal-footer-correction {
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+    .modal-footer-correction .btn {
+      min-width: 120px;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        padding: 0;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .modal-content-correction {
+        padding: 16px 4vw 16px 4vw;
       }
     }
   </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../plurix.html';
+      }
+    }
+    // Modal logic
+    function openCorrectionModal() {
+      document.getElementById('modalCorrection').classList.add('active');
+    }
+    function closeCorrectionModal() {
+      document.getElementById('modalCorrection').classList.remove('active');
+    }
+    // Preenche a tabela de correção com os erros detectados (mock)
+    function fillCorrectionTable() {
+      // Simula as linhas com erro conforme tabela de erros
+      var rows = [
+        {linha: 12, gtin: '', descricao: 'Arroz Branco 5kg', preco: 'R$ 19,90', embalagem: 'PACOTE', erro: 'GTIN inválido (deve conter 13 dígitos numéricos)'},
+        {linha: 27, gtin: '7899876543210', descricao: 'Feijão Carioca 1kg', preco: '-7,99', embalagem: 'PACOTE', erro: 'Valor negativo não permitido'},
+        {linha: 45, gtin: '7891234567890', descricao: '', preco: 'R$ 8,99', embalagem: 'PACOTE', erro: 'Campo obrigatório não preenchido'}
+      ];
+      var table = document.getElementById('correctionTableBody');
+      table.innerHTML = '';
+      rows.forEach(function(r, idx) {
+        table.innerHTML += `<tr>
+          <td>${r.linha}</td>
+          <td><input type="text" name="gtin_${idx}" value="${r.gtin}" maxlength="13" style="width:120px;" required></td>
+          <td><input type="text" name="descricao_${idx}" value="${r.descricao}" style="width:180px;" required></td>
+          <td><input type="text" name="preco_${idx}" value="${r.preco}" style="width:100px;" required></td>
+          <td><input type="text" name="embalagem_${idx}" value="${r.embalagem}" style="width:100px;" required></td>
+          <td style="color:#e74c3c;font-size:0.98rem;">${r.erro}</td>
+        </tr>`;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Botão para abrir modal
+      var btnCorrigir = document.getElementById('btnCorrigirReenviar');
+      if (btnCorrigir) {
+        btnCorrigir.addEventListener('click', function(e) {
+          e.preventDefault();
+          fillCorrectionTable();
+          openCorrectionModal();
+        });
+      }
+      // Botão fechar modal
+      var btnClose = document.getElementById('closeModalCorrection');
+      if (btnClose) {
+        btnClose.addEventListener('click', function() {
+          closeCorrectionModal();
+        });
+      }
+      // Botão cancelar no modal
+      var btnCancel = document.getElementById('btnCancelCorrection');
+      if (btnCancel) {
+        btnCancel.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeCorrectionModal();
+        });
+      }
+      // Botão salvar correções (apenas fecha o modal)
+      var btnSave = document.getElementById('btnSaveCorrection');
+      if (btnSave) {
+        btnSave.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeCorrectionModal();
+          // Aqui você pode adicionar lógica para processar as correções
+        });
+      }
+    });
+  </script>
 </head>
 <body>
-  <header class="header">
-    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
-    <span class="header-title">Validação de Arquivo de Preços</span>
-  </header>
-  <main class="container">
-    <!-- Exemplo de alerta de erro -->
-    <div class="alert alert-error" role="alert">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
-    <table class="error-table" aria-label="Erros de validação">
-      <thead>
-        <tr>
-          <th>Linha</th>
-          <th>Coluna</th>
-          <th>Descrição do Erro</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>12</td>
-          <td>GTIN</td>
-          <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
-        </tr>
-        <tr>
-          <td>27</td>
-          <td>Preço Novo</td>
-          <td>Valor negativo não permitido</td>
-        </tr>
-        <tr>
-          <td>45</td>
-          <td>Descrição</td>
-          <td>Campo obrigatório não preenchido</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="actions">
-      <button class="btn btn-primary" onclick="window.location.reload()">Corrigir e reenviar</button>
-      <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+    <nav>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html')">Dashboard</a>
+      <a href="#" onclick="goTo('upload-tabela.html')">Nova Tabela</a>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
+      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
+      <a href="#" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span class="header-title">Validação de Arquivo de Preços</span>
+    </header>
+    <main class="container">
+      <!-- Exemplo de alerta de erro -->
+      <div class="alert alert-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
+      </div>
+      <table class="error-table" aria-label="Erros de validação">
+        <thead>
+          <tr>
+            <th>Linha</th>
+            <th>Coluna</th>
+            <th>Descrição do Erro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12</td>
+            <td>GTIN</td>
+            <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
+          </tr>
+          <tr>
+            <td>27</td>
+            <td>Preço Novo</td>
+            <td>Valor negativo não permitido</td>
+          </tr>
+          <tr>
+            <td>45</td>
+            <td>Descrição</td>
+            <td>Campo obrigatório não preenchido</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="actions">
+        <button class="btn btn-primary" id="btnCorrigirReenviar">Corrigir e reenviar</button>
+        <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+      </div>
+      <!-- Exemplo de alerta de sucesso (descomentar para exibir sucesso)
+      <div class="alert alert-success" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+      </div>
+      -->
+    </main>
+    <!-- Modal de Correção -->
+    <div class="modal-correction" id="modalCorrection" role="dialog" aria-modal="true" aria-labelledby="modalCorrectionTitle">
+      <div class="modal-content-correction">
+        <div class="modal-header-correction">
+          <span id="modalCorrectionTitle">Corrigir Erros de Validação</span>
+          <button class="close-modal" id="closeModalCorrection" aria-label="Fechar">&times;</button>
+        </div>
+        <table class="correction-table" aria-label="Tabela para correção de erros">
+          <thead>
+            <tr>
+              <th>Linha</th>
+              <th><span class="required">*</span>GTIN</th>
+              <th><span class="required">*</span>Descrição</th>
+              <th><span class="required">*</span>Preço Novo</th>
+              <th><span class="required">*</span>Embalagem</th>
+              <th>Erro</th>
+            </tr>
+          </thead>
+          <tbody id="correctionTableBody">
+            <!-- Preenchido via JS -->
+          </tbody>
+        </table>
+        <div class="modal-footer-correction">
+          <button class="btn btn-primary" id="btnSaveCorrection">Salvar Correções</button>
+          <button class="btn btn-secondary" id="btnCancelCorrection">Cancelar</button>
+        </div>
+      </div>
     </div>
-    <!-- Exemplo de alerta de sucesso (descomentar para exibir sucesso)
-    <div class="alert alert-success" role="alert">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-      <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
-    </div>
-    -->
-  </main>
+    <!-- Fim Modal -->
+  </div>
 </body>
 </html>
