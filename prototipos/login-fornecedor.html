@@ -64,68 +64,94 @@
       font-weight: 700;
       letter-spacing: 1px;
     }
+    nav {
+      margin-right: 32px;
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+    }
+    nav a:hover {
+      color: var(--plurix-secondary);
+    }
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 80vh;
+      min-height: calc(100vh - 72px);
       padding-top: 32px;
     }
     .login-container {
       background: #fff;
       border-radius: var(--plurix-radius);
-      box-shadow: 0 4px 24px rgba(12,35,64,0.07);
-      padding: 40px 32px 32px 32px;
+      box-shadow: 0 8px 32px rgba(12,35,64,0.08);
+      padding: 48px 40px 40px 40px;
       min-width: 340px;
-      max-width: 360px;
+      max-width: 400px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .login-container img {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 12px;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
     }
     .login-container h2 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       color: var(--plurix-primary);
       font-weight: 700;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       letter-spacing: 1px;
     }
     form {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 24px;
     }
     .form-label {
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--plurix-primary);
       margin-bottom: 4px;
+      letter-spacing: 0.3px;
     }
     .form-input {
-      padding: 12px 14px;
+      padding: 14px 16px;
       border: 1px solid var(--plurix-gray);
       border-radius: var(--plurix-radius);
       font-size: 1rem;
       background: var(--plurix-bg);
       color: var(--plurix-dark);
       outline: none;
-      transition: border 0.2s;
+      transition: border 0.2s, box-shadow 0.2s;
     }
     .form-input:focus {
       border-color: var(--plurix-accent);
       background: #fff;
+      box-shadow: 0 0 0 3px rgba(0,152,216,0.1);
     }
     .btn {
       font-family: inherit;
       font-size: 1rem;
-      padding: 12px 0;
+      padding: 14px 0;
       border: none;
       border-radius: var(--plurix-radius);
       font-weight: 700;
@@ -138,10 +164,11 @@
     }
     .btn:hover {
       background: #142d4c;
+      box-shadow: 0 4px 16px rgba(12,35,64,0.12);
     }
     .login-links {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       width: 100%;
       margin-top: 10px;
     }
@@ -149,10 +176,11 @@
       color: var(--plurix-accent);
       text-decoration: none;
       font-size: 0.98rem;
-      transition: color 0.2s;
+      transition: color 0.2s, font-weight 0.2s;
     }
     .login-links a:hover {
-      color: var(--plurix-primary);
+      color: #0077b3;
+      font-weight: 600;
       text-decoration: underline;
     }
     @media (max-width: 600px) {
@@ -163,6 +191,10 @@
       }
       .header-logo {
         margin-left: 12px;
+      }
+      nav {
+        margin-right: 12px;
+        margin-top: 8px;
       }
     }
   </style>
@@ -185,6 +217,9 @@
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
       <span class="header-title">Portal do Fornecedor</span>
     </div>
+    <nav>
+      <a href="index.html">&larr; Voltar para Home</a>
+    </nav>
   </header>
   <main>
     <div class="login-container">
@@ -199,9 +234,12 @@
       </form>
       <div class="login-links">
         <a href="#" aria-label="Recuperar senha">Esqueci minha senha</a>
-        <a href="#" aria-label="Cadastrar novo fornecedor">Cadastrar-se</a>
       </div>
     </div>
   </main>
+  <footer>
+    <div>&copy; 2024 Plurix. Todos os direitos reservados.</div>
+    <div style="font-size:0.95rem;opacity:0.7;margin-top:4px;">Desenvolvido para validação de conceito. Proibida reprodução não autorizada.</div>
+  </footer>
 </body>
 </html>
