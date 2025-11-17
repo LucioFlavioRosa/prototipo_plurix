@@ -114,19 +114,19 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 28px;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
     .card {
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(30,40,80,0.07);
-      padding: 28px 24px 22px 24px;
+      padding: 32px 28px 26px 28px;
       display: flex;
       flex-direction: column;
       min-height: 180px;
     }
     .card-title {
-      font-size: 1.18rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: #1a2340;
       margin-bottom: 12px;
@@ -134,23 +134,23 @@
     .card-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
     .card-table th, .card-table td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       text-align: left;
       border-bottom: 1px solid #f0f0f0;
     }
     .card-table th {
-      background: #f7f8fa;
+      background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
     }
     .status {
       display: inline-block;
       border-radius: 16px;
-      padding: 2px 14px;
-      font-size: 0.95rem;
+      padding: 4px 16px;
+      font-size: 1rem;
       font-weight: 700;
       color: #fff;
     }
@@ -161,19 +161,24 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 12px;
-      font-size: 0.98rem;
+      font-size: 1.02rem;
     }
     .history-table th, .history-table td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid #eaeaea;
     }
     .history-table th {
-      background: #f7f8fa;
+      background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
     }
     .history-table tr:last-child td {
       border-bottom: none;
+    }
+    a:hover {
+      color: #f9b233 !important;
+      font-weight: 600;
+      transition: all 0.2s;
     }
     @media (max-width: 900px) {
       .dashboard-section {
@@ -193,6 +198,18 @@
         padding: 10px 10px;
         font-size: 0.98rem;
       }
+    }
+    /* Responsividade para tabelas */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+    /* Estilo para o título da seção de histórico */
+    .historico-titulo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 20px;
     }
   </style>
   <script>
@@ -232,104 +249,111 @@
       <section class="dashboard-cards">
         <div class="card">
           <div class="card-title">Tabelas Submetidas Recentes</div>
-          <table class="card-table" aria-label="Tabelas Submetidas">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Arquivo</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>10/06/2024</td>
-                <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
-              </tr>
-              <tr>
-                <td>02/06/2024</td>
-                <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
-              </tr>
-              <tr>
-                <td>15/05/2024</td>
-                <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="card-table" aria-label="Tabelas Submetidas">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Arquivo</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10/06/2024</td>
+                  <td>precos_junho.xlsx</td>
+                  <td><span class="status status-pendente" title="Aguardando análise da equipe">Pendente</span></td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+                </tr>
+                <tr>
+                  <td>02/06/2024</td>
+                  <td>precos_maio.xlsx</td>
+                  <td><span class="status status-aprovada" title="Tabela aprovada">Aprovada</span></td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+                </tr>
+                <tr>
+                  <td>15/05/2024</td>
+                  <td>precos_abril.xlsx</td>
+                  <td><span class="status status-reprovada" title="Tabela reprovada">Reprovada</span></td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver Detalhes</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="card">
           <div class="card-title">Resumo de Submissões</div>
-          <table class="card-table" aria-label="Resumo de Submissões">
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td>1</td>
-              </tr>
-              <tr>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>4</td>
-              </tr>
-              <tr>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>2</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="card-table" aria-label="Resumo de Submissões">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="status status-pendente" title="Aguardando análise da equipe">Pendente</span></td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td><span class="status status-aprovada" title="Tabela aprovada">Aprovada</span></td>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <td><span class="status status-reprovada" title="Tabela reprovada">Reprovada</span></td>
+                  <td>2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
       <section id="historico">
+        <div class="historico-titulo">Histórico Completo de Submissões</div>
         <div class="card">
           <div class="card-title">Histórico de Submissões</div>
-          <table class="history-table" aria-label="Histórico de Submissões">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Arquivo</th>
-                <th>Status</th>
-                <th>Coligada/UF</th>
-                <th>Enviado por</th>
-                <th>Detalhes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>10/06/2024</td>
-                <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td>SuperSul / SC</td>
-                <td>fornecedor@exemplo.com</td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>02/06/2024</td>
-                <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>SuperSul / PR</td>
-                <td>fornecedor@exemplo.com</td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>15/05/2024</td>
-                <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>SuperSul / RS</td>
-                <td>fornecedor@exemplo.com</td>
-                <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="history-table" aria-label="Histórico de Submissões">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Arquivo</th>
+                  <th>Status</th>
+                  <th>Coligada/UF</th>
+                  <th>Enviado por</th>
+                  <th>Detalhes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10/06/2024</td>
+                  <td>precos_junho.xlsx</td>
+                  <td><span class="status status-pendente" title="Aguardando análise da equipe">Pendente</span></td>
+                  <td>SuperSul / SC</td>
+                  <td>fornecedor@exemplo.com</td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+                </tr>
+                <tr>
+                  <td>02/06/2024</td>
+                  <td>precos_maio.xlsx</td>
+                  <td><span class="status status-aprovada" title="Tabela aprovada">Aprovada</span></td>
+                  <td>SuperSul / PR</td>
+                  <td>fornecedor@exemplo.com</td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+                </tr>
+                <tr>
+                  <td>15/05/2024</td>
+                  <td>precos_abril.xlsx</td>
+                  <td><span class="status status-reprovada" title="Tabela reprovada">Reprovada</span></td>
+                  <td>SuperSul / RS</td>
+                  <td>fornecedor@exemplo.com</td>
+                  <td><a href="#" style="color:#1a2340;text-decoration:underline;">Ver</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </main>
