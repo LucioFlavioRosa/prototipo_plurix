@@ -1,57 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt" data-theme="light">
+<html lang="pt">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard do Fornecedor | Plurix</title>
-  <meta name="description" content="Dashboard do Fornecedor - Plataforma Plurix de Gerenciamento de Tabelas de Preços">
-  <meta name="theme-color" content="#0c2340">
-  <link rel="canonical" href="https://plurix.com.br/dashboard-fornecedor">
-  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
   <style>
-    @font-face {
-      font-display: swap;
-      font-family: wf_1973fffd9707483bb7143c4dc;
-      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
-           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
-    }
-    @font-face {
-      font-family: 'helvetica-w01-roman';
-      font-style: normal;
-      font-weight: 400;
-      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
-      font-display: swap;
-    }
-    :root {
-      --plurix-primary: #0c2340;
-      --plurix-secondary: #f5b800;
-      --plurix-bg: #f7f8fa;
-      --plurix-gray: #e5e7eb;
-      --plurix-dark: #222;
-      --plurix-accent: #0098d8;
-      --plurix-radius: 8px;
-      --plurix-bg-dark: #1a1a1a;
-      --plurix-card-dark: #2a2a2a;
-      --plurix-text-dark: #f7f8fa;
-    }
-    [data-theme="dark"] {
-      --plurix-bg: var(--plurix-bg-dark);
-      --plurix-card: var(--plurix-card-dark);
-      --plurix-dark: var(--plurix-text-dark);
-      --plurix-primary: #f7f8fa;
-      --plurix-secondary: #ffd600;
-      --plurix-gray: #333;
-      --plurix-accent: #38bdf8;
-    }
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: wf_1973fffd9707483bb7143c4dc, 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
-      background: var(--plurix-bg);
-      color: var(--plurix-dark);
-      font-size: 16px;
-      transition: background 0.3s, color 0.3s;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
     }
     body {
       display: flex;
@@ -59,16 +21,14 @@
     }
     .sidebar {
       width: 260px;
-      background: var(--plurix-primary);
+      background: #1a2340;
       color: #fff;
       display: flex;
       flex-direction: column;
       padding-top: 32px;
-      box-shadow: 2px 0 8px rgba(12,35,64,0.07);
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
       position: relative;
       z-index: 2;
-      will-change: transform;
-      transition: transform 0.3s;
     }
     .sidebar .logo {
       display: flex;
@@ -79,10 +39,6 @@
     .sidebar .logo img {
       width: 120px;
       height: auto;
-      border-radius: var(--plurix-radius);
-      box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      will-change: transform;
-      contain: layout style paint;
     }
     .sidebar nav {
       flex: 1;
@@ -95,531 +51,197 @@
       text-decoration: none;
       font-size: 1.08rem;
       border-left: 4px solid transparent;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      transition: background 0.15s, border-color 0.15s;
       margin-bottom: 2px;
-      position: relative;
     }
     .sidebar nav a.active, .sidebar nav a:hover {
-      background: #142d4c;
-      border-left: 4px solid var(--plurix-secondary);
-      color: var(--plurix-secondary);
-    }
-    .sidebar .badge {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin-left: 8px;
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
     }
     .sidebar .bottom {
       margin-bottom: 32px;
       text-align: center;
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-    .sidebar-backdrop {
-      background: rgba(0,0,0,0.5);
-      position: fixed;
-      inset: 0;
-      z-index: 998;
-      display: none;
+      font-size: 0.95rem;
+      color: #b7b9c6;
     }
     .main-content {
       flex: 1;
-      padding: 0;
+      padding: 0 0 0 0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      margin-top: 0;
     }
     .header {
       background: #fff;
-      padding: 0;
-      box-shadow: 0 2px 8px rgba(12,35,64,0.04);
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 72px;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 1;
     }
     .header h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--plurix-primary);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
       margin: 0;
-      padding: 0 40px;
-      letter-spacing: 1px;
     }
     .header .cta-upload {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
+      background: #f9b233;
+      color: #fff;
       border: none;
-      border-radius: var(--plurix-radius);
-      padding: 12px 32px;
-      font-size: 1rem;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(245,184,0,0.08);
-      margin-right: 40px;
-      outline: none;
-      will-change: transform;
-      text-align: center;
-      display: inline-block;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
     }
     .header .cta-upload:hover {
-      background: #ffd600;
-      color: var(--plurix-primary);
-      box-shadow: 0 4px 16px rgba(245,184,0,0.12);
-    }
-    .header .theme-toggle {
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      margin-right: 24px;
-      cursor: pointer;
-      color: var(--plurix-primary);
-      transition: color 0.2s;
-      outline: none;
-    }
-    .header .sidebar-toggle {
-      display: none;
-      background: transparent;
-      border: none;
-      font-size: 2rem;
-      margin-left: 16px;
-      color: var(--plurix-primary);
-      cursor: pointer;
-      outline: none;
-    }
-    .progress-bar {
-      height: 3px;
-      background: var(--plurix-secondary);
-      width: 0%;
-      transition: width 0.5s ease-out;
-      position: fixed;
-      top: 72px;
-      left: 0;
-      z-index: 999;
+      background: #e1a12a;
     }
     .dashboard-section {
-      background: linear-gradient(180deg, #f7f8fa 0%, #ffffff 100%);
-      padding: 40px 40px 56px 40px;
+      padding: 32px 40px 40px 40px;
       flex: 1;
+      background: #f7f8fa;
       min-height: 0;
-      transition: background 0.3s;
     }
     .dashboard-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 32px;
-      max-width: 1200px;
-      margin: 0 auto 40px auto;
-      padding: 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 48px;
     }
     .card {
       background: #fff;
-      border-radius: var(--plurix-radius);
-      box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      padding: 32px 28px 28px 28px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
       display: flex;
       flex-direction: column;
-      min-height: 200px;
-      contain: layout style paint;
-      transition: box-shadow 0.2s;
-      will-change: transform;
-      animation: fadeInUp 0.5s ease-out;
-    }
-    .card:hover {
-      box-shadow: 0 8px 32px rgba(12,35,64,0.10);
+      min-height: 180px;
     }
     .card-title {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      color: var(--plurix-primary);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
+      color: #1a2340;
+      margin-bottom: 12px;
     }
-    .card-title .icon {
-      margin-right: 8px;
-      font-size: 1.4rem;
-      vertical-align: middle;
-    }
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .quick-action-btn {
-      background: var(--plurix-bg);
-      border: 1px solid var(--plurix-gray);
-      border-radius: var(--plurix-radius);
-      padding: 18px 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 700;
-      color: var(--plurix-primary);
-      font-size: 1rem;
-      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      outline: none;
-      text-align: center;
-    }
-    .quick-action-btn:hover {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
-      box-shadow: 0 4px 16px rgba(245,184,0,0.12);
-    }
-    .quick-action-btn .icon {
-      font-size: 1.5rem;
-      margin-bottom: 6px;
-    }
-    .card-table, .history-table {
+    .card-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
-    .card-table th, .card-table td, .history-table th, .history-table td {
+    .card-table th, .card-table td {
       padding: 10px 12px;
       text-align: left;
-      border-bottom: 1px solid var(--plurix-gray);
+      border-bottom: 1px solid #f0f0f0;
     }
-    .card-table th, .history-table th {
-      background: var(--plurix-bg);
-      color: var(--plurix-primary);
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
       font-weight: 700;
-    }
-    .card-table tbody tr:hover, .history-table tbody tr:hover {
-      background: #f9fafb;
-      transition: background 0.15s;
     }
     .status {
       display: inline-block;
       border-radius: 16px;
       padding: 4px 16px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #fff;
-      vertical-align: middle;
-      cursor: default;
-      transition: background 0.2s;
-    }
-    .status-pendente {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
-    }
-    .status-aprovada {
-      background: #10b981;
-      color: #fff;
-    }
-    .status-reprovada {
-      background: #ef4444;
-      color: #fff;
-    }
-    .card-table a, .history-table a {
-      color: var(--plurix-accent);
-      font-weight: 600;
-      text-decoration: underline;
-      transition: color 0.15s, text-decoration 0.15s;
-      cursor: pointer;
-    }
-    .card-table a:hover, .history-table a:hover {
-      color: var(--plurix-primary);
-      text-decoration: none;
-    }
-    .empty-state {
-      color: #9ca3af;
-      font-size: 1.1rem;
-      text-align: center;
-      padding: 40px 0;
-      display: none;
-    }
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-      border-radius: var(--plurix-radius);
-      min-height: 24px;
-      margin-bottom: 8px;
-    }
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(100%); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideOutRight {
-      from { opacity: 1; transform: translateX(0); }
-      to { opacity: 0; transform: translateX(100%); }
-    }
-    @keyframes highlight {
-      0%, 100% { background: transparent; }
-      50% { background: #d4edda; }
-    }
-    @keyframes highlight-error {
-      0%, 100% { background: transparent; }
-      50% { background: #f8d7da; }
-    }
-    .success {
-      animation: highlight 1s;
-    }
-    .error {
-      animation: highlight-error 1s;
-    }
-    .toast-container {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .toast {
-      background: #fff;
-      color: var(--plurix-primary);
-      border-left: 5px solid var(--plurix-secondary);
-      border-radius: var(--plurix-radius);
-      box-shadow: 0 2px 8px rgba(12,35,64,0.08);
-      padding: 16px 24px;
-      min-width: 220px;
-      font-weight: 600;
-      animation: slideInRight 0.4s, slideOutRight 0.4s 2.6s forwards;
-    }
-    .toast.success { border-left-color: #10b981; }
-    .toast.error { border-left-color: #ef4444; }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal {
-      background: #fff;
-      border-radius: var(--plurix-radius);
-      padding: 32px 40px;
-      box-shadow: 0 8px 32px rgba(12,35,64,0.18);
-      max-width: 340px;
-      text-align: center;
-      color: var(--plurix-primary);
-      font-size: 1.1rem;
-    }
-    .modal .modal-actions {
-      margin-top: 28px;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-    }
-    .modal .btn {
-      font-family: inherit;
       font-size: 1rem;
-      padding: 10px 28px;
-      border: none;
-      border-radius: var(--plurix-radius);
       font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
-      outline: none;
-      text-align: center;
-      display: inline-block;
+      color: #fff;
     }
-    .modal .btn-cancel {
-      background: var(--plurix-gray);
-      color: var(--plurix-primary);
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 1.02rem;
     }
-    .modal .btn-confirm {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
+    .history-table th, .history-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
     }
-    .modal .btn-cancel:hover {
-      background: #d1d5db;
+    .history-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
     }
-    .modal .btn-confirm:hover {
-      background: #ffd600;
+    .history-table tr:last-child td {
+      border-bottom: none;
     }
-    .footer {
-      background: #fff;
-      border-top: 1px solid var(--plurix-gray);
-      padding: 16px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: auto;
-    }
-    .footer a {
-      color: var(--plurix-accent);
-      text-decoration: none;
-      margin-left: 18px;
-      font-weight: 500;
-      transition: color 0.15s;
-    }
-    .footer a:hover {
-      color: var(--plurix-primary);
+    .link-detalhes {
+      color: #1a2340;
       text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
     }
-    /* Responsividade e sidebar mobile */
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
     @media (max-width: 900px) {
-      .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        z-index: 999;
-        transform: translateX(-100%);
-        display: flex;
-        transition: transform 0.3s;
-      }
-      .sidebar.open {
-        transform: translateX(0);
-        display: flex;
-      }
-      .sidebar-backdrop.open {
-        display: block;
-      }
-      .main-content {
-        margin-left: 0;
-      }
-      .header .sidebar-toggle {
-        display: block;
-      }
       .dashboard-section {
         padding: 24px 10px 24px 10px;
       }
       .header {
-        padding: 0;
+        padding: 18px 10px 12px 10px;
       }
-      .footer {
-        padding: 16px 10px;
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
       }
-    }
-    @media (max-width: 600px) {
-      .dashboard-cards {
-        gap: 16px;
-        padding: 0 4px 16px 4px;
+      .sidebar .logo img {
+        width: 44px;
       }
-      .footer {
-        flex-direction: column;
-        gap: 8px;
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
       }
-    }
-    /* Modal de atalhos */
-    .shortcuts-modal {
-      background: #fff;
-      border-radius: var(--plurix-radius);
-      padding: 32px 40px;
-      box-shadow: 0 8px 32px rgba(12,35,64,0.18);
-      max-width: 400px;
-      text-align: left;
-      color: var(--plurix-primary);
-      font-size: 1.05rem;
-      display: none;
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10001;
-    }
-    .shortcuts-modal.open {
-      display: block;
-    }
-    .shortcuts-modal h2 {
-      font-size: 1.2rem;
-      margin-bottom: 18px;
-    }
-    .shortcuts-modal ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .shortcuts-modal li {
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    .shortcuts-modal .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 18px;
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      color: var(--plurix-primary);
-      cursor: pointer;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
-  <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../plurix.html';
+      }
+    }
+    function uploadCTA() {
+      window.location.href = 'upload-tabela.html';
+    }
+  </script>
 </head>
 <body>
-  <div class="sidebar-backdrop" onclick="toggleSidebar()" aria-label="Fechar menu lateral"></div>
-  <aside class="sidebar" aria-label="Menu lateral">
+  <aside class="sidebar">
     <div class="logo">
-      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" loading="lazy">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
     <nav>
-      <a href="dashboard-fornecedor.html" class="active" aria-label="Dashboard">Dashboard</a>
-      <a href="upload-tabela.html" aria-label="Nova Tabela">Nova Tabela <span class="badge" id="badge-nova-tabela">3</span></a>
-      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')" aria-label="Histórico">Histórico <span class="badge" id="badge-historico">12</span></a>
-      <a href="#" onclick="goTo('perfil.html')" aria-label="Perfil">Perfil</a>
-      <a href="#" onclick="sair()" aria-label="Sair">Sair</a>
+      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="#" onclick="goTo('dashboard-fornecedor.html#historico')">Histórico</a>
+      <a href="#" onclick="goTo('perfil.html')">Perfil</a>
+      <a href="#" onclick="sair()">Sair</a>
     </nav>
-    <div class="bottom">&copy; <span id="year"></span> Plurix</div>
+    <div class="bottom">&copy; 2024 Plurix</div>
   </aside>
   <div class="main-content">
     <header class="header">
-      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Abrir menu lateral">&#9776;</button>
       <h1>Dashboard do Fornecedor</h1>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema"><span id="theme-icon">🌙</span></button>
-        <button class="cta-upload" onclick="uploadCTA(event)" aria-label="Nova Tabela de Preços">+ Nova Tabela de Preços</button>
-        <button class="quick-tour-btn" onclick="startTour()" aria-label="Iniciar Tour" style="background:transparent;border:none;font-size:1.3rem;cursor:pointer;color:var(--plurix-accent);margin-left:8px;">🎓</button>
-      </div>
+      <button class="cta-upload" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
     </header>
-    <div class="progress-bar" id="progress-bar"></div>
     <main class="dashboard-section">
       <section class="dashboard-cards">
-        <div class="card" style="animation-delay:0.1s;">
-          <div class="card-title"><span class="icon" aria-hidden="true">⚡</span>Ações Rápidas</div>
-          <div class="quick-actions">
-            <button class="quick-action-btn" onclick="uploadCTA(event)" aria-label="Nova Tabela"><span class="icon">📤</span>Nova Tabela</button>
-            <button class="quick-action-btn" onclick="goTo('dashboard-fornecedor.html#historico')" aria-label="Ver Histórico"><span class="icon">📜</span>Histórico</button>
-            <button class="quick-action-btn" onclick="showToast('Em breve: Suporte!', 'info')" aria-label="Suporte"><span class="icon">💬</span>Suporte</button>
-          </div>
-        </div>
-        <div class="card" style="animation-delay:0.2s;">
-          <div class="card-title"><span class="icon" aria-hidden="true">📊</span>Tabelas Submetidas Recentes</div>
-          <!-- <div class="empty-state"><span style="font-size:1.5rem;">📭</span><br>Nenhuma tabela submetida ainda</div> -->
+        <div class="card">
+          <div class="card-title">Tabelas Submetidas Recentes</div>
           <table class="card-table" aria-label="Tabelas Submetidas">
             <thead>
               <tr>
@@ -633,62 +255,54 @@
               <tr>
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente" title="Aguardando aprovação do gestor">Pendente</span></td>
-                <td><a href="#" title="Ver detalhes da tabela" aria-label="Ver Detalhes">Ver Detalhes</a></td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada" title="Aprovada por gestor">Aprovada</span></td>
-                <td><a href="#" title="Ver detalhes da tabela" aria-label="Ver Detalhes">Ver Detalhes</a></td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada" title="Reprovada por gestor">Reprovada</span></td>
-                <td><a href="#" title="Ver detalhes da tabela" aria-label="Ver Detalhes">Ver Detalhes</a></td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="card" style="animation-delay:0.3s;display:flex;flex-direction:row;align-items:flex-start;gap:24px;">
-          <div style="flex:1;min-width:170px;">
-            <div class="card-title"><span class="icon" aria-hidden="true">📈</span>Resumo de Submissões</div>
-            <table class="card-table" aria-label="Resumo de Submissões">
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Quantidade</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="status status-pendente" title="Aguardando aprovação do gestor">Pendente</span></td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td><span class="status status-aprovada" title="Aprovada por gestor">Aprovada</span></td>
-                  <td>4</td>
-                </tr>
-                <tr>
-                  <td><span class="status status-reprovada" title="Reprovada por gestor">Reprovada</span></td>
-                  <td>2</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="flex:1;min-width:180px;display:flex;align-items:center;justify-content:center;">
-            <canvas id="chartResumo" width="120" height="120" aria-label="Gráfico de Resumo de Submissões"></canvas>
-          </div>
+        <div class="card">
+          <div class="card-title">Resumo de Submissões</div>
+          <table class="card-table" aria-label="Resumo de Submissões">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Quantidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
       <section id="historico">
-        <div class="card" style="animation-delay:0.4s;">
-          <div class="card-title"><span class="icon" aria-hidden="true">📜</span>Histórico de Submissões</div>
-          <div style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:1.2rem;">🔍</span>
-            <input type="text" id="search-historico" placeholder="Buscar por data, status ou arquivo..." style="border:1px solid var(--plurix-gray);border-radius:var(--plurix-radius);padding:8px 12px;width:100%;max-width:300px;" aria-label="Buscar histórico">
-          </div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #1a2340; margin-bottom: 20px;">Histórico Completo de Submissões</h2>
+        <div class="card">
+          <div class="card-title">Histórico de Submissões</div>
           <table class="history-table" aria-label="Histórico de Submissões">
             <thead>
               <tr>
@@ -700,317 +314,36 @@
                 <th>Detalhes</th>
               </tr>
             </thead>
-            <tbody id="historico-tbody">
+            <tbody>
               <tr>
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente" title="Aguardando aprovação do gestor">Pendente</span></td>
+                <td><span class="status status-pendente">Pendente</span></td>
                 <td>SuperSul / SC</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" title="Ver detalhes da submissão" aria-label="Ver">Ver</a></td>
+                <td><a href="#" class="link-detalhes">Ver</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada" title="Aprovada por gestor">Aprovada</span></td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
                 <td>SuperSul / PR</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" title="Ver detalhes da submissão" aria-label="Ver">Ver</a></td>
+                <td><a href="#" class="link-detalhes">Ver</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada" title="Reprovada por gestor">Reprovada</span></td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
                 <td>SuperSul / RS</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" title="Ver detalhes da submissão" aria-label="Ver">Ver</a></td>
+                <td><a href="#" class="link-detalhes">Ver</a></td>
               </tr>
             </tbody>
           </table>
-          <div class="empty-state" id="empty-historico"><span style="font-size:1.5rem;">📭</span><br>Nenhuma submissão encontrada</div>
-          <div id="pagination" style="display:flex;justify-content:center;gap:8px;margin-top:16px;"></div>
         </div>
       </section>
     </main>
-    <footer class="footer">
-      <div>
-        &copy; <span id="footer-year"></span> Plurix. Todos os direitos reservados.
-      </div>
-      <div>
-        <a href="#" aria-label="Termos de Uso">Termos de Uso</a>
-        <a href="#" aria-label="Política de Privacidade">Política de Privacidade</a>
-        <a href="#" aria-label="Suporte">Suporte</a>
-        <span style="margin-left:18px;">Versão 1.0</span>
-      </div>
-    </footer>
-    <div class="toast-container" id="toast-container"></div>
-    <div class="modal-overlay" id="modal-sair">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-sair-title">
-        <div id="modal-sair-title" style="font-weight:700;font-size:1.15rem;margin-bottom:12px;">Deseja realmente sair?</div>
-        <div style="color:#666;font-size:1rem;">Você será redirecionado para a tela inicial.</div>
-        <div class="modal-actions">
-          <button class="btn btn-cancel" onclick="closeModalSair()" aria-label="Cancelar">Cancelar</button>
-          <button class="btn btn-confirm" onclick="confirmarSair()" aria-label="Confirmar">Confirmar</button>
-        </div>
-      </div>
-    </div>
-    <div class="shortcuts-modal" id="shortcuts-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
-      <button class="close-btn" onclick="closeShortcutsModal()" aria-label="Fechar">&times;</button>
-      <h2 id="shortcuts-title">Atalhos de Teclado</h2>
-      <ul>
-        <li><b>Ctrl+N</b> — Nova Tabela</li>
-        <li><b>Ctrl+H</b> — Histórico</li>
-        <li><b>Esc</b> — Fechar modais</li>
-        <li><b>Ctrl+/</b> ou <b>?</b> — Exibir atalhos</li>
-      </ul>
-    </div>
   </div>
-  <script>
-    // Ano dinâmico sidebar/footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-    // Sidebar mobile toggle
-    function toggleSidebar() {
-      const sidebar = document.querySelector('.sidebar');
-      const backdrop = document.querySelector('.sidebar-backdrop');
-      sidebar.classList.toggle('open');
-      backdrop.classList.toggle('open');
-    }
-    // Fechar sidebar ao clicar fora (mobile)
-    document.querySelector('.sidebar-backdrop').addEventListener('click', toggleSidebar);
-
-    // Modal sair
-    function sair() {
-      document.getElementById('modal-sair').style.display = 'flex';
-    }
-    function closeModalSair() {
-      document.getElementById('modal-sair').style.display = 'none';
-    }
-    function confirmarSair() {
-      window.location.href = '../plurix.html';
-    }
-    // Upload CTA com pulse
-    function uploadCTA(e) {
-      const btn = e.target.closest('.cta-upload, .quick-action-btn');
-      if (btn) {
-        btn.style.animation = 'pulse 0.3s ease-in-out';
-        setTimeout(() => { btn.style.animation = ''; }, 300);
-      }
-      window.location.href = 'upload-tabela.html';
-    }
-    // GoTo helper
-    function goTo(page) {
-      window.location.href = page;
-    }
-    // Tema claro/escuro
-    function toggleTheme() {
-      const html = document.documentElement;
-      let theme = html.getAttribute('data-theme');
-      if (theme === 'dark') {
-        html.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-        document.getElementById('theme-icon').textContent = '🌙';
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        document.getElementById('theme-icon').textContent = '☀️';
-      }
-    }
-    // Persistência do tema
-    (function() {
-      const theme = localStorage.getItem('theme');
-      if (theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
-      }
-    })();
-    // Progress bar
-    window.addEventListener('DOMContentLoaded', function() {
-      const pb = document.getElementById('progress-bar');
-      pb.style.width = '0%';
-      setTimeout(() => { pb.style.width = '60%'; }, 100);
-      setTimeout(() => { pb.style.width = '100%'; }, 700);
-      setTimeout(() => { pb.style.display = 'none'; }, 1300);
-    });
-    // Chart.js - Resumo de Submissões
-    window.addEventListener('DOMContentLoaded', function() {
-      const ctx = document.getElementById('chartResumo').getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Pendente', 'Aprovada', 'Reprovada'],
-          datasets: [{
-            data: [1, 4, 2],
-            backgroundColor: [
-              getComputedStyle(document.documentElement).getPropertyValue('--plurix-secondary').trim() || '#f5b800',
-              '#10b981',
-              '#ef4444'
-            ],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { display: false }
-          },
-          cutout: '70%',
-          responsive: false
-        }
-      });
-    });
-    // Busca/filtro histórico
-    const historicoOriginal = [
-      {
-        data: '10/06/2024', arquivo: 'precos_junho.xlsx', status: 'pendente', coligada: 'SuperSul / SC', email: 'fornecedor@exemplo.com'
-      },
-      {
-        data: '02/06/2024', arquivo: 'precos_maio.xlsx', status: 'aprovada', coligada: 'SuperSul / PR', email: 'fornecedor@exemplo.com'
-      },
-      {
-        data: '15/05/2024', arquivo: 'precos_abril.xlsx', status: 'reprovada', coligada: 'SuperSul / RS', email: 'fornecedor@exemplo.com'
-      }
-    ];
-    let historicoFiltrado = [...historicoOriginal];
-    let paginaAtual = 1;
-    const porPagina = 10;
-    function renderHistorico() {
-      const tbody = document.getElementById('historico-tbody');
-      tbody.innerHTML = '';
-      const empty = document.getElementById('empty-historico');
-      if (!historicoFiltrado.length) {
-        empty.style.display = 'block';
-        return;
-      } else {
-        empty.style.display = 'none';
-      }
-      const inicio = (paginaAtual - 1) * porPagina;
-      const fim = inicio + porPagina;
-      historicoFiltrado.slice(inicio, fim).forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${item.data}</td>
-          <td>${item.arquivo}</td>
-          <td><span class="status status-${item.status}" title="${item.status==='pendente'?'Aguardando aprovação do gestor':item.status==='aprovada'?'Aprovada por gestor':'Reprovada por gestor'}">${item.status.charAt(0).toUpperCase()+item.status.slice(1)}</span></td>
-          <td>${item.coligada}</td>
-          <td>${item.email}</td>
-          <td><a href="#" title="Ver detalhes da submissão" aria-label="Ver">Ver</a></td>`;
-        tbody.appendChild(tr);
-      });
-      renderPaginacao();
-    }
-    function renderPaginacao() {
-      const pagDiv = document.getElementById('pagination');
-      pagDiv.innerHTML = '';
-      const total = Math.ceil(historicoFiltrado.length / porPagina);
-      if (total <= 1) return;
-      const btnPrev = document.createElement('button');
-      btnPrev.textContent = 'Anterior';
-      btnPrev.disabled = paginaAtual === 1;
-      btnPrev.onclick = () => { paginaAtual--; renderHistorico(); };
-      pagDiv.appendChild(btnPrev);
-      for (let i = 1; i <= total; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        btn.disabled = i === paginaAtual;
-        btn.onclick = () => { paginaAtual = i; renderHistorico(); };
-        pagDiv.appendChild(btn);
-      }
-      const btnNext = document.createElement('button');
-      btnNext.textContent = 'Próximo';
-      btnNext.disabled = paginaAtual === total;
-      btnNext.onclick = () => { paginaAtual++; renderHistorico(); };
-      pagDiv.appendChild(btnNext);
-    }
-    document.getElementById('search-historico').addEventListener('input', function(e) {
-      const v = e.target.value.toLowerCase();
-      historicoFiltrado = historicoOriginal.filter(item =>
-        item.data.toLowerCase().includes(v) ||
-        item.arquivo.toLowerCase().includes(v) ||
-        item.status.toLowerCase().includes(v)
-      );
-      paginaAtual = 1;
-      renderHistorico();
-    });
-    renderHistorico();
-    // Skeleton loading cards
-    window.addEventListener('DOMContentLoaded', function() {
-      const cards = document.querySelectorAll('.card');
-      cards.forEach((card, idx) => {
-        card.style.opacity = '0.7';
-        const skeleton = document.createElement('div');
-        skeleton.className = 'skeleton';
-        skeleton.style.height = '40px';
-        card.insertBefore(skeleton, card.firstChild);
-        setTimeout(() => {
-          skeleton.remove();
-          card.style.opacity = '1';
-        }, 800 + idx * 150);
-      });
-    });
-    // Toast notification
-    function showToast(message, type) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast ' + (type || '');
-      toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.animation = 'slideOutRight 0.4s forwards';
-        setTimeout(() => toast.remove(), 400);
-      }, 2600);
-    }
-    // Atalhos de teclado
-    document.addEventListener('keydown', function(e) {
-      if ((e.ctrlKey && e.key.toLowerCase() === 'n')) {
-        e.preventDefault(); uploadCTA({target:document.querySelector('.cta-upload')});
-      }
-      if ((e.ctrlKey && e.key.toLowerCase() === 'h')) {
-        e.preventDefault(); goTo('dashboard-fornecedor.html#historico');
-      }
-      if (e.key === 'Escape') {
-        closeModalSair(); closeShortcutsModal();
-        document.querySelector('.sidebar').classList.remove('open');
-        document.querySelector('.sidebar-backdrop').classList.remove('open');
-      }
-      if ((e.ctrlKey && e.key === '/') || e.key === '?') {
-        e.preventDefault(); openShortcutsModal();
-      }
-    });
-    function openShortcutsModal() {
-      document.getElementById('shortcuts-modal').classList.add('open');
-      document.getElementById('shortcuts-modal').focus();
-    }
-    function closeShortcutsModal() {
-      document.getElementById('shortcuts-modal').classList.remove('open');
-    }
-    // Tour guiado
-    function startTour() {
-      introJs().setOptions({
-        steps: [
-          { element: document.querySelector('.cta-upload'), intro: 'Clique aqui para enviar uma nova tabela de preços.' },
-          { element: document.querySelector('.quick-action-btn'), intro: 'Acesse rapidamente as principais funcionalidades.' },
-          { element: document.querySelector('nav a[aria-label="Histórico"]'), intro: 'Veja o histórico de submissões.' },
-          { element: document.querySelector('nav a[aria-label="Perfil"]'), intro: 'Acesse e edite seu perfil.' }
-        ],
-        nextLabel: 'Próximo', prevLabel: 'Anterior', doneLabel: 'Concluir', skipLabel: 'Pular'
-      }).start();
-    }
-    // Badges mock
-    document.getElementById('badge-nova-tabela').textContent = '3';
-    document.getElementById('badge-historico').textContent = '12';
-    // Micro-interação ripple/pulse nos links de ação
-    document.querySelectorAll('.card-table a, .history-table a').forEach(link => {
-      link.addEventListener('click', function(e) {
-        link.style.animation = 'pulse 0.3s ease-in-out';
-        setTimeout(() => { link.style.animation = ''; }, 300);
-      });
-    });
-    // Feedback visual em linhas da tabela (exemplo)
-    function highlightRow(row, type) {
-      row.classList.add(type);
-      setTimeout(() => row.classList.remove(type), 1000);
-    }
-    // Tooltips nativos já aplicados via title
-  </script>
 </body>
 </html>
