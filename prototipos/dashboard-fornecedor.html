@@ -185,6 +185,89 @@
       color: #f9b233;
       text-decoration: none;
     }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.2s;
+    }
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(30,40,80,0.18);
+      max-width: 520px;
+      width: 95%;
+      padding: 0;
+      overflow: hidden;
+      animation: modalFadeIn 0.22s;
+    }
+    @keyframes modalFadeIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      padding: 18px 28px 12px 28px;
+      background: #f7f8fa;
+      border-bottom: 1px solid #e8eaf0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.15s;
+      margin-left: 18px;
+    }
+    .modal-close:hover {
+      color: #f9b233;
+    }
+    .modal-body {
+      padding: 24px 28px 28px 28px;
+      color: #222;
+      font-size: 1.07rem;
+    }
+    .modal-detalhes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 1.01rem;
+    }
+    .modal-detalhes-table th, .modal-detalhes-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #ececec;
+      text-align: left;
+    }
+    .modal-detalhes-table th {
+      background: #f2f3f7;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .modal-detalhes-table tr:last-child td {
+      border-bottom: none;
+    }
     @media (max-width: 900px) {
       .dashboard-section {
         padding: 24px 10px 24px 10px;
@@ -203,6 +286,18 @@
         padding: 10px 10px;
         font-size: 0.98rem;
       }
+      .modal-content {
+        max-width: 98vw;
+        padding: 0;
+      }
+      .modal-header, .modal-body {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .modal-detalhes-table th, .modal-detalhes-table td {
+        padding: 6px 4px;
+        font-size: 0.97rem;
+      }
     }
   </style>
   <script>
@@ -217,6 +312,131 @@
     function uploadCTA() {
       window.location.href = 'upload-tabela.html';
     }
+
+    // Modal de Detalhes
+    function verDetalhes(status, arquivo, data) {
+      var modal = document.getElementById('modalDetalhes');
+      var header = document.getElementById('modalDetalhesHeader');
+      var body = document.getElementById('modalDetalhesBody');
+      // Limpa conteúdo anterior
+      header.innerHTML = '';
+      body.innerHTML = '';
+      // Título
+      var titulo = document.createElement('h2');
+      if (status.toLowerCase() === 'pendente') {
+        titulo.textContent = 'Status: Pendente';
+        header.appendChild(titulo);
+        // Mock: simula o nível de aprovação atual
+        var niveis = [
+          'Gerente Categoria Bandeira',
+          'Dir. Comercial Bandeira',
+          'Dir. Comercial Holding',
+          'VP'
+        ];
+        // Mock: define o nível atual para cada arquivo
+        var nivelAtual = 'Gerente Categoria Bandeira';
+        if (arquivo === 'precos_junho.xlsx') nivelAtual = 'Dir. Comercial Bandeira';
+        if (arquivo === 'precos_maio.xlsx') nivelAtual = 'VP';
+        if (arquivo === 'precos_abril.xlsx') nivelAtual = 'Gerente Categoria Bandeira';
+        var info = document.createElement('div');
+        info.innerHTML =
+          '<strong>Arquivo:</strong> ' + arquivo + '<br>' +
+          '<strong>Data de Submissão:</strong> ' + data + '<br>' +
+          '<strong>Nível atual de aprovação:</strong> <span style="color:#f9b233;font-weight:600;">' + nivelAtual + '</span><br>' +
+          '<ul style="margin-top:10px;margin-bottom:0;">' +
+            niveis.map(function(nv) {
+              return '<li style="' + (nv === nivelAtual ? 'font-weight:700;color:#f9b233;' : 'color:#1a2340;') + '">' + nv + (nv === nivelAtual ? ' (atual)' : '') + '</li>';
+            }).join('') +
+          '</ul>';
+        body.appendChild(info);
+      } else if (status.toLowerCase() === 'aprovada' || status.toLowerCase() === 'reprovada') {
+        titulo.textContent = 'Status: ' + (status.charAt(0).toUpperCase() + status.slice(1));
+        header.appendChild(titulo);
+        // Tabela de detalhes mockada
+        var detalhes = [
+          {
+            produto: 'SKU12345',
+            atualizacao_produto: '+3.2%',
+            ultima_atualizacao: '01/06/2024',
+            peso_vendas: '12.5%',
+            ic_geral: 'A+',
+            ic_objetiva: 'B',
+            impacto_dre: '+R$ 1.200,00'
+          },
+          {
+            produto: 'SKU67890',
+            atualizacao_produto: '+1.8%',
+            ultima_atualizacao: '10/05/2024',
+            peso_vendas: '8.1%',
+            ic_geral: 'B',
+            ic_objetiva: 'A',
+            impacto_dre: '+R$ 800,00'
+          }
+        ];
+        var atualizacaoPonderada = '+2.5%';
+        var impactoTotal = '+R$ 2.000,00';
+        var table = document.createElement('table');
+        table.className = 'modal-detalhes-table';
+        table.innerHTML =
+          '<thead>' +
+            '<tr>' +
+              '<th>Produto</th>' +
+              '<th>Atualização (%)</th>' +
+              '<th>Peso nas Vendas</th>' +
+              '<th>IC Geral</th>' +
+              '<th>IC Objetiva</th>' +
+              '<th>Última Atualização</th>' +
+              '<th>Impacto DRE/DLP</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' +
+            detalhes.map(function(item) {
+              return '<tr>' +
+                '<td>' + item.produto + '</td>' +
+                '<td>' + item.atualizacao_produto + '</td>' +
+                '<td>' + item.peso_vendas + '</td>' +
+                '<td>' + item.ic_geral + '</td>' +
+                '<td>' + item.ic_objetiva + '</td>' +
+                '<td>' + item.ultima_atualizacao + '</td>' +
+                '<td>' + item.impacto_dre + '</td>' +
+              '</tr>';
+            }).join('') +
+          '</tbody>';
+        var resumo = document.createElement('div');
+        resumo.style.margin = '10px 0 0 0';
+        resumo.innerHTML =
+          '<strong>Atualização % ponderada total do fornecedor:</strong> ' + atualizacaoPonderada + '<br>' +
+          '<strong>Impacto total no DRE/DLP da cia/fornecedor:</strong> ' + impactoTotal;
+        body.innerHTML =
+          '<div><strong>Arquivo:</strong> ' + arquivo + '<br><strong>Data de Submissão:</strong> ' + data + '</div>';
+        body.appendChild(table);
+        body.appendChild(resumo);
+      } else {
+        titulo.textContent = 'Detalhes';
+        header.appendChild(titulo);
+        body.textContent = 'Status não reconhecido.';
+      }
+      modal.classList.add('show');
+    }
+
+    function fecharModal() {
+      var modal = document.getElementById('modalDetalhes');
+      var header = document.getElementById('modalDetalhesHeader');
+      var body = document.getElementById('modalDetalhesBody');
+      modal.classList.remove('show');
+      header.innerHTML = '';
+      body.innerHTML = '';
+    }
+
+    // Fecha o modal ao clicar fora do conteúdo
+    window.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modalDetalhes');
+      modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          fecharModal();
+        }
+      });
+    });
   </script>
 </head>
 <body>
@@ -256,19 +476,19 @@
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><a href="#" class="link-detalhes">Ver Detalhes</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
@@ -321,7 +541,7 @@
                 <td><span class="status status-pendente">Pendente</span></td>
                 <td>SuperSul / SC</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" class="link-detalhes">Ver</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
@@ -329,7 +549,7 @@
                 <td><span class="status status-aprovada">Aprovada</span></td>
                 <td>SuperSul / PR</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" class="link-detalhes">Ver</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
@@ -337,13 +557,25 @@
                 <td><span class="status status-reprovada">Reprovada</span></td>
                 <td>SuperSul / RS</td>
                 <td>fornecedor@exemplo.com</td>
-                <td><a href="#" class="link-detalhes">Ver</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verDetalhes('Reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver</a></td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
     </main>
+  </div>
+  <!-- Modal de Detalhes -->
+  <div id="modalDetalhes" class="modal">
+    <div class="modal-content" onclick="event.stopPropagation();">
+      <div class="modal-header" id="modalDetalhesHeader">
+        <!-- Título dinâmico -->
+      </div>
+      <div class="modal-body" id="modalDetalhesBody">
+        <!-- Conteúdo dinâmico -->
+      </div>
+      <button class="modal-close" onclick="fecharModal();" aria-label="Fechar">&times;</button>
+    </div>
   </div>
 </body>
 </html>
