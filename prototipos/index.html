@@ -191,14 +191,11 @@
     }
     .features-grid {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 32px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px 16px 32px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
     }
     .feature-card {
       background: var(--plurix-bg);
@@ -210,15 +207,13 @@
       align-items: flex-start;
       min-height: 220px;
       transition: box-shadow 0.2s;
-      flex: 1 1 auto;
-      min-width: 180px;
-      max-width: 260px;
+      flex: 1 1 calc(20% - 26px);
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-size: clamp(1.26rem, 2.1vw, 1.75rem);
       color: var(--plurix-accent);
       margin-bottom: 12px;
       transition: font-size 0.2s;
@@ -266,6 +261,10 @@
       .features-grid {
         gap: 16px;
         padding: 0 4px 16px 4px;
+      }
+      .feature-card {
+        flex: 1 1 calc(20% - 13px);
+        min-width: 0;
       }
       header, nav {
         flex-direction: column;
