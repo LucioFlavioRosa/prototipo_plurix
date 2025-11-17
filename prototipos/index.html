@@ -39,11 +39,6 @@
       color: var(--plurix-dark);
       font-size: 16px;
     }
-    /* Animação de pulso para o logo Plurix */
-    @keyframes pulse-logo {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
     header {
       background: var(--plurix-primary);
       color: #fff;
@@ -63,12 +58,11 @@
       height: 48px;
       width: auto;
       margin-right: 16px;
-      animation: pulse-logo 2s ease-in-out infinite;
     }
     .header-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
     nav {
       margin-right: 32px;
@@ -77,14 +71,14 @@
       color: #fff;
       text-decoration: none;
       margin-left: 24px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 500;
+      font-size: 1rem;
       transition: color 0.2s;
     }
     nav a.cta {
       background: var(--plurix-secondary);
       color: var(--plurix-primary);
-      padding: 10px 24px;
+      padding: 8px 20px;
       border-radius: var(--plurix-radius);
       font-weight: 700;
       margin-left: 32px;
@@ -133,24 +127,36 @@
       border-radius: var(--plurix-radius);
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
       outline: none;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
+      min-width: 200px;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
     .btn-primary {
       background: var(--plurix-primary);
       color: #fff;
+      text-align: center;
+      text-decoration: none;
     }
     .btn-primary:hover {
       background: #142d4c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(12,35,64,0.12);
     }
     .btn-secondary {
       background: var(--plurix-secondary);
       color: var(--plurix-primary);
+      text-align: center;
+      text-decoration: none;
     }
     .btn-secondary:hover {
       background: #ffd600;
       color: var(--plurix-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(12,35,64,0.12);
     }
     .hero-image {
       max-width: 420px;
@@ -174,8 +180,8 @@
     }
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px;
@@ -184,29 +190,29 @@
       background: var(--plurix-bg);
       border-radius: var(--plurix-radius);
       box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      padding: 24px 16px 16px 16px;
+      padding: 32px 24px 24px 24px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      min-height: 200px;
+      min-height: 220px;
       transition: box-shadow 0.2s;
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       color: var(--plurix-accent);
       margin-bottom: 12px;
     }
     .feature-title {
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--plurix-primary);
       margin-bottom: 8px;
     }
     .feature-desc {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: #444;
       line-height: 1.4;
     }
@@ -217,13 +223,6 @@
       padding: 24px 0 12px 0;
       font-size: 1rem;
       margin-top: 48px;
-    }
-    /* Media query para telas médias entre 900px e 1200px */
-    @media (max-width: 1200px) and (min-width: 901px) {
-      .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-      }
     }
     @media (max-width: 900px) {
       .hero {
@@ -239,21 +238,11 @@
         max-width: 320px;
         padding: 12px;
       }
-      .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-      }
     }
     @media (max-width: 600px) {
       .features-grid {
         grid-template-columns: 1fr;
         padding: 0 8px;
-      }
-      .feature-title {
-        font-size: 1.15rem;
-      }
-      .feature-desc {
-        font-size: 1rem;
       }
       header, nav {
         flex-direction: column;
@@ -282,8 +271,8 @@
         <h1>Centralize, Analise e Aprove Tabelas de Preços com Segurança</h1>
         <p>Uma plataforma completa para fornecedores e gestores da Plurix: upload padronizado, validação automática, workflow de aprovações, análise comercial avançada e integração total com ERPs das bandeiras. Tudo em um só lugar, com máxima conformidade e rastreabilidade.</p>
         <div class="hero-cta">
-          <a href="login-fornecedor.html" class="btn btn-primary" aria-label="Entrar como Fornecedor">Entrar como Fornecedor</a>
-          <a href="login-interno.html" class="btn btn-secondary" aria-label="Entrar como Gestor Interno">Entrar como Gestor Interno</a>
+          <a href="login-fornecedor.html" class="btn btn-primary" aria-label="Entrar como Fornecedor" role="button">Entrar como Fornecedor</a>
+          <a href="login-interno.html" class="btn btn-secondary" aria-label="Entrar como Gestor Interno" role="button">Entrar como Gestor Interno</a>
         </div>
       </div>
       <div class="hero-image">
