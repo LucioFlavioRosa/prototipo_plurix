@@ -39,11 +39,6 @@
       color: var(--plurix-dark);
       font-size: 16px;
     }
-    /* Animação de pulso para o logo Plurix */
-    @keyframes pulse-logo {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
     header {
       background: var(--plurix-primary);
       color: #fff;
@@ -63,12 +58,11 @@
       height: 48px;
       width: auto;
       margin-right: 16px;
-      animation: pulse-logo 2s ease-in-out infinite;
     }
     .header-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
     nav {
       margin-right: 32px;
@@ -77,14 +71,14 @@
       color: #fff;
       text-decoration: none;
       margin-left: 24px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 500;
+      font-size: 1rem;
       transition: color 0.2s;
     }
     nav a.cta {
       background: var(--plurix-secondary);
       color: var(--plurix-primary);
-      padding: 10px 24px;
+      padding: 8px 20px;
       border-radius: var(--plurix-radius);
       font-weight: 700;
       margin-left: 32px;
@@ -94,6 +88,60 @@
     nav a.cta:hover {
       background: #ffd600;
       color: var(--plurix-primary);
+    }
+    /* HERO CTA BUTTONS - REMOVER SUBLINHADO E CENTRALIZAR TEXTO */
+    .hero-cta a {
+      text-decoration: none !important;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+    }
+    .btn {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 12px 32px;
+      border: none;
+      border-radius: var(--plurix-radius);
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
+      outline: none;
+      text-align: center;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: var(--plurix-primary);
+      color: #fff;
+      padding: 12px 32px;
+      border-radius: var(--plurix-radius);
+      font-weight: 700;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
+      text-align: center;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: #142d4c;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(12,35,64,0.12);
+    }
+    .btn-secondary {
+      background: var(--plurix-secondary);
+      color: var(--plurix-primary);
+      padding: 12px 32px;
+      border-radius: var(--plurix-radius);
+      font-weight: 700;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
+      text-align: center;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: #ffd600;
+      color: var(--plurix-primary);
+      box-shadow: 0 4px 16px rgba(245,184,0,0.12);
     }
     .hero {
       display: flex;
@@ -121,37 +169,6 @@
       margin-bottom: 32px;
       line-height: 1.5;
     }
-    .hero-cta {
-      display: flex;
-      gap: 20px;
-    }
-    .btn {
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 12px 32px;
-      border: none;
-      border-radius: var(--plurix-radius);
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(12,35,64,0.06);
-      outline: none;
-    }
-    .btn-primary {
-      background: var(--plurix-primary);
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: #142d4c;
-    }
-    .btn-secondary {
-      background: var(--plurix-secondary);
-      color: var(--plurix-primary);
-    }
-    .btn-secondary:hover {
-      background: #ffd600;
-      color: var(--plurix-primary);
-    }
     .hero-image {
       max-width: 420px;
       width: 100%;
@@ -173,40 +190,47 @@
       padding: 56px 0 32px 0;
     }
     .features-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 16px;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 32px;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 32px;
+      padding: 0 32px 16px 32px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
     }
     .feature-card {
       background: var(--plurix-bg);
       border-radius: var(--plurix-radius);
       box-shadow: 0 2px 8px rgba(12,35,64,0.04);
-      padding: 24px 16px 16px 16px;
+      padding: 32px 24px 24px 24px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      min-height: 200px;
+      min-height: 220px;
       transition: box-shadow 0.2s;
+      flex: 1 1 auto;
+      min-width: 180px;
+      max-width: 260px;
     }
     .feature-card:hover {
       box-shadow: 0 8px 32px rgba(12,35,64,0.10);
     }
     .feature-icon {
-      font-size: 1.8rem;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
       color: var(--plurix-accent);
       margin-bottom: 12px;
+      transition: font-size 0.2s;
     }
     .feature-title {
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--plurix-primary);
       margin-bottom: 8px;
     }
     .feature-desc {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: #444;
       line-height: 1.4;
     }
@@ -217,13 +241,6 @@
       padding: 24px 0 12px 0;
       font-size: 1rem;
       margin-top: 48px;
-    }
-    /* Media query para telas médias entre 900px e 1200px */
-    @media (max-width: 1200px) and (min-width: 901px) {
-      .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-      }
     }
     @media (max-width: 900px) {
       .hero {
@@ -240,20 +257,15 @@
         padding: 12px;
       }
       .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
+        padding: 0 12px 16px 12px;
       }
     }
+    /* Removido grid-template-columns: 1fr para manter os cards em linha */
+    /* Mantém os cards em linha mesmo em telas pequenas */
     @media (max-width: 600px) {
       .features-grid {
-        grid-template-columns: 1fr;
-        padding: 0 8px;
-      }
-      .feature-title {
-        font-size: 1.15rem;
-      }
-      .feature-desc {
-        font-size: 1rem;
+        gap: 16px;
+        padding: 0 4px 16px 4px;
       }
       header, nav {
         flex-direction: column;
