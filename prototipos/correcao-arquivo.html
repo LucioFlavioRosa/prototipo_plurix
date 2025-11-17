@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Correção de Arquivo - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .header img {
+      height: 40px;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 48px auto 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      padding: 40px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .correction-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .correction-table th, .correction-table td {
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .correction-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .correction-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .correction-table tr:last-child {
+      border-bottom: none;
+    }
+    .correction-input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d9d9d9;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: #fff;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .correction-input:focus {
+      border: 1.5px solid #1a6ae5;
+      outline: none;
+      box-shadow: 0 0 0 2px #e6f0ff;
+      background: #fafdff;
+    }
+    .cell-disabled {
+      background: #f5f6fa !important;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .correction-input[disabled], .cell-disabled input {
+      background: #f5f6fa !important;
+      color: #888;
+      cursor: not-allowed;
+      border: 1px solid #eaeaea;
+    }
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+    .btn {
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary {
+      background: #1a6ae5;
+      color: #fff;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-primary:hover {
+      background: #144fa1;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #1a6ae5;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-secondary:hover {
+      background: #f0f5ff;
+    }
+    .alert-success {
+      padding: 18px 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+      gap: 12px;
+      margin-bottom: 16px;
+      background: #e7f9ed;
+      color: #1e7e34;
+      border: 1px solid #b7e7c2;
+      justify-content: center;
+    }
+    .alert-success svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 800px) {
+      .container {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <span class="header-title">Correção de Arquivo de Preços</span>
+  </header>
+  <main class="container">
+    <form id="correcao-form">
+      <table class="correction-table" aria-label="Correção de erros">
+        <thead>
+          <tr>
+            <th>Linha</th>
+            <th>GTIN</th>
+            <th>Preço Novo</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12</td>
+            <td><input class="correction-input" name="gtin_12" type="text" maxlength="13" placeholder="Corrija o GTIN" required></td>
+            <td><input class="correction-input cell-disabled" type="text" value="19.90" disabled></td>
+            <td><input class="correction-input cell-disabled" type="text" value="Produto A" disabled></td>
+          </tr>
+          <tr>
+            <td>27</td>
+            <td><input class="correction-input cell-disabled" type="text" value="7891234567890" disabled></td>
+            <td><input class="correction-input" name="preco_27" type="number" step="0.01" min="0" placeholder="Corrija o Preço" required></td>
+            <td><input class="correction-input cell-disabled" type="text" value="Produto B" disabled></td>
+          </tr>
+          <tr>
+            <td>45</td>
+            <td><input class="correction-input cell-disabled" type="text" value="7899876543210" disabled></td>
+            <td><input class="correction-input cell-disabled" type="text" value="29.90" disabled></td>
+            <td><input class="correction-input" name="descricao_45" type="text" placeholder="Preencha a descrição" required></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Salvar Correções</button>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+      </div>
+    </form>
+    <div id="success-alert" class="alert-success" style="display:none;">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Arquivo corrigido e enviado com sucesso! Redirecionando...</span>
+    </div>
+  </main>
+  <script>
+    document.getElementById('correcao-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('correcao-form').style.display = 'none';
+      var alert = document.getElementById('success-alert');
+      alert.style.display = 'flex';
+      setTimeout(function() {
+        window.location.href = 'dashboard-fornecedor.html';
+      }, 1800);
+    });
+  </script>
+</body>
+</html>
