@@ -157,6 +157,24 @@
     .status-pendente { background: #f9b233; }
     .status-aprovada { background: #4bb543; }
     .status-reprovada { background: #e74c3c; }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 1.02rem;
+    }
+    .history-table th, .history-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .history-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
     .link-detalhes {
       color: #1a2340;
       text-decoration: underline;
@@ -191,10 +209,9 @@
       padding: 32px;
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(30,40,80,0.13);
-      max-height: 85vh;
+      max-height: 90vh;
       overflow-y: auto;
       animation: slideIn 0.3s ease;
-      outline: none;
     }
     .modal-header {
       display: flex;
@@ -283,6 +300,114 @@
       color: #555;
       font-size: 1.02rem;
     }
+    /* Modal Editor Styles */
+    .modal-editor {
+      display: none;
+      position: fixed;
+      z-index: 1100;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-editor.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-editor-content {
+      background: #fff;
+      max-width: 950px;
+      width: 98%;
+      padding: 32px 24px 24px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 92vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .modal-editor-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-editor-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-editor-close:hover {
+      color: #e74c3c;
+    }
+    .editor-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 22px;
+      font-size: 1.01rem;
+    }
+    .editor-table th, .editor-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .editor-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .editor-table input {
+      width: 100%;
+      padding: 5px 6px;
+      border: 1px solid #b7b9c6;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+    }
+    .editor-table input:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .btn-salvar-edicao, .btn-cancelar-edicao {
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-right: 12px;
+      margin-top: 8px;
+      transition: background 0.18s;
+    }
+    .btn-salvar-edicao {
+      background: #4bb543;
+      color: #fff;
+    }
+    .btn-salvar-edicao:hover {
+      background: #399a36;
+    }
+    .btn-cancelar-edicao {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-cancelar-edicao:hover {
+      background: #b93a2e;
+    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -330,6 +455,11 @@
         padding: 12px;
         font-size: 0.98rem;
       }
+      .modal-editor-content {
+        width: 99%;
+        padding: 14px 2px 12px 2px;
+        max-height: 96vh;
+      }
     }
   </style>
   <script>
@@ -365,7 +495,7 @@
           'Dir. Comercial Holding',
           'VP'
         ];
-        // Lógica para determinar o nível atual baseado no arquivo
+        // Mock para determinar o nível atual
         var nivelAtual = 0;
         if (status === 'pendente') {
           if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
@@ -373,7 +503,7 @@
           else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
           else nivelAtual = 0;
         }
-        // Dados mock para motivos
+        // Motivos mock
         var motivosAprovada = {
           'Atualização % por produto': '+2.5%',
           'Atualização % ponderada total do fornecedor': '+2.8%',
@@ -427,6 +557,7 @@
             html += '<div class="motivo-valor">' + motivosReprovada[key] + '</div>';
             html += '</div>';
           });
+          html += '<button class="btn-salvar-edicao" style="margin-top:18px;" onclick="abrirEditorPlanilha(\'' + arquivo + '\')">Editar Planilha</button>';
         } else {
           modalTitle.textContent = 'Detalhes';
           html = '<div>Informações não disponíveis para este status.</div>';
@@ -436,7 +567,7 @@
         modal.classList.remove('closing');
         setTimeout(function() {
           var content = modal.querySelector('.modal-content');
-          if (content) content.focus();
+          if(content) content.focus();
         }, 100);
       } catch (e) {
         var modal = document.getElementById('modal-detalhes');
@@ -445,7 +576,7 @@
           modal.querySelector('.modal-body').innerHTML = '<div>Ocorreu um erro ao carregar os detalhes. Tente novamente.</div>';
           modal.style.display = 'flex';
         } else {
-          alert('Ocorreu um erro ao carregar os detalhes. Tente novamente.');
+          alert('Erro inesperado ao abrir detalhes.');
         }
       }
     }
@@ -459,6 +590,70 @@
           modal.classList.remove('closing');
         }, 250);
       }
+    }
+
+    // MODAL EDITOR DE PLANILHA
+    function abrirEditorPlanilha(arquivo) {
+      var modal = document.getElementById('modal-editor');
+      if (!modal) return;
+      var modalTitle = modal.querySelector('.modal-editor-title');
+      modalTitle.textContent = 'Editar Planilha - ' + arquivo;
+      // Dados mock realistas
+      var dados = [
+        { sku: '12345', produto: 'Arroz Tio João 5kg', preco_atual: 'R$ 25,90', novo_preco: 'R$ 29,90', aumento: '+15.4%', categoria: 'Alimentos' },
+        { sku: '23456', produto: 'Feijão Carioca Kicaldo 1kg', preco_atual: 'R$ 8,50', novo_preco: 'R$ 9,80', aumento: '+15.3%', categoria: 'Alimentos' },
+        { sku: '34567', produto: 'Óleo de Soja Soya 900ml', preco_atual: 'R$ 7,20', novo_preco: 'R$ 8,00', aumento: '+11.1%', categoria: 'Óleos' },
+        { sku: '45678', produto: 'Açúcar União 1kg', preco_atual: 'R$ 4,90', novo_preco: 'R$ 5,40', aumento: '+10.2%', categoria: 'Açúcar' },
+        { sku: '56789', produto: 'Café Pilão 500g', preco_atual: 'R$ 16,90', novo_preco: 'R$ 18,50', aumento: '+9.5%', categoria: 'Cafés' },
+        { sku: '67890', produto: 'Macarrão Renata Espaguete 500g', preco_atual: 'R$ 5,80', novo_preco: 'R$ 6,60', aumento: '+13.8%', categoria: 'Massas' },
+        { sku: '78901', produto: 'Leite Longa Vida Italac 1L', preco_atual: 'R$ 4,50', novo_preco: 'R$ 5,10', aumento: '+13.3%', categoria: 'Laticínios' },
+        { sku: '89012', produto: 'Farinha de Trigo Dona Benta 1kg', preco_atual: 'R$ 6,20', novo_preco: 'R$ 7,10', aumento: '+14.5%', categoria: 'Farinhas' },
+        { sku: '90123', produto: 'Sabão em Pó Omo 800g', preco_atual: 'R$ 18,90', novo_preco: 'R$ 22,00', aumento: '+16.4%', categoria: 'Limpeza' },
+        { sku: '11223', produto: 'Detergente Ypê 500ml', preco_atual: 'R$ 2,90', novo_preco: 'R$ 3,30', aumento: '+13.8%', categoria: 'Limpeza' }
+      ];
+      var tbody = '';
+      for (var i = 0; i < dados.length; i++) {
+        tbody += '<tr>' +
+          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
+          '<td><input type="text" value="' + dados[i].produto + '"></td>' +
+          '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
+          '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
+          '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
+          '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
+        '</tr>';
+      }
+      var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
+        '<thead><tr>' +
+        '<th>SKU</th><th>Produto</th><th>Preço Atual</th><th>Novo Preço</th><th>% Aumento</th><th>Categoria</th>' +
+        '</tr></thead><tbody>' + tbody + '</tbody></table>';
+      var modalBody = modal.querySelector('.modal-editor-body');
+      modalBody.innerHTML = tableHtml +
+        '<div style="margin-top:18px;">' +
+        '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
+        '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
+        '</div>';
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-editor-content');
+        if(content) content.focus();
+      }, 100);
+    }
+
+    function fecharModalEditor() {
+      var modal = document.getElementById('modal-editor');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+
+    function salvarEdicaoPlanilha() {
+      alert('Alterações salvas com sucesso!');
+      fecharModalEditor();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -475,8 +670,24 @@
         }
       }
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') fecharModal();
+        if (e.key === 'Escape') {
+          fecharModal();
+          fecharModalEditor();
+        }
       });
+      // Modal editor
+      var modalEditor = document.getElementById('modal-editor');
+      if (modalEditor) {
+        modalEditor.addEventListener('mousedown', function(e) {
+          if (e.target === modalEditor) {
+            fecharModalEditor();
+          }
+        });
+        var closeBtnEditor = modalEditor.querySelector('.modal-editor-close');
+        if (closeBtnEditor) {
+          closeBtnEditor.addEventListener('click', fecharModalEditor);
+        }
+      }
     });
   </script>
 </head>
@@ -560,7 +771,6 @@
           </table>
         </div>
       </section>
-      <!-- Seção Histórico removida conforme instrução -->
     </main>
   </div>
   <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
@@ -571,6 +781,17 @@
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-editor-content" tabindex="0">
+      <div class="modal-editor-header">
+        <span class="modal-editor-title">Editar Planilha</span>
+        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-editor-body">
+        <!-- Tabela editável será inserida via JS -->
       </div>
     </div>
   </div>
