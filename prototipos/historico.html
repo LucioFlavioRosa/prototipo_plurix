@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard do Fornecedor | Plurix</title>
+  <title>Histórico de Submissões | Plurix</title>
   <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
@@ -78,7 +78,7 @@
       box-shadow: 0 2px 8px rgba(30,40,80,0.04);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -89,32 +89,11 @@
       color: #1a2340;
       margin: 0;
     }
-    .header .cta-upload {
-      background: #f9b233;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 12px 28px;
-      font-size: 1.08rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
-    }
-    .header .cta-upload:hover {
-      background: #e1a12a;
-    }
     .dashboard-section {
       padding: 32px 40px 40px 40px;
       flex: 1;
       background: #f7f8fa;
       min-height: 0;
-    }
-    .dashboard-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 28px;
-      margin-bottom: 48px;
     }
     .card {
       background: #fff;
@@ -131,20 +110,23 @@
       color: #1a2340;
       margin-bottom: 12px;
     }
-    .card-table {
+    .history-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1.05rem;
+      margin-top: 12px;
+      font-size: 1.02rem;
     }
-    .card-table th, .card-table td {
+    .history-table th, .history-table td {
       padding: 10px 12px;
-      text-align: left;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid #eaeaea;
     }
-    .card-table th {
+    .history-table th {
       background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
     }
     .status {
       display: inline-block;
@@ -157,8 +139,16 @@
     .status-pendente { background: #f9b233; }
     .status-aprovada { background: #4bb543; }
     .status-reprovada { background: #e74c3c; }
-    /* Modal Styles ... (mantido igual) */
-    .history-table { display: none; } /* Garantir que não apareça se algum CSS residual */
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
     @media (max-width: 900px) {
       .dashboard-section {
         padding: 24px 10px 24px 10px;
@@ -177,22 +167,8 @@
         padding: 10px 10px;
         font-size: 0.98rem;
       }
-      .modal-content {
-        width: 95%;
-        padding: 20px;
-        max-height: 90vh;
-      }
-      .modal-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .nivel-item {
-        margin-right: 12px;
-        font-size: 0.95rem;
-      }
-      .motivo-item {
-        padding: 12px;
-        font-size: 0.98rem;
+      .card {
+        padding: 16px 8px 12px 8px;
       }
     }
   </style>
@@ -205,18 +181,10 @@
         window.location.href = '../plurix.html';
       }
     }
-    function uploadCTA() {
-      window.location.href = 'upload-tabela.html';
-    }
     function abrirDetalhes(status, arquivo, data) {
-      // ... (mantido igual)
+      // Pode ser implementado conforme necessário
+      alert('Funcionalidade de detalhes pode ser implementada aqui.');
     }
-    function fecharModal() {
-      // ... (mantido igual)
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      // ... (mantido igual)
-    });
   </script>
 </head>
 <body>
@@ -225,9 +193,9 @@
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
     <nav>
-      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
       <a href="upload-tabela.html">Nova Tabela</a>
-      <a href="historico.html">Histórico</a>
+      <a href="historico.html" class="active">Histórico</a>
       <a href="#" onclick="goTo('perfil.html')">Perfil</a>
       <a href="#" onclick="sair()">Sair</a>
     </nav>
@@ -235,20 +203,22 @@
   </aside>
   <div class="main-content">
     <header class="header">
-      <h1>Dashboard do Fornecedor</h1>
-      <button class="cta-upload" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
+      <h1>Histórico de Submissões</h1>
     </header>
     <main class="dashboard-section">
-      <section class="dashboard-cards">
+      <section>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #1a2340; margin-bottom: 20px;">Histórico Completo de Submissões</h2>
         <div class="card">
-          <div class="card-title">Tabelas Submetidas Recentes</div>
-          <table class="card-table" aria-label="Tabelas Submetidas">
+          <div class="card-title">Histórico de Submissões</div>
+          <table class="history-table" aria-label="Histórico de Submissões">
             <thead>
               <tr>
                 <th>Data</th>
                 <th>Arquivo</th>
                 <th>Status</th>
-                <th>Ações</th>
+                <th>Coligada/UF</th>
+                <th>Enviado por</th>
+                <th>Detalhes</th>
               </tr>
             </thead>
             <tbody>
@@ -256,61 +226,79 @@
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
+                <td>SuperSul / SC</td>
+                <td>ana.souza@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
+                <td>SuperSul / PR</td>
+                <td>carlos.martins@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <div class="card-title">Resumo de Submissões</div>
-          <table class="card-table" aria-label="Resumo de Submissões">
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td>1</td>
+                <td>SuperSul / RS</td>
+                <td>marina.lima@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
+                <td>01/05/2024</td>
+                <td>precos_abril_v2.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>4</td>
+                <td>SuperSul / SP</td>
+                <td>joao.silva@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_abril_v2.xlsx', '01/05/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
+                <td>20/04/2024</td>
+                <td>precos_marco.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>2</td>
+                <td>SuperSul / MG</td>
+                <td>fernando.pereira@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_marco.xlsx', '20/04/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>10/04/2024</td>
+                <td>precos_marco_v2.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>SuperSul / RJ</td>
+                <td>lucas.almeida@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_marco_v2.xlsx', '10/04/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>28/03/2024</td>
+                <td>precos_fevereiro.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td>SuperSul / ES</td>
+                <td>patricia.menezes@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro.xlsx', '28/03/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>15/03/2024</td>
+                <td>precos_fevereiro_v2.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>SuperSul / BA</td>
+                <td>rodrigo.santos@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>01/03/2024</td>
+                <td>precos_janeiro.xlsx</td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>SuperSul / GO</td>
+                <td>aline.gomes@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_janeiro.xlsx', '01/03/2024'); return false;">Ver</a></td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
     </main>
-  </div>
-  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
-    <div class="modal-content" tabindex="0">
-      <div class="modal-header">
-        <span class="modal-title">Detalhes</span>
-        <button class="modal-close" aria-label="Fechar">&times;</button>
-      </div>
-      <div class="modal-body">
-        <!-- Conteúdo dinâmico -->
-      </div>
-    </div>
   </div>
 </body>
 </html>
