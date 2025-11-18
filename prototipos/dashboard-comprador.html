@@ -95,40 +95,6 @@
       background: #fff;
       color: #222;
     }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      padding: 26px 22px 18px 22px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      min-height: 120px;
-    }
-    .card-title {
-      font-size: 1.1rem;
-      color: #888;
-      font-weight: 600;
-    }
-    .card-value {
-      font-size: 2.1rem;
-      font-weight: 700;
-      color: #1a6ae5;
-      margin-top: 6px;
-    }
-    .card-indicator {
-      font-size: 1rem;
-      color: #16a34a;
-      font-weight: 600;
-      margin-left: 8px;
-    }
     .table-section {
       background: #fff;
       border-radius: 14px;
@@ -179,6 +145,23 @@
     .btn-table:hover {
       background: #144fa1;
     }
+    .btn-buscar {
+      background: #1a6ae5;
+      color: #fff;
+      border: none;
+      padding: 8px 22px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-left: 12px;
+      height: 40px;
+      align-self: flex-end;
+    }
+    .btn-buscar:hover {
+      background: #144fa1;
+    }
     @media (max-width: 1000px) {
       .main-content {
         padding: 0 4vw 24px 4vw;
@@ -196,7 +179,6 @@
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
-      .card-grid { grid-template-columns: 1fr; }
       .sidebar { display: none; }
       .main-content { padding: 0 2vw 18px 2vw; }
     }
@@ -218,104 +200,181 @@
     </aside>
     <main class="main-content">
       <header class="main-header">Dashboard do Comprador</header>
-      <form class="filters" aria-label="Filtros de pesquisa">
+      <form class="filters" id="form-filtros" aria-label="Filtros de pesquisa" onsubmit="buscarTabelas(event)">
         <label>Fornecedor:
-          <select>
-            <option>Todos</option>
-            <option>Fornecedor A</option>
-            <option>Fornecedor B</option>
+          <select id="filtro-fornecedor" name="fornecedor">
+            <option value="">Todos</option>
+            <option value="ambev">Ambev</option>
+            <option value="nestle">Nestlé</option>
+            <option value="unilever">Unilever</option>
+            <option value="cocacola">Coca-Cola</option>
+            <option value="brf">BRF</option>
+            <option value="jbs">JBS</option>
+            <option value="mondelez">Mondelez</option>
+            <option value="pepsico">PepsiCo</option>
           </select>
         </label>
         <label>Bandeira:
-          <select>
-            <option>Todas</option>
-            <option>SuperMais</option>
-            <option>Maxi</option>
+          <select id="filtro-bandeira" name="bandeira">
+            <option value="">Todas</option>
+            <option value="superpao">Superpão</option>
+            <option value="boa">Boa Supermercados</option>
+            <option value="avenida">Supermercados Avenida</option>
+            <option value="compremais">Compre Mais</option>
+            <option value="emporio">Empório Dom Olívio</option>
+            <option value="amigao">Grupo Amigão</option>
+            <option value="parana">Paraná Supermercados</option>
           </select>
         </label>
         <label>UF:
-          <select>
-            <option>Todas</option>
-            <option>SP</option>
-            <option>MG</option>
+          <select id="filtro-uf" name="uf">
+            <option value="">Todas</option>
           </select>
         </label>
         <label>Data:
-          <input type="date">
+          <input type="date" id="filtro-data" name="data">
         </label>
+        <button type="submit" class="btn-buscar">Buscar</button>
       </form>
-      <section class="card-grid">
-        <div class="card">
-          <span class="card-title">Tabelas Pendentes</span>
-          <span class="card-value">7</span>
+      <section class="table-section" id="tabelas-section">
+        <div class="section-title">Tabelas Submetidas</div>
+        <div id="tabelas-resultados">
+          <!-- Tabela dinâmica será inserida aqui -->
         </div>
-        <div class="card">
-          <span class="card-title">Variação Média de Preço</span>
-          <span class="card-value">+4,2% <span class="card-indicator">▲</span></span>
-        </div>
-        <div class="card">
-          <span class="card-title">Impacto no DRE</span>
-          <span class="card-value">R$ 12.500</span>
-        </div>
-        <div class="card">
-          <span class="card-title">IC Nielsen (Média)</span>
-          <span class="card-value">92</span>
-        </div>
-        <div class="card">
-          <span class="card-title">IC Objetiva (Média)</span>
-          <span class="card-value">87</span>
-        </div>
-      </section>
-      <section class="table-section">
-        <div class="section-title">Tabelas Pendentes de Aprovação</div>
-        <table class="data-table" aria-label="Tabelas pendentes">
-          <thead>
-            <tr>
-              <th>Fornecedor</th>
-              <th>Bandeira</th>
-              <th>UF</th>
-              <th>Data Submissão</th>
-              <th>Variação (%)</th>
-              <th>Impacto DRE</th>
-              <th>IC Nielsen</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Fornecedor A</td>
-              <td>SuperMais</td>
-              <td>SP</td>
-              <td>2024-06-10</td>
-              <td style="color:#d4380d;">+5,1%</td>
-              <td>R$ 3.200</td>
-              <td>91</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>Fornecedor B</td>
-              <td>Maxi</td>
-              <td>MG</td>
-              <td>2024-06-09</td>
-              <td style="color:#16a34a;">-1,8%</td>
-              <td>R$ 1.100</td>
-              <td>89</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>Fornecedor C</td>
-              <td>SuperMais</td>
-              <td>SP</td>
-              <td>2024-06-08</td>
-              <td style="color:#d4380d;">+7,3%</td>
-              <td>R$ 2.800</td>
-              <td>94</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
-          </tbody>
-        </table>
       </section>
     </main>
   </div>
+  <script>
+    // Mapeamento de bandeiras para UFs
+    const bandeiraUFs = {
+      superpao: ['PR','SC','RS'],
+      boa: ['SP','MG'],
+      avenida: ['MS','MT'],
+      compremais: ['GO','DF','TO'],
+      emporio: ['RJ','ES'],
+      amigao: ['BA','SE','AL'],
+      parana: ['PR','SP']
+    };
+
+    // Atualiza UFs ao mudar a bandeira
+    document.getElementById('filtro-bandeira').addEventListener('change', function() {
+      const ufSelect = document.getElementById('filtro-uf');
+      const bandeira = this.value;
+      ufSelect.innerHTML = '<option value="">Todas</option>';
+      if (bandeiraUFs[bandeira]) {
+        bandeiraUFs[bandeira].forEach(function(uf) {
+          const opt = document.createElement('option');
+          opt.value = uf;
+          opt.textContent = uf;
+          ufSelect.appendChild(opt);
+        });
+      }
+    });
+
+    // Simulação de dados de submissão de tabelas
+    const tabelasSubmetidas = [
+      {
+        fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', data: '2024-06-10', status: 'Em Análise'
+      },
+      {
+        fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'MG', data: '2024-06-09', status: 'Aprovada'
+      },
+      {
+        fornecedor: 'JBS', bandeira: 'Grupo Amigão', uf: 'BA', data: '2024-06-08', status: 'Reprovada'
+      },
+      {
+        fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'SC', data: '2024-06-07', status: 'Aprovada'
+      },
+      {
+        fornecedor: 'Coca-Cola', bandeira: 'Paraná Supermercados', uf: 'PR', data: '2024-06-11', status: 'Em Análise'
+      },
+      {
+        fornecedor: 'BRF', bandeira: 'Compre Mais', uf: 'GO', data: '2024-06-10', status: 'Aprovada'
+      },
+      {
+        fornecedor: 'PepsiCo', bandeira: 'Empório Dom Olívio', uf: 'RJ', data: '2024-06-09', status: 'Em Análise'
+      },
+      {
+        fornecedor: 'Unilever', bandeira: 'Supermercados Avenida', uf: 'MT', data: '2024-06-08', status: 'Aprovada'
+      },
+      {
+        fornecedor: 'Mondelez', bandeira: 'Boa Supermercados', uf: 'SP', data: '2024-06-07', status: 'Reprovada'
+      }
+    ];
+
+    // Função para buscar e exibir tabelas
+    function buscarTabelas(event) {
+      if (event) event.preventDefault();
+      const fornecedorSel = document.getElementById('filtro-fornecedor').value;
+      const bandeiraSel = document.getElementById('filtro-bandeira').value;
+      const ufSel = document.getElementById('filtro-uf').value;
+      const dataSel = document.getElementById('filtro-data').value;
+      let resultados = tabelasSubmetidas.filter(function(tab) {
+        let ok = true;
+        if (fornecedorSel && tab.fornecedor.toLowerCase() !== fornecedorSel) ok = false;
+        if (bandeiraSel) {
+          // Bandeira no dado é nome completo, no select é slug
+          const mapBandeira = {
+            superpao: 'Superpão',
+            boa: 'Boa Supermercados',
+            avenida: 'Supermercados Avenida',
+            compremais: 'Compre Mais',
+            emporio: 'Empório Dom Olívio',
+            amigao: 'Grupo Amigão',
+            parana: 'Paraná Supermercados'
+          };
+          if (tab.bandeira !== mapBandeira[bandeiraSel]) ok = false;
+        }
+        if (ufSel && tab.uf !== ufSel) ok = false;
+        if (dataSel && tab.data < dataSel) ok = false;
+        return ok;
+      });
+      let html = '';
+      if (resultados.length === 0) {
+        html = '<div style="padding:16px;color:#888;">Nenhuma tabela encontrada para os filtros selecionados.</div>';
+      } else {
+        html = '<table class="data-table" aria-label="Tabelas submetidas">';
+        html += '<thead><tr>' +
+          '<th>Fornecedor</th>' +
+          '<th>Bandeira</th>' +
+          '<th>UF</th>' +
+          '<th>Data Submissão</th>' +
+          '<th>Status de Avaliação</th>' +
+          '<th>Ações</th>' +
+          '</tr></thead><tbody>';
+        resultados.forEach(function(tab) {
+          html += '<tr>' +
+            '<td>' + tab.fornecedor + '</td>' +
+            '<td>' + tab.bandeira + '</td>' +
+            '<td>' + tab.uf + '</td>' +
+            '<td>' + tab.data + '</td>' +
+            '<td>' + tab.status + '</td>' +
+            '<td>';
+          if (tab.status === 'Em Análise') {
+            // Monta query string
+            const params = new URLSearchParams({
+              fornecedor: tab.fornecedor,
+              bandeira: tab.bandeira,
+              uf: tab.uf,
+              data: tab.data
+            }).toString();
+            html += '<button class="btn-table" onclick="window.location.href=\'analise-tabela.html?' + params + '\'">Aprovar/Reprovar</button>';
+          } else if (tab.status === 'Aprovada' || tab.status === 'Reprovada') {
+            html += 'Visualizar';
+          } else {
+            html += '';
+          }
+          html += '</td></tr>';
+        });
+        html += '</tbody></table>';
+      }
+      document.getElementById('tabelas-resultados').innerHTML = html;
+    }
+
+    // Exibe tabelas ao carregar a página
+    window.addEventListener('DOMContentLoaded', function() {
+      buscarTabelas();
+    });
+  </script>
 </body>
 </html>
