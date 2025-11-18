@@ -157,6 +157,106 @@
     .btn-drill:hover {
       background: #144fa1;
     }
+    /* --- INÍCIO: NOVOS ESTILOS PARA BOTÕES APROVAR/REPROVAR E MODAL DE AÇÃO --- */
+    .btn-acao {
+      border: none;
+      padding: 7px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background 0.18s;
+      color: #fff;
+    }
+    .btn-aprovar {
+      background: #16a34a;
+    }
+    .btn-aprovar:hover {
+      background: #15803d;
+    }
+    .btn-reprovar {
+      background: #d4380d;
+    }
+    .btn-reprovar:hover {
+      background: #a82e0b;
+    }
+    /* Modal de aprovação/reprovação */
+    .modal-overlay-acao {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay-acao.active {
+      display: flex;
+    }
+    .modal-content-acao {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+      max-width: 420px;
+      width: 96vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px 24px 24px 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .modal-content-acao h3 {
+      margin-top: 0;
+      font-size: 1.18rem;
+      color: #1a6ae5;
+      font-weight: 700;
+    }
+    .modal-content-acao textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      font-size: 1rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+    .btn-enviar-acao {
+      background: #1a6ae5;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-end;
+      margin-top: 8px;
+      transition: background 0.18s;
+    }
+    .btn-enviar-acao:hover {
+      background: #144fa1;
+    }
+    .btn-cancelar-acao {
+      background: #6b7280;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background 0.18s;
+      align-self: flex-end;
+    }
+    .btn-cancelar-acao:hover {
+      background: #4b5563;
+    }
+    /* --- FIM: NOVOS ESTILOS --- */
     /* Modal styles */
     .modal-overlay {
       display: none;
@@ -189,29 +289,6 @@
       font-size: 1.25rem;
       color: #1a6ae5;
       font-weight: 700;
-    }
-    .modal-info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 32px;
-      margin-bottom: 8px;
-    }
-    .modal-info-label {
-      font-weight: 600;
-      color: #444;
-    }
-    .modal-info-value {
-      font-weight: 700;
-      color: #1a1a1a;
-    }
-    .modal-info-value.important {
-      color: #1a6ae5;
-    }
-    .modal-info-value.positive {
-      color: #16a34a;
-    }
-    .modal-info-value.negative {
-      color: #d4380d;
     }
     .modal-close-btn {
       background: #d4380d;
@@ -282,7 +359,7 @@
       }
       .sidebar img { width: 38px; }
       .modal-content { max-width: 98vw; }
-      .modal-info-grid { grid-template-columns: 1fr; }
+      .modal-content-acao { max-width: 98vw; }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
@@ -290,13 +367,12 @@
       .main-content { padding: 0 2vw 18px 2vw; }
       .panel-header { flex-direction: column; gap: 8px; }
       .modal-content { padding: 16px 4px 12px 4px; }
-      .modal-info-grid { grid-template-columns: 1fr; }
-      .modal-table th, .modal-table td { font-size: 0.85rem; padding: 6px 4px; }
+      .modal-content-acao { padding: 16px 4px 12px 4px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Utilitário para parsear parâmetros da URL
+    // --- Passo 12: Popula cabeçalho com parâmetros da URL ---
     function getURLParams() {
       const params = new URLSearchParams(window.location.search);
       return {
@@ -306,7 +382,6 @@
         data: params.get('data') || ''
       };
     }
-    // Preencher cabeçalho com dados vindos da dashboard
     function populateHeader() {
       const params = getURLParams();
       document.getElementById('header-fornecedor').innerHTML = params.fornecedor ? `<strong>${params.fornecedor}</strong>` : '<em>Não informado</em>';
@@ -314,8 +389,8 @@
       document.getElementById('header-uf').innerHTML = params.uf ? `<strong>${params.uf}</strong>` : '<em>Não informado</em>';
       document.getElementById('header-data').innerHTML = params.data ? `<strong>${params.data}</strong>` : '<em>Não informado</em>';
     }
-    // Produtos realistas por fornecedor (apenas exemplos próximos do real)
-    const produtosPorFornecedor = {
+    // --- Passo 14, 18: Dados realistas por fornecedor/SKU ---
+    const fornecedoresProdutos = {
       'Ambev': [
         {
           sku: '7891910000197',
@@ -456,9 +531,9 @@
       ]
     };
     function getProdutosFornecedor(fornecedor) {
-      return produtosPorFornecedor[fornecedor] || [];
+      return fornecedoresProdutos[fornecedor] || [];
     }
-    // Renderiza a tabela de produtos baseada no fornecedor selecionado
+    // --- Passo 13: Atualizar tabela de preços ---
     function renderTabelaProdutos() {
       const params = getURLParams();
       const produtos = getProdutosFornecedor(params.fornecedor);
@@ -482,7 +557,7 @@
         tbody.appendChild(tr);
       });
     }
-    // Modal de análise detalhada
+    // --- Passo 15, 16, 17, 18: Modal de análise detalhada ---
     let chart1 = null, chart2 = null;
     function abrirModalAnalise(sku) {
       const params = getURLParams();
@@ -491,20 +566,16 @@
       if (!prod) return;
       // Preencher modal
       document.getElementById('modal-sku').textContent = prod.sku;
-      // Informações básicas em grid
-      const infoGrid = document.getElementById('modal-info-grid');
-      infoGrid.innerHTML = `
-        <div class="modal-info-label">Descrição:</div><div class="modal-info-value">${prod.descricao}</div>
-        <div class="modal-info-label">Preço Atual:</div><div class="modal-info-value important">R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}</div>
-        <div class="modal-info-label">Preço Anterior:</div><div class="modal-info-value">R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}</div>
-        <div class="modal-info-label">IC Nielsen:</div><div class="modal-info-value positive">${prod.icNielsen}</div>
-        <div class="modal-info-label">IC Objetiva:</div><div class="modal-info-value">${prod.icObjetiva}</div>
-        <div class="modal-info-label">Peso nas Vendas:</div><div class="modal-info-value">${prod.pesoVendas.toFixed(1)}%</div>
-        <div class="modal-info-label">Impacto no DRE/DLP:</div><div class="modal-info-value">R$ ${prod.impactoDRE.toLocaleString('pt-BR')}</div>
-        <div class="modal-info-label">Margem Atual:</div><div class="modal-info-value">${prod.historico.margem[prod.historico.margem.length-1].toFixed(1)}%</div>
-        <div class="modal-info-label">Data da Última Atualização:</div><div class="modal-info-value">${prod.dataUltimaAtualizacao}</div>
-      `;
-      // Gráfico de evolução de preço
+      document.getElementById('modal-descricao').textContent = prod.descricao;
+      document.getElementById('modal-preco-atual').textContent = `R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-preco-antigo').textContent = `R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-ic-nielsen').textContent = prod.icNielsen;
+      document.getElementById('modal-ic-objetiva').textContent = prod.icObjetiva;
+      document.getElementById('modal-peso-vendas').textContent = prod.pesoVendas.toFixed(1) + '%';
+      document.getElementById('modal-impacto-dre').textContent = `R$ ${prod.impactoDRE.toLocaleString('pt-BR')}`;
+      document.getElementById('modal-margem').textContent = prod.historico.margem[prod.historico.margem.length-1].toFixed(1) + '%';
+      document.getElementById('modal-data-ult-atualizacao').textContent = prod.dataUltimaAtualizacao;
+      // Render gráfico de evolução de preço
       const ctx1 = document.getElementById('chart-preco').getContext('2d');
       if (chart1) chart1.destroy();
       chart1 = new Chart(ctx1, {
@@ -599,21 +670,14 @@
       `;
       document.getElementById('modal-overlay').classList.add('active');
     }
-    // Fechar modal
+    // --- Passo 20: Fechar modal ---
     function fecharModalAnalise() {
       document.getElementById('modal-overlay').classList.remove('active');
+      // Limpa gráficos para liberar memória
       if (chart1) { chart1.destroy(); chart1 = null; }
       if (chart2) { chart2.destroy(); chart2 = null; }
       document.getElementById('modal-tabela-historico').innerHTML = '';
-      document.getElementById('modal-info-grid').innerHTML = '';
     }
-    // Fechar modal clicando fora
-    window.addEventListener('click', function(event) {
-      const overlay = document.getElementById('modal-overlay');
-      if (event.target === overlay) {
-        fecharModalAnalise();
-      }
-    });
     window.addEventListener('DOMContentLoaded', function() {
       populateHeader();
       renderTabelaProdutos();
@@ -626,6 +690,11 @@
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
       <nav>
         <a href="dashboard-comprador.html">Dashboard</a>
+        <a href="#">Aprovações Pendentes</a>
+        <a href="#">Histórico</a>
+        <a href="#">Fornecedores</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Perfil</a>
         <a href="#" style="color:#d4380d;">Sair</a>
       </nav>
     </aside>
@@ -637,6 +706,10 @@
           <div>Bandeira: <span id="header-bandeira"></span></div>
           <div>UF: <span id="header-uf"></span></div>
           <div>Data Submissão: <span id="header-data"></span></div>
+        </div>
+        <div style="margin-bottom: 18px;">
+          <button class="btn-acao btn-aprovar" type="button" onclick="abrirModalAcao('aprovar')">Aprovar</button>
+          <button class="btn-acao btn-reprovar" type="button" onclick="abrirModalAcao('reprovar')">Reprovar</button>
         </div>
         <form class="filters" aria-label="Filtros avançados">
           <label>SKU:
@@ -679,23 +752,28 @@
             </tr>
           </thead>
           <tbody id="produtos-tbody">
-            <!-- Conteúdo dinâmico -->
-          </tbody>
+            </tbody>
         </table>
       </section>
-      <!-- Modal de Análise Detalhada -->
       <div class="modal-overlay" id="modal-overlay">
         <div class="modal-content">
           <h3>Análise Detalhada do SKU <span id="modal-sku"></span></h3>
           <div class="modal-section">
-            <div id="modal-info-grid" class="modal-info-grid"></div>
+            <strong>Descrição:</strong> <span id="modal-descricao"></span><br>
+            <strong>Preço Atual:</strong> <span id="modal-preco-atual"></span><br>
+            <strong>Preço Anterior:</strong> <span id="modal-preco-antigo"></span><br>
+            <strong>IC Nielsen:</strong> <span id="modal-ic-nielsen"></span> &nbsp; <strong>IC Objetiva:</strong> <span id="modal-ic-objetiva"></span><br>
+            <strong>Peso nas Vendas:</strong> <span id="modal-peso-vendas"></span><br>
+            <strong>Impacto no DRE/DLP:</strong> <span id="modal-impacto-dre"></span><br>
+            <strong>Margem Atual:</strong> <span id="modal-margem"></span><br>
+            <strong>Data da Última Atualização:</strong> <span id="modal-data-ult-atualizacao"></span>
           </div>
           <div class="modal-section">
             <div class="modal-chart">
-              <canvas id="chart-preco" width="600" height="240" aria-label="Gráfico de evolução de preço do SKU"></canvas>
+              <canvas id="chart-preco" width="600" height="240" aria-label="Gráfico de preço"></canvas>
             </div>
             <div class="modal-chart">
-              <canvas id="chart-ic" width="600" height="240" aria-label="Gráfico de histórico de índices de competitividade"></canvas>
+              <canvas id="chart-ic" width="600" height="240" aria-label="Gráfico de ICs"></canvas>
             </div>
           </div>
           <div class="modal-section">
@@ -712,8 +790,7 @@
                 </tr>
               </thead>
               <tbody id="modal-tabela-historico">
-                <!-- Dinâmico -->
-              </tbody>
+                </tbody>
             </table>
           </div>
           <div class="modal-section">
@@ -723,7 +800,54 @@
           <button class="modal-close-btn" onclick="fecharModalAnalise()">Fechar</button>
         </div>
       </div>
-    </main>
+      <div class="modal-overlay-acao" id="modal-overlay-acao">
+        <div class="modal-content-acao">
+          <h3 id="titulo-modal-acao">Justificativa</h3>
+          <textarea id="justificativa-acao" placeholder="Insira a justificativa para a ação..."></textarea>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn-cancelar-acao" type="button" onclick="fecharModalAcao()">Cancelar</button>
+            <button class="btn-enviar-acao" type="button" onclick="enviarAcao()">Enviar</button>
+          </div>
+        </div>
+      </div>
+      </main>
   </div>
+  <script>
+    // --- Modal Aprovação/Reprovação ---
+    let acaoSelecionada = null;
+    function abrirModalAcao(acao) {
+      acaoSelecionada = acao;
+      document.getElementById('justificativa-acao').value = '';
+      document.getElementById('titulo-modal-acao').textContent = acao === 'aprovar' ? 'Justificativa para Aprovação' : 'Justificativa para Reprovação';
+      document.getElementById('modal-overlay-acao').classList.add('active');
+    }
+    function fecharModalAcao() {
+      document.getElementById('modal-overlay-acao').classList.remove('active');
+      acaoSelecionada = null;
+    }
+    function enviarAcao() {
+      // Aqui você pode capturar a justificativa se desejar
+      const justificativa = document.getElementById('justificativa-acao').value.trim();
+      if (!justificativa) {
+        alert('Por favor, insira uma justificativa.');
+        return;
+      }
+      // Redireciona para dashboard-comprador.html com parâmetros de ação
+      const params = getURLParams();
+      
+      // --- CORREÇÃO AQUI: Usar window.location.href para manter o caminho relativo correto ---
+      const url = new URL('dashboard-comprador.html', window.location.href);
+      // Limpa search params antigos que possam vir da URL base, se for o mesmo arquivo, mas como mudamos o nome, o search já vem limpo no objeto URL
+      
+      url.searchParams.set('fornecedor', params.fornecedor);
+      url.searchParams.set('bandeira', params.bandeira);
+      url.searchParams.set('uf', params.uf);
+      url.searchParams.set('data', params.data);
+      url.searchParams.set('acao', acaoSelecionada);
+      url.searchParams.set('justificativa', justificativa); // O objeto URL já faz o encode
+      
+      window.location.href = url.toString();
+    }
+  </script>
 </body>
 </html>
