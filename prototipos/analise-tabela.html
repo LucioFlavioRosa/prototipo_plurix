@@ -682,6 +682,76 @@
       populateHeader();
       renderTabelaProdutos();
     });
+
+    // --- Modal Aprovação/Reprovação ---
+    let acaoSelecionada = null;
+    function abrirModalAcao(acao) {
+      acaoSelecionada = acao;
+      document.getElementById('justificativa-acao').value = '';
+      document.getElementById('titulo-modal-acao').textContent = acao === 'aprovar' ? 'Justificativa para Aprovação' : 'Justificativa para Reprovação';
+      document.getElementById('modal-overlay-acao').classList.add('active');
+    }
+    function fecharModalAcao() {
+      document.getElementById('modal-overlay-acao').classList.remove('active');
+      acaoSelecionada = null;
+    }
+    function enviarAcao() {
+      // Aqui você pode capturar a justificativa se desejar
+      const justificativa = document.getElementById('justificativa-acao').value.trim();
+      if (!justificativa) {
+        alert('Por favor, insira uma justificativa.');
+        return;
+      }
+      const params = getURLParams();
+      // Passo 5: Validar parâmetros obrigatórios
+      if (!params.fornecedor || !params.bandeira || !params.uf || !params.data) {
+        alert('Erro: Parâmetros da tabela não encontrados.');
+        return;
+      }
+      // Passo 6: Garantir dataSubmissao no formato ISO (params.data já está no formato correto)
+      const decisao = {
+        fornecedor: params.fornecedor,
+        bandeira: params.bandeira,
+        uf: params.uf,
+        dataSubmissao: params.data,
+        acao: acaoSelecionada,
+        justificativa: justificativa
+      };
+      // Passo 13: Feedback visual no botão
+      const btnEnviar = document.querySelector('.btn-enviar-acao');
+      if (btnEnviar) {
+        btnEnviar.textContent = 'Salvando...';
+        btnEnviar.disabled = true;
+      }
+      // Passo 12: Try-catch ao salvar no localStorage
+      try {
+        let decisoes = [];
+        const stored = localStorage.getItem('decisoesTabelas');
+        if (stored) {
+          try {
+            const arr = JSON.parse(stored);
+            if (Array.isArray(arr)) {
+              decisoes = arr;
+            }
+          } catch(e) {
+            // Se erro no parse, sobrescreve com novo array
+            decisoes = [];
+          }
+        }
+        decisoes.push(decisao);
+        localStorage.setItem('decisoesTabelas', JSON.stringify(decisoes));
+        // Passo 1: Redirecionar para dashboard sem parâmetros na URL
+        window.location.href = 'dashboard-comprador.html';
+      } catch(e) {
+        alert('Erro ao salvar decisão. Tente novamente.');
+        console.error(e);
+        // Reabilitar botão caso erro
+        if (btnEnviar) {
+          btnEnviar.textContent = 'Enviar';
+          btnEnviar.disabled = false;
+        }
+      }
+    }
   </script>
 </head>
 <body>
@@ -812,42 +882,5 @@
       </div>
       </main>
   </div>
-  <script>
-    // --- Modal Aprovação/Reprovação ---
-    let acaoSelecionada = null;
-    function abrirModalAcao(acao) {
-      acaoSelecionada = acao;
-      document.getElementById('justificativa-acao').value = '';
-      document.getElementById('titulo-modal-acao').textContent = acao === 'aprovar' ? 'Justificativa para Aprovação' : 'Justificativa para Reprovação';
-      document.getElementById('modal-overlay-acao').classList.add('active');
-    }
-    function fecharModalAcao() {
-      document.getElementById('modal-overlay-acao').classList.remove('active');
-      acaoSelecionada = null;
-    }
-    function enviarAcao() {
-      // Aqui você pode capturar a justificativa se desejar
-      const justificativa = document.getElementById('justificativa-acao').value.trim();
-      if (!justificativa) {
-        alert('Por favor, insira uma justificativa.');
-        return;
-      }
-      // Redireciona para dashboard-comprador.html com parâmetros de ação
-      const params = getURLParams();
-      
-      // --- CORREÇÃO AQUI: Usar window.location.href para manter o caminho relativo correto ---
-      const url = new URL('dashboard-comprador.html', window.location.href);
-      // Limpa search params antigos que possam vir da URL base, se for o mesmo arquivo, mas como mudamos o nome, o search já vem limpo no objeto URL
-      
-      url.searchParams.set('fornecedor', params.fornecedor);
-      url.searchParams.set('bandeira', params.bandeira);
-      url.searchParams.set('uf', params.uf);
-      url.searchParams.set('data', params.data);
-      url.searchParams.set('acao', acaoSelecionada);
-      url.searchParams.set('justificativa', justificativa); // O objeto URL já faz o encode
-      
-      window.location.href = url.toString();
-    }
-  </script>
 </body>
 </html>
