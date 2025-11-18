@@ -143,72 +143,52 @@
     .data-table tr:last-child {
       border-bottom: none;
     }
-    .btn-drill {
-      background: #fff;
-      color: #1a6ae5;
-      border: 1px solid #1a6ae5;
-      padding: 6px 14px;
+    .btn-analise {
+      background: #1a6ae5;
+      color: #fff;
+      border: none;
+      padding: 7px 18px;
       border-radius: 5px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.18s;
     }
-    .btn-drill:hover {
-      background: #eaf2ff;
+    .btn-analise:hover {
+      background: #144fa1;
     }
-    .chart-section {
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      padding: 24px 18px 18px 18px;
-      margin-bottom: 32px;
-    }
-    .chart-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 12px;
-    }
-    .chart-container {
-      width: 100%;
-      max-width: 600px;
-      height: 260px;
-      margin: 0 auto;
-      position: relative;
-    }
-    /* Modal Styles */
-    .modal {
-      display: none;
+    /* Modal */
+    .modal-overlay {
       position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      overflow: auto;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.35);
-      justify-content: center;
+      z-index: 1000;
+      display: none;
       align-items: center;
+      justify-content: center;
     }
-    .modal-content {
+    .modal {
       background: #fff;
-      border-radius: 16px;
-      padding: 32px 24px 24px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
       max-width: 700px;
       width: 95vw;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+      padding: 32px 24px 24px 24px;
       position: relative;
-      animation: fadeIn 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .modal-title {
-      font-size: 1.3rem;
+    .modal-header {
+      font-size: 1.25rem;
       font-weight: 700;
       color: #1a6ae5;
-      margin-bottom: 18px;
+      margin-bottom: 6px;
     }
     .modal-section {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .modal-section-title {
       font-size: 1.08rem;
@@ -216,224 +196,386 @@
       color: #222;
       margin-bottom: 8px;
     }
-    .modal .btn-close {
-      position: absolute;
-      top: 16px;
-      right: 18px;
-      background: #f5f6fa;
+    .modal-close-btn {
+      background: #d4380d;
+      color: #fff;
       border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      font-size: 1.2rem;
-      color: #1a1a1a;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
-      transition: background 0.15s;
+      align-self: flex-end;
+      margin-top: 6px;
+      transition: background 0.18s;
     }
-    .modal .btn-close:hover {
-      background: #eaf2ff;
+    .modal-close-btn:hover {
+      background: #a81f0a;
     }
-    .modal-indicadores-table {
+    .modal-canvas {
+      width: 100%;
+      max-width: 600px;
+      height: 240px;
+      margin: 0 auto 16px auto;
+      display: block;
+      background: #f5f6fa;
+      border-radius: 6px;
+    }
+    .modal-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 8px;
-      margin-bottom: 8px;
-    }
-    .modal-indicadores-table th, .modal-indicadores-table td {
-      padding: 7px 10px;
-      border-bottom: 1px solid #eee;
       font-size: 0.98rem;
-      text-align: left;
+      margin-bottom: 10px;
     }
-    .modal-indicadores-table th {
+    .modal-table th, .modal-table td {
+      padding: 7px 8px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-table th {
       background: #f5f6fa;
       font-weight: 700;
     }
-    .modal-sugestoes {
-      background: #f5f6fa;
-      border-radius: 8px;
-      padding: 12px 14px;
-      color: #1a1a1a;
-      font-size: 1.04rem;
-      margin-top: 10px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1000px) {
+      .main-content {
+        padding: 0 4vw 24px 4vw;
+      }
+      .sidebar {
+        width: 60px;
+        padding: 10px 0;
+      }
+      .sidebar nav a {
+        font-size: 0.95rem;
+        padding: 10px 10px;
+        text-align: center;
+      }
+      .sidebar img { width: 38px; }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
       .sidebar { display: none; }
       .main-content { padding: 0 2vw 18px 2vw; }
       .panel-header { flex-direction: column; gap: 8px; }
-      .chart-container { max-width: 98vw; }
-      .modal-content { padding: 16px 5vw 16px 5vw; }
+      .modal { max-width: 98vw; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Gráfico simples de variação ponderada
-    window.addEventListener('DOMContentLoaded', function() {
-      var canvas = document.getElementById('chartVaria');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      var data = [4.2, 5.1, 3.6, 7.3, 2.8, 1.8, 4.9];
-      var labels = ['SKU 1','SKU 2','SKU 3','SKU 4','SKU 5','SKU 6','SKU 7'];
-      var w = canvas.width, h = canvas.height;
-      var max = Math.max(...data, 0);
-      var min = Math.min(...data, 0);
-      ctx.clearRect(0,0,w,h);
-      // Eixos
-      ctx.strokeStyle = '#eaeaea';
-      ctx.beginPath();
-      ctx.moveTo(40, 20); ctx.lineTo(40, h-40); ctx.lineTo(w-20, h-40);
-      ctx.stroke();
-      // Barras
-      var barW = (w-80)/data.length;
-      for (var i=0; i<data.length; i++) {
-        var val = data[i];
-        var barH = ((val-min)/(max-min+0.01))*(h-80);
-        ctx.fillStyle = val >= 0 ? '#1a6ae5' : '#d4380d';
-        ctx.fillRect(40 + i*barW + 10, h-40-barH, barW-20, barH);
-        ctx.fillStyle = '#222';
-        ctx.font = 'bold 13px Helvetica';
-        ctx.fillText(val+'%', 40 + i*barW + 14, h-45-barH);
-        ctx.save();
-        ctx.translate(40 + i*barW + 14, h-25);
-        ctx.rotate(-0.35);
-        ctx.font = '11px Helvetica';
-        ctx.fillStyle = '#555';
-        ctx.fillText(labels[i], 0, 0);
-        ctx.restore();
-      }
-    });
+    // Função para ler parâmetros da URL e preencher o cabeçalho
+    function preencherCabecalho() {
+      const params = new URLSearchParams(window.location.search);
+      const fornecedor = params.get('fornecedor') || 'Fornecedor não informado';
+      const bandeira = params.get('bandeira') || 'Bandeira não informada';
+      const uf = params.get('uf') || 'UF não informada';
+      const data = params.get('data') || 'Data não informada';
+      document.getElementById('fornecedor-info').innerHTML = `<strong>${fornecedor}</strong>`;
+      document.getElementById('bandeira-info').innerHTML = `<strong>${bandeira}</strong>`;
+      document.getElementById('uf-info').innerHTML = `<strong>${uf}</strong>`;
+      document.getElementById('data-info').innerHTML = `<strong>${data}</strong>`;
+      return fornecedor;
+    }
 
-    // Modal de Análise Detalhada do SKU
-    function openSkuModal(sku) {
-      // Exemplo de dados dinâmicos para o SKU
-      var historicoPreco = {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-        data: [19.9, 20.1, 20.5, 21.0, 21.2, 21.5]
-      };
-      var concorrentes = {
-        labels: ['Fornecedor A', 'Fornecedor B', 'Fornecedor C'],
-        data: [21.5, 20.9, 21.1]
-      };
-      var indicadores = {
-        precoNovo: 21.5,
-        precoMercado: 20.9,
-        variacao: 8.0,
-        variacaoPonderada: 5.2,
-        impactoDRE: 350,
-        pesoVendas: '2.5%',
-        icNielsen: 95,
-        icObjetiva: 92,
-        dataUltimaAtualizacao: '2024-06-05',
-        margemBruta: 18.2
-      };
-      // Preencher os gráficos
-      setTimeout(function(){
-        renderHistoricoPreco(historicoPreco);
-        renderConcorrentes(concorrentes);
-        renderIndicadores(indicadores);
-        renderSugestoes(indicadores);
-      }, 100);
-      document.getElementById('skuModal').style.display = 'flex';
+    // Dados de exemplo realistas por fornecedor
+    const produtosPorFornecedor = {
+      'Ambev': [
+        {
+          sku: '7891910000197',
+          descricao: 'Cerveja Skol Lata 350ml',
+          precoAntigo: 3.29,
+          precoNovo: 3.49,
+          atualizacao: 6.1,
+          atualizacaoPonderada: 5.2,
+          impactoDRE: 1200,
+          pesoVendas: 12.5,
+          icNielsen: 92,
+          icObjetiva: 89,
+          ultimaAtualizacao: '2024-06-05',
+          historico: {
+            preco: [3.09, 3.19, 3.29, 3.49],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [90, 91, 92, 92],
+            vendas: [10000, 11000, 11500, 12000],
+            margem: [18, 17, 16, 15]
+          }
+        },
+        {
+          sku: '7891149102077',
+          descricao: 'Guaraná Antarctica 2L',
+          precoAntigo: 7.99,
+          precoNovo: 8.49,
+          atualizacao: 6.3,
+          atualizacaoPonderada: 5.2,
+          impactoDRE: 900,
+          pesoVendas: 10.2,
+          icNielsen: 88,
+          icObjetiva: 86,
+          ultimaAtualizacao: '2024-06-06',
+          historico: {
+            preco: [7.49, 7.69, 7.99, 8.49],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [85, 86, 87, 88],
+            vendas: [8000, 8500, 9000, 9500],
+            margem: [22, 21, 20, 19]
+          }
+        },
+        {
+          sku: '7891991000848',
+          descricao: 'Cerveja Brahma Lata 350ml',
+          precoAntigo: 3.39,
+          precoNovo: 3.59,
+          atualizacao: 5.9,
+          atualizacaoPonderada: 5.2,
+          impactoDRE: 1100,
+          pesoVendas: 11.1,
+          icNielsen: 91,
+          icObjetiva: 88,
+          ultimaAtualizacao: '2024-06-07',
+          historico: {
+            preco: [3.19, 3.29, 3.39, 3.59],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [89, 90, 91, 91],
+            vendas: [9500, 10000, 10500, 11000],
+            margem: [17, 16, 15, 14]
+          }
+        }
+      ],
+      'Nestlé': [
+        {
+          sku: '7891000240102',
+          descricao: 'Leite Condensado Moça 395g',
+          precoAntigo: 7.89,
+          precoNovo: 8.19,
+          atualizacao: 3.8,
+          atualizacaoPonderada: 3.1,
+          impactoDRE: 700,
+          pesoVendas: 9.3,
+          icNielsen: 95,
+          icObjetiva: 93,
+          ultimaAtualizacao: '2024-06-06',
+          historico: {
+            preco: [7.49, 7.69, 7.89, 8.19],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [92, 93, 94, 95],
+            vendas: [7000, 7200, 7500, 7800],
+            margem: [25, 24, 23, 22]
+          }
+        },
+        {
+          sku: '7891000050107',
+          descricao: 'Nescau 2.0 400g',
+          precoAntigo: 6.99,
+          precoNovo: 7.29,
+          atualizacao: 4.3,
+          atualizacaoPonderada: 3.1,
+          impactoDRE: 600,
+          pesoVendas: 8.1,
+          icNielsen: 93,
+          icObjetiva: 91,
+          ultimaAtualizacao: '2024-06-07',
+          historico: {
+            preco: [6.59, 6.79, 6.99, 7.29],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [90, 91, 92, 93],
+            vendas: [6000, 6200, 6500, 6700],
+            margem: [23, 22, 21, 20]
+          }
+        }
+      ],
+      'BRF': [
+        {
+          sku: '7896005800016',
+          descricao: 'Presunto Sadia Kg',
+          precoAntigo: 22.90,
+          precoNovo: 24.50,
+          atualizacao: 7.0,
+          atualizacaoPonderada: 6.2,
+          impactoDRE: 1500,
+          pesoVendas: 10.8,
+          icNielsen: 89,
+          icObjetiva: 87,
+          ultimaAtualizacao: '2024-06-04',
+          historico: {
+            preco: [21.90, 22.50, 22.90, 24.50],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [86, 87, 88, 89],
+            vendas: [5000, 5200, 5400, 5600],
+            margem: [19, 18, 17, 16]
+          }
+        },
+        {
+          sku: '7896005800023',
+          descricao: 'Mortadela Sadia Kg',
+          precoAntigo: 14.90,
+          precoNovo: 15.60,
+          atualizacao: 4.7,
+          atualizacaoPonderada: 6.2,
+          impactoDRE: 900,
+          pesoVendas: 8.4,
+          icNielsen: 87,
+          icObjetiva: 85,
+          ultimaAtualizacao: '2024-06-05',
+          historico: {
+            preco: [14.10, 14.50, 14.90, 15.60],
+            datas: ['2024-03', '2024-04', '2024-05', '2024-06'],
+            ic: [84, 85, 86, 87],
+            vendas: [4000, 4200, 4400, 4600],
+            margem: [18, 17, 16, 15]
+          }
+        }
+      ]
+    };
+
+    // Função para gerar linhas da tabela
+    function gerarTabelaComparativa(fornecedor) {
+      const tbody = document.getElementById('tabela-comparativa-body');
+      tbody.innerHTML = '';
+      const produtos = produtosPorFornecedor[fornecedor] || produtosPorFornecedor['Ambev'];
+      produtos.forEach(produto => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${produto.sku}</td>
+          <td>${produto.descricao}</td>
+          <td>R$ ${produto.precoAntigo.toFixed(2)}</td>
+          <td>R$ ${produto.precoNovo.toFixed(2)}</td>
+          <td style="color:${produto.atualizacao >= 0 ? '#d4380d' : '#16a34a'};">${produto.atualizacao >= 0 ? '+' : ''}${produto.atualizacao.toFixed(1)}%</td>
+          <td>${produto.atualizacaoPonderada.toFixed(1)}%</td>
+          <td>R$ ${produto.impactoDRE}</td>
+          <td>${produto.pesoVendas.toFixed(1)}%</td>
+          <td>${produto.icNielsen} / ${produto.icObjetiva}</td>
+          <td>${produto.ultimaAtualizacao}</td>
+          <td><button class="btn-analise" onclick="abrirModalAnalise('${produto.sku}')">Análise</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
-    function closeSkuModal() {
-      document.getElementById('skuModal').style.display = 'none';
+
+    // Dados históricos únicos por SKU para a modal
+    function getProdutoPorSKU(sku) {
+      for (const fornecedor in produtosPorFornecedor) {
+        const produto = produtosPorFornecedor[fornecedor].find(p => p.sku === sku);
+        if (produto) return produto;
+      }
+      return null;
     }
-    function renderHistoricoPreco(historico) {
-      var canvas = document.getElementById('modalChartHistorico');
-      var ctx = canvas.getContext('2d');
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      // Eixos
-      ctx.strokeStyle = '#eaeaea';
-      ctx.beginPath();
-      ctx.moveTo(40, 20); ctx.lineTo(40, 180); ctx.lineTo(370, 180);
-      ctx.stroke();
-      // Linha
-      ctx.strokeStyle = '#1a6ae5';
-      ctx.beginPath();
-      for(var i=0;i<historico.data.length;i++){
-        var x = 40 + i*((330)/(historico.data.length-1));
-        var y = 180 - ((historico.data[i]-19)/(22-19))*150;
-        if(i===0) ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-      }
-      ctx.stroke();
-      // Pontos
-      ctx.fillStyle = '#1a6ae5';
-      for(var i=0;i<historico.data.length;i++){
-        var x = 40 + i*((330)/(historico.data.length-1));
-        var y = 180 - ((historico.data[i]-19)/(22-19))*150;
-        ctx.beginPath(); ctx.arc(x,y,4,0,2*Math.PI); ctx.fill();
-        ctx.font = '11px Helvetica';
-        ctx.fillText('R$ '+historico.data[i].toFixed(2), x-18, y-10);
-      }
-      // Labels
-      ctx.fillStyle = '#222';
-      for(var i=0;i<historico.labels.length;i++){
-        var x = 40 + i*((330)/(historico.labels.length-1));
-        ctx.font = '11px Helvetica';
-        ctx.fillText(historico.labels[i], x-10, 195);
-      }
-    }
-    function renderConcorrentes(concorrentes) {
-      var canvas = document.getElementById('modalChartConcorrentes');
-      var ctx = canvas.getContext('2d');
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      var max = Math.max(...concorrentes.data, 0);
-      var barW = 60;
-      for(var i=0;i<concorrentes.data.length;i++){
-        var val = concorrentes.data[i];
-        var barH = ((val-20)/(max-20+0.01))*120;
-        ctx.fillStyle = i===0 ? '#1a6ae5' : '#888';
-        ctx.fillRect(40 + i*barW, 160-barH, barW-18, barH);
-        ctx.fillStyle = '#222';
-        ctx.font = 'bold 13px Helvetica';
-        ctx.fillText('R$'+val.toFixed(2), 40 + i*barW + 2, 150-barH);
-        ctx.font = '11px Helvetica';
-        ctx.fillText(concorrentes.labels[i], 40 + i*barW + 2, 175);
-      }
-    }
-    function renderIndicadores(ind) {
-      document.getElementById('modalIndicadores').innerHTML = `
-        <table class="modal-indicadores-table">
-          <tr><th>Preço Novo</th><td>R$ ${ind.precoNovo.toFixed(2)}</td></tr>
-          <tr><th>Preço Médio Mercado</th><td>R$ ${ind.precoMercado.toFixed(2)}</td></tr>
-          <tr><th>Variação (%)</th><td>${ind.variacao.toFixed(1)}%</td></tr>
-          <tr><th>Variação Ponderada (%)</th><td>${ind.variacaoPonderada.toFixed(1)}%</td></tr>
-          <tr><th>Impacto DRE</th><td>R$ ${ind.impactoDRE}</td></tr>
-          <tr><th>Peso nas Vendas</th><td>${ind.pesoVendas}</td></tr>
-          <tr><th>IC Nielsen</th><td>${ind.icNielsen}</td></tr>
-          <tr><th>IC Objetiva</th><td>${ind.icObjetiva}</td></tr>
-          <tr><th>Data Última Atualização</th><td>${ind.dataUltimaAtualizacao}</td></tr>
-          <tr><th>Margem Bruta</th><td>${ind.margemBruta.toFixed(1)}%</td></tr>
-        </table>
+
+    // Função para abrir modal de análise
+    function abrirModalAnalise(sku) {
+      const produto = getProdutoPorSKU(sku);
+      if (!produto) return;
+      const modal = document.getElementById('modal-analise');
+      const overlay = document.getElementById('modal-overlay');
+      // Preencher header
+      document.getElementById('modal-header').textContent = `${produto.descricao} (${produto.sku})`;
+      // Gráfico de evolução de preço
+      const canvasPreco = document.getElementById('modal-canvas-preco');
+      if (window.chartPreco) window.chartPreco.destroy();
+      window.chartPreco = new Chart(canvasPreco, {
+        type: 'line',
+        data: {
+          labels: produto.historico.datas,
+          datasets: [{
+            label: 'Preço (R$)',
+            data: produto.historico.preco,
+            borderColor: '#1a6ae5',
+            backgroundColor: 'rgba(26,106,229,0.12)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+      // Gráfico de IC
+      const canvasIC = document.getElementById('modal-canvas-ic');
+      if (window.chartIC) window.chartIC.destroy();
+      window.chartIC = new Chart(canvasIC, {
+        type: 'bar',
+        data: {
+          labels: produto.historico.datas,
+          datasets: [{
+            label: 'IC Nielsen',
+            data: produto.historico.ic,
+            backgroundColor: '#16a34a'
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, max: 100 } }
+        }
+      });
+      // Gráfico de vendas
+      const canvasVendas = document.getElementById('modal-canvas-vendas');
+      if (window.chartVendas) window.chartVendas.destroy();
+      window.chartVendas = new Chart(canvasVendas, {
+        type: 'bar',
+        data: {
+          labels: produto.historico.datas,
+          datasets: [{
+            label: 'Volume de Vendas',
+            data: produto.historico.vendas,
+            backgroundColor: '#f5b800'
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+      // Gráfico de margem
+      const canvasMargem = document.getElementById('modal-canvas-margem');
+      if (window.chartMargem) window.chartMargem.destroy();
+      window.chartMargem = new Chart(canvasMargem, {
+        type: 'line',
+        data: {
+          labels: produto.historico.datas,
+          datasets: [{
+            label: 'Margem (%)',
+            data: produto.historico.margem,
+            borderColor: '#d4380d',
+            backgroundColor: 'rgba(212,56,13,0.10)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+      // Tabela de histórico
+      const historicoTable = document.getElementById('modal-historico-table');
+      historicoTable.innerHTML = '<tr><th>Mês</th><th>Preço (R$)</th><th>IC Nielsen</th><th>Vendas</th><th>Margem (%)</th></tr>' +
+        produto.historico.datas.map((data, i) =>
+          `<tr><td>${data}</td><td>R$ ${produto.historico.preco[i].toFixed(2)}</td><td>${produto.historico.ic[i]}</td><td>${produto.historico.vendas[i]}</td><td>${produto.historico.margem[i]}%</td></tr>`
+        ).join('');
+      // Sugestões de análise
+      document.getElementById('modal-sugestoes').innerHTML = `
+        <ul>
+          <li>Comparar evolução do preço do SKU com a média do mercado e outros fornecedores.</li>
+          <li>Analisar o índice de competitividade (IC) ao longo dos meses.</li>
+          <li>Observar o volume de vendas e sua relação com as variações de preço.</li>
+          <li>Verificar a margem de lucro e seu impacto na decisão de aprovação.</li>
+          <li>Conferir a data da última atualização e frequência de reajustes.</li>
+        </ul>
       `;
+      overlay.style.display = 'flex';
+      modal.style.display = 'flex';
     }
-    function renderSugestoes(ind) {
-      var sugestoes = [];
-      if (ind.precoNovo > ind.precoMercado * 1.10) {
-        sugestoes.push('Preço está mais de 10% acima da média do mercado - Considerar reprovação.');
-      } else if (ind.precoNovo < ind.precoMercado * 0.95) {
-        sugestoes.push('Preço competitivo em relação ao mercado - Aprovação recomendada.');
-      } else {
-        sugestoes.push('Preço alinhado ao mercado.');
-      }
-      if (ind.margemBruta < 15) {
-        sugestoes.push('Margem bruta abaixo do ideal - Atenção.');
-      } else if (ind.margemBruta > 20) {
-        sugestoes.push('Margem bruta saudável.');
-      }
-      if (ind.icNielsen < 80) {
-        sugestoes.push('IC Nielsen baixo - avaliar posicionamento.');
-      } else if (ind.icNielsen > 90) {
-        sugestoes.push('IC Nielsen elevado - produto com boa aceitação.');
-      }
-      document.getElementById('modalSugestoes').innerHTML = sugestoes.map(s => '• ' + s).join('<br>');
+    // Função para fechar a modal
+    function fecharModalAnalise() {
+      document.getElementById('modal-overlay').style.display = 'none';
+      document.getElementById('modal-analise').style.display = 'none';
     }
+    window.onload = function() {
+      const fornecedor = preencherCabecalho();
+      gerarTabelaComparativa(fornecedor);
+    };
   </script>
 </head>
 <body>
@@ -454,10 +596,10 @@
       <header class="main-header">Análise Comercial da Tabela</header>
       <section class="panel">
         <div class="panel-header">
-          <div>Fornecedor: <strong id="fornecedorSelecionado">Fornecedor A</strong></div>
-          <div>Bandeira: <strong id="bandeiraSelecionada">SuperMais</strong></div>
-          <div>UF: <strong id="ufSelecionada">SP</strong></div>
-          <div>Data Submissão: <strong id="dataSubmissaoSelecionada">2024-06-10</strong></div>
+          <div>Fornecedor: <span id="fornecedor-info"><strong></strong></span></div>
+          <div>Bandeira: <span id="bandeira-info"><strong></strong></span></div>
+          <div>UF: <span id="uf-info"><strong></strong></span></div>
+          <div>Data Submissão: <span id="data-info"><strong></strong></span></div>
         </div>
         <form class="filters" aria-label="Filtros avançados">
           <label>SKU:
@@ -490,106 +632,52 @@
               <th>Descrição</th>
               <th>Preço Antigo</th>
               <th>Preço Novo</th>
-              <th>Atualização (%)</th>
-              <th>Atualização Ponderada (%)</th>
-              <th>Impacto Total DRE/DLP</th>
-              <th>Peso nas Vendas</th>
-              <th>IC Nielsen</th>
-              <th>IC Objetiva</th>
-              <th>Data Última Atualização</th>
+              <th>Atualização em % por produto</th>
+              <th>Atualização em % ponderada total do fornecedor</th>
+              <th>Impacto total no DRE/DLP da cia/fornecedor</th>
+              <th>Peso do produto nas vendas totais do fornecedor</th>
+              <th>ICs (Geral Nielsen & Objetiva)</th>
+              <th>Data da última atualização de preço do SKU</th>
               <th>Análise</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>7891910000197</td>
-              <td>Skol Pilsen Lata 350ml</td>
-              <td>R$ 3,19</td>
-              <td>R$ 3,49</td>
-              <td style="color:#d4380d;">+9,4%</td>
-              <td>+7,1%</td>
-              <td>R$ 8.500</td>
-              <td>3,2%</td>
-              <td>92</td>
-              <td>89</td>
-              <td>2024-06-07</td>
-              <td><button class="btn-drill" onclick="openSkuModal('7891910000197')">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>7891149100011</td>
-              <td>Brahma Duplo Malte 350ml</td>
-              <td>R$ 3,49</td>
-              <td>R$ 3,69</td>
-              <td style="color:#d4380d;">+5,7%</td>
-              <td>+4,2%</td>
-              <td>R$ 6.200</td>
-              <td>2,7%</td>
-              <td>90</td>
-              <td>87</td>
-              <td>2024-06-06</td>
-              <td><button class="btn-drill" onclick="openSkuModal('7891149100011')">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>7891991000015</td>
-              <td>Guaraná Antarctica 2L</td>
-              <td>R$ 7,99</td>
-              <td>R$ 8,49</td>
-              <td style="color:#d4380d;">+6,3%</td>
-              <td>+5,0%</td>
-              <td>R$ 4.700</td>
-              <td>1,9%</td>
-              <td>88</td>
-              <td>85</td>
-              <td>2024-06-05</td>
-              <td><button class="btn-drill" onclick="openSkuModal('7891991000015')">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>7894900011517</td>
-              <td>Pepsi Black 2L</td>
-              <td>R$ 7,59</td>
-              <td>R$ 7,99</td>
-              <td style="color:#d4380d;">+5,3%</td>
-              <td>+4,1%</td>
-              <td>R$ 2.900</td>
-              <td>1,1%</td>
-              <td>86</td>
-              <td>83</td>
-              <td>2024-06-04</td>
-              <td><button class="btn-drill" onclick="openSkuModal('7894900011517')">Analisar</button></td>
-            </tr>
+          <tbody id="tabela-comparativa-body">
+            <!-- Linhas geradas dinamicamente -->
           </tbody>
         </table>
       </section>
-      <section class="chart-section">
-        <div class="chart-title">Variação Ponderada por SKU</div>
-        <div class="chart-container">
-          <canvas id="chartVaria" width="600" height="260" aria-label="Gráfico de variação" role="img"></canvas>
-        </div>
-      </section>
-    </main>
-    <!-- Modal de Análise Detalhada do SKU -->
-    <div class="modal" id="skuModal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-content">
-        <button class="btn-close" onclick="closeSkuModal()" aria-label="Fechar">&times;</button>
-        <div class="modal-title" id="modalTitle">Análise Detalhada do SKU</div>
-        <div class="modal-section">
-          <div class="modal-section-title">Evolução Histórica de Preço</div>
-          <canvas id="modalChartHistorico" width="400" height="200" style="width:100%;max-width:400px;"></canvas>
-        </div>
-        <div class="modal-section">
-          <div class="modal-section-title">Comparação com Concorrentes</div>
-          <canvas id="modalChartConcorrentes" width="250" height="190" style="width:100%;max-width:250px;"></canvas>
-        </div>
-        <div class="modal-section">
-          <div class="modal-section-title">Indicadores de Performance</div>
-          <div id="modalIndicadores"></div>
-        </div>
-        <div class="modal-section">
-          <div class="modal-section-title">Sugestões de Decisão</div>
-          <div class="modal-sugestoes" id="modalSugestoes"></div>
+      <!-- Modal de análise detalhada do SKU -->
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal-analise">
+          <div class="modal-header" id="modal-header"></div>
+          <div class="modal-section">
+            <div class="modal-section-title">Evolução de Preço</div>
+            <canvas id="modal-canvas-preco" class="modal-canvas" width="600" height="240"></canvas>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Índice de Competitividade (IC Nielsen)</div>
+            <canvas id="modal-canvas-ic" class="modal-canvas" width="600" height="240"></canvas>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Volume de Vendas</div>
+            <canvas id="modal-canvas-vendas" class="modal-canvas" width="600" height="240"></canvas>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Margem de Lucro (%)</div>
+            <canvas id="modal-canvas-margem" class="modal-canvas" width="600" height="240"></canvas>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Histórico Resumido</div>
+            <table class="modal-table" id="modal-historico-table"></table>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Sugestões de Análise</div>
+            <div id="modal-sugestoes"></div>
+          </div>
+          <button class="modal-close-btn" onclick="fecharModalAnalise()">Fechar</button>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </body>
 </html>
