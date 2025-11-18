@@ -454,15 +454,31 @@
           alert('Erro: estrutura do modal inválida.');
           return;
         }
+        // Bandeiras mockadas para cada UF
+        var bandeirasPorUF = {
+          'SC': 'Superpão',
+          'PR': 'Superpão',
+          'RS': 'Superpão',
+          'SP': 'Superpão',
+          'MG': 'Superpão',
+          'RJ': 'Superpão',
+          'ES': 'Superpão',
+          'BA': 'Superpão',
+          'GO': 'Superpão',
+          'AM': 'Boa Supermercados',
+          'PA': 'Boa Supermercados',
+          'DF': 'Supermercados Avenida'
+        };
+        // Níveis de aprovação
         var nivelAprovacao = [
           'Gerente Categoria Bandeira',
           'Dir. Comercial Bandeira',
           'Dir. Comercial Holding',
           'VP'
         ];
+        // Mock para determinar o nível atual
         var nivelAtual = 0;
         if (status === 'pendente') {
-          // Exemplo: lógica mock para níveis
           if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
           else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
           else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
@@ -728,7 +744,7 @@
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td>SuperSul / SC</td>
+                <td>Superpão / SC</td>
                 <td>ana.souza@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver</a></td>
               </tr>
@@ -736,7 +752,7 @@
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>SuperSul / PR</td>
+                <td>Superpão / PR</td>
                 <td>carlos.martins@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver</a></td>
               </tr>
@@ -744,7 +760,7 @@
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>SuperSul / RS</td>
+                <td>Superpão / RS</td>
                 <td>marina.lima@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver</a></td>
               </tr>
@@ -752,7 +768,7 @@
                 <td>01/05/2024</td>
                 <td>precos_abril_v2.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>SuperSul / SP</td>
+                <td>Superpão / SP</td>
                 <td>joao.silva@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_abril_v2.xlsx', '01/05/2024'); return false;">Ver</a></td>
               </tr>
@@ -760,7 +776,7 @@
                 <td>20/04/2024</td>
                 <td>precos_marco.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>SuperSul / MG</td>
+                <td>Superpão / MG</td>
                 <td>fernando.pereira@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_marco.xlsx', '20/04/2024'); return false;">Ver</a></td>
               </tr>
@@ -768,7 +784,7 @@
                 <td>10/04/2024</td>
                 <td>precos_marco_v2.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>SuperSul / RJ</td>
+                <td>Superpão / RJ</td>
                 <td>lucas.almeida@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_marco_v2.xlsx', '10/04/2024'); return false;">Ver</a></td>
               </tr>
@@ -776,7 +792,7 @@
                 <td>28/03/2024</td>
                 <td>precos_fevereiro.xlsx</td>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td>SuperSul / ES</td>
+                <td>Superpão / ES</td>
                 <td>patricia.menezes@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro.xlsx', '28/03/2024'); return false;">Ver</a></td>
               </tr>
@@ -784,7 +800,7 @@
                 <td>15/03/2024</td>
                 <td>precos_fevereiro_v2.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>SuperSul / BA</td>
+                <td>Superpão / BA</td>
                 <td>rodrigo.santos@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
               </tr>
@@ -792,9 +808,41 @@
                 <td>01/03/2024</td>
                 <td>precos_janeiro.xlsx</td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>SuperSul / GO</td>
+                <td>Superpão / GO</td>
                 <td>aline.gomes@fornecedor.com.br</td>
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_janeiro.xlsx', '01/03/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>22/02/2024</td>
+                <td>precos_amazonas.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>Boa Supermercados / AM</td>
+                <td>maria.silva@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_amazonas.xlsx', '22/02/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>18/02/2024</td>
+                <td>precos_para.xlsx</td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>Boa Supermercados / PA</td>
+                <td>joana.pereira@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_para.xlsx', '18/02/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>10/02/2024</td>
+                <td>precos_goias.xlsx</td>
+                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td>Supermercados Avenida / GO</td>
+                <td>carlos.souza@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_goias.xlsx', '10/02/2024'); return false;">Ver</a></td>
+              </tr>
+              <tr>
+                <td>05/02/2024</td>
+                <td>precos_df.xlsx</td>
+                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td>Supermercados Avenida / DF</td>
+                <td>fernanda.melo@fornecedor.com.br</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_df.xlsx', '05/02/2024'); return false;">Ver</a></td>
               </tr>
             </tbody>
           </table>
