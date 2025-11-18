@@ -190,6 +190,29 @@
       color: #1a6ae5;
       font-weight: 700;
     }
+    .modal-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 32px;
+      margin-bottom: 8px;
+    }
+    .modal-info-label {
+      font-weight: 600;
+      color: #444;
+    }
+    .modal-info-value {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .modal-info-value.important {
+      color: #1a6ae5;
+    }
+    .modal-info-value.positive {
+      color: #16a34a;
+    }
+    .modal-info-value.negative {
+      color: #d4380d;
+    }
     .modal-close-btn {
       background: #d4380d;
       color: #fff;
@@ -259,6 +282,7 @@
       }
       .sidebar img { width: 38px; }
       .modal-content { max-width: 98vw; }
+      .modal-info-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
@@ -266,11 +290,13 @@
       .main-content { padding: 0 2vw 18px 2vw; }
       .panel-header { flex-direction: column; gap: 8px; }
       .modal-content { padding: 16px 4px 12px 4px; }
+      .modal-info-grid { grid-template-columns: 1fr; }
+      .modal-table th, .modal-table td { font-size: 0.85rem; padding: 6px 4px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // --- Passo 12: Popula cabeçalho com parâmetros da URL ---
+    // Utilitário para parsear parâmetros da URL
     function getURLParams() {
       const params = new URLSearchParams(window.location.search);
       return {
@@ -280,6 +306,7 @@
         data: params.get('data') || ''
       };
     }
+    // Preencher cabeçalho com dados vindos da dashboard
     function populateHeader() {
       const params = getURLParams();
       document.getElementById('header-fornecedor').innerHTML = params.fornecedor ? `<strong>${params.fornecedor}</strong>` : '<em>Não informado</em>';
@@ -287,8 +314,8 @@
       document.getElementById('header-uf').innerHTML = params.uf ? `<strong>${params.uf}</strong>` : '<em>Não informado</em>';
       document.getElementById('header-data').innerHTML = params.data ? `<strong>${params.data}</strong>` : '<em>Não informado</em>';
     }
-    // --- Passo 14, 18: Dados realistas por fornecedor/SKU ---
-    const fornecedoresProdutos = {
+    // Produtos realistas por fornecedor (apenas exemplos próximos do real)
+    const produtosPorFornecedor = {
       'Ambev': [
         {
           sku: '7891910000197',
@@ -429,9 +456,9 @@
       ]
     };
     function getProdutosFornecedor(fornecedor) {
-      return fornecedoresProdutos[fornecedor] || [];
+      return produtosPorFornecedor[fornecedor] || [];
     }
-    // --- Passo 13: Atualizar tabela de preços ---
+    // Renderiza a tabela de produtos baseada no fornecedor selecionado
     function renderTabelaProdutos() {
       const params = getURLParams();
       const produtos = getProdutosFornecedor(params.fornecedor);
@@ -455,7 +482,7 @@
         tbody.appendChild(tr);
       });
     }
-    // --- Passo 15, 16, 17, 18: Modal de análise detalhada ---
+    // Modal de análise detalhada
     let chart1 = null, chart2 = null;
     function abrirModalAnalise(sku) {
       const params = getURLParams();
@@ -464,16 +491,20 @@
       if (!prod) return;
       // Preencher modal
       document.getElementById('modal-sku').textContent = prod.sku;
-      document.getElementById('modal-descricao').textContent = prod.descricao;
-      document.getElementById('modal-preco-atual').textContent = `R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}`;
-      document.getElementById('modal-preco-antigo').textContent = `R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}`;
-      document.getElementById('modal-ic-nielsen').textContent = prod.icNielsen;
-      document.getElementById('modal-ic-objetiva').textContent = prod.icObjetiva;
-      document.getElementById('modal-peso-vendas').textContent = prod.pesoVendas.toFixed(1) + '%';
-      document.getElementById('modal-impacto-dre').textContent = `R$ ${prod.impactoDRE.toLocaleString('pt-BR')}`;
-      document.getElementById('modal-margem').textContent = prod.historico.margem[prod.historico.margem.length-1].toFixed(1) + '%';
-      document.getElementById('modal-data-ult-atualizacao').textContent = prod.dataUltimaAtualizacao;
-      // Render gráfico de evolução de preço
+      // Informações básicas em grid
+      const infoGrid = document.getElementById('modal-info-grid');
+      infoGrid.innerHTML = `
+        <div class="modal-info-label">Descrição:</div><div class="modal-info-value">${prod.descricao}</div>
+        <div class="modal-info-label">Preço Atual:</div><div class="modal-info-value important">R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}</div>
+        <div class="modal-info-label">Preço Anterior:</div><div class="modal-info-value">R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}</div>
+        <div class="modal-info-label">IC Nielsen:</div><div class="modal-info-value positive">${prod.icNielsen}</div>
+        <div class="modal-info-label">IC Objetiva:</div><div class="modal-info-value">${prod.icObjetiva}</div>
+        <div class="modal-info-label">Peso nas Vendas:</div><div class="modal-info-value">${prod.pesoVendas.toFixed(1)}%</div>
+        <div class="modal-info-label">Impacto no DRE/DLP:</div><div class="modal-info-value">R$ ${prod.impactoDRE.toLocaleString('pt-BR')}</div>
+        <div class="modal-info-label">Margem Atual:</div><div class="modal-info-value">${prod.historico.margem[prod.historico.margem.length-1].toFixed(1)}%</div>
+        <div class="modal-info-label">Data da Última Atualização:</div><div class="modal-info-value">${prod.dataUltimaAtualizacao}</div>
+      `;
+      // Gráfico de evolução de preço
       const ctx1 = document.getElementById('chart-preco').getContext('2d');
       if (chart1) chart1.destroy();
       chart1 = new Chart(ctx1, {
@@ -568,14 +599,21 @@
       `;
       document.getElementById('modal-overlay').classList.add('active');
     }
-    // --- Passo 20: Fechar modal ---
+    // Fechar modal
     function fecharModalAnalise() {
       document.getElementById('modal-overlay').classList.remove('active');
-      // Limpa gráficos para liberar memória
       if (chart1) { chart1.destroy(); chart1 = null; }
       if (chart2) { chart2.destroy(); chart2 = null; }
       document.getElementById('modal-tabela-historico').innerHTML = '';
+      document.getElementById('modal-info-grid').innerHTML = '';
     }
+    // Fechar modal clicando fora
+    window.addEventListener('click', function(event) {
+      const overlay = document.getElementById('modal-overlay');
+      if (event.target === overlay) {
+        fecharModalAnalise();
+      }
+    });
     window.addEventListener('DOMContentLoaded', function() {
       populateHeader();
       renderTabelaProdutos();
@@ -655,21 +693,14 @@
         <div class="modal-content">
           <h3>Análise Detalhada do SKU <span id="modal-sku"></span></h3>
           <div class="modal-section">
-            <strong>Descrição:</strong> <span id="modal-descricao"></span><br>
-            <strong>Preço Atual:</strong> <span id="modal-preco-atual"></span><br>
-            <strong>Preço Anterior:</strong> <span id="modal-preco-antigo"></span><br>
-            <strong>IC Nielsen:</strong> <span id="modal-ic-nielsen"></span> &nbsp; <strong>IC Objetiva:</strong> <span id="modal-ic-objetiva"></span><br>
-            <strong>Peso nas Vendas:</strong> <span id="modal-peso-vendas"></span><br>
-            <strong>Impacto no DRE/DLP:</strong> <span id="modal-impacto-dre"></span><br>
-            <strong>Margem Atual:</strong> <span id="modal-margem"></span><br>
-            <strong>Data da Última Atualização:</strong> <span id="modal-data-ult-atualizacao"></span>
+            <div id="modal-info-grid" class="modal-info-grid"></div>
           </div>
           <div class="modal-section">
             <div class="modal-chart">
-              <canvas id="chart-preco" width="600" height="240" aria-label="Gráfico de preço"></canvas>
+              <canvas id="chart-preco" width="600" height="240" aria-label="Gráfico de evolução de preço do SKU"></canvas>
             </div>
             <div class="modal-chart">
-              <canvas id="chart-ic" width="600" height="240" aria-label="Gráfico de ICs"></canvas>
+              <canvas id="chart-ic" width="600" height="240" aria-label="Gráfico de histórico de índices de competitividade"></canvas>
             </div>
           </div>
           <div class="modal-section">
