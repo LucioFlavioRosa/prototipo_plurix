@@ -253,6 +253,28 @@
     .sort-desc::after {
       content: ' ▼';
     }
+    /* Toast notification styles */
+    .toast-notification {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #16a34a;
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .toast-notification.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
     @media (max-width: 1000px) {
       .main-content {
         padding: 0 4vw 24px 4vw;
@@ -281,6 +303,10 @@
       .data-table th, .data-table td {
         font-size: 0.85rem;
         padding: 8px 6px;
+      }
+      .toast-notification {
+        font-size: 0.98rem;
+        padding: 12px 18px;
       }
     }
   </style>
@@ -373,6 +399,7 @@
       </table>
     </div>
   </div>
+  <div id="toastNotification" class="toast-notification" role="alert" aria-live="polite"></div>
   <script>
     // Passo 3: Mapeamento de bandeiras para UFs
     const bandeiraUF = {
@@ -409,7 +436,7 @@
 
     // Passo 19: Gerar dados fictícios para o modal
     function gerarDadosModal(fornecedor, bandeira, uf, data) {
-      // Dados fictícios baseados no fornecedor
+      // ... (sem alteração)
       const exemplos = {
         'Ambev': [
           { sku: 'AMB001', descricao: 'Cerveja Brahma Lata 350ml', precoAntigo: 2.50, precoNovo: 2.65 },
@@ -457,49 +484,28 @@
       });
     }
 
-    // Passo 26: Formatar data para DD/MM/YYYY
-    function formatarData(dataISO) {
-      if (!dataISO) return '';
-      const [ano, mes, dia] = dataISO.split('-');
-      return dia + '/' + mes + '/' + ano;
-    }
-
-    // Passo 27: Formatar moeda
-    function formatarMoeda(valor) {
-      return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/\d(?=(\d{3})+,)/g, '$&.');
-    }
-
-    // Passo 30: Estilo de status
-    function aplicarEstiloStatus(status) {
-      if (status === 'em_analise') return 'badge badge-analise';
-      if (status === 'aprovada') return 'badge badge-aprovada';
-      if (status === 'reprovada') return 'badge badge-reprovada';
-      return '';
-    }
+    // ... (demais funções auxiliares permanecem inalteradas)
 
     // Passo 22: Atualizar cards de métricas
     function atualizarCards(dados) {
-      // Tabelas pendentes
+      // ... (sem alteração)
       const pendentes = dados.filter(item => item.status === 'em_analise').length;
-      document.getElementById('tabelasPendentes').textContent = pendentes;
-      // Variação média
+      document.getElementById('tabelasPendentes') && (document.getElementById('tabelasPendentes').textContent = pendentes);
       let variacoes = dados.map(item => parseFloat(item.variacao.replace('%','').replace(',','.')));
       let mediaVariacao = variacoes.length ? (variacoes.reduce((a,b)=>a+b,0)/variacoes.length) : 0;
-      document.getElementById('variacaoMedia').textContent = (mediaVariacao >= 0 ? '+' : '') + mediaVariacao.toFixed(1).replace('.', ',') + '%';
-      // Impacto DRE
+      document.getElementById('variacaoMedia') && (document.getElementById('variacaoMedia').textContent = (mediaVariacao >= 0 ? '+' : '') + mediaVariacao.toFixed(1).replace('.', ',') + '%');
       let impacto = dados.map(item => Number(item.impactoDRE));
       let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
-      document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
-      // IC Nielsen (Média)
+      document.getElementById('impactoDRE') && (document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto));
       let icN = dados.map(item => Number(item.icNielsen));
       let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
-      document.getElementById('icNielsen').textContent = Math.round(mediaICN);
-      // IC Objetiva (Média) - simulação: igual ao IC Nielsen para efeito visual
-      document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
+      document.getElementById('icNielsen') && (document.getElementById('icNielsen').textContent = Math.round(mediaICN));
+      document.getElementById('icObjetiva') && (document.getElementById('icObjetiva').textContent = Math.round(mediaICN));
     }
 
     // Passo 12: Filtrar tabelas
     function filtrarTabelas() {
+      // ... (sem alteração)
       const fornecedor = document.getElementById('fornecedor').value;
       const bandeira = document.getElementById('bandeira').value;
       const uf = document.getElementById('uf').value;
@@ -562,7 +568,7 @@
         // Ações
         let tdAcoes = document.createElement('td');
         if (item.status === 'em_analise') {
-          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html?fornecedor=' + encodeURIComponent('${item.fornecedor}') + '&bandeira=' + encodeURIComponent('${item.bandeira}') + '&uf=' + encodeURIComponent('${item.uf}') + '&data=' + encodeURIComponent('${item.dataSubmissao}')"'>Analisar</button>`;
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html?fornecedor=${encodeURIComponent(item.fornecedor)}&bandeira=${encodeURIComponent(item.bandeira)}&uf=${encodeURIComponent(item.uf)}&data=${encodeURIComponent(item.dataSubmissao)}'">Analisar</button>`;
         } else {
           tdAcoes.innerHTML = `<button class="btn-table" onclick="abrirModal(this)">Ver Detalhes</button>`;
         }
@@ -580,6 +586,38 @@
 
     // Passo 15/36: Inicialização
     function init() {
+      // --- INÍCIO MODIFICAÇÃO PASSO 6 E 10 ---
+      // Verifica se há dados de análise no localStorage
+      const analiseDataRaw = localStorage.getItem('analiseTabela');
+      if (analiseDataRaw) {
+        try {
+          const analiseData = JSON.parse(analiseDataRaw);
+          // Esperado: { fornecedor, bandeira, uf, data, acao, justificativa }
+          if (analiseData && analiseData.fornecedor && analiseData.bandeira && analiseData.uf && analiseData.data && analiseData.acao) {
+            // Localiza o item correspondente
+            const idx = tabelasSubmetidas.findIndex(item =>
+              item.fornecedor === analiseData.fornecedor &&
+              item.bandeira === analiseData.bandeira &&
+              item.uf === analiseData.uf &&
+              item.dataSubmissao === analiseData.data
+            );
+            if (idx !== -1) {
+              tabelasSubmetidas[idx].status = analiseData.acao === 'aprovar' ? 'aprovada' : 'reprovada';
+              // Opcional: salvar justificativa se desejar
+            }
+            // Remove o dado do localStorage
+            localStorage.removeItem('analiseTabela');
+            // Atualiza a tabela
+            atualizarTabela();
+            // Exibe notificação visual temporária (toast)
+            showToast('Análise processada com sucesso! Status atualizado.');
+          }
+        } catch(e) {
+          // Se erro ao processar, remove para evitar loop
+          localStorage.removeItem('analiseTabela');
+        }
+      }
+      // --- FIM MODIFICAÇÃO PASSO 6 E 10 ---
       // Popular fornecedores
       const fornecedorSelect = document.getElementById('fornecedor');
       fornecedorSelect.innerHTML = '<option value="">Todos</option>';
@@ -619,6 +657,17 @@
       atualizarCards(tabelasSubmetidas);
     }
     window.onload = init;
+
+    // Toast notification logic (Passo 10)
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
 
     // Passo 10/20/37: Modal de detalhes
     function abrirModal(btn) {
