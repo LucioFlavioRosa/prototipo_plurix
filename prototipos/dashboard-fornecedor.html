@@ -185,7 +185,7 @@
       color: #f9b233;
       text-decoration: none;
     }
-    /* Modal Styles */
+    /* Modal Styles - Detalhes e Editor Inline */
     .modal {
       display: none;
       position: fixed;
@@ -243,92 +243,109 @@
       line-height: 1.6;
       color: #222;
     }
-    /* Tabela Modal Produtos (Aprovada/Reprovada) */
-    .modal-produtos-table {
+    /* Tabela de edição e visualização nos modais */
+    .editor-table {
       width: 100%;
       border-collapse: collapse;
       margin: 18px 0 18px 0;
-      font-size: 1.03rem;
+      font-size: 1.04rem;
       background: #fff;
     }
-    .modal-produtos-table th, .modal-produtos-table td {
+    .editor-table th, .editor-table td {
       padding: 10px 12px;
       border-bottom: 1px solid #eaeaea;
       text-align: left;
     }
-    .modal-produtos-table th {
+    .editor-table th {
       background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
     }
-    .modal-produtos-table tr:last-child td {
+    .editor-table tr:last-child td {
       border-bottom: none;
     }
-    .modal-produtos-table input[type="text"], .modal-produtos-table input[type="number"] {
+    .editor-table input[type="text"] {
       width: 100%;
       padding: 6px 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #b7b9c6;
       border-radius: 4px;
       font-size: 1rem;
-      box-sizing: border-box;
       background: #f7f8fa;
       color: #222;
+      box-sizing: border-box;
     }
-    .modal-produtos-table input:focus {
+    .editor-table input[type="text"]:focus {
       outline: 2px solid #f9b233;
       background: #fffbe7;
     }
-    .modal-produtos-actions {
-      display: flex;
-      gap: 14px;
-      margin-top: 18px;
-      justify-content: flex-end;
-    }
-    .btn-download-planilha {
-      background: #1a2340;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
+    /* Botões de ação nos modais */
+    .btn-salvar-edicao, .btn-cancelar-edicao {
       padding: 10px 24px;
       font-size: 1.08rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(30,40,80,0.08);
-    }
-    .btn-download-planilha:hover {
-      background: #f9b233;
-      color: #1a2340;
-    }
-    .btn-salvar-alteracoes {
-      background: #4bb543;
-      color: #fff;
-      border: none;
       border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.08rem;
-      font-weight: 700;
+      border: none;
       cursor: pointer;
+      margin-right: 12px;
+      margin-top: 8px;
       transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(75,181,67,0.08);
     }
-    .btn-salvar-alteracoes:hover {
+    .btn-salvar-edicao {
+      background: #4bb543;
+      color: #fff;
+    }
+    .btn-salvar-edicao:hover {
       background: #399a36;
     }
-    .btn-cancelar-alteracoes {
+    .btn-cancelar-edicao {
       background: #e74c3c;
       color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.08rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(231,76,60,0.08);
     }
-    .btn-cancelar-alteracoes:hover {
+    .btn-cancelar-edicao:hover {
       background: #b93a2e;
+    }
+    /* Indicador de níveis de aprovação (modal pendente) */
+    .nivel-aprovacao {
+      display: flex;
+      align-items: center;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .nivel-item {
+      display: flex;
+      align-items: center;
+      margin-right: 24px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1a2340;
+    }
+    .status-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background: #ddd;
+      border: 2px solid #ccc;
+      transition: background 0.2s;
+    }
+    .status-circle.ativo {
+      background: #4bb543;
+      border-color: #4bb543;
+    }
+    .nivel-linha {
+      height: 2px;
+      width: 40px;
+      background: #ddd;
+      margin: 0 8px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .nivel-linha.ativo {
+      background: #4bb543;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -369,13 +386,20 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .modal-produtos-table th, .modal-produtos-table td {
-        padding: 8px 6px;
-        font-size: 0.97rem;
+      .nivel-item {
+        margin-right: 12px;
+        font-size: 0.95rem;
+      }
+      .motivo-item {
+        padding: 12px;
+        font-size: 0.98rem;
       }
     }
   </style>
   <script>
+    /**
+     * Navegação de páginas e ações básicas
+     */
     function goTo(page) {
       window.location.href = page;
     }
@@ -388,6 +412,15 @@
       window.location.href = 'upload-tabela.html';
     }
 
+    /**
+     * Função principal para abrir o modal de detalhes.
+     * Exibe conteúdos diferentes conforme o status:
+     * - 'aprovada': tabela mock + botão download
+     * - 'reprovada': tabela editável inline + botões salvar/cancelar
+     * - 'pendente': indicador visual do estágio de aprovação
+     *
+     * Os estágios de aprovação para cada arquivo pendente são definidos individualmente.
+     */
     function abrirDetalhes(status, arquivo, data) {
       try {
         var modal = document.getElementById('modal-detalhes');
@@ -401,91 +434,26 @@
           alert('Erro: estrutura do modal inválida.');
           return;
         }
-        // --- INÍCIO DA LÓGICA CUSTOMIZADA PARA STATUS ---
-        if (status === 'aprovada') {
-          modalTitle.textContent = 'Produtos da Tabela Aprovada - ' + arquivo;
-          var produtosAprovados = [
-            { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1, pacote 5kg', preco: 'R$ 25,90' },
-            { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca selecionado, pacote 1kg', preco: 'R$ 8,50' },
-            { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal de soja, garrafa 900ml', preco: 'R$ 7,20' },
-            { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado, pacote 1kg', preco: 'R$ 4,90' }
-          ];
-          var html = '';
-          html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Produtos da Tabela:</div>';
-          html += '<table class="modal-produtos-table" aria-label="Produtos da Tabela Aprovada">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < produtosAprovados.length; i++) {
-            var p = produtosAprovados[i];
-            html += '<tr>';
-            html += '<td>' + p.sku + '</td>';
-            html += '<td>' + p.nome + '</td>';
-            html += '<td>' + p.descricao + '</td>';
-            html += '<td>' + p.preco + '</td>';
-            html += '</tr>';
-          }
-          html += '</tbody></table>';
-          html += '<div class="modal-produtos-actions">';
-          html += '<button class="btn-download-planilha" onclick="downloadPlanilha(\'' + arquivo + '\')">Fazer Download da Planilha</button>';
-          html += '</div>';
-          modalBody.innerHTML = html;
-          modal.style.display = 'flex';
-          modal.classList.remove('closing');
-          setTimeout(function() {
-            var content = modal.querySelector('.modal-content');
-            if(content) content.focus();
-          }, 100);
-          return;
-        } else if (status === 'reprovada') {
-          modalTitle.textContent = 'Editar Produtos da Tabela Reprovada - ' + arquivo;
-          var produtosReprovados = [
-            { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1, pacote 5kg', preco: '25.90' },
-            { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca selecionado, pacote 1kg', preco: '8.50' },
-            { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal de soja, garrafa 900ml', preco: '7.20' },
-            { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado, pacote 1kg', preco: '4.90' }
-          ];
-          var html = '';
-          html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Edite os produtos e salve as alterações:</div>';
-          html += '<form id="form-editar-reprovada" onsubmit="salvarAlteracoesReprovada(event)">';
-          html += '<table class="modal-produtos-table" aria-label="Produtos da Tabela Reprovada">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < produtosReprovados.length; i++) {
-            var p = produtosReprovados[i];
-            html += '<tr>';
-            html += '<td><input type="text" name="sku_' + i + '" value="' + p.sku + '" required></td>';
-            html += '<td><input type="text" name="nome_' + i + '" value="' + p.nome + '" required></td>';
-            html += '<td><input type="text" name="descricao_' + i + '" value="' + p.descricao + '" required></td>';
-            html += '<td><input type="number" step="0.01" min="0" name="preco_' + i + '" value="' + p.preco + '" required></td>';
-            html += '</tr>';
-          }
-          html += '</tbody></table>';
-          html += '<div class="modal-produtos-actions">';
-          html += '<button type="button" class="btn-cancelar-alteracoes" onclick="fecharModal()">Cancelar</button>';
-          html += '<button type="submit" class="btn-salvar-alteracoes">Salvar Alterações</button>';
-          html += '</div>';
-          html += '</form>';
-          modalBody.innerHTML = html;
-          modal.style.display = 'flex';
-          modal.classList.remove('closing');
-          setTimeout(function() {
-            var content = modal.querySelector('.modal-content');
-            if(content) content.focus();
-          }, 100);
-          return;
-        }
-        // --- FIM DA LÓGICA CUSTOMIZADA PARA STATUS ---
-        // Níveis de aprovação (mantido para status pendente)
+
+        // Dados mock para as tabelas de exemplos (aprovada/reprovada)
+        var dadosTabela = [
+          { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1', preco: 'R$ 29,90' },
+          { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão tipo carioca', preco: 'R$ 9,80' },
+          { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal de soja', preco: 'R$ 8,00' },
+          { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado', preco: 'R$ 5,40' },
+          { sku: '56789', nome: 'Café Pilão 500g', descricao: 'Café torrado e moído', preco: 'R$ 18,50' }
+        ];
+
+        // Níveis de aprovação
         var nivelAprovacao = [
           'Gerente Categoria Bandeira',
           'Dir. Comercial Bandeira',
           'Dir. Comercial Holding',
           'VP'
         ];
+
+        // Determinação do estágio de aprovação para cada arquivo pendente
+        // Exemplo: 'precos_junho.xlsx' -> 1 (Dir. Comercial Bandeira), 'precos_maio.xlsx' -> 3 (VP), 'precos_abril.xlsx' -> 2 (Dir. Comercial Holding)
         var nivelAtual = 0;
         if (status === 'pendente') {
           if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
@@ -493,8 +461,14 @@
           else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
           else nivelAtual = 0;
         }
+
         var html = '';
+        // --- Bloco para status 'pendente' ---
         if (status === 'pendente') {
+          /*
+           * Exibe indicador visual do estágio de aprovação.
+           * O círculo verde indica o estágio atual, conforme nivelAtual.
+           */
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
           html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
@@ -510,7 +484,60 @@
           }
           html += '</div>';
           html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
-        } else {
+        }
+        // --- Bloco para status 'aprovada' ---
+        else if (status === 'aprovada') {
+          /*
+           * Exibe uma tabela mock com dados, não editável, e botão para download da planilha.
+           */
+          modalTitle.textContent = 'Tabela Aprovada - ' + arquivo;
+          html += '<div><strong>Status:</strong> Aprovada</div>';
+          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Preços:</div>';
+          html += '<table class="editor-table" aria-label="Tabela de Preços Aprovada">';
+          html += '<thead><tr>';
+          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>';
+          html += '</tr></thead><tbody>';
+          for (var i = 0; i < 5; i++) {
+            var row = dadosTabela[i];
+            html += '<tr>';
+            html += '<td>' + row.sku + '</td>';
+            html += '<td>' + row.nome + '</td>';
+            html += '<td>' + row.descricao + '</td>';
+            html += '<td>' + row.preco + '</td>';
+            html += '</tr>';
+          }
+          html += '</tbody></table>';
+          html += '<button class="btn-salvar-edicao" onclick="baixarPlanilha(\'' + arquivo + '\')">Baixar Planilha</button>';
+        }
+        // --- Bloco para status 'reprovada' ---
+        else if (status === 'reprovada') {
+          /*
+           * Exibe uma tabela mock com dados, todos os campos editáveis inline (exceto SKU), e botões salvar/cancelar.
+           */
+          modalTitle.textContent = 'Editar Tabela Reprovada - ' + arquivo;
+          html += '<div><strong>Status:</strong> Reprovada</div>';
+          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Edite os campos abaixo e salve as alterações:</div>';
+          html += '<form id="form-edicao-inline" onsubmit="event.preventDefault();salvarEdicaoInline();">';
+          html += '<table class="editor-table" aria-label="Tabela de Preços Editável">';
+          html += '<thead><tr>';
+          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>';
+          html += '</tr></thead><tbody>';
+          for (var i = 0; i < 5; i++) {
+            var row = dadosTabela[i];
+            html += '<tr>';
+            html += '<td><input type="text" name="sku_' + i + '" value="' + row.sku + '" readonly tabindex="-1"></td>';
+            html += '<td><input type="text" name="nome_' + i + '" value="' + row.nome + '"></td>';
+            html += '<td><input type="text" name="descricao_' + i + '" value="' + row.descricao + '"></td>';
+            html += '<td><input type="text" name="preco_' + i + '" value="' + row.preco + '"></td>';
+            html += '</tr>';
+          }
+          html += '</tbody></table>';
+          html += '<button type="submit" class="btn-salvar-edicao">Salvar Alterações</button>';
+          html += '<button type="button" class="btn-cancelar-edicao" onclick="fecharModal()">Cancelar</button>';
+          html += '</form>';
+        }
+        // --- Bloco para outros status (fallback) ---
+        else {
           modalTitle.textContent = 'Detalhes';
           html = '<div>Informações não disponíveis para este status.</div>';
         }
@@ -533,6 +560,9 @@
       }
     }
 
+    /**
+     * Função utilitária para fechar o modal de detalhes.
+     */
     function fecharModal() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -544,59 +574,52 @@
       }
     }
 
-    // Função para download da planilha (CSV)
-    function downloadPlanilha(arquivo) {
-      // Dados mock - os mesmos da tabela aprovada
-      var produtos = [
-        { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1, pacote 5kg', preco: '25.90' },
-        { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca selecionado, pacote 1kg', preco: '8.50' },
-        { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal de soja, garrafa 900ml', preco: '7.20' },
-        { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado, pacote 1kg', preco: '4.90' }
+    /**
+     * Função para simular o download de uma planilha Excel.
+     * Cria um arquivo CSV mock e dispara o download.
+     * @param {string} arquivo - Nome do arquivo para download
+     */
+    function baixarPlanilha(arquivo) {
+      // Dados mock para exportação (mesmos da tabela)
+      var dados = [
+        ['SKU', 'Nome', 'Descrição', 'Preço'],
+        ['12345', 'Arroz Tio João 5kg', 'Arroz branco tipo 1', 'R$ 29,90'],
+        ['23456', 'Feijão Carioca Kicaldo 1kg', 'Feijão tipo carioca', 'R$ 9,80'],
+        ['34567', 'Óleo de Soja Soya 900ml', 'Óleo vegetal de soja', 'R$ 8,00'],
+        ['45678', 'Açúcar União 1kg', 'Açúcar refinado', 'R$ 5,40'],
+        ['56789', 'Café Pilão 500g', 'Café torrado e moído', 'R$ 18,50']
       ];
-      var csv = 'SKU,Nome,Descrição,Preço\n';
-      produtos.forEach(function(p) {
-        // Escapar aspas e vírgulas
-        var row = [p.sku, p.nome.replace(/"/g, '""'), p.descricao.replace(/"/g, '""'), p.preco.replace('R$ ', '').replace(',', '.')];
-        csv += row.map(function(field) {
-          return '"' + field + '"';
-        }).join(',') + '\n';
-      });
+      var csv = '';
+      for (var i = 0; i < dados.length; i++) {
+        csv += dados[i].map(function(v) { return '"' + v.replace(/"/g, '""') + '"'; }).join(',') + '\n';
+      }
       var blob = new Blob([csv], { type: 'text/csv' });
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = arquivo.replace(/\.[^.]+$/, '') + '_produtos.csv';
-      document.body.appendChild(link);
-      link.click();
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = arquivo.replace(/\.xlsx$/, '.csv');
+      document.body.appendChild(a);
+      a.click();
       setTimeout(function() {
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(link.href);
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       }, 100);
+      alert('Download da planilha iniciado!');
     }
 
-    // Função para salvar alterações da tabela reprovada
-    function salvarAlteracoesReprovada(event) {
-      event.preventDefault();
-      var form = document.getElementById('form-editar-reprovada');
+    /**
+     * Função para salvar alterações inline na tabela editável (status 'reprovada').
+     * Coleta os valores dos campos e exibe confirmação.
+     */
+    function salvarEdicaoInline() {
+      var form = document.getElementById('form-edicao-inline');
       if (!form) return;
-      var linhas = form.querySelectorAll('tbody tr');
-      var produtos = [];
-      for (var i = 0; i < linhas.length; i++) {
-        var inputs = linhas[i].querySelectorAll('input');
-        var sku = inputs[0].value.trim();
-        var nome = inputs[1].value.trim();
-        var descricao = inputs[2].value.trim();
-        var preco = inputs[3].value.trim();
-        if (!sku || !nome || !descricao || !preco || isNaN(Number(preco.replace(',', '.')))) {
-          alert('Por favor, preencha todos os campos corretamente.');
-          return;
-        }
-        produtos.push({ sku: sku, nome: nome, descricao: descricao, preco: preco });
-      }
-      // Simula salvamento
+      // Aqui poderíamos coletar os dados dos inputs, mas para mock apenas exibe confirmação
       alert('Alterações salvas com sucesso!');
       fecharModal();
     }
 
+    // Event listeners para fechar modais por clique fora ou tecla ESC
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -708,6 +731,18 @@
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+  <!-- Modal editor removido do fluxo de reprovada, mas mantido caso outro fluxo utilize -->
+  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-editor-content" tabindex="0">
+      <div class="modal-editor-header">
+        <span class="modal-editor-title">Editar Planilha</span>
+        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-editor-body">
+        <!-- Tabela editável será inserida via JS -->
       </div>
     </div>
   </div>

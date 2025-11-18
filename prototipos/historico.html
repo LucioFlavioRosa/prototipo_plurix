@@ -207,28 +207,85 @@
       line-height: 1.6;
       color: #222;
     }
-    /* Tabela de produtos no modal */
-    .produtos-table {
+    .nivel-aprovacao {
+      display: flex;
+      align-items: center;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .nivel-item {
+      display: flex;
+      align-items: center;
+      margin-right: 24px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1a2340;
+    }
+    .status-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background: #ddd;
+      border: 2px solid #ccc;
+      transition: background 0.2s;
+    }
+    .status-circle.ativo {
+      background: #4bb543;
+      border-color: #4bb543;
+    }
+    .nivel-linha {
+      height: 2px;
+      width: 40px;
+      background: #ddd;
+      margin: 0 8px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .nivel-linha.ativo {
+      background: #4bb543;
+    }
+    .motivo-item {
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f9f9f9;
+      border-left: 4px solid #f9b233;
+      border-radius: 6px;
+    }
+    .motivo-titulo {
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+    .motivo-valor {
+      color: #555;
+      font-size: 1.02rem;
+    }
+    /* Tabela de detalhes e edição inline */
+    .detalhe-table, .detalhe-table-edit {
       width: 100%;
       border-collapse: collapse;
-      margin: 18px 0 18px 0;
-      font-size: 1.04rem;
-      background: #fff;
+      margin-top: 18px;
+      margin-bottom: 18px;
+      font-size: 1.05rem;
     }
-    .produtos-table th, .produtos-table td {
+    .detalhe-table th, .detalhe-table td, .detalhe-table-edit th, .detalhe-table-edit td {
       padding: 10px 12px;
       border-bottom: 1px solid #eaeaea;
       text-align: left;
     }
-    .produtos-table th {
+    .detalhe-table th, .detalhe-table-edit th {
       background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
     }
-    .produtos-table tr:last-child td {
+    .detalhe-table tr:last-child td, .detalhe-table-edit tr:last-child td {
       border-bottom: none;
     }
-    .produtos-table input[type="text"], .produtos-table input[type="number"] {
+    .detalhe-table-edit input[type="text"], .detalhe-table-edit input[type="number"] {
       width: 100%;
       padding: 6px 8px;
       border: 1px solid #ccc;
@@ -238,32 +295,16 @@
       background: #f7f8fa;
       color: #222;
     }
-    .produtos-table input:focus {
+    .detalhe-table-edit input:focus {
       outline: 2px solid #f9b233;
       background: #fffbe7;
     }
-    .modal-actions {
+    .detalhe-actions {
       display: flex;
       justify-content: flex-end;
       gap: 12px;
-      margin-top: 18px;
     }
-    .btn-download {
-      background: #1a2340;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(26,35,64,0.08);
-    }
-    .btn-download:hover {
-      background: #222b4a;
-    }
-    .btn-salvar {
+    .detalhe-download {
       background: #4bb543;
       color: #fff;
       border: none;
@@ -275,10 +316,25 @@
       transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(75,181,67,0.08);
     }
-    .btn-salvar:hover {
+    .detalhe-download:hover {
       background: #399c36;
     }
-    .btn-cancelar {
+    .detalhe-save {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+    }
+    .detalhe-save:hover {
+      background: #399c36;
+    }
+    .detalhe-cancel {
       background: #e74c3c;
       color: #fff;
       border: none;
@@ -290,7 +346,7 @@
       transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(231,76,60,0.08);
     }
-    .btn-cancelar:hover {
+    .detalhe-cancel:hover {
       background: #c0392b;
     }
     @keyframes fadeIn {
@@ -335,22 +391,43 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .produtos-table th, .produtos-table td {
-        padding: 7px 6px;
+      .nivel-item {
+        margin-right: 12px;
+        font-size: 0.95rem;
+      }
+      .motivo-item {
+        padding: 12px;
+        font-size: 0.98rem;
+      }
+      .detalhe-table, .detalhe-table-edit {
+        font-size: 0.98rem;
+      }
+      .detalhe-download, .detalhe-save, .detalhe-cancel {
+        padding: 8px 14px;
         font-size: 0.97rem;
       }
     }
   </style>
   <script>
+    // Função para navegação
     function goTo(page) {
       window.location.href = page;
     }
+    // Função para sair
     function sair() {
       if (confirm('Deseja realmente sair?')) {
         window.location.href = '../plurix.html';
       }
     }
 
+    /**
+     * Função principal para abrir o modal de detalhes de submissão.
+     * Exibe diferentes conteúdos conforme o status: 'aprovada', 'reprovada', 'pendente'.
+     * - 'aprovada': mostra tabela mock e botão de download.
+     * - 'reprovada': mostra tabela mock editável inline com botões de ação.
+     * - 'pendente': mostra níveis de aprovação com indicador verde.
+     * Cada arquivo pendente tem um estágio diferente.
+     */
     function abrirDetalhes(status, arquivo, data) {
       try {
         var modal = document.getElementById('modal-detalhes');
@@ -365,72 +442,69 @@
           return;
         }
         var html = '';
+        // Dados de exemplo para tabela
+        var tabelaMock = [
+          { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 22,90' },
+          { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 8,50' },
+          { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal, garrafa 900ml', preco: 'R$ 7,80' }
+        ];
+        // Níveis de aprovação
+        var nivelAprovacao = [
+          'Gerente Categoria Bandeira',
+          'Dir. Comercial Bandeira',
+          'Dir. Comercial Holding',
+          'VP'
+        ];
+        // Mapeamento de arquivos pendentes para estágio de aprovação
+        var nivelAtualMap = {
+          'precos_junho.xlsx': 1,
+          'precos_fevereiro.xlsx': 0,
+          'precos_marco.xlsx': 2,
+          'precos_fevereiro_v2.xlsx': 3,
+          'precos_fevereiro_v3.xlsx': 0
+        };
+        var nivelAtual = nivelAtualMap[arquivo] !== undefined ? nivelAtualMap[arquivo] : 0;
         if (status === 'aprovada') {
-          modalTitle.textContent = 'Produtos da Planilha Aprovada - ' + arquivo;
-          var produtosAprovados = [
-            { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 24,90' },
-            { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 9,20' },
-            { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal de soja 900ml', preco: 'R$ 8,30' }
-          ];
+          modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<table class="produtos-table" aria-label="Produtos Aprovados">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < produtosAprovados.length; i++) {
-            var p = produtosAprovados[i];
+          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Preços:</div>';
+          html += '<table class="detalhe-table" aria-label="Tabela de Preços">';
+          html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
+          tabelaMock.forEach(function(row) {
             html += '<tr>' +
-              '<td>' + p.sku + '</td>' +
-              '<td>' + p.nome + '</td>' +
-              '<td>' + p.descricao + '</td>' +
-              '<td>' + p.preco + '</td>' +
+              '<td>' + row.sku + '</td>' +
+              '<td>' + row.nome + '</td>' +
+              '<td>' + row.descricao + '</td>' +
+              '<td>' + row.preco + '</td>' +
               '</tr>';
-          }
+          });
           html += '</tbody></table>';
-          html += '<div class="modal-actions">';
-          html += '<button class="btn-download" onclick="downloadPlanilha(\'' + arquivo + '\')">Fazer Download da Planilha</button>';
+          html += '<div class="detalhe-actions">';
+          html += '<button class="detalhe-download" onclick="baixarPlanilha(\'' + arquivo + '\')">Baixar Planilha</button>';
           html += '</div>';
         } else if (status === 'reprovada') {
-          modalTitle.textContent = 'Editar Produtos da Planilha Reprovada - ' + arquivo;
-          var produtosReprovados = [
-            { sku: '2001', nome: 'Açúcar Refinado 1kg', descricao: 'Açúcar refinado, pacote 1kg', preco: 'R$ 5,40' },
-            { sku: '2002', nome: 'Café Torrado 500g', descricao: 'Café torrado e moído, 500g', preco: 'R$ 18,50' },
-            { sku: '2003', nome: 'Leite Longa Vida 1L', descricao: 'Leite UHT integral, 1L', preco: 'R$ 5,10' }
-          ];
+          modalTitle.textContent = 'Detalhes da Reprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<form id="form-reprovada" onsubmit="salvarAlteracoesReprovada(event)">';
-          html += '<table class="produtos-table" aria-label="Produtos Reprovados">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < produtosReprovados.length; i++) {
-            var p = produtosReprovados[i];
+          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Editar Tabela:</div>';
+          html += '<form id="form-edicao-inline" onsubmit="salvarEdicaoInline(event)">';
+          html += '<table class="detalhe-table-edit" aria-label="Editar Tabela">';
+          html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
+          tabelaMock.forEach(function(row, idx) {
             html += '<tr>' +
-              '<td><input type="text" name="sku_' + i + '" value="' + p.sku + '"></td>' +
-              '<td><input type="text" name="nome_' + i + '" value="' + p.nome + '"></td>' +
-              '<td><input type="text" name="desc_' + i + '" value="' + p.descricao + '"></td>' +
-              '<td><input type="text" name="preco_' + i + '" value="' + p.preco + '"></td>' +
+              '<td><input type="text" name="sku_' + idx + '" value="' + row.sku + '" required></td>' +
+              '<td><input type="text" name="nome_' + idx + '" value="' + row.nome + '" required></td>' +
+              '<td><input type="text" name="descricao_' + idx + '" value="' + row.descricao + '" required></td>' +
+              '<td><input type="text" name="preco_' + idx + '" value="' + row.preco + '" required></td>' +
               '</tr>';
-          }
+          });
           html += '</tbody></table>';
-          html += '<div class="modal-actions">';
-          html += '<button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>';
-          html += '<button type="submit" class="btn-salvar">Salvar Alterações</button>';
+          html += '<div class="detalhe-actions">';
+          html += '<button type="button" class="detalhe-cancel" onclick="fecharModal()">Cancelar</button>';
+          html += '<button type="submit" class="detalhe-save">Salvar Alterações</button>';
           html += '</div>';
           html += '</form>';
         } else if (status === 'pendente') {
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
-          var nivelAprovacao = [
-            'Gerente Categoria Bandeira',
-            'Dir. Comercial Bandeira',
-            'Dir. Comercial Holding',
-            'VP'
-          ];
-          var nivelAtual = 0;
-          if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
-          else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
-          else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
-          else nivelAtual = 0;
           html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
           html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
           html += '<div class="nivel-aprovacao">';
@@ -468,6 +542,45 @@
       }
     }
 
+    /**
+     * Função para baixar a planilha de exemplo (mock).
+     * Gera um arquivo CSV com os dados da tabela de exemplo.
+     */
+    function baixarPlanilha(arquivo) {
+      // Dados mock para exportação
+      var tabelaMock = [
+        { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 22,90' },
+        { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 8,50' },
+        { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal, garrafa 900ml', preco: 'R$ 7,80' }
+      ];
+      var csv = 'SKU,Nome,Descrição,Preço\n';
+      tabelaMock.forEach(function(row) {
+        csv += [row.sku, row.nome, row.descricao, row.preco].map(function(val) {
+          return '"' + val.replace(/"/g, '""') + '"';
+        }).join(',') + '\n';
+      });
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = arquivo.replace(/\.xlsx$/, '') + '_detalhes.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /**
+     * Função para salvar a edição inline da tabela de planilha reprovada.
+     * Apenas mocka o salvamento e fecha o modal.
+     */
+    function salvarEdicaoInline(event) {
+      event.preventDefault();
+      alert('Alterações salvas com sucesso! (mock)');
+      fecharModal();
+    }
+
+    /**
+     * Função para fechar o modal de detalhes.
+     */
     function fecharModal() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -479,61 +592,7 @@
       }
     }
 
-    // Download CSV para planilha aprovada
-    function downloadPlanilha(arquivo) {
-      // Dados mock - devem ser os mesmos da tabela exibida
-      var produtos = [
-        { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 24,90' },
-        { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 9,20' },
-        { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal de soja 900ml', preco: 'R$ 8,30' }
-      ];
-      var csv = 'SKU,Nome,Descrição,Preço\n';
-      produtos.forEach(function(p) {
-        var row = [p.sku, p.nome, p.descricao, p.preco].map(function(val) {
-          return '"' + (val || '').replace(/"/g, '""') + '"';
-        }).join(',');
-        csv += row + '\n';
-      });
-      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      var link = document.createElement('a');
-      var url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', arquivo.replace(/\.[^.]+$/, '') + '_produtos.csv');
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-
-    // Salvar alterações da tabela reprovada
-    function salvarAlteracoesReprovada(event) {
-      if (event) event.preventDefault();
-      var form = document.getElementById('form-reprovada');
-      if (!form) return;
-      var linhas = form.querySelectorAll('tbody tr');
-      var produtos = [];
-      for (var i = 0; i < linhas.length; i++) {
-        var inputs = linhas[i].querySelectorAll('input');
-        produtos.push({
-          sku: inputs[0].value.trim(),
-          nome: inputs[1].value.trim(),
-          descricao: inputs[2].value.trim(),
-          preco: inputs[3].value.trim()
-        });
-      }
-      // Validação simples (opcional)
-      for (var j = 0; j < produtos.length; j++) {
-        if (!produtos[j].sku || !produtos[j].nome || !produtos[j].descricao || !produtos[j].preco) {
-          alert('Todos os campos devem ser preenchidos.');
-          return;
-        }
-      }
-      alert('Alterações salvas com sucesso!');
-      fecharModal();
-    }
-
-    // Event listeners para fechar modais
+    // Event listeners para fechar modais e acessibilidade
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -652,7 +711,7 @@
                 <td><span class="status status-aprovada">Aprovada</span></td>
                 <td>SuperSul / BA</td>
                 <td>rodrigo.santos@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
               </tr>
               <tr>
                 <td>01/03/2024</td>
