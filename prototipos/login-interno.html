@@ -179,30 +179,7 @@
       background: #fff;
     }
     .sso-btn {
-      background: #fff;
-      color: var(--plurix-primary);
-      border: 1.5px solid var(--plurix-primary);
-      padding: 12px 0;
-      font-weight: 700;
-      border-radius: var(--plurix-radius);
-      margin-top: 8px;
-      margin-bottom: 4px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .sso-btn:hover {
-      background: var(--plurix-primary);
-      color: #fff;
-    }
-    .sso-icon {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
+      display: none;
     }
     @media (max-width: 600px) {
       .login-container {
@@ -217,18 +194,21 @@
   </style>
   <script>
     function validateForm(e) {
-      const bandeira = document.getElementById('bandeira');
       const usuario = document.getElementById('usuario');
       const senha = document.getElementById('senha');
-      if (!bandeira.value || !usuario.value.trim() || !senha.value.trim()) {
+      if (!usuario.value.trim() || !senha.value.trim()) {
         alert('Preencha todos os campos para continuar.');
         e.preventDefault();
         return false;
       }
-      return true;
-    }
-    function ssoLogin() {
-      alert('Redirecionando para autenticação SSO/Azure AD... (simulação)');
+      if (usuario.value.trim() === 'comprador@plurix.com.br' && senha.value === 'senha123') {
+        window.location.href = 'dashboard-comprador.html';
+        return false;
+      } else {
+        alert('Credenciais inválidas');
+        e.preventDefault();
+        return false;
+      }
     }
   </script>
 </head>
@@ -243,22 +223,7 @@
     <div class="login-container">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
       <h2>Login de Usuário Interno</h2>
-      <button class="sso-btn" onclick="ssoLogin()" aria-label="Entrar com SSO Azure AD">
-        <svg class="sso-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0078D4"/><text x="12" y="17" text-anchor="middle" font-size="13" fill="#fff" font-family="Arial, Helvetica, sans-serif">SSO</text></svg>
-        Entrar com SSO / Azure AD
-      </button>
       <form action="#" method="post" onsubmit="return validateForm(event)">
-        <div class="form-group form-group-select">
-          <label for="bandeira" class="form-label">Selecione a Bandeira/Coligada</label>
-          <select id="bandeira" name="bandeira" class="form-select" required>
-            <option value="">Selecione...</option>
-            <option value="bandeira1">Bandeira 1</option>
-            <option value="bandeira2">Bandeira 2</option>
-            <option value="bandeira3">Bandeira 3</option>
-            <option value="bandeira4">Bandeira 4</option>
-            <option value="bandeira5">Bandeira 5</option>
-          </select>
-        </div>
         <label for="usuario" class="form-label">Usuário (e-mail ou matrícula)</label>
         <input type="text" id="usuario" name="usuario" class="form-input" placeholder="Digite seu e-mail ou matrícula" autocomplete="username" required>
         <label for="senha" class="form-label">Senha</label>
