@@ -477,6 +477,10 @@
 
     function abrirDetalhes(status, arquivo, data) {
       try {
+        if (status === 'reprovada') {
+          abrirEditorPlanilha(arquivo);
+          return;
+        }
         var modal = document.getElementById('modal-detalhes');
         if (!modal) {
           alert('Erro: modal não encontrado.');
@@ -498,28 +502,12 @@
         // Mock para determinar o nível atual
         var nivelAtual = 0;
         if (status === 'pendente') {
-          if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
-          else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
-          else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
+          if (arquivo === 'precos_junho.xlsx') nivelAtual = 0;
+          else if (arquivo === 'precos_julho.xlsx') nivelAtual = 1;
+          else if (arquivo === 'precos_agosto.xlsx') nivelAtual = 2;
+          else if (arquivo === 'precos_setembro.xlsx') nivelAtual = 3;
           else nivelAtual = 0;
         }
-        // Motivos mock
-        var motivosAprovada = {
-          'Atualização % por produto': '+2.5%',
-          'Atualização % ponderada total do fornecedor': '+2.8%',
-          'Impacto total no DRE/DLP da cia/fornecedor': 'Positivo +R$ 45.000',
-          'Peso do produto nas vendas totais do fornecedor': '12% do total',
-          'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 98.5, Objetiva: 97.2',
-          'Data da última atualização de preço do SKU': '15/04/2024'
-        };
-        var motivosReprovada = {
-          'Atualização % por produto': '+15.2% (acima do limite)',
-          'Atualização % ponderada total do fornecedor': '+13.7% (acima do limite)',
-          'Impacto total no DRE/DLP da cia/fornecedor': 'Negativo -R$ 120.000',
-          'Peso do produto nas vendas totais do fornecedor': '23% do total',
-          'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 85.3 (abaixo da meta), Objetiva: 79.1',
-          'Data da última atualização de preço do SKU': '10/01/2024'
-        };
         var html = '';
         if (status === 'pendente') {
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
@@ -537,27 +525,6 @@
           }
           html += '</div>';
           html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
-        } else if (status === 'aprovada') {
-          modalTitle.textContent = 'Motivos da Aprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para aprovação:</div>';
-          Object.keys(motivosAprovada).forEach(function(key) {
-            html += '<div class="motivo-item">';
-            html += '<div class="motivo-titulo">' + key + '</div>';
-            html += '<div class="motivo-valor">' + motivosAprovada[key] + '</div>';
-            html += '</div>';
-          });
-        } else if (status === 'reprovada') {
-          modalTitle.textContent = 'Motivos da Reprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para reprovação:</div>';
-          Object.keys(motivosReprovada).forEach(function(key) {
-            html += '<div class="motivo-item">';
-            html += '<div class="motivo-titulo">' + key + '</div>';
-            html += '<div class="motivo-valor">' + motivosReprovada[key] + '</div>';
-            html += '</div>';
-          });
-          html += '<button class="btn-salvar-edicao" style="margin-top:18px;" onclick="abrirEditorPlanilha(\'' + arquivo + '\')">Editar Planilha</button>';
         } else {
           modalTitle.textContent = 'Detalhes';
           html = '<div>Informações não disponíveis para este status.</div>';
@@ -598,38 +565,32 @@
       if (!modal) return;
       var modalTitle = modal.querySelector('.modal-editor-title');
       modalTitle.textContent = 'Editar Planilha - ' + arquivo;
-      // Dados mock realistas
+      // Dados mock realistas para SKU, Nome, Descrição, Preço
       var dados = [
-        { sku: '12345', produto: 'Arroz Tio João 5kg', preco_atual: 'R$ 25,90', novo_preco: 'R$ 29,90', aumento: '+15.4%', categoria: 'Alimentos' },
-        { sku: '23456', produto: 'Feijão Carioca Kicaldo 1kg', preco_atual: 'R$ 8,50', novo_preco: 'R$ 9,80', aumento: '+15.3%', categoria: 'Alimentos' },
-        { sku: '34567', produto: 'Óleo de Soja Soya 900ml', preco_atual: 'R$ 7,20', novo_preco: 'R$ 8,00', aumento: '+11.1%', categoria: 'Óleos' },
-        { sku: '45678', produto: 'Açúcar União 1kg', preco_atual: 'R$ 4,90', novo_preco: 'R$ 5,40', aumento: '+10.2%', categoria: 'Açúcar' },
-        { sku: '56789', produto: 'Café Pilão 500g', preco_atual: 'R$ 16,90', novo_preco: 'R$ 18,50', aumento: '+9.5%', categoria: 'Cafés' },
-        { sku: '67890', produto: 'Macarrão Renata Espaguete 500g', preco_atual: 'R$ 5,80', novo_preco: 'R$ 6,60', aumento: '+13.8%', categoria: 'Massas' },
-        { sku: '78901', produto: 'Leite Longa Vida Italac 1L', preco_atual: 'R$ 4,50', novo_preco: 'R$ 5,10', aumento: '+13.3%', categoria: 'Laticínios' },
-        { sku: '89012', produto: 'Farinha de Trigo Dona Benta 1kg', preco_atual: 'R$ 6,20', novo_preco: 'R$ 7,10', aumento: '+14.5%', categoria: 'Farinhas' },
-        { sku: '90123', produto: 'Sabão em Pó Omo 800g', preco_atual: 'R$ 18,90', novo_preco: 'R$ 22,00', aumento: '+16.4%', categoria: 'Limpeza' },
-        { sku: '11223', produto: 'Detergente Ypê 500ml', preco_atual: 'R$ 2,90', novo_preco: 'R$ 3,30', aumento: '+13.8%', categoria: 'Limpeza' }
+        { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1, pacote 5kg', preco: '25,90' },
+        { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: '8,50' },
+        { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo de soja refinado, 900ml', preco: '7,20' },
+        { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado, pacote 1kg', preco: '4,90' },
+        { sku: '56789', nome: 'Café Pilão 500g', descricao: 'Café torrado e moído, 500g', preco: '16,90' }
       ];
       var tbody = '';
       for (var i = 0; i < dados.length; i++) {
         tbody += '<tr>' +
-          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
-          '<td><input type="text" value="' + dados[i].produto + '"></td>' +
-          '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
-          '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
-          '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
-          '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
+          '<td><input type="text" value="' + dados[i].sku + '"></td>' +
+          '<td><input type="text" value="' + dados[i].nome + '"></td>' +
+          '<td><input type="text" value="' + dados[i].descricao + '"></td>' +
+          '<td><input type="text" value="' + dados[i].preco + '"></td>' +
         '</tr>';
       }
       var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
         '<thead><tr>' +
-        '<th>SKU</th><th>Produto</th><th>Preço Atual</th><th>Novo Preço</th><th>% Aumento</th><th>Categoria</th>' +
+        '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th>' +
         '</tr></thead><tbody>' + tbody + '</tbody></table>';
       var modalBody = modal.querySelector('.modal-editor-body');
       modalBody.innerHTML = tableHtml +
         '<div style="margin-top:18px;">' +
         '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
+        '<button class="btn-salvar-edicao" onclick="downloadPlanilha()">Baixar Planilha (.xlsx)</button>' +
         '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
         '</div>';
       modal.style.display = 'flex';
@@ -654,6 +615,37 @@
     function salvarEdicaoPlanilha() {
       alert('Alterações salvas com sucesso!');
       fecharModalEditor();
+    }
+
+    function downloadPlanilha() {
+      var modal = document.getElementById('modal-editor');
+      if (!modal) return;
+      var table = modal.querySelector('.editor-table');
+      if (!table) return;
+      var rows = table.querySelectorAll('tr');
+      var csv = '';
+      for (var i = 0; i < rows.length; i++) {
+        var cols = rows[i].querySelectorAll('th,td');
+        var row = [];
+        for (var j = 0; j < cols.length; j++) {
+          var val = cols[j].querySelector('input') ? cols[j].querySelector('input').value : cols[j].innerText;
+          // Escapar aspas e vírgulas
+          val = '"' + String(val).replace(/"/g, '""') + '"';
+          row.push(val);
+        }
+        csv += row.join(',') + '\n';
+      }
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'planilha_editada.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -730,6 +722,24 @@
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
+                <td>12/06/2024</td>
+                <td>precos_julho.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_julho.xlsx', '12/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>14/06/2024</td>
+                <td>precos_agosto.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_agosto.xlsx', '14/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>16/06/2024</td>
+                <td>precos_setembro.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_setembro.xlsx', '16/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
@@ -756,7 +766,7 @@
             <tbody>
               <tr>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td>1</td>
+                <td>4</td>
               </tr>
               <tr>
                 <td><span class="status status-aprovada">Aprovada</span></td>
