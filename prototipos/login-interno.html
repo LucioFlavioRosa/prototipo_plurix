@@ -178,9 +178,6 @@
       border-color: var(--plurix-accent);
       background: #fff;
     }
-    .sso-btn {
-      display: none;
-    }
     @media (max-width: 600px) {
       .login-container {
         min-width: 90vw;
@@ -201,14 +198,14 @@
         e.preventDefault();
         return false;
       }
+      // Nova lógica de autenticação
       if (usuario.value.trim() === 'comprador@plurix.com.br' && senha.value === 'senha123') {
         window.location.href = 'dashboard-comprador.html';
-        return false;
       } else {
-        alert('Credenciais inválidas');
-        e.preventDefault();
-        return false;
+        alert('Usuário ou senha inválidos.');
       }
+      e.preventDefault();
+      return false;
     }
   </script>
 </head>
