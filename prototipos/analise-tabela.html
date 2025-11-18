@@ -707,12 +707,10 @@
           <div>UF: <span id="header-uf"></span></div>
           <div>Data Submissão: <span id="header-data"></span></div>
         </div>
-        <!-- INÍCIO: Botões Aprovar/Reprovar -->
         <div style="margin-bottom: 18px;">
           <button class="btn-acao btn-aprovar" type="button" onclick="abrirModalAcao('aprovar')">Aprovar</button>
           <button class="btn-acao btn-reprovar" type="button" onclick="abrirModalAcao('reprovar')">Reprovar</button>
         </div>
-        <!-- FIM: Botões Aprovar/Reprovar -->
         <form class="filters" aria-label="Filtros avançados">
           <label>SKU:
             <input type="text" placeholder="Buscar SKU">
@@ -754,11 +752,9 @@
             </tr>
           </thead>
           <tbody id="produtos-tbody">
-            <!-- Conteúdo dinâmico -->
-          </tbody>
+            </tbody>
         </table>
       </section>
-      <!-- Modal de Análise Detalhada -->
       <div class="modal-overlay" id="modal-overlay">
         <div class="modal-content">
           <h3>Análise Detalhada do SKU <span id="modal-sku"></span></h3>
@@ -794,8 +790,7 @@
                 </tr>
               </thead>
               <tbody id="modal-tabela-historico">
-                <!-- Dinâmico -->
-              </tbody>
+                </tbody>
             </table>
           </div>
           <div class="modal-section">
@@ -805,7 +800,6 @@
           <button class="modal-close-btn" onclick="fecharModalAnalise()">Fechar</button>
         </div>
       </div>
-      <!-- INÍCIO: Modal Aprovação/Reprovação -->
       <div class="modal-overlay-acao" id="modal-overlay-acao">
         <div class="modal-content-acao">
           <h3 id="titulo-modal-acao">Justificativa</h3>
@@ -816,8 +810,7 @@
           </div>
         </div>
       </div>
-      <!-- FIM: Modal Aprovação/Reprovação -->
-    </main>
+      </main>
   </div>
   <script>
     // --- Modal Aprovação/Reprovação ---
@@ -841,13 +834,18 @@
       }
       // Redireciona para dashboard-comprador.html com parâmetros de ação
       const params = getURLParams();
-      const url = new URL('dashboard-comprador.html', window.location.origin);
+      
+      // --- CORREÇÃO AQUI: Usar window.location.href para manter o caminho relativo correto ---
+      const url = new URL('dashboard-comprador.html', window.location.href);
+      // Limpa search params antigos que possam vir da URL base, se for o mesmo arquivo, mas como mudamos o nome, o search já vem limpo no objeto URL
+      
       url.searchParams.set('fornecedor', params.fornecedor);
       url.searchParams.set('bandeira', params.bandeira);
       url.searchParams.set('uf', params.uf);
       url.searchParams.set('data', params.data);
       url.searchParams.set('acao', acaoSelecionada);
-      url.searchParams.set('justificativa', encodeURIComponent(justificativa));
+      url.searchParams.set('justificativa', justificativa); // O objeto URL já faz o encode
+      
       window.location.href = url.toString();
     }
   </script>
