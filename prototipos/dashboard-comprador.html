@@ -95,6 +95,54 @@
       background: #fff;
       color: #222;
     }
+    .btn-limpar {
+      background: #6b7280;
+      color: #fff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .btn-limpar:hover {
+      background: #4b5563;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 26px 22px 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 120px;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      color: #888;
+      font-weight: 600;
+    }
+    .card-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #1a6ae5;
+      margin-top: 6px;
+    }
+    .card-indicator {
+      font-size: 1rem;
+      color: #16a34a;
+      font-weight: 600;
+      margin-left: 8px;
+    }
     .table-section {
       background: #fff;
       border-radius: 14px;
@@ -145,22 +193,65 @@
     .btn-table:hover {
       background: #144fa1;
     }
-    .btn-buscar {
-      background: #1a6ae5;
-      color: #fff;
-      border: none;
-      padding: 8px 22px;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.18s;
-      margin-left: 12px;
-      height: 40px;
-      align-self: flex-end;
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
     }
-    .btn-buscar:hover {
-      background: #144fa1;
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 900px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #000;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .badge-analise {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .badge-aprovada {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .badge-reprovada {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+    .sortable:hover {
+      background: #e5e7eb;
+    }
+    .sort-asc::after {
+      content: ' ▲';
+    }
+    .sort-desc::after {
+      content: ' ▼';
     }
     @media (max-width: 1000px) {
       .main-content {
@@ -179,8 +270,18 @@
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
+      .card-grid { grid-template-columns: 1fr; }
       .sidebar { display: none; }
       .main-content { padding: 0 2vw 18px 2vw; }
+      .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 20px;
+      }
+      .data-table th, .data-table td {
+        font-size: 0.85rem;
+        padding: 8px 6px;
+      }
     }
   </style>
 </head>
@@ -190,32 +291,19 @@
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
       <nav>
         <a href="dashboard-comprador.html" class="active">Dashboard</a>
-        <a href="#">Aprovações Pendentes</a>
-        <a href="#">Histórico</a>
-        <a href="#">Fornecedores</a>
-        <a href="#">Relatórios</a>
-        <a href="#">Perfil</a>
-        <a href="#" style="color:#d4380d;">Sair</a>
+        <a href="index.html" style="color:#d4380d;">Sair</a>
       </nav>
     </aside>
     <main class="main-content">
       <header class="main-header">Dashboard do Comprador</header>
-      <form class="filters" id="form-filtros" aria-label="Filtros de pesquisa" onsubmit="buscarTabelas(event)">
+      <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
         <label>Fornecedor:
-          <select id="filtro-fornecedor" name="fornecedor">
+          <select id="fornecedor">
             <option value="">Todos</option>
-            <option value="ambev">Ambev</option>
-            <option value="nestle">Nestlé</option>
-            <option value="unilever">Unilever</option>
-            <option value="cocacola">Coca-Cola</option>
-            <option value="brf">BRF</option>
-            <option value="jbs">JBS</option>
-            <option value="mondelez">Mondelez</option>
-            <option value="pepsico">PepsiCo</option>
           </select>
         </label>
         <label>Bandeira:
-          <select id="filtro-bandeira" name="bandeira">
+          <select id="bandeira">
             <option value="">Todas</option>
             <option value="superpao">Superpão</option>
             <option value="boa">Boa Supermercados</option>
@@ -227,26 +315,89 @@
           </select>
         </label>
         <label>UF:
-          <select id="filtro-uf" name="uf">
+          <select id="uf">
             <option value="">Todas</option>
           </select>
         </label>
         <label>Data:
-          <input type="date" id="filtro-data" name="data">
+          <input type="date" id="dataFiltro">
         </label>
-        <button type="submit" class="btn-buscar">Buscar</button>
+        <label>Status:
+          <select id="status">
+            <option value="">Todos</option>
+            <option value="em_analise">Em Análise</option>
+            <option value="aprovada">Aprovada</option>
+            <option value="reprovada">Reprovada</option>
+          </select>
+        </label>
+        <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
       </form>
-      <section class="table-section" id="tabelas-section">
-        <div class="section-title">Tabelas Submetidas</div>
-        <div id="tabelas-resultados">
-          <!-- Tabela dinâmica será inserida aqui -->
+      <section class="card-grid">
+        <div class="card">
+          <span class="card-title">Tabelas Pendentes</span>
+          <span class="card-value" id="tabelasPendentes">7</span>
         </div>
+        <div class="card">
+          <span class="card-title">Variação Média de Preço</span>
+          <span class="card-value" id="variacaoMedia">+4,2%</span>
+        </div>
+        <div class="card">
+          <span class="card-title">Impacto no DRE</span>
+          <span class="card-value" id="impactoDRE">R$ 12.500</span>
+        </div>
+        <div class="card">
+          <span class="card-title">IC Nielsen (Média)</span>
+          <span class="card-value" id="icNielsen">92</span>
+        </div>
+        <div class="card">
+          <span class="card-title">IC Objetiva (Média)</span>
+          <span class="card-value" id="icObjetiva">87</span>
+        </div>
+      </section>
+      <section class="table-section">
+        <div class="section-title">Tabelas Submetidas</div>
+        <table class="data-table" aria-label="Tabelas submetidas">
+          <thead>
+            <tr>
+              <th class="sortable" data-col="fornecedor">Fornecedor</th>
+              <th class="sortable" data-col="bandeira">Bandeira</th>
+              <th class="sortable" data-col="uf">UF</th>
+              <th class="sortable" data-col="dataSubmissao">Data Submissão</th>
+              <th class="sortable" data-col="variacao">Variação (%)</th>
+              <th class="sortable" data-col="impactoDRE">Impacto DRE</th>
+              <th class="sortable" data-col="icNielsen">IC Nielsen</th>
+              <th class="sortable" data-col="status">Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaSubmetidasBody">
+          </tbody>
+        </table>
       </section>
     </main>
   </div>
+  <div id="modalDetalhes" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="fecharModal()">&times;</span>
+      <h2>Detalhes da Tabela Submetida</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Descrição</th>
+            <th>Preço Antigo</th>
+            <th>Preço Novo</th>
+            <th>Variação de Preço</th>
+            <th>Data da Submissão</th>
+          </tr>
+        </thead>
+        <tbody id="modalTabelaBody"></tbody>
+      </table>
+    </div>
+  </div>
   <script>
-    // Mapeamento de bandeiras para UFs
-    const bandeiraUFs = {
+    // Passo 3: Mapeamento de bandeiras para UFs
+    const bandeiraUF = {
       superpao: ['PR','SC','RS'],
       boa: ['SP','MG'],
       avenida: ['MS','MT'],
@@ -256,125 +407,316 @@
       parana: ['PR','SP']
     };
 
-    // Atualiza UFs ao mudar a bandeira
-    document.getElementById('filtro-bandeira').addEventListener('change', function() {
-      const ufSelect = document.getElementById('filtro-uf');
-      const bandeira = this.value;
-      ufSelect.innerHTML = '<option value="">Todas</option>';
-      if (bandeiraUFs[bandeira]) {
-        bandeiraUFs[bandeira].forEach(function(uf) {
-          const opt = document.createElement('option');
-          opt.value = uf;
-          opt.textContent = uf;
-          ufSelect.appendChild(opt);
-        });
-      }
-    });
-
-    // Simulação de dados de submissão de tabelas
+    // Passo 11: Estrutura de dados simulando tabelas submetidas
     const tabelasSubmetidas = [
-      {
-        fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', data: '2024-06-10', status: 'Em Análise'
-      },
-      {
-        fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'MG', data: '2024-06-09', status: 'Aprovada'
-      },
-      {
-        fornecedor: 'JBS', bandeira: 'Grupo Amigão', uf: 'BA', data: '2024-06-08', status: 'Reprovada'
-      },
-      {
-        fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'SC', data: '2024-06-07', status: 'Aprovada'
-      },
-      {
-        fornecedor: 'Coca-Cola', bandeira: 'Paraná Supermercados', uf: 'PR', data: '2024-06-11', status: 'Em Análise'
-      },
-      {
-        fornecedor: 'BRF', bandeira: 'Compre Mais', uf: 'GO', data: '2024-06-10', status: 'Aprovada'
-      },
-      {
-        fornecedor: 'PepsiCo', bandeira: 'Empório Dom Olívio', uf: 'RJ', data: '2024-06-09', status: 'Em Análise'
-      },
-      {
-        fornecedor: 'Unilever', bandeira: 'Supermercados Avenida', uf: 'MT', data: '2024-06-08', status: 'Aprovada'
-      },
-      {
-        fornecedor: 'Mondelez', bandeira: 'Boa Supermercados', uf: 'SP', data: '2024-06-07', status: 'Reprovada'
-      }
+      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-15', status: 'em_analise', variacao: '+3.2%', impactoDRE: 2100, icNielsen: 88 },
+      { fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'MG', dataSubmissao: '2024-06-14', status: 'aprovada', variacao: '+1.8%', impactoDRE: 1800, icNielsen: 91 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Supermercados Avenida', uf: 'MS', dataSubmissao: '2024-06-13', status: 'reprovada', variacao: '-2.1%', impactoDRE: 950, icNielsen: 86 },
+      { fornecedor: 'BRF', bandeira: 'Compre Mais', uf: 'GO', dataSubmissao: '2024-06-12', status: 'em_analise', variacao: '+4.7%', impactoDRE: 1200, icNielsen: 89 },
+      { fornecedor: 'JBS', bandeira: 'Empório Dom Olívio', uf: 'RJ', dataSubmissao: '2024-06-11', status: 'aprovada', variacao: '+0.9%', impactoDRE: 800, icNielsen: 93 },
+      { fornecedor: 'Unilever', bandeira: 'Grupo Amigão', uf: 'BA', dataSubmissao: '2024-06-10', status: 'reprovada', variacao: '-3.0%', impactoDRE: 700, icNielsen: 85 },
+      { fornecedor: 'Ambev', bandeira: 'Paraná Supermercados', uf: 'SP', dataSubmissao: '2024-06-09', status: 'em_analise', variacao: '+2.2%', impactoDRE: 1100, icNielsen: 90 },
+      { fornecedor: 'Nestlé', bandeira: 'Superpão', uf: 'SC', dataSubmissao: '2024-06-08', status: 'aprovada', variacao: '+5.1%', impactoDRE: 3200, icNielsen: 91 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-07', status: 'reprovada', variacao: '-1.8%', impactoDRE: 1100, icNielsen: 89 },
+      { fornecedor: 'BRF', bandeira: 'Supermercados Avenida', uf: 'MT', dataSubmissao: '2024-06-06', status: 'em_analise', variacao: '+7.3%', impactoDRE: 2800, icNielsen: 94 },
+      { fornecedor: 'JBS', bandeira: 'Compre Mais', uf: 'DF', dataSubmissao: '2024-06-05', status: 'aprovada', variacao: '+4.0%', impactoDRE: 2100, icNielsen: 88 },
+      { fornecedor: 'Unilever', bandeira: 'Empório Dom Olívio', uf: 'ES', dataSubmissao: '2024-06-04', status: 'reprovada', variacao: '-0.5%', impactoDRE: 500, icNielsen: 92 },
+      { fornecedor: 'Ambev', bandeira: 'Grupo Amigão', uf: 'SE', dataSubmissao: '2024-06-03', status: 'em_analise', variacao: '+2.8%', impactoDRE: 1300, icNielsen: 87 },
+      { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-02', status: 'aprovada', variacao: '+3.7%', impactoDRE: 1700, icNielsen: 90 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Superpão', uf: 'RS', dataSubmissao: '2024-06-01', status: 'reprovada', variacao: '-2.6%', impactoDRE: 600, icNielsen: 86 }
     ];
 
-    // Função para buscar e exibir tabelas
-    function buscarTabelas(event) {
-      if (event) event.preventDefault();
-      const fornecedorSel = document.getElementById('filtro-fornecedor').value;
-      const bandeiraSel = document.getElementById('filtro-bandeira').value;
-      const ufSel = document.getElementById('filtro-uf').value;
-      const dataSel = document.getElementById('filtro-data').value;
-      let resultados = tabelasSubmetidas.filter(function(tab) {
-        let ok = true;
-        if (fornecedorSel && tab.fornecedor.toLowerCase() !== fornecedorSel) ok = false;
-        if (bandeiraSel) {
-          // Bandeira no dado é nome completo, no select é slug
-          const mapBandeira = {
-            superpao: 'Superpão',
-            boa: 'Boa Supermercados',
-            avenida: 'Supermercados Avenida',
-            compremais: 'Compre Mais',
-            emporio: 'Empório Dom Olívio',
-            amigao: 'Grupo Amigão',
-            parana: 'Paraná Supermercados'
-          };
-          if (tab.bandeira !== mapBandeira[bandeiraSel]) ok = false;
-        }
-        if (ufSel && tab.uf !== ufSel) ok = false;
-        if (dataSel && tab.data < dataSel) ok = false;
-        return ok;
+    // Passo 36: Fornecedores reais
+    const fornecedores = ['Ambev', 'Nestlé', 'Coca-Cola', 'BRF', 'JBS', 'Unilever'];
+
+    // Passo 19: Gerar dados fictícios para o modal
+    function gerarDadosModal(fornecedor, bandeira, uf, data) {
+      // Dados fictícios baseados no fornecedor
+      const exemplos = {
+        'Ambev': [
+          { sku: 'AMB001', descricao: 'Cerveja Brahma Lata 350ml', precoAntigo: 2.50, precoNovo: 2.65 },
+          { sku: 'AMB002', descricao: 'Guaraná Antarctica 2L', precoAntigo: 6.90, precoNovo: 7.10 },
+          { sku: 'AMB003', descricao: 'Skol Pilsen 269ml', precoAntigo: 2.10, precoNovo: 2.20 }
+        ],
+        'Nestlé': [
+          { sku: 'NES001', descricao: 'Leite Ninho 400g', precoAntigo: 11.90, precoNovo: 12.50 },
+          { sku: 'NES002', descricao: 'Nescau 2.0 400g', precoAntigo: 7.50, precoNovo: 7.90 },
+          { sku: 'NES003', descricao: 'Chocolate Alpino 90g', precoAntigo: 6.80, precoNovo: 7.20 }
+        ],
+        'Coca-Cola': [
+          { sku: 'COC001', descricao: 'Coca-Cola 2L', precoAntigo: 8.00, precoNovo: 8.30 },
+          { sku: 'COC002', descricao: 'Fanta Laranja 350ml', precoAntigo: 2.90, precoNovo: 3.10 },
+          { sku: 'COC003', descricao: 'Sprite 2L', precoAntigo: 7.80, precoNovo: 7.95 }
+        ],
+        'BRF': [
+          { sku: 'BRF001', descricao: 'Presunto Sadia 200g', precoAntigo: 7.20, precoNovo: 7.60 },
+          { sku: 'BRF002', descricao: 'Mortadela Perdigão 500g', precoAntigo: 8.90, precoNovo: 9.10 },
+          { sku: 'BRF003', descricao: 'Linguiça Calabresa Sadia 1kg', precoAntigo: 22.50, precoNovo: 23.00 }
+        ],
+        'JBS': [
+          { sku: 'JBS001', descricao: 'Frango Seara Congelado 1kg', precoAntigo: 12.90, precoNovo: 13.20 },
+          { sku: 'JBS002', descricao: 'Hambúrguer Seara 56g', precoAntigo: 1.80, precoNovo: 1.90 },
+          { sku: 'JBS003', descricao: 'Carne Moída Friboi 500g', precoAntigo: 18.00, precoNovo: 18.50 }
+        ],
+        'Unilever': [
+          { sku: 'UNI001', descricao: 'Sabão em Pó OMO 800g', precoAntigo: 13.90, precoNovo: 14.30 },
+          { sku: 'UNI002', descricao: 'Maionese Hellmann’s 500g', precoAntigo: 8.50, precoNovo: 8.80 },
+          { sku: 'UNI003', descricao: 'Desodorante Rexona Aerosol', precoAntigo: 10.90, precoNovo: 11.10 }
+        ]
+      };
+      let lista = exemplos[fornecedor] || exemplos['Ambev'];
+      return lista.map(item => {
+        let variacao = (((item.precoNovo - item.precoAntigo) / item.precoAntigo) * 100).toFixed(1);
+        let variacaoStr = (variacao >= 0 ? '+' : '') + variacao.replace('.', ',') + '%';
+        return {
+          sku: item.sku,
+          descricao: item.descricao,
+          precoAntigo: formatarMoeda(item.precoAntigo),
+          precoNovo: formatarMoeda(item.precoNovo),
+          variacao: variacaoStr,
+          dataSubmissao: formatarData(data)
+        };
       });
-      let html = '';
-      if (resultados.length === 0) {
-        html = '<div style="padding:16px;color:#888;">Nenhuma tabela encontrada para os filtros selecionados.</div>';
-      } else {
-        html = '<table class="data-table" aria-label="Tabelas submetidas">';
-        html += '<thead><tr>' +
-          '<th>Fornecedor</th>' +
-          '<th>Bandeira</th>' +
-          '<th>UF</th>' +
-          '<th>Data Submissão</th>' +
-          '<th>Status de Avaliação</th>' +
-          '<th>Ações</th>' +
-          '</tr></thead><tbody>';
-        resultados.forEach(function(tab) {
-          html += '<tr>' +
-            '<td>' + tab.fornecedor + '</td>' +
-            '<td>' + tab.bandeira + '</td>' +
-            '<td>' + tab.uf + '</td>' +
-            '<td>' + tab.data + '</td>' +
-            '<td>' + tab.status + '</td>' +
-            '<td>';
-          if (tab.status === 'Em Análise') {
-            // Monta query string
-            const params = new URLSearchParams({
-              fornecedor: tab.fornecedor,
-              bandeira: tab.bandeira,
-              uf: tab.uf,
-              data: tab.data
-            }).toString();
-            html += '<button class="btn-table" onclick="window.location.href=\'analise-tabela.html?' + params + '\'">Aprovar/Reprovar</button>';
-          } else if (tab.status === 'Aprovada' || tab.status === 'Reprovada') {
-            html += 'Visualizar';
-          } else {
-            html += '';
-          }
-          html += '</td></tr>';
-        });
-        html += '</tbody></table>';
-      }
-      document.getElementById('tabelas-resultados').innerHTML = html;
     }
 
-    // Exibe tabelas ao carregar a página
-    window.addEventListener('DOMContentLoaded', function() {
-      buscarTabelas();
-    });
+    // Passo 26: Formatar data para DD/MM/YYYY
+    function formatarData(dataISO) {
+      if (!dataISO) return '';
+      const [ano, mes, dia] = dataISO.split('-');
+      return dia + '/' + mes + '/' + ano;
+    }
+
+    // Passo 27: Formatar moeda
+    function formatarMoeda(valor) {
+      return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/\d(?=(\d{3})+,)/g, '$&.');
+    }
+
+    // Passo 30: Estilo de status
+    function aplicarEstiloStatus(status) {
+      if (status === 'em_analise') return 'badge badge-analise';
+      if (status === 'aprovada') return 'badge badge-aprovada';
+      if (status === 'reprovada') return 'badge badge-reprovada';
+      return '';
+    }
+
+    // Passo 22: Atualizar cards de métricas
+    function atualizarCards(dados) {
+      // Tabelas pendentes
+      const pendentes = dados.filter(item => item.status === 'em_analise').length;
+      document.getElementById('tabelasPendentes').textContent = pendentes;
+      // Variação média
+      let variacoes = dados.map(item => parseFloat(item.variacao.replace('%','').replace(',','.')));
+      let mediaVariacao = variacoes.length ? (variacoes.reduce((a,b)=>a+b,0)/variacoes.length) : 0;
+      document.getElementById('variacaoMedia').textContent = (mediaVariacao >= 0 ? '+' : '') + mediaVariacao.toFixed(1).replace('.', ',') + '%';
+      // Impacto DRE
+      let impacto = dados.map(item => Number(item.impactoDRE));
+      let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
+      document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
+      // IC Nielsen (Média)
+      let icN = dados.map(item => Number(item.icNielsen));
+      let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
+      document.getElementById('icNielsen').textContent = Math.round(mediaICN);
+      // IC Objetiva (Média) - simulação: igual ao IC Nielsen para efeito visual
+      document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
+    }
+
+    // Passo 12: Filtrar tabelas
+    function filtrarTabelas() {
+      const fornecedor = document.getElementById('fornecedor').value;
+      const bandeira = document.getElementById('bandeira').value;
+      const uf = document.getElementById('uf').value;
+      const status = document.getElementById('status').value;
+      const data = document.getElementById('dataFiltro').value;
+      return tabelasSubmetidas.filter(item => {
+        let ok = true;
+        if (fornecedor && item.fornecedor !== fornecedor) ok = false;
+        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) ok = false;
+        if (uf && item.uf !== uf) ok = false;
+        if (status && item.status !== status) ok = false;
+        if (data && item.dataSubmissao < data) ok = false;
+        return ok;
+      });
+    }
+
+    // Passo 13/28/29/32/25: Renderizar tabela
+    let ordemAtual = { coluna: null, asc: true };
+    function renderizarTabela(dados) {
+      const tbody = document.getElementById('tabelaSubmetidasBody');
+      tbody.innerHTML = '';
+      if (!dados.length) {
+        let tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.colSpan = 9;
+        td.style.textAlign = 'center';
+        td.style.padding = '20px';
+        td.style.color = '#888';
+        td.textContent = 'Nenhuma tabela encontrada com os filtros selecionados.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+      dados.forEach(item => {
+        let tr = document.createElement('tr');
+        tr.innerHTML =
+          `<td>${item.fornecedor}</td>`+
+          `<td>${item.bandeira}</td>`+
+          `<td>${item.uf}</td>`+
+          `<td>${formatarData(item.dataSubmissao)}</td>`;
+        // Variação (%) com cor
+        let tdVar = document.createElement('td');
+        tdVar.textContent = item.variacao;
+        tdVar.style.color = item.variacao.startsWith('+') ? '#d4380d' : '#16a34a';
+        tr.appendChild(tdVar);
+        // Impacto DRE
+        let tdDRE = document.createElement('td');
+        tdDRE.textContent = formatarMoeda(Number(item.impactoDRE));
+        tr.appendChild(tdDRE);
+        // IC Nielsen
+        let tdIC = document.createElement('td');
+        tdIC.textContent = item.icNielsen;
+        tr.appendChild(tdIC);
+        // Status badge
+        let tdStatus = document.createElement('td');
+        const badgeClass = item.status === 'em_analise' ? 'badge-analise' : item.status === 'aprovada' ? 'badge-aprovada' : 'badge-reprovada';
+        const statusTexto = item.status === 'em_analise' ? 'Em Análise' : item.status === 'aprovada' ? 'Aprovada' : 'Reprovada';
+        tdStatus.innerHTML = `<span class="badge ${badgeClass}">${statusTexto}</span>`;
+        tr.appendChild(tdStatus);
+        // Ações
+        let tdAcoes = document.createElement('td');
+        if (item.status === 'em_analise') {
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button>`;
+        } else {
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="abrirModal(this)">Ver Detalhes</button>`;
+        }
+        tr.appendChild(tdAcoes);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Passo 14/23: Atualizar tabela e cards
+    function atualizarTabela() {
+      const dadosFiltrados = filtrarTabelas();
+      renderizarTabela(dadosFiltrados);
+      atualizarCards(dadosFiltrados);
+    }
+
+    // Passo 15/36: Inicialização
+    function init() {
+      // Popular fornecedores
+      const fornecedorSelect = document.getElementById('fornecedor');
+      fornecedorSelect.innerHTML = '<option value="">Todos</option>';
+      fornecedores.forEach(f => {
+        let opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        fornecedorSelect.appendChild(opt);
+      });
+      // Event listeners
+      document.getElementById('bandeira').addEventListener('change', function() {
+        const ufSelect = document.getElementById('uf');
+        const bandeira = this.value;
+        ufSelect.innerHTML = '<option value="">Todas</option>';
+        if (bandeira && bandeiraUF[bandeira]) {
+          bandeiraUF[bandeira].forEach(uf => {
+            let opt = document.createElement('option');
+            opt.value = uf;
+            opt.textContent = uf;
+            ufSelect.appendChild(opt);
+          });
+        }
+        atualizarTabela();
+      });
+      document.getElementById('fornecedor').addEventListener('change', atualizarTabela);
+      document.getElementById('uf').addEventListener('change', atualizarTabela);
+      document.getElementById('status').addEventListener('change', atualizarTabela);
+      document.getElementById('dataFiltro').addEventListener('change', atualizarTabela);
+      // Ordenação
+      document.querySelectorAll('.data-table th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+          ordenarTabela(this.getAttribute('data-col'));
+        });
+      });
+      // Render inicial
+      renderizarTabela(tabelasSubmetidas);
+      atualizarCards(tabelasSubmetidas);
+    }
+    window.onload = init;
+
+    // Passo 10/20/37: Modal de detalhes
+    function abrirModal(btn) {
+      try {
+        let tr = btn.closest('tr');
+        let tds = tr.querySelectorAll('td');
+        let fornecedor = tds[0].textContent;
+        let bandeira = tds[1].textContent;
+        let uf = tds[2].textContent;
+        let data = tds[3].textContent.split('/').reverse().join('-');
+        let dados = gerarDadosModal(fornecedor, bandeira, uf, data);
+        let tbody = document.getElementById('modalTabelaBody');
+        tbody.innerHTML = '';
+        dados.forEach(item => {
+          let tr = document.createElement('tr');
+          tr.innerHTML = `<td>${item.sku}</td><td>${item.descricao}</td><td>${item.precoAntigo}</td><td>${item.precoNovo}</td><td>${item.variacao}</td><td>${item.dataSubmissao}</td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('modalDetalhes').style.display = 'block';
+      } catch(e) {
+        console.error('Erro ao abrir modal:', e);
+      }
+    }
+    function fecharModal() {
+      document.getElementById('modalDetalhes').style.display = 'none';
+    }
+    // Passo 33: Fechar modal ao clicar fora
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalDetalhes');
+      if (event.target === modal) {
+        fecharModal();
+      }
+    };
+    // Passo 34: Resetar filtros
+    function resetarFiltros() {
+      document.getElementById('fornecedor').value = '';
+      document.getElementById('bandeira').value = '';
+      document.getElementById('uf').innerHTML = '<option value="">Todas</option>';
+      document.getElementById('status').value = '';
+      document.getElementById('dataFiltro').value = '';
+      atualizarTabela();
+    }
+    // Passo 39: Ordenação da tabela
+    function ordenarTabela(coluna) {
+      let dados = filtrarTabelas();
+      if (ordemAtual.coluna === coluna) {
+        ordemAtual.asc = !ordemAtual.asc;
+      } else {
+        ordemAtual.coluna = coluna;
+        ordemAtual.asc = true;
+      }
+      dados.sort((a, b) => {
+        let va = a[coluna], vb = b[coluna];
+        if (coluna === 'impactoDRE' || coluna === 'icNielsen') {
+          va = Number(va); vb = Number(vb);
+        }
+        if (coluna === 'variacao') {
+          va = parseFloat(va.replace('%','').replace(',','.'));
+          vb = parseFloat(vb.replace('%','').replace(',','.'));
+        }
+        if (coluna === 'dataSubmissao') {
+          va = va; vb = vb;
+        }
+        if (va < vb) return ordemAtual.asc ? -1 : 1;
+        if (va > vb) return ordemAtual.asc ? 1 : -1;
+        return 0;
+      });
+      renderizarTabela(dados);
+      // Atualizar indicadores visuais
+      document.querySelectorAll('.data-table th').forEach(th => {
+        th.classList.remove('sort-asc','sort-desc');
+        if (th.getAttribute('data-col') === coluna) {
+          th.classList.add(ordemAtual.asc ? 'sort-asc' : 'sort-desc');
+        }
+      });
+    }
   </script>
 </body>
 </html>
