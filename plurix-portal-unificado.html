@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma de Gerenciamento de Tabelas de Preços | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_32,h_32,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    /* --- Visibilidade de telas --- */
+    .tela { display: none; }
+    .tela.ativa { display: block; }
+    .hidden { display: none !important; }
+    /* --- Footer fixo --- */
+    html, body { height: 100%; min-height: 100vh; }
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    #main-container { flex: 1 0 auto; display: flex; flex-direction: column; min-height: 0; }
+    footer { position: relative; margin-top: auto; }
+    /* --- Estilos globais e fontes (copiados dos arquivos) --- */
+    @font-face {
+      font-display: swap;
+      font-family: wf_1973fffd9707483bb7143c4dc;
+      src: url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff2/file.woff2') format('woff2'),
+           url('https://static.wixstatic.com/ufonts/891e54_1973fffd9707483bb7143c4dc47ac236/woff/file.woff') format('woff');
+    }
+    @font-face {
+      font-family: 'helvetica-w01-roman';
+      font-style: normal;
+      font-weight: 400;
+      src: url('//static.parastorage.com/fonts/v2/2af1bf48-e783-4da8-9fa0-599dde29f2d5/v1/helvetica-lt-w10-roman.woff2') format('woff2');
+      font-display: swap;
+    }
+    :root {
+      --plurix-primary: #0c2340;
+      --plurix-secondary: #f5b800;
+      --plurix-bg: #f7f8fa;
+      --plurix-gray: #e5e7eb;
+      --plurix-dark: #222;
+      --plurix-accent: #0098d8;
+      --plurix-radius: 8px;
+    }
+    html, body {
+      font-family: wf_1973fffd9707483bb7143c4dc, 'helvetica-w01-roman', Arial, Helvetica, sans-serif;
+      background: var(--plurix-bg);
+      color: var(--plurix-dark);
+      font-size: 16px;
+    }
+    /* --- Sidebar (copiado dos arquivos autenticados) --- */
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+    }
+    /* --- Footer (copiado dos arquivos) --- */
+    footer {
+      background: var(--plurix-primary);
+      color: #fff;
+      text-align: center;
+      padding: 24px 0 12px 0;
+      font-size: 1rem;
+      margin-top: 48px;
+    }
+    /* --- Outras regras de responsividade e utilidades dos arquivos --- */
+    /* ... (demais estilos já estão incluídos nas seções de tela) ... */
+  </style>
+</head>
+<body>
+  <div id="main-container" style="display: flex; flex: 1 0 auto; min-height: 0;">
+    <!-- Sidebar (visível só em telas autenticadas) -->
+    <aside class="sidebar hidden">
+      <div class="logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      </div>
+      <nav>
+        <a href="#" onclick="navegarPara('dashboard'); return false;" id="nav-dashboard">Dashboard</a>
+        <a href="#" onclick="navegarPara('upload'); return false;" id="nav-upload">Nova Tabela</a>
+        <a href="#" onclick="navegarPara('historico'); return false;" id="nav-historico">Histórico</a>
+        <a href="#" onclick="navegarPara('perfil'); return false;" id="nav-perfil">Perfil</a>
+        <a href="#" onclick="sair(); return false;">Sair</a>
+      </nav>
+      <div class="bottom">&copy; 2024 Plurix</div>
+    </aside>
+    <!-- Telas como seções -->
+    <section id="tela-index" class="tela ativa" style="flex:1;">
+      <!-- Conteúdo do index.html -->
+      <header>
+        <div class="header-logo">
+          <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
+          <span class="header-title">Plataforma de Gerenciamento de Tabelas de Preços</span>
+        </div>
+      </header>
+      <main>
+        <section class="hero">
+          <div class="hero-content">
+            <h1>Centralize, Analise e Aprove Tabelas de Preços com Segurança</h1>
+            <p>Uma plataforma completa para fornecedores e gestores da Plurix: upload padronizado, validação automática, workflow de aprovações, análise comercial avançada e integração total com ERPs das bandeiras. Tudo em um só lugar, com máxima conformidade e rastreabilidade.</p>
+            <div class="hero-cta">
+              <a href="#" onclick="navegarPara('login'); return false;" class="btn btn-primary" aria-label="Entrar como Fornecedor">Entrar como Fornecedor</a>
+              <a href="#" onclick="navegarPara('login'); return false;" class="btn btn-secondary" aria-label="Entrar como Gestor Interno">Entrar como Gestor Interno</a>
+            </div>
+          </div>
+          <div class="hero-image">
+            <img src="https://static.wixstatic.com/media/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png/v1/fill/w_600,h_340,al_c/511fa0_f85da51999a44f949def19aac2c8dd06~mv2.png" alt="Dashboard Plurix" />
+          </div>
+        </section>
+        <section class="features-section">
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon" aria-hidden="true">📤</div>
+              <div class="feature-title">Upload Padronizado</div>
+              <div class="feature-desc">Envie tabelas de preços no formato Excel/CSV, com validação automática e feedback instantâneo.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔎</div>
+              <div class="feature-title">Análise Comercial</div>
+              <div class="feature-desc">Visualize indicadores críticos, variações de preços e impacto financeiro para decisões assertivas.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon" aria-hidden="true">✅</div>
+              <div class="feature-title">Workflow de Aprovação</div>
+              <div class="feature-desc">Aprovação multinível, regras de alçada e rastreabilidade completa das decisões comerciais.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔗</div>
+              <div class="feature-title">Integração ERP</div>
+              <div class="feature-desc">Atualização automática dos preços aprovados nos sistemas Consinco e Flex das bandeiras.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔒</div>
+              <div class="feature-title">Segurança & Compliance</div>
+              <div class="feature-desc">Controle de acessos, logs de auditoria e conformidade com SOC 2 e ISO 27001.</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+    <section id="tela-login" class="tela hidden" style="flex:1;">
+      <!-- Conteúdo do login-fornecedor.html -->
+      <header>
+        <div class="header-logo">
+          <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" height="48">
+          <span class="header-title">Portal do Fornecedor</span>
+        </div>
+      </header>
+      <main>
+        <div class="login-container">
+          <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+          <h2>Acesse sua conta de Fornecedor</h2>
+          <form action="#" method="post" onsubmit="return validateForm(event)" novalidate>
+            <label for="emailCnpj" class="form-label">E-mail ou CNPJ</label>
+            <input type="text" id="emailCnpj" name="emailCnpj" class="form-input" placeholder="Digite seu e-mail ou CNPJ" autocomplete="username" required inputmode="email">
+            <label for="senha" class="form-label">Senha</label>
+            <input type="password" id="senha" name="senha" class="form-input" placeholder="Digite sua senha" autocomplete="current-password" required>
+            <button type="submit" class="btn" id="btn-entrar">Entrar</button>
+          </form>
+          <div class="login-links">
+            <a href="#" aria-label="Recuperar senha">Esqueci minha senha</a>
+          </div>
+        </div>
+      </main>
+    </section>
+    <section id="tela-dashboard" class="tela hidden" style="flex:1;">
+      <!-- Conteúdo do dashboard-fornecedor.html -->
+      <div class="main-content">
+        <header class="header">
+          <h1>Dashboard do Fornecedor</h1>
+          <button class="cta-upload" onclick="navegarPara('upload');">+ Nova Tabela de Preços</button>
+        </header>
+        <main class="dashboard-section">
+          <section class="dashboard-cards">
+            <div class="card">
+              <div class="card-title">Tabelas Submetidas Recentes</div>
+              <table class="card-table" aria-label="Tabelas Submetidas">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Arquivo</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10/06/2024</td>
+                    <td>precos_junho.xlsx</td>
+                    <td><span class="status status-pendente">Pendente</span></td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
+                  </tr>
+                  <tr>
+                    <td>02/06/2024</td>
+                    <td>precos_maio.xlsx</td>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
+                  </tr>
+                  <tr>
+                    <td>15/05/2024</td>
+                    <td>precos_abril.xlsx</td>
+                    <td><span class="status status-reprovada">Reprovada</span></td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="card-title">Resumo de Submissões</div>
+              <table class="card-table" aria-label="Resumo de Submissões">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Quantidade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="status status-pendente">Pendente</span></td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td>4</td>
+                  </tr>
+                  <tr>
+                    <td><span class="status status-reprovada">Reprovada</span></td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+      <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+        <div class="modal-content" tabindex="0">
+          <div class="modal-header">
+            <span class="modal-title">Detalhes</span>
+            <button class="modal-close" aria-label="Fechar">&times;</button>
+          </div>
+          <div class="modal-body">
+            <!-- Conteúdo dinâmico -->
+          </div>
+        </div>
+      </div>
+      <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+        <div class="modal-editor-content" tabindex="0">
+          <div class="modal-editor-header">
+            <span class="modal-editor-title">Editar Planilha</span>
+            <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+          </div>
+          <div class="modal-editor-body">
+            <!-- Tabela editável será inserida via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="tela-historico" class="tela hidden" style="flex:1;">
+      <!-- Conteúdo do historico.html -->
+      <div class="main-content">
+        <header class="header">
+          <h1>Histórico de Submissões</h1>
+        </header>
+        <main class="dashboard-section">
+          <section>
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #1a2340; margin-bottom: 20px;">Histórico Completo de Submissões</h2>
+            <div class="card">
+              <div class="card-title">Histórico de Submissões</div>
+              <table class="history-table" aria-label="Histórico de Submissões">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Arquivo</th>
+                    <th>Status</th>
+                    <th>Coligada/UF</th>
+                    <th>Enviado por</th>
+                    <th>Detalhes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10/06/2024</td>
+                    <td>precos_junho.xlsx</td>
+                    <td><span class="status status-pendente">Pendente</span></td>
+                    <td>SuperSul / SC</td>
+                    <td>ana.souza@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>02/06/2024</td>
+                    <td>precos_maio.xlsx</td>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td>SuperSul / PR</td>
+                    <td>carlos.martins@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>15/05/2024</td>
+                    <td>precos_abril.xlsx</td>
+                    <td><span class="status status-reprovada">Reprovada</span></td>
+                    <td>SuperSul / RS</td>
+                    <td>marina.lima@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>01/05/2024</td>
+                    <td>precos_abril_v2.xlsx</td>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td>SuperSul / SP</td>
+                    <td>joao.silva@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_abril_v2.xlsx', '01/05/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>20/04/2024</td>
+                    <td>precos_marco.xlsx</td>
+                    <td><span class="status status-reprovada">Reprovada</span></td>
+                    <td>SuperSul / MG</td>
+                    <td>fernando.pereira@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_marco.xlsx', '20/04/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>10/04/2024</td>
+                    <td>precos_marco_v2.xlsx</td>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td>SuperSul / RJ</td>
+                    <td>lucas.almeida@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_marco_v2.xlsx', '10/04/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>28/03/2024</td>
+                    <td>precos_fevereiro.xlsx</td>
+                    <td><span class="status status-pendente">Pendente</span></td>
+                    <td>SuperSul / ES</td>
+                    <td>patricia.menezes@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro.xlsx', '28/03/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>15/03/2024</td>
+                    <td>precos_fevereiro_v2.xlsx</td>
+                    <td><span class="status status-aprovada">Aprovada</span></td>
+                    <td>SuperSul / BA</td>
+                    <td>rodrigo.santos@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
+                  </tr>
+                  <tr>
+                    <td>01/03/2024</td>
+                    <td>precos_janeiro.xlsx</td>
+                    <td><span class="status status-reprovada">Reprovada</span></td>
+                    <td>SuperSul / GO</td>
+                    <td>aline.gomes@fornecedor.com.br</td>
+                    <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_janeiro.xlsx', '01/03/2024'); return false;">Ver</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+      <!-- Modal Detalhes -->
+      <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+        <div class="modal-content" tabindex="0">
+          <div class="modal-header">
+            <span class="modal-title">Detalhes</span>
+            <button class="modal-close" aria-label="Fechar">&times;</button>
+          </div>
+          <div class="modal-body">
+            <!-- Conteúdo dinâmico -->
+          </div>
+        </div>
+      </div>
+      <!-- Modal Editor Planilha -->
+      <div id="modal-editor-planilha" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+        <div class="modal-editor-content" tabindex="0">
+          <div class="modal-editor-header">
+            <span class="modal-editor-title">Editar Planilha</span>
+            <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+          </div>
+          <div class="modal-editor-body">
+            <!-- Conteúdo dinâmico -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="tela-upload" class="tela hidden" style="flex:1;">
+      <!-- Conteúdo do upload-tabela.html -->
+      <div class="main-content">
+        <header class="header">
+          <h1>Upload de Tabela de Preços</h1>
+        </header>
+        <main class="upload-section">
+          <form id="formUpload" class="upload-card" autocomplete="off">
+            <h2>1. Selecione o arquivo Excel/CSV</h2>
+            <div class="drag-drop" id="dragDropArea" tabindex="0" aria-label="Área para arrastar e soltar arquivo">
+              <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Selecionar arquivo Excel ou CSV">
+              Arraste e solte o arquivo aqui ou <span style="color:#f9b233;text-decoration:underline;cursor:pointer;">clique para selecionar</span>.
+            </div>
+            <div class="upload-info">Apenas arquivos no formato <b>.xlsx</b>, <b>.xls</b> ou <b>.csv</b> com até 10.000 SKUs.</div>
+            <h2>2. Escolha as Coligadas/UF</h2>
+            <div class="bandeiras-group">
+              <label class="bandeiras-label">Bandeiras:</label>
+              <div class="bandeira">
+                <div class="bandeira-title">SuperSul</div>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" name="coligadas[]" value="SC"> SC</label>
+                  <label><input type="checkbox" name="coligadas[]" value="PR"> PR</label>
+                  <label><input type="checkbox" name="coligadas[]" value="RS"> RS</label>
+                </div>
+              </div>
+              <div class="bandeira">
+                <div class="bandeira-title">MaxiNorte</div>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" name="coligadas[]" value="AM"> AM</label>
+                  <label><input type="checkbox" name="coligadas[]" value="PA"> PA</label>
+                </div>
+              </div>
+              <div class="bandeira">
+                <div class="bandeira-title">CentroMais</div>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" name="coligadas[]" value="GO"> GO</label>
+                  <label><input type="checkbox" name="coligadas[]" value="DF"> DF</label>
+                </div>
+              </div>
+            </div>
+            <h2>3. Estrutura Esperada do Arquivo</h2>
+            <table class="preview-table" id="previewTable" aria-label="Preview do Arquivo">
+              <thead>
+                <tr>
+                  <th><span class="required">*</span>GTIN</th>
+                  <th><span class="required">*</span>Descrição</th>
+                  <th><span class="required">*</span>Preço Novo</th>
+                  <th><span class="required">*</span>Embalagem</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="4" style="color:#b7b9c6;text-align:center;">Selecione um arquivo para visualizar o preview.</td></tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn-submit">Enviar Tabela</button>
+            <div id="message" class="message"></div>
+          </form>
+        </main>
+      </div>
+    </section>
+    <section id="tela-validacao" class="tela hidden" style="flex:1;">
+      <!-- Conteúdo do validacao-arquivo.html -->
+      <header class="header">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+        <span class="header-title">Validação de Arquivo de Preços</span>
+      </header>
+      <main class="container">
+        <div class="alert alert-error" role="alert" id="alertErro">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
+        </div>
+        <div class="alert alert-success" role="alert" id="alertSucesso">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+          <span id="msgSucesso">Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+        </div>
+        <table class="error-table" aria-label="Erros de validação" id="tabelaErros">
+          <thead>
+            <tr>
+              <th>Linha</th>
+              <th>Coluna</th>
+              <th>Descrição do Erro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12</td>
+              <td>GTIN</td>
+              <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
+            </tr>
+            <tr>
+              <td>27</td>
+              <td>Preço Novo</td>
+              <td>Valor negativo não permitido</td>
+            </tr>
+            <tr>
+              <td>45</td>
+              <td>Descrição</td>
+              <td>Campo obrigatório não preenchido</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="actions">
+          <button class="btn btn-primary" id="btnCorrigir">Corrigir e reenviar</button>
+          <button class="btn btn-secondary" onclick="navegarPara('dashboard');">Cancelar</button>
+        </div>
+      </main>
+      <div class="modal-correcoes-bg" id="modalCorrecoesBg">
+        <div class="modal-correcoes" id="modalCorrecoes">
+          <div class="modal-correcoes-header">
+            <h2>Corrigir Dados da Tabela</h2>
+            <button class="modal-correcoes-close" id="fecharModalBtn" aria-label="Fechar">&times;</button>
+          </div>
+          <form id="formCorrecoes" autocomplete="off">
+            <table class="modal-correcoes-table" id="modalCorrecoesTable">
+              <!-- Conteúdo dinâmico -->
+            </table>
+            <div class="modal-correcoes-actions">
+              <button type="button" class="btn btn-primary" id="btnSalvarCorrecoes">Salvar Correções</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer>
+    <div>&copy; 2024 Plurix. Todos os direitos reservados.</div>
+    <div style="font-size:0.95rem;opacity:0.7;margin-top:4px;">Desenvolvido para validação de conceito. Proibida reprodução não autorizada.</div>
+  </footer>
+  <script>
+    // --- Navegação SPA ---
+    const telas = {
+      'index': 'tela-index',
+      'login': 'tela-login',
+      'dashboard': 'tela-dashboard',
+      'historico': 'tela-historico',
+      'upload': 'tela-upload',
+      'validacao': 'tela-validacao',
+      // 'perfil': ... (poderia ser implementado)
+    };
+    const telasAutenticadas = ['dashboard', 'historico', 'upload', 'validacao'];
+    function navegarPara(tela) {
+      // Oculta todas as telas
+      Object.values(telas).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('ativa');
+        if (el) el.classList.add('hidden');
+      });
+      // Mostra a tela desejada
+      const ativa = document.getElementById(telas[tela]);
+      if (ativa) {
+        ativa.classList.remove('hidden');
+        ativa.classList.add('ativa');
+      }
+      // Sidebar visível só em telas autenticadas
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar) {
+        sidebar.style.display = telasAutenticadas.includes(tela) ? 'flex' : 'none';
+      }
+      // Ajusta active na sidebar
+      if (telasAutenticadas.includes(tela)) {
+        ['nav-dashboard','nav-upload','nav-historico','nav-perfil'].forEach(id => {
+          const nav = document.getElementById(id);
+          if (nav) nav.classList.remove('active');
+        });
+        if (tela === 'dashboard') document.getElementById('nav-dashboard').classList.add('active');
+        if (tela === 'upload') document.getElementById('nav-upload').classList.add('active');
+        if (tela === 'historico') document.getElementById('nav-historico').classList.add('active');
+        if (tela === 'perfil') document.getElementById('nav-perfil').classList.add('active');
+      }
+      window.scrollTo(0,0);
+    }
+    // Sair: volta para index
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        navegarPara('index');
+      }
+    }
+    // --- Login ---
+    function validateForm(e) {
+      const emailCnpj = document.getElementById('emailCnpj');
+      const senha = document.getElementById('senha');
+      const btn = document.getElementById('btn-entrar');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;
+      const valor = emailCnpj.value.trim();
+      const senhaValor = senha.value;
+      if (!valor || !senhaValor) {
+        alert('Preencha todos os campos para continuar.');
+        e.preventDefault();
+        return false;
+      }
+      if (valor.includes('@')) {
+        if (!emailRegex.test(valor)) {
+          alert('Formato de e-mail inválido');
+          e.preventDefault();
+          return false;
+        }
+      } else {
+        if (!cnpjRegex.test(valor)) {
+          alert('Formato de CNPJ inválido');
+          e.preventDefault();
+          return false;
+        }
+      }
+      if (valor === 'lucio.rosa@peers.com.br' && senhaValor === 'prototipo_2') {
+        btn.classList.add('btn-loading');
+        setTimeout(function() {
+          navegarPara('dashboard');
+        }, 800);
+        e.preventDefault();
+        return false;
+      } else {
+        alert('Credenciais inválidas');
+        e.preventDefault();
+        return false;
+      }
+    }
+    // --- Upload de tabela (drag&drop, preview) ---
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sidebar inicia oculta
+      document.querySelector('.sidebar').style.display = 'none';
+      // Upload
+      var drop = document.getElementById('dragDropArea');
+      var input = document.getElementById('fileInput');
+      var preview = document.getElementById('previewTable');
+      var message = document.getElementById('message');
+      if (drop && input && preview && message) {
+        drop.addEventListener('click', function() { input.click(); });
+        drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('dragover'); });
+        drop.addEventListener('dragleave', function(e) { drop.classList.remove('dragover'); });
+        drop.addEventListener('drop', function(e) {
+          e.preventDefault();
+          drop.classList.remove('dragover');
+          input.files = e.dataTransfer.files;
+          handleFile(input.files[0]);
+        });
+        input.addEventListener('change', function() {
+          if (input.files.length > 0) handleFile(input.files[0]);
+        });
+        function handleFile(file) {
+          preview.innerHTML = `<thead><tr><th><span class='required'>*</span>GTIN</th><th><span class='required'>*</span>Descrição</th><th><span class='required'>*</span>Preço Novo</th><th><span class='required'>*</span>Embalagem</th></tr></thead><tbody><tr><td>7891234567890</td><td>Arroz Branco 5kg</td><td>R$ 19,90</td><td>PACOTE</td></tr><tr><td>7899876543210</td><td>Feijão Carioca 1kg</td><td>R$ 7,99</td><td>PACOTE</td></tr></tbody>`;
+        }
+        document.getElementById('formUpload').addEventListener('submit', function(e) {
+          e.preventDefault();
+          var valid = input.files.length > 0;
+          if (valid) {
+            message.className = 'message success';
+            message.textContent = 'Tabela enviada com sucesso!';
+            setTimeout(function(){ navegarPara('validacao'); }, 1500);
+          } else {
+            message.className = 'message error';
+            message.textContent = 'Por favor, selecione um arquivo Excel/CSV.';
+          }
+        });
+      }
+    });
+    // --- Dashboard/Histórico: modais de detalhes e editor ---
+    // (Funções combinadas dos arquivos dashboard-fornecedor.html e historico.html)
+    function abrirDetalhes(status, arquivo, data) {
+      var modal = document.getElementById('modal-detalhes') || document.querySelector('.modal');
+      if (!modal) { alert('Erro: modal não encontrado.'); return; }
+      var modalBody = modal.querySelector('.modal-body');
+      var modalTitle = modal.querySelector('.modal-title');
+      if (!modalBody || !modalTitle) { alert('Erro: estrutura do modal inválida.'); return; }
+      var nivelAprovacao = [
+        'Gerente Categoria Bandeira',
+        'Dir. Comercial Bandeira',
+        'Dir. Comercial Holding',
+        'VP'
+      ];
+      var nivelAtual = 0;
+      if (status === 'pendente') {
+        if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
+        else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
+        else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
+        else nivelAtual = 0;
+      }
+      var motivosAprovada = {
+        'Atualização % por produto': '+2.5%',
+        'Atualização % ponderada total do fornecedor': '+2.8%',
+        'Impacto total no DRE/DLP da cia/fornecedor': 'Positivo +R$ 45.000',
+        'Peso do produto nas vendas totais do fornecedor': '12% do total',
+        'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 98.5, Objetiva: 97.2',
+        'Data da última atualização de preço do SKU': '15/04/2024'
+      };
+      var motivosReprovada = {
+        'Atualização % por produto': '+15.2% (acima do limite)',
+        'Atualização % ponderada total do fornecedor': '+13.7% (acima do limite)',
+        'Impacto total no DRE/DLP da cia/fornecedor': 'Negativo -R$ 120.000',
+        'Peso do produto nas vendas totais do fornecedor': '23% do total',
+        'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 85.3 (abaixo da meta), Objetiva: 79.1',
+        'Data da última atualização de preço do SKU': '10/01/2024'
+      };
+      var html = '';
+      if (status === 'pendente') {
+        modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
+        html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
+        html += '<div class="nivel-aprovacao">';
+        for (var i = 0; i < nivelAprovacao.length; i++) {
+          html += '<div class="nivel-item">';
+          html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
+          html += nivelAprovacao[i];
+          html += '</div>';
+          if (i < nivelAprovacao.length - 1) {
+            html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
+          }
+        }
+        html += '</div>';
+        html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
+      } else if (status === 'aprovada') {
+        modalTitle.textContent = 'Motivos da Aprovação - ' + arquivo;
+        html += '<div><strong>Status:</strong> Aprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para aprovação:</div>';
+        Object.keys(motivosAprovada).forEach(function(key) {
+          html += '<div class="motivo-item">';
+          html += '<div class="motivo-titulo">' + key + '</div>';
+          html += '<div class="motivo-valor">' + motivosAprovada[key] + '</div>';
+          html += '</div>';
+        });
+      } else if (status === 'reprovada') {
+        modalTitle.textContent = 'Motivos da Reprovação - ' + arquivo;
+        html += '<div><strong>Status:</strong> Reprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para reprovação:</div>';
+        Object.keys(motivosReprovada).forEach(function(key) {
+          html += '<div class="motivo-item">';
+          html += '<div class="motivo-titulo">' + key + '</div>';
+          html += '<div class="motivo-valor">' + motivosReprovada[key] + '</div>';
+          html += '</div>';
+        });
+        html += '<button class="btn-salvar-edicao" style="margin-top:18px;" onclick="abrirEditorPlanilha(\'' + arquivo + '\')">Editar Planilha</button>';
+      } else {
+        modalTitle.textContent = 'Detalhes';
+        html = '<div>Informações não disponíveis para este status.</div>';
+      }
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModal() {
+      var modal = document.getElementById('modal-detalhes') || document.querySelector('.modal');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    // Modal Editor Planilha (dashboard/historico)
+    function abrirEditorPlanilha(arquivo) {
+      fecharModal();
+      setTimeout(function() {
+        var modal = document.getElementById('modal-editor') || document.getElementById('modal-editor-planilha');
+        if (!modal) return;
+        var modalTitle = modal.querySelector('.modal-editor-title');
+        modalTitle.textContent = 'Editar Planilha - ' + arquivo;
+        var dados = [
+          { sku: '12345', produto: 'Arroz Tio João 5kg', preco_atual: 'R$ 25,90', novo_preco: 'R$ 29,90', aumento: '+15.4%', categoria: 'Alimentos' },
+          { sku: '23456', produto: 'Feijão Carioca Kicaldo 1kg', preco_atual: 'R$ 8,50', novo_preco: 'R$ 9,80', aumento: '+15.3%', categoria: 'Alimentos' },
+          { sku: '34567', produto: 'Óleo de Soja Soya 900ml', preco_atual: 'R$ 7,20', novo_preco: 'R$ 8,00', aumento: '+11.1%', categoria: 'Óleos' }
+        ];
+        var tbody = '';
+        for (var i = 0; i < dados.length; i++) {
+          tbody += '<tr>' +
+            '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
+            '<td><input type="text" value="' + dados[i].produto + '"></td>' +
+            '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
+            '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
+            '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
+            '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
+          '</tr>';
+        }
+        var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
+          '<thead><tr>' +
+          '<th>SKU</th><th>Produto</th><th>Preço Atual</th><th>Novo Preço</th><th>% Aumento</th><th>Categoria</th>' +
+          '</tr></thead><tbody>' + tbody + '</tbody></table>';
+        var modalBody = modal.querySelector('.modal-editor-body');
+        modalBody.innerHTML = tableHtml +
+          '<div style="margin-top:18px;">' +
+          '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
+          '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
+          '</div>';
+        modal.style.display = 'flex';
+        modal.classList.remove('closing');
+        setTimeout(function() {
+          var content = modal.querySelector('.modal-editor-content');
+          if(content) content.focus();
+        }, 100);
+      }, 300);
+    }
+    function fecharModalEditor() {
+      var modal = document.getElementById('modal-editor') || document.getElementById('modal-editor-planilha');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    function salvarEdicaoPlanilha() {
+      alert('Alterações salvas com sucesso!');
+      fecharModalEditor();
+    }
+    // --- Validacao-arquivo: modal de correcoes ---
+    // (Funções do validacao-arquivo.html)
+    const erros = [
+      { linha: 12, coluna: 'GTIN', descricao: 'GTIN inválido (deve conter 13 dígitos numéricos)' },
+      { linha: 27, coluna: 'Preço Novo', descricao: 'Valor negativo não permitido' },
+      { linha: 45, coluna: 'Descrição', descricao: 'Campo obrigatório não preenchido' }
+    ];
+    const dadosOriginais = {
+      12: { GTIN: '78912345678', Descrição: 'Arroz Branco 5kg', 'Preço Novo': 'R$ 19,90', Embalagem: 'PACOTE' },
+      27: { GTIN: '7899876543210', Descrição: 'Feijão Carioca 1kg', 'Preço Novo': '-7,99', Embalagem: 'PACOTE' },
+      45: { GTIN: '7891111222333', Descrição: '', 'Preço Novo': 'R$ 5,99', Embalagem: 'PACOTE' }
+    };
+    const colunasTabela = ['GTIN', 'Descrição', 'Preço Novo', 'Embalagem'];
+    const camposEditaveis = ['GTIN', 'Descrição', 'Preço Novo'];
+    function abrirModalCorrecao() {
+      const modalBg = document.getElementById('modalCorrecoesBg');
+      const modal = document.getElementById('modalCorrecoes');
+      const tabela = document.getElementById('modalCorrecoesTable');
+      tabela.innerHTML = '';
+      let thead = '<thead><tr>';
+      for (const col of colunasTabela) { thead += `<th>${col}</th>`; }
+      thead += '</tr></thead>';
+      const errosPorLinha = {};
+      erros.forEach(e => { if (!errosPorLinha[e.linha]) errosPorLinha[e.linha] = []; errosPorLinha[e.linha].push(e.coluna); });
+      let tbody = '<tbody>';
+      Object.keys(errosPorLinha).forEach(linha => {
+        tbody += '<tr>';
+        colunasTabela.forEach(col => {
+          const valor = dadosOriginais[linha][col] !== undefined ? dadosOriginais[linha][col] : '';
+          if (errosPorLinha[linha].includes(col) && camposEditaveis.includes(col)) {
+            const idCampo = `campo_${linha}_${col.replace(/\s/g,'_')}`;
+            tbody += `<td><input type="text" id="${idCampo}" name="${idCampo}" value="${valor}" data-linha="${linha}" data-coluna="${col}" autocomplete="off" oninput="validarCampoEditavel(this, this.value)"><span class="feedback-erro" id="fb_${idCampo}"></span></td>`;
+          } else {
+            tbody += `<td>${valor}</td>`;
+          }
+        });
+        tbody += '</tr>';
+      });
+      tbody += '</tbody>';
+      tabela.innerHTML = thead + tbody;
+      modalBg.classList.add('active');
+      modal.classList.remove('saindo');
+      setTimeout(() => {
+        const inp = tabela.querySelector('input');
+        if (inp) inp.focus();
+      }, 200);
+    }
+    function validarCampoEditavel(input, valor) {
+      const coluna = input.getAttribute('data-coluna');
+      let valido = true;
+      let msg = '';
+      if (coluna === 'GTIN') {
+        const gtin = valor.replace(/\D/g, '');
+        if (!/^\d{13}$/.test(gtin)) {
+          valido = false;
+          msg = 'GTIN deve conter 13 dígitos numéricos';
+        }
+      } else if (coluna === 'Preço Novo') {
+        let v = valor.replace(/[R$\s]/g, '').replace(',', '.');
+        if (isNaN(v) || Number(v) <= 0) {
+          valido = false;
+          msg = 'Preço deve ser um valor positivo';
+        }
+      } else if (coluna === 'Descrição') {
+        if (!valor.trim()) {
+          valido = false;
+          msg = 'Descrição não pode estar vazia';
+        }
+      }
+      if (valido) {
+        input.classList.remove('erro');
+        input.classList.add('sucesso');
+      } else {
+        input.classList.add('erro');
+        input.classList.remove('sucesso');
+      }
+      const fb = document.getElementById('fb_' + input.id);
+      if (fb) fb.textContent = msg;
+      return valido;
+    }
+    function salvarCorrecoes() {
+      const tabela = document.getElementById('modalCorrecoesTable');
+      const inputs = tabela.querySelectorAll('input');
+      let todosValidos = true;
+      inputs.forEach(input => {
+        const valido = validarCampoEditavel(input, input.value);
+        if (!valido) todosValidos = false;
+      });
+      if (!todosValidos) {
+        for (const input of inputs) {
+          if (input.classList.contains('erro')) {
+            input.focus();
+            break;
+          }
+        }
+        return;
+      }
+      fecharModalCorrecao();
+      setTimeout(() => {
+        exibirSucesso();
+      }, 350);
+    }
+    function exibirSucesso() {
+      document.getElementById('alertErro').style.display = 'none';
+      const alertSucesso = document.getElementById('alertSucesso');
+      const msg = document.getElementById('msgSucesso');
+      msg.textContent = 'Arquivo validado e corrigido com sucesso! Redirecionando...';
+      alertSucesso.classList.add('active');
+      setTimeout(() => {
+        navegarPara('dashboard');
+      }, 2000);
+    }
+    function fecharModalCorrecao() {
+      const modalBg = document.getElementById('modalCorrecoesBg');
+      const modal = document.getElementById('modalCorrecoes');
+      modal.classList.add('saindo');
+      setTimeout(() => {
+        modalBg.classList.remove('active');
+        modal.classList.remove('saindo');
+      }, 300);
+    }
+    // Eventos modal correcoes
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnCorrigir = document.getElementById('btnCorrigir');
+      if (btnCorrigir) btnCorrigir.addEventListener('click', abrirModalCorrecao);
+      var btnSalvar = document.getElementById('btnSalvarCorrecoes');
+      if (btnSalvar) btnSalvar.addEventListener('click', salvarCorrecoes);
+      var btnFechar = document.getElementById('fecharModalBtn');
+      if (btnFechar) btnFechar.addEventListener('click', fecharModalCorrecao);
+      var modalBg = document.getElementById('modalCorrecoesBg');
+      if (modalBg) {
+        modalBg.addEventListener('mousedown', function(e) { if (e.target === this) fecharModalCorrecao(); });
+      }
+      document.addEventListener('keydown', function(e) {
+        const modalBg = document.getElementById('modalCorrecoesBg');
+        if (modalBg && modalBg.classList.contains('active') && e.key === 'Escape') {
+          fecharModalCorrecao();
+        }
+      });
+    });
+    // Fechar modais dashboard/historico
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-detalhes');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) { if (e.target === modal) { fecharModal(); } });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) { closeBtn.addEventListener('click', fecharModal); }
+      }
+      var modalEditor = document.getElementById('modal-editor') || document.getElementById('modal-editor-planilha');
+      if (modalEditor) {
+        modalEditor.addEventListener('mousedown', function(e) { if (e.target === modalEditor) { fecharModalEditor(); } });
+        var closeBtn = modalEditor.querySelector('.modal-editor-close');
+        if (closeBtn) { closeBtn.addEventListener('click', fecharModalEditor); }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModal();
+          fecharModalEditor();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
