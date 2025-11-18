@@ -243,170 +243,138 @@
       line-height: 1.6;
       color: #222;
     }
-    .nivel-aprovacao {
+    /* Indicador de Aprovação */
+    .indicador-aprovacao {
       display: flex;
       align-items: center;
-      margin: 16px 0;
+      margin: 24px 0 16px 0;
       flex-wrap: wrap;
+      justify-content: flex-start;
     }
-    .nivel-item {
+    .indicador-nivel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 28px;
+    }
+    .indicador-circulo {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ddd;
+      border: 3px solid #ccc;
+      margin-bottom: 6px;
+      transition: background 0.2s, border-color 0.2s;
       display: flex;
       align-items: center;
-      margin-right: 24px;
-      font-size: 1.08rem;
-      font-weight: 600;
-      color: #1a2340;
+      justify-content: center;
+      font-size: 1.05rem;
+      color: #fff;
     }
-    .status-circle {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #ddd;
-      border: 2px solid #ccc;
-      transition: background 0.2s;
-    }
-    .status-circle.ativo {
+    .indicador-circulo.ativo {
       background: #4bb543;
       border-color: #4bb543;
+      color: #fff;
     }
-    .nivel-linha {
-      height: 2px;
-      width: 40px;
+    .indicador-label {
+      font-size: 0.93rem;
+      color: #1a2340;
+      font-weight: 600;
+      text-align: center;
+      max-width: 90px;
+    }
+    .indicador-linha {
+      width: 48px;
+      height: 4px;
       background: #ddd;
-      margin: 0 8px;
-      display: inline-block;
-      vertical-align: middle;
+      margin: 0 6px;
       border-radius: 2px;
       transition: background 0.2s;
+      display: inline-block;
+      vertical-align: middle;
     }
-    .nivel-linha.ativo {
+    .indicador-linha.ativo {
       background: #4bb543;
     }
-    .motivo-item {
-      margin-bottom: 20px;
-      padding: 16px;
-      background: #f9f9f9;
-      border-left: 4px solid #f9b233;
-      border-radius: 6px;
-    }
-    .motivo-titulo {
-      font-weight: 700;
-      color: #1a2340;
-      margin-bottom: 8px;
-      font-size: 1.08rem;
-    }
-    .motivo-valor {
-      color: #555;
-      font-size: 1.02rem;
-    }
-    /* Modal Editor Styles */
-    .modal-editor {
-      display: none;
-      position: fixed;
-      z-index: 1100;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(30,40,80,0.35);
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease;
-    }
-    .modal-editor.closing {
-      animation: fadeOut 0.25s ease forwards;
-    }
-    .modal-editor-content {
-      background: #fff;
-      max-width: 950px;
-      width: 98%;
-      padding: 32px 24px 24px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
-      max-height: 92vh;
-      overflow-y: auto;
-      animation: slideIn 0.3s ease;
-    }
-    .modal-editor-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-    .modal-editor-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1a2340;
-      margin: 0;
-    }
-    .modal-editor-close {
-      cursor: pointer;
-      font-size: 28px;
-      color: #999;
-      background: none;
-      border: none;
-      line-height: 1;
-      margin-left: 16px;
-      transition: color 0.18s;
-    }
-    .modal-editor-close:hover {
-      color: #e74c3c;
-    }
-    .editor-table {
+    /* Tabela Editável (Aprovada) */
+    .tabela-editavel {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 22px;
-      font-size: 1.01rem;
+      margin-bottom: 18px;
+      font-size: 1.04rem;
     }
-    .editor-table th, .editor-table td {
+    .tabela-editavel th, .tabela-editavel td {
       padding: 8px 10px;
       border-bottom: 1px solid #eaeaea;
       text-align: left;
     }
-    .editor-table th {
+    .tabela-editavel th {
       background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
     }
-    .editor-table input {
+    .tabela-editavel input[type="text"] {
       width: 100%;
-      padding: 5px 6px;
+      box-sizing: border-box;
+      padding: 6px 8px;
       border: 1px solid #b7b9c6;
       border-radius: 4px;
       font-size: 1rem;
       background: #f7f8fa;
       color: #222;
-      box-sizing: border-box;
+      transition: border 0.18s;
     }
-    .editor-table input:focus {
+    .tabela-editavel input[type="text"]:focus {
       outline: 2px solid #f9b233;
       background: #fffbe7;
     }
-    .btn-salvar-edicao, .btn-cancelar-edicao {
+    .btn-salvar-edicao {
       padding: 10px 24px;
       font-size: 1.08rem;
       font-weight: 700;
       border-radius: 6px;
       border: none;
       cursor: pointer;
-      margin-right: 12px;
       margin-top: 8px;
-      transition: background 0.18s;
-    }
-    .btn-salvar-edicao {
       background: #4bb543;
       color: #fff;
+      transition: background 0.18s;
     }
     .btn-salvar-edicao:hover {
       background: #399a36;
     }
-    .btn-cancelar-edicao {
-      background: #e74c3c;
-      color: #fff;
+    /* Tabela Somente Leitura (Reprovada) */
+    .tabela-readonly {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      font-size: 1.04rem;
     }
-    .btn-cancelar-edicao:hover {
-      background: #b93a2e;
+    .tabela-readonly th, .tabela-readonly td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .tabela-readonly th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .btn-download-xlsx {
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      background: #4bb543;
+      color: #fff;
+      transition: background 0.18s;
+      display: inline-block;
+    }
+    .btn-download-xlsx:hover {
+      background: #399a36;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -447,18 +415,13 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .nivel-item {
-        margin-right: 12px;
-        font-size: 0.95rem;
+      .indicador-label {
+        font-size: 0.85rem;
+        max-width: 60px;
       }
-      .motivo-item {
-        padding: 12px;
+      .tabela-editavel th, .tabela-editavel td, .tabela-readonly th, .tabela-readonly td {
+        padding: 6px 4px;
         font-size: 0.98rem;
-      }
-      .modal-editor-content {
-        width: 99%;
-        padding: 14px 2px 12px 2px;
-        max-height: 96vh;
       }
     }
   </style>
@@ -475,6 +438,101 @@
       window.location.href = 'upload-tabela.html';
     }
 
+    // Função para gerar tabela editável para status 'aprovada'
+    function gerarTabelaEditavel(arquivo) {
+      var dados = [
+        { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1', preco: '25,90' },
+        { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca premium', preco: '8,50' },
+        { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal refinado', preco: '7,20' },
+        { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado', preco: '4,90' },
+        { sku: '56789', nome: 'Café Pilão 500g', descricao: 'Café torrado e moído', preco: '16,90' },
+        { sku: '67890', nome: 'Macarrão Renata Espaguete 500g', descricao: 'Massa de trigo', preco: '5,80' },
+        { sku: '78901', nome: 'Leite Longa Vida Italac 1L', descricao: 'Leite UHT integral', preco: '4,50' },
+        { sku: '89012', nome: 'Farinha de Trigo Dona Benta 1kg', descricao: 'Farinha de trigo especial', preco: '6,20' },
+        { sku: '90123', nome: 'Sabão em Pó Omo 800g', descricao: 'Sabão em pó para roupas', preco: '18,90' },
+        { sku: '11223', nome: 'Detergente Ypê 500ml', descricao: 'Detergente líquido', preco: '2,90' }
+      ];
+      var html = '<table class="tabela-editavel" aria-label="Tabela Editável">';
+      html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th></tr></thead><tbody>';
+      for (var i = 0; i < dados.length; i++) {
+        html += '<tr>' +
+          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
+          '<td><input type="text" value="' + dados[i].nome + '"></td>' +
+          '<td><input type="text" value="' + dados[i].descricao + '"></td>' +
+          '<td><input type="text" value="' + dados[i].preco + '"></td>' +
+        '</tr>';
+      }
+      html += '</tbody></table>';
+      html += '<button class="btn-salvar-edicao" onclick="alert(\'Alterações salvas com sucesso!\')">Salvar Alterações</button>';
+      return html;
+    }
+
+    // Função para gerar tabela somente leitura para status 'reprovada'
+    function gerarTabelaSomenteLeitura(arquivo) {
+      var dados = [
+        { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1', preco: '25,90' },
+        { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca premium', preco: '8,50' },
+        { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal refinado', preco: '7,20' },
+        { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado', preco: '4,90' },
+        { sku: '56789', nome: 'Café Pilão 500g', descricao: 'Café torrado e moído', preco: '16,90' },
+        { sku: '67890', nome: 'Macarrão Renata Espaguete 500g', descricao: 'Massa de trigo', preco: '5,80' },
+        { sku: '78901', nome: 'Leite Longa Vida Italac 1L', descricao: 'Leite UHT integral', preco: '4,50' },
+        { sku: '89012', nome: 'Farinha de Trigo Dona Benta 1kg', descricao: 'Farinha de trigo especial', preco: '6,20' },
+        { sku: '90123', nome: 'Sabão em Pó Omo 800g', descricao: 'Sabão em pó para roupas', preco: '18,90' },
+        { sku: '11223', nome: 'Detergente Ypê 500ml', descricao: 'Detergente líquido', preco: '2,90' }
+      ];
+      var html = '<table class="tabela-readonly" aria-label="Tabela Somente Leitura">';
+      html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th></tr></thead><tbody>';
+      for (var i = 0; i < dados.length; i++) {
+        html += '<tr>' +
+          '<td>' + dados[i].sku + '</td>' +
+          '<td>' + dados[i].nome + '</td>' +
+          '<td>' + dados[i].descricao + '</td>' +
+          '<td>' + dados[i].preco + '</td>' +
+        '</tr>';
+      }
+      html += '</tbody></table>';
+      html += '<button class="btn-download-xlsx" onclick="baixarTabelaXLSX(\'' + arquivo + '\')">Download XLSX</button>';
+      return html;
+    }
+
+    // Função para simular download de tabela .xlsx
+    function baixarTabelaXLSX(arquivo) {
+      // Simulação: cria um arquivo blob simples
+      var conteudo = 'SKU\tNome\tDescrição\tPreço\n12345\tArroz Tio João 5kg\tArroz branco tipo 1\t25,90\n...';
+      var blob = new Blob([conteudo], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = arquivo.replace(/\.[^.]+$/, '') + '.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Função para gerar indicador de aprovação para status 'pendente'
+    function gerarIndicadorAprovacao(nivelAtual) {
+      var niveis = [
+        'Gerente Categoria Bandeira',
+        'Dir. Comercial Bandeira',
+        'Dir. Comercial Holding',
+        'VP'
+      ];
+      var html = '<div class="indicador-aprovacao">';
+      for (var i = 0; i < niveis.length; i++) {
+        html += '<div class="indicador-nivel">';
+        html += '<div class="indicador-circulo' + (i === nivelAtual ? ' ativo' : '') + '">' + (i + 1) + '</div>';
+        html += '<div class="indicador-label">' + niveis[i] + '</div>';
+        html += '</div>';
+        if (i < niveis.length - 1) {
+          html += '<div class="indicador-linha' + (i < nivelAtual ? ' ativo' : '') + '"></div>';
+        }
+      }
+      html += '</div>';
+      html += '<div style="margin-top: 12px; color: #555; font-size: 1.01rem;">O círculo verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
+      return html;
+    }
+
+    // Função principal para abrir detalhes de cada status
     function abrirDetalhes(status, arquivo, data) {
       try {
         var modal = document.getElementById('modal-detalhes');
@@ -488,76 +546,27 @@
           alert('Erro: estrutura do modal inválida.');
           return;
         }
-        // Níveis de aprovação
-        var nivelAprovacao = [
-          'Gerente Categoria Bandeira',
-          'Dir. Comercial Bandeira',
-          'Dir. Comercial Holding',
-          'VP'
-        ];
-        // Mock para determinar o nível atual
-        var nivelAtual = 0;
-        if (status === 'pendente') {
-          if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
-          else if (arquivo === 'precos_maio.xlsx') nivelAtual = 3;
-          else if (arquivo === 'precos_abril.xlsx') nivelAtual = 2;
-          else nivelAtual = 0;
-        }
-        // Motivos mock
-        var motivosAprovada = {
-          'Atualização % por produto': '+2.5%',
-          'Atualização % ponderada total do fornecedor': '+2.8%',
-          'Impacto total no DRE/DLP da cia/fornecedor': 'Positivo +R$ 45.000',
-          'Peso do produto nas vendas totais do fornecedor': '12% do total',
-          'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 98.5, Objetiva: 97.2',
-          'Data da última atualização de preço do SKU': '15/04/2024'
-        };
-        var motivosReprovada = {
-          'Atualização % por produto': '+15.2% (acima do limite)',
-          'Atualização % ponderada total do fornecedor': '+13.7% (acima do limite)',
-          'Impacto total no DRE/DLP da cia/fornecedor': 'Negativo -R$ 120.000',
-          'Peso do produto nas vendas totais do fornecedor': '23% do total',
-          'ICs (Geral “Nielsen” & Objetiva) (API)': 'Nielsen: 85.3 (abaixo da meta), Objetiva: 79.1',
-          'Data da última atualização de preço do SKU': '10/01/2024'
-        };
         var html = '';
-        if (status === 'pendente') {
+        if (status === 'aprovada') {
+          modalTitle.textContent = 'Tabela Editável - ' + arquivo;
+          html += '<div><strong>Status:</strong> Aprovada</div>';
+          html += '<div style="margin: 14px 0 8px 0; font-weight: 600; color: #1a2340;">Edite os campos desejados e salve as alterações:</div>';
+          html += gerarTabelaEditavel(arquivo);
+        } else if (status === 'reprovada') {
+          modalTitle.textContent = 'Tabela Reprovada - ' + arquivo;
+          html += '<div><strong>Status:</strong> Reprovada</div>';
+          html += '<div style="margin: 14px 0 8px 0; font-weight: 600; color: #1a2340;">Tabela para correção:</div>';
+          html += gerarTabelaSomenteLeitura(arquivo);
+        } else if (status === 'pendente') {
+          // Determinar nivelAtual pelo nome do arquivo
+          var nivelAtual = 0;
+          if (arquivo === 'precos_junho.xlsx') nivelAtual = 1;
+          else if (arquivo === 'precos_maio_pendente.xlsx') nivelAtual = 2;
+          else if (arquivo === 'precos_julho.xlsx') nivelAtual = 0;
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
           html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
-          html += '<div class="nivel-aprovacao">';
-          for (var i = 0; i < nivelAprovacao.length; i++) {
-            html += '<div class="nivel-item">';
-            html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
-            html += nivelAprovacao[i];
-            html += '</div>';
-            if (i < nivelAprovacao.length - 1) {
-              html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
-            }
-          }
-          html += '</div>';
-          html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
-        } else if (status === 'aprovada') {
-          modalTitle.textContent = 'Motivos da Aprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para aprovação:</div>';
-          Object.keys(motivosAprovada).forEach(function(key) {
-            html += '<div class="motivo-item">';
-            html += '<div class="motivo-titulo">' + key + '</div>';
-            html += '<div class="motivo-valor">' + motivosAprovada[key] + '</div>';
-            html += '</div>';
-          });
-        } else if (status === 'reprovada') {
-          modalTitle.textContent = 'Motivos da Reprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Motivos para reprovação:</div>';
-          Object.keys(motivosReprovada).forEach(function(key) {
-            html += '<div class="motivo-item">';
-            html += '<div class="motivo-titulo">' + key + '</div>';
-            html += '<div class="motivo-valor">' + motivosReprovada[key] + '</div>';
-            html += '</div>';
-          });
-          html += '<button class="btn-salvar-edicao" style="margin-top:18px;" onclick="abrirEditorPlanilha(\'' + arquivo + '\')">Editar Planilha</button>';
+          html += gerarIndicadorAprovacao(nivelAtual);
         } else {
           modalTitle.textContent = 'Detalhes';
           html = '<div>Informações não disponíveis para este status.</div>';
@@ -592,70 +601,6 @@
       }
     }
 
-    // MODAL EDITOR DE PLANILHA
-    function abrirEditorPlanilha(arquivo) {
-      var modal = document.getElementById('modal-editor');
-      if (!modal) return;
-      var modalTitle = modal.querySelector('.modal-editor-title');
-      modalTitle.textContent = 'Editar Planilha - ' + arquivo;
-      // Dados mock realistas
-      var dados = [
-        { sku: '12345', produto: 'Arroz Tio João 5kg', preco_atual: 'R$ 25,90', novo_preco: 'R$ 29,90', aumento: '+15.4%', categoria: 'Alimentos' },
-        { sku: '23456', produto: 'Feijão Carioca Kicaldo 1kg', preco_atual: 'R$ 8,50', novo_preco: 'R$ 9,80', aumento: '+15.3%', categoria: 'Alimentos' },
-        { sku: '34567', produto: 'Óleo de Soja Soya 900ml', preco_atual: 'R$ 7,20', novo_preco: 'R$ 8,00', aumento: '+11.1%', categoria: 'Óleos' },
-        { sku: '45678', produto: 'Açúcar União 1kg', preco_atual: 'R$ 4,90', novo_preco: 'R$ 5,40', aumento: '+10.2%', categoria: 'Açúcar' },
-        { sku: '56789', produto: 'Café Pilão 500g', preco_atual: 'R$ 16,90', novo_preco: 'R$ 18,50', aumento: '+9.5%', categoria: 'Cafés' },
-        { sku: '67890', produto: 'Macarrão Renata Espaguete 500g', preco_atual: 'R$ 5,80', novo_preco: 'R$ 6,60', aumento: '+13.8%', categoria: 'Massas' },
-        { sku: '78901', produto: 'Leite Longa Vida Italac 1L', preco_atual: 'R$ 4,50', novo_preco: 'R$ 5,10', aumento: '+13.3%', categoria: 'Laticínios' },
-        { sku: '89012', produto: 'Farinha de Trigo Dona Benta 1kg', preco_atual: 'R$ 6,20', novo_preco: 'R$ 7,10', aumento: '+14.5%', categoria: 'Farinhas' },
-        { sku: '90123', produto: 'Sabão em Pó Omo 800g', preco_atual: 'R$ 18,90', novo_preco: 'R$ 22,00', aumento: '+16.4%', categoria: 'Limpeza' },
-        { sku: '11223', produto: 'Detergente Ypê 500ml', preco_atual: 'R$ 2,90', novo_preco: 'R$ 3,30', aumento: '+13.8%', categoria: 'Limpeza' }
-      ];
-      var tbody = '';
-      for (var i = 0; i < dados.length; i++) {
-        tbody += '<tr>' +
-          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
-          '<td><input type="text" value="' + dados[i].produto + '"></td>' +
-          '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
-          '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
-          '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
-          '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
-        '</tr>';
-      }
-      var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
-        '<thead><tr>' +
-        '<th>SKU</th><th>Produto</th><th>Preço Atual</th><th>Novo Preço</th><th>% Aumento</th><th>Categoria</th>' +
-        '</tr></thead><tbody>' + tbody + '</tbody></table>';
-      var modalBody = modal.querySelector('.modal-editor-body');
-      modalBody.innerHTML = tableHtml +
-        '<div style="margin-top:18px;">' +
-        '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
-        '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
-        '</div>';
-      modal.style.display = 'flex';
-      modal.classList.remove('closing');
-      setTimeout(function() {
-        var content = modal.querySelector('.modal-editor-content');
-        if(content) content.focus();
-      }, 100);
-    }
-
-    function fecharModalEditor() {
-      var modal = document.getElementById('modal-editor');
-      if (modal) {
-        modal.classList.add('closing');
-        setTimeout(function() {
-          modal.style.display = 'none';
-          modal.classList.remove('closing');
-        }, 250);
-      }
-    }
-
-    function salvarEdicaoPlanilha() {
-      alert('Alterações salvas com sucesso!');
-      fecharModalEditor();
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -672,22 +617,8 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           fecharModal();
-          fecharModalEditor();
         }
       });
-      // Modal editor
-      var modalEditor = document.getElementById('modal-editor');
-      if (modalEditor) {
-        modalEditor.addEventListener('mousedown', function(e) {
-          if (e.target === modalEditor) {
-            fecharModalEditor();
-          }
-        });
-        var closeBtnEditor = modalEditor.querySelector('.modal-editor-close');
-        if (closeBtnEditor) {
-          closeBtnEditor.addEventListener('click', fecharModalEditor);
-        }
-      }
     });
   </script>
 </head>
@@ -730,6 +661,18 @@
                 <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
+                <td>05/06/2024</td>
+                <td>precos_julho.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_julho.xlsx', '05/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>03/06/2024</td>
+                <td>precos_maio_pendente.xlsx</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_maio_pendente.xlsx', '03/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
                 <td><span class="status status-aprovada">Aprovada</span></td>
@@ -756,7 +699,7 @@
             <tbody>
               <tr>
                 <td><span class="status status-pendente">Pendente</span></td>
-                <td>1</td>
+                <td>3</td>
               </tr>
               <tr>
                 <td><span class="status status-aprovada">Aprovada</span></td>
@@ -780,17 +723,6 @@
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico -->
-      </div>
-    </div>
-  </div>
-  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
-    <div class="modal-editor-content" tabindex="0">
-      <div class="modal-editor-header">
-        <span class="modal-editor-title">Editar Planilha</span>
-        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
-      </div>
-      <div class="modal-editor-body">
-        <!-- Tabela editável será inserida via JS -->
       </div>
     </div>
   </div>
