@@ -516,7 +516,7 @@
       });
     }
 
-    // Passo 13/28/29/32/25: Renderizar tabela
+    // Passo 13/28/29/32/25/7: Renderizar tabela
     let ordemAtual = { coluna: null, asc: true };
     function renderizarTabela(dados) {
       const tbody = document.getElementById('tabelaSubmetidasBody');
@@ -562,7 +562,9 @@
         // Ações
         let tdAcoes = document.createElement('td');
         if (item.status === 'em_analise') {
-          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html?fornecedor=' + encodeURIComponent('${item.fornecedor}') + '&bandeira=' + encodeURIComponent('${item.bandeira}') + '&uf=' + encodeURIComponent('${item.uf}') + '&data=' + encodeURIComponent('${item.dataSubmissao}')"'>Analisar</button>`;
+          // Redireciona para analise-tabela.html com parâmetros na URL
+          const url = `analise-tabela.html?fornecedor=${encodeURIComponent(item.fornecedor)}&bandeira=${encodeURIComponent(item.bandeira)}&uf=${encodeURIComponent(item.uf)}&data=${encodeURIComponent(item.dataSubmissao)}`;
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='${url}'">Analisar</button>`;
         } else {
           tdAcoes.innerHTML = `<button class="btn-table" onclick="abrirModal(this)">Ver Detalhes</button>`;
         }
@@ -578,7 +580,7 @@
       atualizarCards(dadosFiltrados);
     }
 
-    // Passo 15/36: Inicialização
+    // Passo 15/36/6/12/18: Inicialização
     function init() {
       // Popular fornecedores
       const fornecedorSelect = document.getElementById('fornecedor');
@@ -614,7 +616,39 @@
           ordenarTabela(this.getAttribute('data-col'));
         });
       });
-      // Render inicial
+      // Passo 6/15: Processar decisões do localStorage (aprovação/reprovação)
+      try {
+        const stored = localStorage.getItem('decisoesTabelas');
+        if (stored) {
+          let decisoes = [];
+          try {
+            decisoes = JSON.parse(stored);
+            if (!Array.isArray(decisoes)) throw new Error('Estrutura inválida');
+          } catch(e) {
+            console.error('Erro ao parsear decisoesTabelas do localStorage:', e);
+            decisoes = [];
+          }
+          // Para cada decisão, atualizar o status correspondente
+          decisoes.forEach(decisao => {
+            if (!decisao || !decisao.fornecedor || !decisao.bandeira || !decisao.uf || !decisao.dataSubmissao || !decisao.acao) return;
+            const idx = tabelasSubmetidas.findIndex(item =>
+              item.fornecedor === decisao.fornecedor &&
+              item.bandeira === decisao.bandeira &&
+              item.uf === decisao.uf &&
+              item.dataSubmissao === decisao.dataSubmissao
+            );
+            if (idx !== -1) {
+              if (decisao.acao === 'aprovar') tabelasSubmetidas[idx].status = 'aprovada';
+              else if (decisao.acao === 'reprovar') tabelasSubmetidas[idx].status = 'reprovada';
+            }
+          });
+          // Limpar localStorage após processar
+          localStorage.removeItem('decisoesTabelas');
+        }
+      } catch(e) {
+        console.error('Erro ao processar decisões do localStorage:', e);
+      }
+      // Passo 18: Atualizar interface após decisões
       renderizarTabela(tabelasSubmetidas);
       atualizarCards(tabelasSubmetidas);
     }
@@ -696,5 +730,13 @@
       });
     }
   </script>
+  <div style="display:none">
+    <!-- Cards de métricas (apenas para garantir que atualizarCards funcione) -->
+    <span id="tabelasPendentes"></span>
+    <span id="variacaoMedia"></span>
+    <span id="impactoDRE"></span>
+    <span id="icNielsen"></span>
+    <span id="icObjetiva"></span>
+  </div>
 </body>
 </html>
