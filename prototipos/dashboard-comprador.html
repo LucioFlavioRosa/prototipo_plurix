@@ -434,7 +434,349 @@
       amigao: ['BA','SE','AL'],
       parana: ['PR','SP']
     };
-    // ... (demais scripts idênticos ao original)
+   const tabelasSubmetidas = [
+      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-15', status: 'em_analise', variacao: '+3.2%', impactoDRE: 2100, icNielsen: 88 },
+      { fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'MG', dataSubmissao: '2024-06-14', status: 'aprovada', variacao: '+1.8%', impactoDRE: 1800, icNielsen: 91 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Supermercados Avenida', uf: 'MS', dataSubmissao: '2024-06-13', status: 'reprovada', variacao: '-2.1%', impactoDRE: 950, icNielsen: 86 },
+      { fornecedor: 'BRF', bandeira: 'Compre Mais', uf: 'GO', dataSubmissao: '2024-06-12', status: 'em_analise', variacao: '+4.7%', impactoDRE: 1200, icNielsen: 89 },
+      { fornecedor: 'JBS', bandeira: 'Empório Dom Olívio', uf: 'RJ', dataSubmissao: '2024-06-11', status: 'aprovada', variacao: '+0.9%', impactoDRE: 800, icNielsen: 93 },
+      { fornecedor: 'Unilever', bandeira: 'Grupo Amigão', uf: 'BA', dataSubmissao: '2024-06-10', status: 'reprovada', variacao: '-3.0%', impactoDRE: 700, icNielsen: 85 },
+      { fornecedor: 'Ambev', bandeira: 'Paraná Supermercados', uf: 'SP', dataSubmissao: '2024-06-09', status: 'em_analise', variacao: '+2.2%', impactoDRE: 1100, icNielsen: 90 },
+      { fornecedor: 'Nestlé', bandeira: 'Superpão', uf: 'SC', dataSubmissao: '2024-06-08', status: 'aprovada', variacao: '+5.1%', impactoDRE: 3200, icNielsen: 91 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-07', status: 'reprovada', variacao: '-1.8%', impactoDRE: 1100, icNielsen: 89 },
+      { fornecedor: 'BRF', bandeira: 'Supermercados Avenida', uf: 'MT', dataSubmissao: '2024-06-06', status: 'em_analise', variacao: '+7.3%', impactoDRE: 2800, icNielsen: 94 },
+      { fornecedor: 'JBS', bandeira: 'Compre Mais', uf: 'DF', dataSubmissao: '2024-06-05', status: 'aprovada', variacao: '+4.0%', impactoDRE: 2100, icNielsen: 88 },
+      { fornecedor: 'Unilever', bandeira: 'Empório Dom Olívio', uf: 'ES', dataSubmissao: '2024-06-04', status: 'reprovada', variacao: '-0.5%', impactoDRE: 500, icNielsen: 92 },
+      { fornecedor: 'Ambev', bandeira: 'Grupo Amigão', uf: 'SE', dataSubmissao: '2024-06-03', status: 'em_analise', variacao: '+2.8%', impactoDRE: 1300, icNielsen: 87 },
+      { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-02', status: 'aprovada', variacao: '+3.7%', impactoDRE: 1700, icNielsen: 90 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Superpão', uf: 'RS', dataSubmissao: '2024-06-01', status: 'reprovada', variacao: '-2.6%', impactoDRE: 600, icNielsen: 86 }
+    ];
+
+    // Passo 36: Fornecedores reais
+    const fornecedores = ['Ambev', 'Nestlé', 'Coca-Cola', 'BRF', 'JBS', 'Unilever'];
+
+    // Passo 19: Gerar dados fictícios para o modal
+    function gerarDadosModal(fornecedor, bandeira, uf, data) {
+      // Dados fictícios baseados no fornecedor
+      const exemplos = {
+        'Ambev': [
+          { sku: 'AMB001', descricao: 'Cerveja Brahma Lata 350ml', precoAntigo: 2.50, precoNovo: 2.65 },
+          { sku: 'AMB002', descricao: 'Guaraná Antarctica 2L', precoAntigo: 6.90, precoNovo: 7.10 },
+          { sku: 'AMB003', descricao: 'Skol Pilsen 269ml', precoAntigo: 2.10, precoNovo: 2.20 }
+        ],
+        'Nestlé': [
+          { sku: 'NES001', descricao: 'Leite Ninho 400g', precoAntigo: 11.90, precoNovo: 12.50 },
+          { sku: 'NES002', descricao: 'Nescau 2.0 400g', precoAntigo: 7.50, precoNovo: 7.90 },
+          { sku: 'NES003', descricao: 'Chocolate Alpino 90g', precoAntigo: 6.80, precoNovo: 7.20 }
+        ],
+        'Coca-Cola': [
+          { sku: 'COC001', descricao: 'Coca-Cola 2L', precoAntigo: 8.00, precoNovo: 8.30 },
+          { sku: 'COC002', descricao: 'Fanta Laranja 350ml', precoAntigo: 2.90, precoNovo: 3.10 },
+          { sku: 'COC003', descricao: 'Sprite 2L', precoAntigo: 7.80, precoNovo: 7.95 }
+        ],
+        'BRF': [
+          { sku: 'BRF001', descricao: 'Presunto Sadia 200g', precoAntigo: 7.20, precoNovo: 7.60 },
+          { sku: 'BRF002', descricao: 'Mortadela Perdigão 500g', precoAntigo: 8.90, precoNovo: 9.10 },
+          { sku: 'BRF003', descricao: 'Linguiça Calabresa Sadia 1kg', precoAntigo: 22.50, precoNovo: 23.00 }
+        ],
+        'JBS': [
+          { sku: 'JBS001', descricao: 'Frango Seara Congelado 1kg', precoAntigo: 12.90, precoNovo: 13.20 },
+          { sku: 'JBS002', descricao: 'Hambúrguer Seara 56g', precoAntigo: 1.80, precoNovo: 1.90 },
+          { sku: 'JBS003', descricao: 'Carne Moída Friboi 500g', precoAntigo: 18.00, precoNovo: 18.50 }
+        ],
+        'Unilever': [
+          { sku: 'UNI001', descricao: 'Sabão em Pó OMO 800g', precoAntigo: 13.90, precoNovo: 14.30 },
+          { sku: 'UNI002', descricao: 'Maionese Hellmann’s 500g', precoAntigo: 8.50, precoNovo: 8.80 },
+          { sku: 'UNI003', descricao: 'Desodorante Rexona Aerosol', precoAntigo: 10.90, precoNovo: 11.10 }
+        ]
+      };
+      let lista = exemplos[fornecedor] || exemplos['Ambev'];
+      return lista.map(item => {
+        let variacao = (((item.precoNovo - item.precoAntigo) / item.precoAntigo) * 100).toFixed(1);
+        let variacaoStr = (variacao >= 0 ? '+' : '') + variacao.replace('.', ',') + '%';
+        return {
+          sku: item.sku,
+          descricao: item.descricao,
+          precoAntigo: formatarMoeda(item.precoAntigo),
+          precoNovo: formatarMoeda(item.precoNovo),
+          variacao: variacaoStr,
+          dataSubmissao: formatarData(data)
+        };
+      });
+    }
+
+    // Passo 26: Formatar data para DD/MM/YYYY
+    function formatarData(dataISO) {
+      if (!dataISO) return '';
+      const [ano, mes, dia] = dataISO.split('-');
+      return dia + '/' + mes + '/' + ano;
+    }
+
+    // Passo 27: Formatar moeda
+    function formatarMoeda(valor) {
+      return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/\d(?=(\d{3})+,)/g, '$&.');
+    }
+
+    // Passo 30: Estilo de status
+    function aplicarEstiloStatus(status) {
+      if (status === 'em_analise') return 'badge badge-analise';
+      if (status === 'aprovada') return 'badge badge-aprovada';
+      if (status === 'reprovada') return 'badge badge-reprovada';
+      return '';
+    }
+
+    // Passo 22: Atualizar cards de métricas
+    function atualizarCards(dados) {
+      // Tabelas pendentes
+      const pendentes = dados.filter(item => item.status === 'em_analise').length;
+      document.getElementById('tabelasPendentes').textContent = pendentes;
+      // Variação média
+      let variacoes = dados.map(item => parseFloat(item.variacao.replace('%','').replace(',','.')));
+      let mediaVariacao = variacoes.length ? (variacoes.reduce((a,b)=>a+b,0)/variacoes.length) : 0;
+      document.getElementById('variacaoMedia').textContent = (mediaVariacao >= 0 ? '+' : '') + mediaVariacao.toFixed(1).replace('.', ',') + '%';
+      // Impacto DRE
+      let impacto = dados.map(item => Number(item.impactoDRE));
+      let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
+      document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
+      // IC Nielsen (Média)
+      let icN = dados.map(item => Number(item.icNielsen));
+      let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
+      document.getElementById('icNielsen').textContent = Math.round(mediaICN);
+      // IC Objetiva (Média) - simulação: igual ao IC Nielsen para efeito visual
+      document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
+    }
+
+    // Passo 12: Filtrar tabelas
+    function filtrarTabelas() {
+      const fornecedor = document.getElementById('fornecedor').value;
+      const bandeira = document.getElementById('bandeira').value;
+      const uf = document.getElementById('uf').value;
+      const status = document.getElementById('status').value;
+      const data = document.getElementById('dataFiltro').value;
+      return tabelasSubmetidas.filter(item => {
+        let ok = true;
+        if (fornecedor && item.fornecedor !== fornecedor) ok = false;
+        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) ok = false;
+        if (uf && item.uf !== uf) ok = false;
+        if (status && item.status !== status) ok = false;
+        if (data && item.dataSubmissao < data) ok = false;
+        return ok;
+      });
+    }
+
+    // Passo 13/28/29/32/25/7: Renderizar tabela
+    let ordemAtual = { coluna: null, asc: true };
+    function renderizarTabela(dados) {
+      const tbody = document.getElementById('tabelaSubmetidasBody');
+      tbody.innerHTML = '';
+      if (!dados.length) {
+        let tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.colSpan = 9;
+        td.style.textAlign = 'center';
+        td.style.padding = '20px';
+        td.style.color = '#888';
+        td.textContent = 'Nenhuma tabela encontrada com os filtros selecionados.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+      dados.forEach(item => {
+        let tr = document.createElement('tr');
+        tr.innerHTML =
+          `<td>${item.fornecedor}</td>`+
+          `<td>${item.bandeira}</td>`+
+          `<td>${item.uf}</td>`+
+          `<td>${formatarData(item.dataSubmissao)}</td>`;
+        // Variação (%) com cor
+        let tdVar = document.createElement('td');
+        tdVar.textContent = item.variacao;
+        tdVar.style.color = item.variacao.startsWith('+') ? '#d4380d' : '#16a34a';
+        tr.appendChild(tdVar);
+        // Impacto DRE
+        let tdDRE = document.createElement('td');
+        tdDRE.textContent = formatarMoeda(Number(item.impactoDRE));
+        tr.appendChild(tdDRE);
+        // IC Nielsen
+        let tdIC = document.createElement('td');
+        tdIC.textContent = item.icNielsen;
+        tr.appendChild(tdIC);
+        // Status badge
+        let tdStatus = document.createElement('td');
+        const badgeClass = item.status === 'em_analise' ? 'badge-analise' : item.status === 'aprovada' ? 'badge-aprovada' : 'badge-reprovada';
+        const statusTexto = item.status === 'em_analise' ? 'Em Análise' : item.status === 'aprovada' ? 'Aprovada' : 'Reprovada';
+        tdStatus.innerHTML = `<span class="badge ${badgeClass}">${statusTexto}</span>`;
+        tr.appendChild(tdStatus);
+        // Ações
+        let tdAcoes = document.createElement('td');
+        if (item.status === 'em_analise') {
+          // Redireciona para analise-tabela.html com parâmetros na URL
+          const url = `analise-tabela.html?fornecedor=${encodeURIComponent(item.fornecedor)}&bandeira=${encodeURIComponent(item.bandeira)}&uf=${encodeURIComponent(item.uf)}&data=${encodeURIComponent(item.dataSubmissao)}`;
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='${url}'">Analisar</button>`;
+        } else {
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="abrirModal(this)">Ver Detalhes</button>`;
+        }
+        tr.appendChild(tdAcoes);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Passo 14/23: Atualizar tabela e cards
+    function atualizarTabela() {
+      const dadosFiltrados = filtrarTabelas();
+      renderizarTabela(dadosFiltrados);
+      atualizarCards(dadosFiltrados);
+    }
+
+    // Passo 15/36/6/12/18: Inicialização
+    function init() {
+      // Popular fornecedores
+      const fornecedorSelect = document.getElementById('fornecedor');
+      fornecedorSelect.innerHTML = '<option value="">Todos</option>';
+      fornecedores.forEach(f => {
+        let opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        fornecedorSelect.appendChild(opt);
+      });
+      // Event listeners
+      document.getElementById('bandeira').addEventListener('change', function() {
+        const ufSelect = document.getElementById('uf');
+        const bandeira = this.value;
+        ufSelect.innerHTML = '<option value="">Todas</option>';
+        if (bandeira && bandeiraUF[bandeira]) {
+          bandeiraUF[bandeira].forEach(uf => {
+            let opt = document.createElement('option');
+            opt.value = uf;
+            opt.textContent = uf;
+            ufSelect.appendChild(opt);
+          });
+        }
+        atualizarTabela();
+      });
+      document.getElementById('fornecedor').addEventListener('change', atualizarTabela);
+      document.getElementById('uf').addEventListener('change', atualizarTabela);
+      document.getElementById('status').addEventListener('change', atualizarTabela);
+      document.getElementById('dataFiltro').addEventListener('change', atualizarTabela);
+      // Ordenação
+      document.querySelectorAll('.data-table th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+          ordenarTabela(this.getAttribute('data-col'));
+        });
+      });
+      // Passo 6/15: Processar decisões do localStorage (aprovação/reprovação)
+      try {
+        const stored = localStorage.getItem('decisoesTabelas');
+        if (stored) {
+          let decisoes = [];
+          try {
+            decisoes = JSON.parse(stored);
+            if (!Array.isArray(decisoes)) throw new Error('Estrutura inválida');
+          } catch(e) {
+            console.error('Erro ao parsear decisoesTabelas do localStorage:', e);
+            decisoes = [];
+          }
+          // Para cada decisão, atualizar o status correspondente
+          decisoes.forEach(decisao => {
+            if (!decisao || !decisao.fornecedor || !decisao.bandeira || !decisao.uf || !decisao.dataSubmissao || !decisao.acao) return;
+            const idx = tabelasSubmetidas.findIndex(item =>
+              item.fornecedor === decisao.fornecedor &&
+              item.bandeira === decisao.bandeira &&
+              item.uf === decisao.uf &&
+              item.dataSubmissao === decisao.dataSubmissao
+            );
+            if (idx !== -1) {
+              if (decisao.acao === 'aprovar') tabelasSubmetidas[idx].status = 'aprovada';
+              else if (decisao.acao === 'reprovar') tabelasSubmetidas[idx].status = 'reprovada';
+            }
+          });
+          // Limpar localStorage após processar
+          localStorage.removeItem('decisoesTabelas');
+        }
+      } catch(e) {
+        console.error('Erro ao processar decisões do localStorage:', e);
+      }
+      // Passo 18: Atualizar interface após decisões
+      renderizarTabela(tabelasSubmetidas);
+      atualizarCards(tabelasSubmetidas);
+    }
+    window.onload = init;
+
+    // Passo 10/20/37: Modal de detalhes
+    function abrirModal(btn) {
+      try {
+        let tr = btn.closest('tr');
+        let tds = tr.querySelectorAll('td');
+        let fornecedor = tds[0].textContent;
+        let bandeira = tds[1].textContent;
+        let uf = tds[2].textContent;
+        let data = tds[3].textContent.split('/').reverse().join('-');
+        let dados = gerarDadosModal(fornecedor, bandeira, uf, data);
+        let tbody = document.getElementById('modalTabelaBody');
+        tbody.innerHTML = '';
+        dados.forEach(item => {
+          let tr = document.createElement('tr');
+          tr.innerHTML = `<td>${item.sku}</td><td>${item.descricao}</td><td>${item.precoAntigo}</td><td>${item.precoNovo}</td><td>${item.variacao}</td><td>${item.dataSubmissao}</td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('modalDetalhes').style.display = 'block';
+      } catch(e) {
+        console.error('Erro ao abrir modal:', e);
+      }
+    }
+    function fecharModal() {
+      document.getElementById('modalDetalhes').style.display = 'none';
+    }
+    // Passo 33: Fechar modal ao clicar fora
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalDetalhes');
+      if (event.target === modal) {
+        fecharModal();
+      }
+    };
+    // Passo 34: Resetar filtros
+    function resetarFiltros() {
+      document.getElementById('fornecedor').value = '';
+      document.getElementById('bandeira').value = '';
+      document.getElementById('uf').innerHTML = '<option value="">Todas</option>';
+      document.getElementById('status').value = '';
+      document.getElementById('dataFiltro').value = '';
+      atualizarTabela();
+    }
+    // Passo 39: Ordenação da tabela
+    function ordenarTabela(coluna) {
+      let dados = filtrarTabelas();
+      if (ordemAtual.coluna === coluna) {
+        ordemAtual.asc = !ordemAtual.asc;
+      } else {
+        ordemAtual.coluna = coluna;
+        ordemAtual.asc = true;
+      }
+      dados.sort((a, b) => {
+        let va = a[coluna], vb = b[coluna];
+        if (coluna === 'impactoDRE' || coluna === 'icNielsen') {
+          va = Number(va); vb = Number(vb);
+        }
+        if (coluna === 'variacao') {
+          va = parseFloat(va.replace('%','').replace(',','.'));
+          vb = parseFloat(vb.replace('%','').replace(',','.'));
+        }
+        if (coluna === 'dataSubmissao') {
+          va = va; vb = vb;
+        }
+        if (va < vb) return ordemAtual.asc ? -1 : 1;
+        if (va > vb) return ordemAtual.asc ? 1 : -1;
+        return 0;
+      });
+      renderizarTabela(dados);
+      // Atualizar indicadores visuais
+      document.querySelectorAll('.data-table th').forEach(th => {
+        th.classList.remove('sort-asc','sort-desc');
+        if (th.getAttribute('data-col') === coluna) {
+          th.classList.add(ordemAtual.asc ? 'sort-asc' : 'sort-desc');
+        }
+      });
+    }
   </script>
   <div style="display:none">
     <!-- Cards de métricas (apenas para garantir que atualizarCards funcione) -->
