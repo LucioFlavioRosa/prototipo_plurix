@@ -201,6 +201,128 @@
       .main-content { padding: 0 2vw 18px 2vw; }
     }
   </style>
+  <script>
+    // Dados de Fornecedores, Bandeiras e UFs
+    const fornecedores = [
+      { nome: 'Ambev', bandeiras: [
+        { nome: 'Superpão', ufs: ['PR', 'SC', 'RS'] },
+        { nome: 'Boa Supermercados', ufs: ['SP', 'MG'] },
+        { nome: 'Supermercados Avenida', ufs: ['MS', 'MT'] },
+        { nome: 'Compre Mais', ufs: ['GO', 'DF', 'TO'] },
+        { nome: 'Empório Dom Olívio', ufs: ['RJ', 'ES'] },
+        { nome: 'Grupo Amigão', ufs: ['BA', 'SE', 'AL'] },
+        { nome: 'Paraná Supermercados', ufs: ['PR', 'SP'] }
+      ] },
+      { nome: 'BRF', bandeiras: [
+        { nome: 'Superpão', ufs: ['PR', 'SC', 'RS'] },
+        { nome: 'Boa Supermercados', ufs: ['SP', 'MG'] }
+      ] },
+      { nome: 'Nestlé', bandeiras: [
+        { nome: 'Empório Dom Olívio', ufs: ['RJ', 'ES'] },
+        { nome: 'Paraná Supermercados', ufs: ['PR', 'SP'] }
+      ] },
+      { nome: 'JBS', bandeiras: [
+        { nome: 'Grupo Amigão', ufs: ['BA', 'SE', 'AL'] },
+        { nome: 'Compre Mais', ufs: ['GO', 'DF', 'TO'] }
+      ] },
+      { nome: 'Coca-Cola', bandeiras: [
+        { nome: 'Supermercados Avenida', ufs: ['MS', 'MT'] },
+        { nome: 'Superpão', ufs: ['PR', 'SC', 'RS'] }
+      ] },
+      { nome: 'Pepsico', bandeiras: [
+        { nome: 'Boa Supermercados', ufs: ['SP', 'MG'] },
+        { nome: 'Compre Mais', ufs: ['GO', 'DF', 'TO'] }
+      ] },
+      { nome: 'Unilever', bandeiras: [
+        { nome: 'Empório Dom Olívio', ufs: ['RJ', 'ES'] },
+        { nome: 'Superpão', ufs: ['PR', 'SC', 'RS'] }
+      ] }
+    ];
+    // Exemplo de tabelas submetidas
+    const tabelas = [
+      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', data: '2024-06-10', status: 'Em análise' },
+      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'SC', data: '2024-06-12', status: 'Aprovada' },
+      { fornecedor: 'Ambev', bandeira: 'Boa Supermercados', uf: 'SP', data: '2024-06-11', status: 'Reprovada' },
+      { fornecedor: 'BRF', bandeira: 'Superpão', uf: 'RS', data: '2024-06-09', status: 'Em análise' },
+      { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'SP', data: '2024-06-10', status: 'Aprovada' },
+      { fornecedor: 'JBS', bandeira: 'Grupo Amigão', uf: 'BA', data: '2024-06-08', status: 'Em análise' },
+      { fornecedor: 'Coca-Cola', bandeira: 'Supermercados Avenida', uf: 'MS', data: '2024-06-10', status: 'Em análise' },
+      { fornecedor: 'Pepsico', bandeira: 'Boa Supermercados', uf: 'MG', data: '2024-06-11', status: 'Aprovada' },
+      { fornecedor: 'Unilever', bandeira: 'Empório Dom Olívio', uf: 'RJ', data: '2024-06-09', status: 'Reprovada' }
+    ];
+    function popularFornecedores() {
+      const select = document.getElementById('filtroFornecedor');
+      select.innerHTML = '<option value="">Selecione</option>' + fornecedores.map(f => `<option value="${f.nome}">${f.nome}</option>`).join('');
+    }
+    function popularBandeiras() {
+      const fornecedor = document.getElementById('filtroFornecedor').value;
+      const select = document.getElementById('filtroBandeira');
+      select.innerHTML = '<option value="">Selecione</option>';
+      if (!fornecedor) return;
+      const f = fornecedores.find(f => f.nome === fornecedor);
+      if (f) {
+        select.innerHTML += f.bandeiras.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+      }
+      popularUFs();
+    }
+    function popularUFs() {
+      const fornecedor = document.getElementById('filtroFornecedor').value;
+      const bandeira = document.getElementById('filtroBandeira').value;
+      const select = document.getElementById('filtroUF');
+      select.innerHTML = '<option value="">Selecione</option>';
+      if (!fornecedor || !bandeira) return;
+      const f = fornecedores.find(f => f.nome === fornecedor);
+      if (f) {
+        const b = f.bandeiras.find(b => b.nome === bandeira);
+        if (b) {
+          select.innerHTML += b.ufs.map(uf => `<option value="${uf}">${uf}</option>`).join('');
+        }
+      }
+    }
+    function filtrarTabelas() {
+      const fornecedor = document.getElementById('filtroFornecedor').value;
+      const bandeira = document.getElementById('filtroBandeira').value;
+      const uf = document.getElementById('filtroUF').value;
+      const data = document.getElementById('filtroData').value;
+      let filtradas = tabelas.filter(t => {
+        return (!fornecedor || t.fornecedor === fornecedor) &&
+               (!bandeira || t.bandeira === bandeira) &&
+               (!uf || t.uf === uf) &&
+               (!data || t.data >= data);
+      });
+      const tbody = document.getElementById('tabelasAvaliacao');
+      tbody.innerHTML = '';
+      filtradas.forEach(t => {
+        let acoes = '';
+        if (t.status === 'Em análise') {
+          acoes = `<button class='btn-table' onclick="avaliarTabela('${t.fornecedor}','${t.bandeira}','${t.uf}','${t.data}')">Avaliar</button>`;
+        }
+        tbody.innerHTML += `<tr><td>${t.fornecedor}</td><td>${t.bandeira}</td><td>${t.uf}</td><td>${t.data}</td><td>${t.status}</td><td>${acoes}</td></tr>`;
+      });
+    }
+    function avaliarTabela(fornecedor, bandeira, uf, data) {
+      // Salva seleção no localStorage para a próxima página
+      localStorage.setItem('analise_fornecedor', fornecedor);
+      localStorage.setItem('analise_bandeira', bandeira);
+      localStorage.setItem('analise_uf', uf);
+      localStorage.setItem('analise_data', data);
+      window.location.href = 'analise-tabela.html';
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      popularFornecedores();
+      document.getElementById('filtroFornecedor').addEventListener('change', function() {
+        popularBandeiras();
+        filtrarTabelas();
+      });
+      document.getElementById('filtroBandeira').addEventListener('change', function() {
+        popularUFs();
+        filtrarTabelas();
+      });
+      document.getElementById('filtroUF').addEventListener('change', filtrarTabelas);
+      document.getElementById('filtroData').addEventListener('change', filtrarTabelas);
+      filtrarTabelas();
+    });
+  </script>
 </head>
 <body>
   <div class="layout">
@@ -218,30 +340,18 @@
     </aside>
     <main class="main-content">
       <header class="main-header">Dashboard do Comprador</header>
-      <form class="filters" aria-label="Filtros de pesquisa">
+      <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
         <label>Fornecedor:
-          <select>
-            <option>Todos</option>
-            <option>Fornecedor A</option>
-            <option>Fornecedor B</option>
-          </select>
+          <select id="filtroFornecedor"></select>
         </label>
         <label>Bandeira:
-          <select>
-            <option>Todas</option>
-            <option>SuperMais</option>
-            <option>Maxi</option>
-          </select>
+          <select id="filtroBandeira"></select>
         </label>
         <label>UF:
-          <select>
-            <option>Todas</option>
-            <option>SP</option>
-            <option>MG</option>
-          </select>
+          <select id="filtroUF"></select>
         </label>
         <label>Data:
-          <input type="date">
+          <input type="date" id="filtroData">
         </label>
       </form>
       <section class="card-grid">
@@ -267,51 +377,20 @@
         </div>
       </section>
       <section class="table-section">
-        <div class="section-title">Tabelas Pendentes de Aprovação</div>
-        <table class="data-table" aria-label="Tabelas pendentes">
+        <div class="section-title">Tabelas Submetidas</div>
+        <table class="data-table" aria-label="Tabelas submetidas">
           <thead>
             <tr>
               <th>Fornecedor</th>
               <th>Bandeira</th>
               <th>UF</th>
               <th>Data Submissão</th>
-              <th>Variação (%)</th>
-              <th>Impacto DRE</th>
-              <th>IC Nielsen</th>
+              <th>Status de Avaliação</th>
               <th>Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Fornecedor A</td>
-              <td>SuperMais</td>
-              <td>SP</td>
-              <td>2024-06-10</td>
-              <td style="color:#d4380d;">+5,1%</td>
-              <td>R$ 3.200</td>
-              <td>91</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>Fornecedor B</td>
-              <td>Maxi</td>
-              <td>MG</td>
-              <td>2024-06-09</td>
-              <td style="color:#16a34a;">-1,8%</td>
-              <td>R$ 1.100</td>
-              <td>89</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
-            <tr>
-              <td>Fornecedor C</td>
-              <td>SuperMais</td>
-              <td>SP</td>
-              <td>2024-06-08</td>
-              <td style="color:#d4380d;">+7,3%</td>
-              <td>R$ 2.800</td>
-              <td>94</td>
-              <td><button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button></td>
-            </tr>
+          <tbody id="tabelasAvaliacao">
+            <!-- Preenchido dinamicamente -->
           </tbody>
         </table>
       </section>
