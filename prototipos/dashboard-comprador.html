@@ -562,7 +562,7 @@
         // Ações
         let tdAcoes = document.createElement('td');
         if (item.status === 'em_analise') {
-          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html'">Analisar</button>`;
+          tdAcoes.innerHTML = `<button class="btn-table" onclick="window.location.href='analise-tabela.html?fornecedor=' + encodeURIComponent('${item.fornecedor}') + '&bandeira=' + encodeURIComponent('${item.bandeira}') + '&uf=' + encodeURIComponent('${item.uf}') + '&data=' + encodeURIComponent('${item.dataSubmissao}')"'>Analisar</button>`;
         } else {
           tdAcoes.innerHTML = `<button class="btn-table" onclick="abrirModal(this)">Ver Detalhes</button>`;
         }
