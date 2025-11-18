@@ -177,20 +177,90 @@
       margin: 0 auto;
       position: relative;
     }
-    @media (max-width: 1000px) {
-      .main-content {
-        padding: 0 4vw 24px 4vw;
-      }
-      .sidebar {
-        width: 60px;
-        padding: 10px 0;
-      }
-      .sidebar nav a {
-        font-size: 0.95rem;
-        padding: 10px 10px;
-        text-align: center;
-      }
-      .sidebar img { width: 38px; }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+      background: rgba(0,0,0,0.35);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 24px 24px 24px;
+      max-width: 700px;
+      width: 95vw;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+      position: relative;
+      animation: fadeIn 0.2s;
+    }
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a6ae5;
+      margin-bottom: 18px;
+    }
+    .modal-section {
+      margin-bottom: 20px;
+    }
+    .modal-section-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+    .modal .btn-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: #f5f6fa;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
+      color: #1a1a1a;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.15s;
+    }
+    .modal .btn-close:hover {
+      background: #eaf2ff;
+    }
+    .modal-indicadores-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    .modal-indicadores-table th, .modal-indicadores-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.98rem;
+      text-align: left;
+    }
+    .modal-indicadores-table th {
+      background: #f5f6fa;
+      font-weight: 700;
+    }
+    .modal-sugestoes {
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #1a1a1a;
+      font-size: 1.04rem;
+      margin-top: 10px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
@@ -198,6 +268,7 @@
       .main-content { padding: 0 2vw 18px 2vw; }
       .panel-header { flex-direction: column; gap: 8px; }
       .chart-container { max-width: 98vw; }
+      .modal-content { padding: 16px 5vw 16px 5vw; }
     }
   </style>
   <script>
@@ -236,6 +307,133 @@
         ctx.restore();
       }
     });
+
+    // Modal de Análise Detalhada do SKU
+    function openSkuModal(sku) {
+      // Exemplo de dados dinâmicos para o SKU
+      var historicoPreco = {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        data: [19.9, 20.1, 20.5, 21.0, 21.2, 21.5]
+      };
+      var concorrentes = {
+        labels: ['Fornecedor A', 'Fornecedor B', 'Fornecedor C'],
+        data: [21.5, 20.9, 21.1]
+      };
+      var indicadores = {
+        precoNovo: 21.5,
+        precoMercado: 20.9,
+        variacao: 8.0,
+        variacaoPonderada: 5.2,
+        impactoDRE: 350,
+        pesoVendas: '2.5%',
+        icNielsen: 95,
+        icObjetiva: 92,
+        dataUltimaAtualizacao: '2024-06-05',
+        margemBruta: 18.2
+      };
+      // Preencher os gráficos
+      setTimeout(function(){
+        renderHistoricoPreco(historicoPreco);
+        renderConcorrentes(concorrentes);
+        renderIndicadores(indicadores);
+        renderSugestoes(indicadores);
+      }, 100);
+      document.getElementById('skuModal').style.display = 'flex';
+    }
+    function closeSkuModal() {
+      document.getElementById('skuModal').style.display = 'none';
+    }
+    function renderHistoricoPreco(historico) {
+      var canvas = document.getElementById('modalChartHistorico');
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // Eixos
+      ctx.strokeStyle = '#eaeaea';
+      ctx.beginPath();
+      ctx.moveTo(40, 20); ctx.lineTo(40, 180); ctx.lineTo(370, 180);
+      ctx.stroke();
+      // Linha
+      ctx.strokeStyle = '#1a6ae5';
+      ctx.beginPath();
+      for(var i=0;i<historico.data.length;i++){
+        var x = 40 + i*((330)/(historico.data.length-1));
+        var y = 180 - ((historico.data[i]-19)/(22-19))*150;
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // Pontos
+      ctx.fillStyle = '#1a6ae5';
+      for(var i=0;i<historico.data.length;i++){
+        var x = 40 + i*((330)/(historico.data.length-1));
+        var y = 180 - ((historico.data[i]-19)/(22-19))*150;
+        ctx.beginPath(); ctx.arc(x,y,4,0,2*Math.PI); ctx.fill();
+        ctx.font = '11px Helvetica';
+        ctx.fillText('R$ '+historico.data[i].toFixed(2), x-18, y-10);
+      }
+      // Labels
+      ctx.fillStyle = '#222';
+      for(var i=0;i<historico.labels.length;i++){
+        var x = 40 + i*((330)/(historico.labels.length-1));
+        ctx.font = '11px Helvetica';
+        ctx.fillText(historico.labels[i], x-10, 195);
+      }
+    }
+    function renderConcorrentes(concorrentes) {
+      var canvas = document.getElementById('modalChartConcorrentes');
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      var max = Math.max(...concorrentes.data, 0);
+      var barW = 60;
+      for(var i=0;i<concorrentes.data.length;i++){
+        var val = concorrentes.data[i];
+        var barH = ((val-20)/(max-20+0.01))*120;
+        ctx.fillStyle = i===0 ? '#1a6ae5' : '#888';
+        ctx.fillRect(40 + i*barW, 160-barH, barW-18, barH);
+        ctx.fillStyle = '#222';
+        ctx.font = 'bold 13px Helvetica';
+        ctx.fillText('R$'+val.toFixed(2), 40 + i*barW + 2, 150-barH);
+        ctx.font = '11px Helvetica';
+        ctx.fillText(concorrentes.labels[i], 40 + i*barW + 2, 175);
+      }
+    }
+    function renderIndicadores(ind) {
+      document.getElementById('modalIndicadores').innerHTML = `
+        <table class="modal-indicadores-table">
+          <tr><th>Preço Novo</th><td>R$ ${ind.precoNovo.toFixed(2)}</td></tr>
+          <tr><th>Preço Médio Mercado</th><td>R$ ${ind.precoMercado.toFixed(2)}</td></tr>
+          <tr><th>Variação (%)</th><td>${ind.variacao.toFixed(1)}%</td></tr>
+          <tr><th>Variação Ponderada (%)</th><td>${ind.variacaoPonderada.toFixed(1)}%</td></tr>
+          <tr><th>Impacto DRE</th><td>R$ ${ind.impactoDRE}</td></tr>
+          <tr><th>Peso nas Vendas</th><td>${ind.pesoVendas}</td></tr>
+          <tr><th>IC Nielsen</th><td>${ind.icNielsen}</td></tr>
+          <tr><th>IC Objetiva</th><td>${ind.icObjetiva}</td></tr>
+          <tr><th>Data Última Atualização</th><td>${ind.dataUltimaAtualizacao}</td></tr>
+          <tr><th>Margem Bruta</th><td>${ind.margemBruta.toFixed(1)}%</td></tr>
+        </table>
+      `;
+    }
+    function renderSugestoes(ind) {
+      var sugestoes = [];
+      if (ind.precoNovo > ind.precoMercado * 1.10) {
+        sugestoes.push('Preço está mais de 10% acima da média do mercado - Considerar reprovação.');
+      } else if (ind.precoNovo < ind.precoMercado * 0.95) {
+        sugestoes.push('Preço competitivo em relação ao mercado - Aprovação recomendada.');
+      } else {
+        sugestoes.push('Preço alinhado ao mercado.');
+      }
+      if (ind.margemBruta < 15) {
+        sugestoes.push('Margem bruta abaixo do ideal - Atenção.');
+      } else if (ind.margemBruta > 20) {
+        sugestoes.push('Margem bruta saudável.');
+      }
+      if (ind.icNielsen < 80) {
+        sugestoes.push('IC Nielsen baixo - avaliar posicionamento.');
+      } else if (ind.icNielsen > 90) {
+        sugestoes.push('IC Nielsen elevado - produto com boa aceitação.');
+      }
+      document.getElementById('modalSugestoes').innerHTML = sugestoes.map(s => '• ' + s).join('<br>');
+    }
   </script>
 </head>
 <body>
@@ -256,10 +454,10 @@
       <header class="main-header">Análise Comercial da Tabela</header>
       <section class="panel">
         <div class="panel-header">
-          <div>Fornecedor: <strong>Fornecedor A</strong></div>
-          <div>Bandeira: <strong>SuperMais</strong></div>
-          <div>UF: <strong>SP</strong></div>
-          <div>Data Submissão: <strong>2024-06-10</strong></div>
+          <div>Fornecedor: <strong id="fornecedorSelecionado">Fornecedor A</strong></div>
+          <div>Bandeira: <strong id="bandeiraSelecionada">SuperMais</strong></div>
+          <div>UF: <strong id="ufSelecionada">SP</strong></div>
+          <div>Data Submissão: <strong id="dataSubmissaoSelecionada">2024-06-10</strong></div>
         </div>
         <form class="filters" aria-label="Filtros avançados">
           <label>SKU:
@@ -292,57 +490,72 @@
               <th>Descrição</th>
               <th>Preço Antigo</th>
               <th>Preço Novo</th>
-              <th>Variação (%)</th>
+              <th>Atualização (%)</th>
+              <th>Atualização Ponderada (%)</th>
+              <th>Impacto Total DRE/DLP</th>
+              <th>Peso nas Vendas</th>
               <th>IC Nielsen</th>
               <th>IC Objetiva</th>
-              <th>Impacto DRE</th>
-              <th>Detalhes</th>
+              <th>Data Última Atualização</th>
+              <th>Análise</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>7891234567890</td>
-              <td>Arroz Tipo 1 5kg</td>
-              <td>R$ 19,90</td>
-              <td>R$ 21,50</td>
-              <td style="color:#d4380d;">+8,0%</td>
-              <td>95</td>
+              <td>7891910000197</td>
+              <td>Skol Pilsen Lata 350ml</td>
+              <td>R$ 3,19</td>
+              <td>R$ 3,49</td>
+              <td style="color:#d4380d;">+9,4%</td>
+              <td>+7,1%</td>
+              <td>R$ 8.500</td>
+              <td>3,2%</td>
               <td>92</td>
-              <td>R$ 350</td>
-              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567890')">Ver</button></td>
+              <td>89</td>
+              <td>2024-06-07</td>
+              <td><button class="btn-drill" onclick="openSkuModal('7891910000197')">Analisar</button></td>
             </tr>
             <tr>
-              <td>7891234567891</td>
-              <td>Feijão Carioca 1kg</td>
-              <td>R$ 8,50</td>
-              <td>R$ 8,40</td>
-              <td style="color:#16a34a;">-1,2%</td>
+              <td>7891149100011</td>
+              <td>Brahma Duplo Malte 350ml</td>
+              <td>R$ 3,49</td>
+              <td>R$ 3,69</td>
+              <td style="color:#d4380d;">+5,7%</td>
+              <td>+4,2%</td>
+              <td>R$ 6.200</td>
+              <td>2,7%</td>
+              <td>90</td>
+              <td>87</td>
+              <td>2024-06-06</td>
+              <td><button class="btn-drill" onclick="openSkuModal('7891149100011')">Analisar</button></td>
+            </tr>
+            <tr>
+              <td>7891991000015</td>
+              <td>Guaraná Antarctica 2L</td>
+              <td>R$ 7,99</td>
+              <td>R$ 8,49</td>
+              <td style="color:#d4380d;">+6,3%</td>
+              <td>+5,0%</td>
+              <td>R$ 4.700</td>
+              <td>1,9%</td>
               <td>88</td>
               <td>85</td>
-              <td>R$ 120</td>
-              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567891')">Ver</button></td>
+              <td>2024-06-05</td>
+              <td><button class="btn-drill" onclick="openSkuModal('7891991000015')">Analisar</button></td>
             </tr>
             <tr>
-              <td>7891234567892</td>
-              <td>Açúcar Refinado 1kg</td>
-              <td>R$ 4,10</td>
-              <td>R$ 4,30</td>
-              <td style="color:#d4380d;">+4,9%</td>
-              <td>91</td>
-              <td>87</td>
-              <td>R$ 80</td>
-              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567892')">Ver</button></td>
-            </tr>
-            <tr>
-              <td>7891234567893</td>
-              <td>Óleo de Soja 900ml</td>
-              <td>R$ 7,80</td>
-              <td>R$ 8,10</td>
-              <td style="color:#d4380d;">+3,8%</td>
-              <td>90</td>
-              <td>89</td>
-              <td>R$ 60</td>
-              <td><button class="btn-drill" onclick="alert('Drill-down SKU 7891234567893')">Ver</button></td>
+              <td>7894900011517</td>
+              <td>Pepsi Black 2L</td>
+              <td>R$ 7,59</td>
+              <td>R$ 7,99</td>
+              <td style="color:#d4380d;">+5,3%</td>
+              <td>+4,1%</td>
+              <td>R$ 2.900</td>
+              <td>1,1%</td>
+              <td>86</td>
+              <td>83</td>
+              <td>2024-06-04</td>
+              <td><button class="btn-drill" onclick="openSkuModal('7894900011517')">Analisar</button></td>
             </tr>
           </tbody>
         </table>
@@ -354,6 +567,29 @@
         </div>
       </section>
     </main>
+    <!-- Modal de Análise Detalhada do SKU -->
+    <div class="modal" id="skuModal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-content">
+        <button class="btn-close" onclick="closeSkuModal()" aria-label="Fechar">&times;</button>
+        <div class="modal-title" id="modalTitle">Análise Detalhada do SKU</div>
+        <div class="modal-section">
+          <div class="modal-section-title">Evolução Histórica de Preço</div>
+          <canvas id="modalChartHistorico" width="400" height="200" style="width:100%;max-width:400px;"></canvas>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">Comparação com Concorrentes</div>
+          <canvas id="modalChartConcorrentes" width="250" height="190" style="width:100%;max-width:250px;"></canvas>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">Indicadores de Performance</div>
+          <div id="modalIndicadores"></div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">Sugestões de Decisão</div>
+          <div class="modal-sugestoes" id="modalSugestoes"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
