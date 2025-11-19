@@ -13,68 +13,111 @@
       height: 100%;
       margin: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f5f6fa;
+      background: #f7f8fa;
       color: #222;
       line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+    body {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
     }
     .layout {
       display: flex;
       min-height: 100vh;
+      width: 100%;
     }
     .sidebar {
-      width: 240px;
+      width: 260px;
       background: #1a2340;
       border-right: 1px solid #eaeaea;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding-top: 32px;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
     }
-    .sidebar img {
-      width: 60px;
-      margin-bottom: 18px;
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
     }
     .sidebar nav {
       width: 100%;
       margin-top: 8px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 0;
     }
-    .sidebar a {
-      display: block;
-      width: 100%;
-      padding: 12px 32px;
-      color: #1976d2;
-      font-weight: 600;
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
       text-decoration: none;
-      border-radius: 6px 0 0 6px;
       font-size: 1.08rem;
-      transition: background 0.15s, color 0.15s;
+      font-weight: 600;
+      border-left: 4px solid transparent;
+      border-radius: 0;
+      margin-bottom: 2px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    .sidebar a.active, .sidebar a:hover {
-      background: #e0edff;
-      color: #144fa1;
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
     }
     .main-content {
       flex: 1;
-      padding: 0 40px 40px 40px;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
+      padding: 0 0 0 0;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
     .main-header {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+      background: none;
+      letter-spacing: 0.5px;
       height: 64px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #eaeaea;
-      background: #fff;
-      margin-bottom: 36px;
-      padding-left: 0;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: 1px;
+      padding: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
     .filters {
       display: flex;
@@ -84,14 +127,14 @@
     }
     .filters label {
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: #444;
       margin-right: 6px;
     }
     .filters select, .filters input[type="date"] {
-      padding: 9px 16px;
+      padding: 7px 14px;
       border-radius: 5px;
-      border: 1px solid #d1d5db;
+      border: 1px solid #b7b9c6;
       font-size: 1rem;
       background: #fff;
       color: #222;
@@ -100,8 +143,8 @@
       background: #9ca3af;
       color: #fff;
       border: none;
-      padding: 9px 20px;
-      border-radius: 6px;
+      padding: 7px 18px;
+      border-radius: 5px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
@@ -145,6 +188,13 @@
       font-weight: 600;
       margin-left: 8px;
     }
+    .panel {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 24px 24px;
+      margin-bottom: 32px;
+    }
     .table-section {
       background: #fff;
       border-radius: 14px;
@@ -154,7 +204,7 @@
     .section-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #1a2340;
       margin-bottom: 20px;
     }
     .data-table {
@@ -166,11 +216,11 @@
       font-size: 1rem;
     }
     .data-table th, .data-table td {
-      padding: 14px 12px;
+      padding: 12px 10px;
       text-align: left;
     }
     .data-table th {
-      background: #f0f2f5;
+      background: #e8eaf0;
       color: #222;
       font-weight: 700;
       border-bottom: 2px solid #eaeaea;
@@ -185,18 +235,18 @@
       background: #f9fafb;
     }
     .btn-table {
-      background: #1a6ae5;
+      background: #f9b233;
       color: #fff;
       border: none;
-      padding: 9px 20px;
-      border-radius: 6px;
+      padding: 7px 18px;
+      border-radius: 5px;
       font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
     }
     .btn-table:hover {
-      background: #144fa1;
+      background: #e1a12a;
     }
     .modal {
       position: fixed;
@@ -205,16 +255,27 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.45);
     }
     .modal-content {
       background-color: #fff;
       margin: 5% auto;
-      padding: 36px;
+      padding: 32px 24px 24px 24px;
       border-radius: 14px;
-      width: 80%;
-      max-width: 900px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      max-width: 700px;
+      width: 98vw;
+      max-height: 95vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .modal-content h2 {
+      font-size: 1.25rem;
+      color: #1a2340;
+      font-weight: 700;
+      margin-top: 0;
     }
     .close {
       color: #aaa;
@@ -222,6 +283,7 @@
       font-size: 28px;
       font-weight: bold;
       cursor: pointer;
+      transition: color 0.2s;
     }
     .close:hover {
       color: #000;
@@ -258,30 +320,51 @@
     .sort-desc::after {
       content: ' ▼';
     }
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.97rem;
+    }
+    .modal-table th, .modal-table td {
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .modal-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .modal-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-table tr:last-child {
+      border-bottom: none;
+    }
     @media (max-width: 1000px) {
-      .main-content {
-        padding: 0 4vw 24px 4vw;
-      }
       .sidebar {
-        width: 60px;
-        padding: 10px 0;
+        width: 70px;
+        padding-top: 12px;
       }
-      .sidebar nav a {
-        font-size: 0.95rem;
-        padding: 10px 10px;
-        text-align: center;
+      .sidebar .logo img {
+        width: 44px;
       }
-      .sidebar img { width: 38px; }
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
     }
     @media (max-width: 700px) {
-      .main-header { font-size: 1.1rem; }
-      .card-grid { grid-template-columns: 1fr; }
       .sidebar { display: none; }
-      .main-content { padding: 0 2vw 18px 2vw; }
+      .main-header { font-size: 1.1rem; }
+      .dashboard-section { padding: 0 2vw 18px 2vw; }
       .modal-content {
-        width: 95%;
-        margin: 10% auto;
-        padding: 20px;
+        padding: 16px 4px 12px 4px;
       }
       .data-table th, .data-table td {
         font-size: 0.85rem;
@@ -293,77 +376,84 @@
 <body>
   <div class="layout">
     <aside class="sidebar" aria-label="Menu principal">
-      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <div class="logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      </div>
       <nav>
         <a href="dashboard-comprador.html" class="active">Dashboard</a>
         <a href="index.html" style="color:#d4380d;">Sair</a>
       </nav>
+      <div class="bottom">&copy; 2024 Plurix</div>
     </aside>
-    <main class="main-content">
-      <header class="main-header">Dashboard do Comprador</header>
-      <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
-        <label>Fornecedor:
-          <select id="fornecedor">
-            <option value="">Todos</option>
-          </select>
-        </label>
-        <label>Bandeira:
-          <select id="bandeira">
-            <option value="">Todas</option>
-            <option value="superpao">Superpão</option>
-            <option value="boa">Boa Supermercados</option>
-            <option value="avenida">Supermercados Avenida</option>
-            <option value="compremais">Compre Mais</option>
-            <option value="emporio">Empório Dom Olívio</option>
-            <option value="amigao">Grupo Amigão</option>
-            <option value="parana">Paraná Supermercados</option>
-          </select>
-        </label>
-        <label>UF:
-          <select id="uf">
-            <option value="">Todas</option>
-          </select>
-        </label>
-        <label>Data:
-          <input type="date" id="dataFiltro">
-        </label>
-        <label>Status:
-          <select id="status">
-            <option value="">Todos</option>
-            <option value="em_analise">Em Análise</option>
-            <option value="aprovada">Aprovada</option>
-            <option value="reprovada">Reprovada</option>
-          </select>
-        </label>
-        <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
-      </form>
-      <section class="table-section">
-        <div class="section-title">Tabelas Submetidas</div>
-        <table class="data-table" aria-label="Tabelas submetidas">
-          <thead>
-            <tr>
-              <th class="sortable" data-col="fornecedor">Fornecedor</th>
-              <th class="sortable" data-col="bandeira">Bandeira</th>
-              <th class="sortable" data-col="uf">UF</th>
-              <th class="sortable" data-col="dataSubmissao">Data Submissão</th>
-              <th class="sortable" data-col="variacao">Variação (%)</th>
-              <th class="sortable" data-col="impactoDRE">Impacto DRE</th>
-              <th class="sortable" data-col="icNielsen">IC Nielsen</th>
-              <th class="sortable" data-col="status">Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaSubmetidasBody">
-          </tbody>
-        </table>
-      </section>
-    </main>
+    <div class="main-content">
+      <header class="header">
+        <h1 class="main-header">Dashboard do Comprador</h1>
+      </header>
+      <main class="dashboard-section">
+        <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
+          <label>Fornecedor:
+            <select id="fornecedor">
+              <option value="">Todos</option>
+            </select>
+          </label>
+          <label>Bandeira:
+            <select id="bandeira">
+              <option value="">Todas</option>
+              <option value="superpao">Superpão</option>
+              <option value="boa">Boa Supermercados</option>
+              <option value="avenida">Supermercados Avenida</option>
+              <option value="compremais">Compre Mais</option>
+              <option value="emporio">Empório Dom Olívio</option>
+              <option value="amigao">Grupo Amigão</option>
+              <option value="parana">Paraná Supermercados</option>
+            </select>
+          </label>
+          <label>UF:
+            <select id="uf">
+              <option value="">Todas</option>
+            </select>
+          </label>
+          <label>Data:
+            <input type="date" id="dataFiltro">
+          </label>
+          <label>Status:
+            <select id="status">
+              <option value="">Todos</option>
+              <option value="em_analise">Em Análise</option>
+              <option value="aprovada">Aprovada</option>
+              <option value="reprovada">Reprovada</option>
+            </select>
+          </label>
+          <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
+        </form>
+        <section class="table-section panel">
+          <div class="section-title">Tabelas Submetidas</div>
+          <table class="data-table" aria-label="Tabelas submetidas">
+            <thead>
+              <tr>
+                <th class="sortable" data-col="fornecedor">Fornecedor</th>
+                <th class="sortable" data-col="bandeira">Bandeira</th>
+                <th class="sortable" data-col="uf">UF</th>
+                <th class="sortable" data-col="dataSubmissao">Data Submissão</th>
+                <th class="sortable" data-col="variacao">Variação (%)</th>
+                <th class="sortable" data-col="impactoDRE">Impacto DRE</th>
+                <th class="sortable" data-col="icNielsen">IC Nielsen</th>
+                <th class="sortable" data-col="status">Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaSubmetidasBody">
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
   </div>
   <div id="modalDetalhes" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close" onclick="fecharModal()">&times;</span>
       <h2>Detalhes da Tabela Submetida</h2>
-      <table class="data-table">
+      <table class="modal-table">
         <thead>
           <tr>
             <th>SKU</th>
