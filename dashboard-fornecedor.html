@@ -546,12 +546,12 @@
           alert('Erro: estrutura do modal inválida.');
           return;
         }
-        // Dados mock para tabela
+        // Dados mock para tabela - PRODUTOS AMBEV
         var dadosTabela = [
-          { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1', preco: '25.90' },
-          { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca premium', preco: '8.50' },
-          { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal refinado', preco: '7.20' },
-          { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado', preco: '4.90' }
+          { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
+          { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
+          { sku: '7891991010848', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica 2 Litros', preco: '7.99' },
+          { sku: '7892840800011', nome: 'Pepsi Lata 350ml', descricao: 'Refrigerante Pepsi Lata 350ml', preco: '3.49' }
         ];
         // Níveis de aprovação
         var nivelAprovacao = [
@@ -678,12 +678,12 @@
 
     // Função para gerar download Excel (status aprovada)
     function gerarDownloadExcel(arquivo) {
-      // Dados mock iguais aos exibidos na tabela
+      // Dados mock iguais aos exibidos na tabela - PRODUTOS AMBEV
       var dadosTabela = [
-        { sku: '12345', nome: 'Arroz Tio João 5kg', descricao: 'Arroz branco tipo 1', preco: '25.90' },
-        { sku: '23456', nome: 'Feijão Carioca Kicaldo 1kg', descricao: 'Feijão carioca premium', preco: '8.50' },
-        { sku: '34567', nome: 'Óleo de Soja Soya 900ml', descricao: 'Óleo vegetal refinado', preco: '7.20' },
-        { sku: '45678', nome: 'Açúcar União 1kg', descricao: 'Açúcar refinado', preco: '4.90' }
+        { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
+        { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
+        { sku: '7891991010848', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica 2 Litros', preco: '7.99' },
+        { sku: '7892840800011', nome: 'Pepsi Lata 350ml', descricao: 'Refrigerante Pepsi Lata 350ml', preco: '3.49' }
       ];
       var ws_data = [
         ['SKU', 'Nome', 'Descrição', 'Preço (R$)']
@@ -715,18 +715,18 @@
       if (!modal) return;
       var modalTitle = modal.querySelector('.modal-editor-title');
       modalTitle.textContent = 'Editar Planilha - ' + arquivo;
-      // Dados mock realistas
+      // Dados mock realistas - PRODUTOS AMBEV
       var dados = [
-        { sku: '12345', produto: 'Arroz Tio João 5kg', preco_atual: 'R$ 25,90', novo_preco: 'R$ 29,90', aumento: '+15.4%', categoria: 'Alimentos' },
-        { sku: '23456', produto: 'Feijão Carioca Kicaldo 1kg', preco_atual: 'R$ 8,50', novo_preco: 'R$ 9,80', aumento: '+15.3%', categoria: 'Alimentos' },
-        { sku: '34567', produto: 'Óleo de Soja Soya 900ml', preco_atual: 'R$ 7,20', novo_preco: 'R$ 8,00', aumento: '+11.1%', categoria: 'Óleos' },
-        { sku: '45678', produto: 'Açúcar União 1kg', preco_atual: 'R$ 4,90', novo_preco: 'R$ 5,40', aumento: '+10.2%', categoria: 'Açúcar' },
-        { sku: '56789', produto: 'Café Pilão 500g', preco_atual: 'R$ 16,90', novo_preco: 'R$ 18,50', aumento: '+9.5%', categoria: 'Cafés' },
-        { sku: '67890', produto: 'Macarrão Renata Espaguete 500g', preco_atual: 'R$ 5,80', novo_preco: 'R$ 6,60', aumento: '+13.8%', categoria: 'Massas' },
-        { sku: '78901', produto: 'Leite Longa Vida Italac 1L', preco_atual: 'R$ 4,50', novo_preco: 'R$ 5,10', aumento: '+13.3%', categoria: 'Laticínios' },
-        { sku: '89012', produto: 'Farinha de Trigo Dona Benta 1kg', preco_atual: 'R$ 6,20', novo_preco: 'R$ 7,10', aumento: '+14.5%', categoria: 'Farinhas' },
-        { sku: '90123', produto: 'Sabão em Pó Omo 800g', preco_atual: 'R$ 18,90', novo_preco: 'R$ 22,00', aumento: '+16.4%', categoria: 'Limpeza' },
-        { sku: '11223', produto: 'Detergente Ypê 500ml', preco_atual: 'R$ 2,90', novo_preco: 'R$ 3,30', aumento: '+13.8%', categoria: 'Limpeza' }
+        { sku: '7891991000849', produto: 'Skol Lata 350ml', preco_atual: 'R$ 3,99', novo_preco: 'R$ 4,29', aumento: '+7.5%', categoria: 'Cervejas' },
+        { sku: '7891149100015', produto: 'Brahma Long Neck 355ml', preco_atual: 'R$ 5,49', novo_preco: 'R$ 5,99', aumento: '+9.1%', categoria: 'Cervejas' },
+        { sku: '7891991010848', produto: 'Guaraná Antarctica 2L', preco_atual: 'R$ 7,99', novo_preco: 'R$ 8,49', aumento: '+6.3%', categoria: 'Refrigerantes' },
+        { sku: '7892840800011', produto: 'Pepsi Lata 350ml', preco_atual: 'R$ 3,49', novo_preco: 'R$ 3,79', aumento: '+8.6%', categoria: 'Refrigerantes' },
+        { sku: '7896045500117', produto: 'Beats Senses 269ml', preco_atual: 'R$ 6,99', novo_preco: 'R$ 7,49', aumento: '+7.2%', categoria: 'Bebidas Alcoólicas' },
+        { sku: '7891991010893', produto: 'Guaraná Antarctica Zero 2L', preco_atual: 'R$ 8,49', novo_preco: 'R$ 8,99', aumento: '+5.9%', categoria: 'Refrigerantes' },
+        { sku: '7891149100022', produto: 'Antarctica Subzero Lata 350ml', preco_atual: 'R$ 3,89', novo_preco: 'R$ 4,19', aumento: '+7.7%', categoria: 'Cervejas' },
+        { sku: '7891991000863', produto: 'Skol Beats 269ml', preco_atual: 'R$ 7,49', novo_preco: 'R$ 7,99', aumento: '+6.7%', categoria: 'Bebidas Alcoólicas' },
+        { sku: '7891991010909', produto: 'H2OH! Limão 500ml', preco_atual: 'R$ 3,99', novo_preco: 'R$ 4,39', aumento: '+10.0%', categoria: 'Águas Saborizadas' },
+        { sku: '7892840800028', produto: 'Pepsi Black Lata 350ml', preco_atual: 'R$ 3,69', novo_preco: 'R$ 3,99', aumento: '+8.1%', categoria: 'Refrigerantes' }
       ];
       var tbody = '';
       for (var i = 0; i < dados.length; i++) {
