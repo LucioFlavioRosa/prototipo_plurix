@@ -13,7 +13,7 @@
       height: 100%;
       margin: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f7f8fa;;
+      background: #f7f8fa;
       color: #222;
     }
     .body {
@@ -41,6 +41,8 @@
     .sidebar .logo img {
       width: 120px;
       height: auto;
+      display: block;
+      margin: 0 auto;
     }
     .sidebar nav {
       flex: 1;
@@ -119,7 +121,7 @@
       margin-right: 6px;
     }
     .filters select, .filters input[type="date"] {
-      padding: 9px 16px;
+      padding: 7px 14px;
       border-radius: 5px;
       border: 1px solid #b7b9c6;
       font-size: 1rem;
@@ -203,11 +205,11 @@
       font-size: 1rem;
     }
     .data-table th, .data-table td {
-      padding: 14px 12px;
+      padding: 12px 10px;
       text-align: left;
     }
     .data-table th {
-      background: #f0f2f5;
+      background: #e8eaf0;
       color: #222;
       font-weight: 700;
       border-bottom: 2px solid #eaeaea;
@@ -300,15 +302,15 @@
         padding: 0 4vw 24px 4vw;
       }
       .sidebar {
-        width: 60px;
-        padding: 10px 0;
+        width: 70px;
+        padding: 12px 0;
       }
       .sidebar nav a {
         font-size: 0.95rem;
         padding: 10px 10px;
         text-align: center;
       }
-      .sidebar img { width: 38px; }
+      .sidebar img { width: 44px; }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
@@ -330,7 +332,9 @@
 <body>
   <div class="layout">
     <aside class="sidebar" aria-label="Menu principal">
-      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <div class="logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      </div>
       <nav>
         <a href="dashboard-comprador.html" class="active">Dashboard</a>
         <a href="index.html" style="color:#d4380d;">Sair</a>
