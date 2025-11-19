@@ -270,7 +270,7 @@
       });
       function handleFile(file) {
         // Simulação de preview de arquivo
-        preview.innerHTML = `<thead><tr><th><span class='required'>*</span>GTIN</th><th><span class='required'>*</span>Descrição</th><th><span class='required'>*</span>Preço Novo</th><th><span class='required'>*</span>Embalagem</th></tr></thead><tbody><tr><td>7891234567890</td><td>Arroz Branco 5kg</td><td>R$ 19,90</td><td>PACOTE</td></tr><tr><td>7899876543210</td><td>Feijão Carioca 1kg</td><td>R$ 7,99</td><td>PACOTE</td></tr></tbody>`;
+        preview.innerHTML = `<thead><tr><th><span class='required'>*</span>SKU</th><th><span class='required'>*</span>Descrição</th><th><span class='required'>*</span>Preço Novo</th><th><span class='required'>*</span>Embalagem</th></tr></thead><tbody><tr><td>7891234567890</td><td>Arroz Branco 5kg</td><td>R$ 19,90</td><td>PACOTE</td></tr><tr><td>7899876543210</td><td>Feijão Carioca 1kg</td><td>R$ 7,99</td><td>PACOTE</td></tr></tbody>`;
       }
       document.getElementById('formUpload').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -321,41 +321,26 @@
             <div class="checkbox-group">
               <label><input type="checkbox" name="coligadas[]" value="SC"> SC</label>
               <label><input type="checkbox" name="coligadas[]" value="PR"> PR</label>
-              <label><input type="checkbox" name="coligadas[]" value="RS"> RS</label>
+            </div>
+          </div>
+          <div class="bandeira">
+            <div class="bandeira-title">Super Mercados Avenida</div>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="coligadas[]" value="SP"> SP</label>
             </div>
           </div>
           <div class="bandeira">
             <div class="bandeira-title">Boa Supermercados</div>
             <div class="checkbox-group">
-              <label><input type="checkbox" name="coligadas[]" value="AM"> AM</label>
-              <label><input type="checkbox" name="coligadas[]" value="PA"> PA</label>
-            </div>
-          </div>
-          <div class="bandeira">
-            <div class="bandeira-title">Supermercados Avenida</div>
-            <div class="checkbox-group">
-              <label><input type="checkbox" name="coligadas[]" value="GO"> GO</label>
-              <label><input type="checkbox" name="coligadas[]" value="DF"> DF</label>
-            </div>
-          </div>
-          <div class="bandeira">
-            <div class="bandeira-title">Compre Mais</div>
-            <div class="checkbox-group">
-              <label><input type="checkbox" name="coligadas[]" value="MG"> MG</label>
               <label><input type="checkbox" name="coligadas[]" value="SP"> SP</label>
-            </div>
-          </div>
-          <div class="bandeira">
-            <div class="bandeira-title">Empório Dom Olívio</div>
-            <div class="checkbox-group">
-              <label><input type="checkbox" name="coligadas[]" value="RS"> RS</label>
             </div>
           </div>
           <div class="bandeira">
             <div class="bandeira-title">Grupo Amigão</div>
             <div class="checkbox-group">
-              <label><input type="checkbox" name="coligadas[]" value="PE"> PE</label>
-              <label><input type="checkbox" name="coligadas[]" value="BA"> BA</label>
+              <label><input type="checkbox" name="coligadas[]" value="PR"> PR</label>
+              <label><input type="checkbox" name="coligadas[]" value="SP"> SP</label>
+              <label><input type="checkbox" name="coligadas[]" value="MS"> MS</label>
             </div>
           </div>
           <div class="bandeira">
@@ -369,7 +354,7 @@
         <table class="preview-table" id="previewTable" aria-label="Preview do Arquivo">
           <thead>
             <tr>
-              <th><span class="required">*</span>GTIN</th>
+              <th><span class="required">*</span>SKU</th>
               <th><span class="required">*</span>Descrição</th>
               <th><span class="required">*</span>Preço Novo</th>
               <th><span class="required">*</span>Embalagem</th>

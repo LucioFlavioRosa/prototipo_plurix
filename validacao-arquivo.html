@@ -287,17 +287,17 @@
       </thead>
       <tbody>
         <tr>
-          <td>12</td>
-          <td>GTIN</td>
-          <td>GTIN inválido (deve conter 13 dígitos numéricos)</td>
+          <td>3</td>
+          <td>SKU</td>
+          <td>SKU inválido (deve conter 13 dígitos numéricos)</td>
         </tr>
         <tr>
-          <td>27</td>
+          <td>5</td>
           <td>Preço Novo</td>
           <td>Valor negativo não permitido</td>
         </tr>
         <tr>
-          <td>45</td>
+          <td>20</td>
           <td>Descrição</td>
           <td>Campo obrigatório não preenchido</td>
         </tr>
@@ -334,20 +334,20 @@
   <script>
     // Dados simulados da tabela de erros e dados originais (mock)
     const erros = [
-      { linha: 12, coluna: 'GTIN', descricao: 'GTIN inválido (deve conter 13 dígitos numéricos)' },
-      { linha: 27, coluna: 'Preço Novo', descricao: 'Valor negativo não permitido' },
-      { linha: 45, coluna: 'Descrição', descricao: 'Campo obrigatório não preenchido' }
+      { linha: 3, coluna: 'SKU', descricao: 'SKU inválido (deve conter 13 dígitos numéricos)' },
+      { linha: 5, coluna: 'Preço Novo', descricao: 'Valor negativo não permitido' },
+      { linha: 20, coluna: 'Descrição', descricao: 'Campo obrigatório não preenchido' }
     ];
     // Simulação dos dados originais das linhas com erro
     const dadosOriginais = {
-      12: { GTIN: '78912345678', Descrição: 'Arroz Branco 5kg', 'Preço Novo': 'R$ 19,90', Embalagem: 'PACOTE' },
-      27: { GTIN: '7899876543210', Descrição: 'Feijão Carioca 1kg', 'Preço Novo': '-7,99', Embalagem: 'PACOTE' },
-      45: { GTIN: '7891111222333', Descrição: '', 'Preço Novo': 'R$ 5,99', Embalagem: 'PACOTE' }
+      3: { SKU: '78919910008', Descrição: 'Cerveja Brahma Chopp 350ml', 'Preço Novo': 'R$ 3,49', Embalagem: 'LATA' },
+      5: { SKU: '7891991001340', Descrição: 'Refrigerante Guaraná Antarctica 2L', 'Preço Novo': '- 8,99', Embalagem: 'GARRAFA' },
+      20: { SKU: '7891991010373', Descrição: ' ', 'Preço Novo': 'R$ 6,49', Embalagem: 'GARRAFA' }
     };
     // Colunas esperadas (como upload-tabela.html)
-    const colunasTabela = ['GTIN', 'Descrição', 'Preço Novo', 'Embalagem'];
+    const colunasTabela = ['SKU', 'Descrição', 'Preço Novo', 'Embalagem'];
     // Quais campos podem ser editados
-    const camposEditaveis = ['GTIN', 'Descrição', 'Preço Novo'];
+    const camposEditaveis = ['SKU', 'Descrição', 'Preço Novo'];
 
     // Função para abrir o modal de correção
     function abrirModalCorrecao() {
@@ -401,12 +401,12 @@
       const coluna = input.getAttribute('data-coluna');
       let valido = true;
       let msg = '';
-      if (coluna === 'GTIN') {
+      if (coluna === 'SKU') {
         // Remover espaços e caracteres não numéricos
         const gtin = valor.replace(/\D/g, '');
         if (!/^\d{13}$/.test(gtin)) {
           valido = false;
-          msg = 'GTIN deve conter 13 dígitos numéricos';
+          msg = 'SKU deve conter 13 dígitos numéricos';
         }
       } else if (coluna === 'Preço Novo') {
         // Aceita formato R$ 12,34 ou 12.34 ou -12,34

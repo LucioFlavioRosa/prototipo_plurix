@@ -40,6 +40,7 @@
       box-shadow: 2px 0 8px rgba(30,40,80,0.07);
       position: relative;
       z-index: 2;
+      min-height: 100vh;
     }
     .sidebar .logo {
       display: flex;
@@ -348,6 +349,10 @@
       background-color: #fef3c7 !important;
       border-color: #f9b233 !important;
     }
+    .data-table th:nth-child(7), .data-table td:nth-child(7), .data-table th:nth-child(8), .data-table td:nth-child(8) {
+      text-align: center;
+      vertical-align: middle;
+    }
     @media (max-width: 1000px) {
       .sidebar {
         width: 70px;
@@ -404,16 +409,8 @@
             <div class="card-value" id="variacaoMedia"></div>
           </div>
           <div class="card">
-            <div class="card-title">Impacto DRE</div>
+            <div class="card-title">Impacto Médio DRE</div>
             <div class="card-value" id="impactoDRE"></div>
-          </div>
-          <div class="card">
-            <div class="card-title">IC Nielsen</div>
-            <div class="card-value" id="icNielsen"></div>
-          </div>
-          <div class="card">
-            <div class="card-title">IC Objetiva</div>
-            <div class="card-value" id="icObjetiva"></div>
           </div>
         </div>
         <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
@@ -428,8 +425,6 @@
               <option value="superpao">Superpão</option>
               <option value="boa">Boa Supermercados</option>
               <option value="avenida">Supermercados Avenida</option>
-              <option value="compremais">Compre Mais</option>
-              <option value="emporio">Empório Dom Olívio</option>
               <option value="amigao">Grupo Amigão</option>
               <option value="parana">Paraná Supermercados</option>
             </select>
@@ -437,33 +432,10 @@
           <label>UF:
             <select id="uf">
               <option value="">Todas</option>
-              <option value="AC">AC</option>
-              <option value="AL">AL</option>
-              <option value="AP">AP</option>
-              <option value="AM">AM</option>
-              <option value="BA">BA</option>
-              <option value="CE">CE</option>
-              <option value="DF">DF</option>
-              <option value="ES">ES</option>
-              <option value="GO">GO</option>
-              <option value="MA">MA</option>
-              <option value="MT">MT</option>
               <option value="MS">MS</option>
-              <option value="MG">MG</option>
-              <option value="PA">PA</option>
-              <option value="PB">PB</option>
               <option value="PR">PR</option>
-              <option value="PE">PE</option>
-              <option value="PI">PI</option>
-              <option value="RJ">RJ</option>
-              <option value="RN">RN</option>
-              <option value="RS">RS</option>
-              <option value="RO">RO</option>
-              <option value="RR">RR</option>
               <option value="SC">SC</option>
               <option value="SP">SP</option>
-              <option value="SE">SE</option>
-              <option value="TO">TO</option>
             </select>
           </label>
           <label>Data:
@@ -490,7 +462,6 @@
                 <th class="sortable" data-col="dataSubmissao">Data Submissão</th>
                 <th class="sortable" data-col="variacao">Variação (%)</th>
                 <th class="sortable" data-col="impactoDRE">Impacto DRE</th>
-                <th class="sortable" data-col="icNielsen">IC Nielsen</th>
                 <th class="sortable" data-col="status">Status</th>
                 <th>Ações</th>
               </tr>
@@ -537,32 +508,30 @@
       'superpao': 'Superpão',
       'boa': 'Boa Supermercados',
       'avenida': 'Supermercados Avenida',
-      'compremais': 'Compre Mais',
-      'emporio': 'Empório Dom Olívio',
       'amigao': 'Grupo Amigão',
       'parana': 'Paraná Supermercados'
     };
     // UFs estáticas
     const UFS = [
-      'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'
+      'PR', 'SC', 'SP', 'MS'
     ];
     // Passo 11: Estrutura de dados simulando tabelas submetidas
     const tabelasSubmetidas = [
-      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-15', status: 'em_analise', variacao: '+3.2%', impactoDRE: 2100, icNielsen: 88 },
-      { fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'MG', dataSubmissao: '2024-06-14', status: 'aprovada', variacao: '+1.8%', impactoDRE: 1800, icNielsen: 91 },
-      { fornecedor: 'Coca-Cola', bandeira: 'Supermercados Avenida', uf: 'MS', dataSubmissao: '2024-06-13', status: 'reprovada', variacao: '-2.1%', impactoDRE: 950, icNielsen: 86 },
-      { fornecedor: 'BRF', bandeira: 'Compre Mais', uf: 'GO', dataSubmissao: '2024-06-12', status: 'em_analise', variacao: '+4.7%', impactoDRE: 1200, icNielsen: 89 },
-      { fornecedor: 'JBS', bandeira: 'Empório Dom Olívio', uf: 'RJ', dataSubmissao: '2024-06-11', status: 'aprovada', variacao: '+0.9%', impactoDRE: 800, icNielsen: 93 },
-      { fornecedor: 'Unilever', bandeira: 'Grupo Amigão', uf: 'BA', dataSubmissao: '2024-06-10', status: 'reprovada', variacao: '-3.0%', impactoDRE: 700, icNielsen: 85 },
-      { fornecedor: 'Ambev', bandeira: 'Paraná Supermercados', uf: 'SP', dataSubmissao: '2024-06-09', status: 'em_analise', variacao: '+2.2%', impactoDRE: 1100, icNielsen: 90 },
-      { fornecedor: 'Nestlé', bandeira: 'Superpão', uf: 'SC', dataSubmissao: '2024-06-08', status: 'aprovada', variacao: '+5.1%', impactoDRE: 3200, icNielsen: 91 },
-      { fornecedor: 'Coca-Cola', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-07', status: 'reprovada', variacao: '-1.8%', impactoDRE: 1100, icNielsen: 89 },
-      { fornecedor: 'BRF', bandeira: 'Supermercados Avenida', uf: 'MT', dataSubmissao: '2024-06-06', status: 'em_analise', variacao: '+7.3%', impactoDRE: 2800, icNielsen: 94 },
-      { fornecedor: 'JBS', bandeira: 'Compre Mais', uf: 'DF', dataSubmissao: '2024-06-05', status: 'aprovada', variacao: '+4.0%', impactoDRE: 2100, icNielsen: 88 },
-      { fornecedor: 'Unilever', bandeira: 'Empório Dom Olívio', uf: 'ES', dataSubmissao: '2024-06-04', status: 'reprovada', variacao: '-0.5%', impactoDRE: 500, icNielsen: 92 },
-      { fornecedor: 'Ambev', bandeira: 'Grupo Amigão', uf: 'SE', dataSubmissao: '2024-06-03', status: 'em_analise', variacao: '+2.8%', impactoDRE: 1300, icNielsen: 87 },
-      { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-02', status: 'aprovada', variacao: '+3.7%', impactoDRE: 1700, icNielsen: 90 },
-      { fornecedor: 'Coca-Cola', bandeira: 'Superpão', uf: 'RS', dataSubmissao: '2024-06-01', status: 'reprovada', variacao: '-2.6%', impactoDRE: 600, icNielsen: 86 }
+      { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-15', status: 'em_analise', variacao: '+3.2%', impactoDRE: 2100},
+      { fornecedor: 'Nestlé', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-14', status: 'aprovada', variacao: '+1.8%', impactoDRE: 1800 },
+      { fornecedor: 'Coca-Cola', bandeira: 'Supermercados Avenida', uf: 'SP', dataSubmissao: '2024-06-13', status: 'reprovada', variacao: '-2.1%', impactoDRE: 950},
+      { fornecedor: 'BRF', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-12', status: 'em_analise', variacao: '+4.7%', impactoDRE: 1200},
+      { fornecedor: 'JBS', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-11', status: 'aprovada', variacao: '+0.9%', impactoDRE: 800},
+      { fornecedor: 'Unilever', bandeira: 'Grupo Amigão', uf: 'MS', dataSubmissao: '2024-06-10', status: 'reprovada', variacao: '-3.0%', impactoDRE: 700},
+      { fornecedor: 'Ambev', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-09', status: 'em_analise', variacao: '+2.2%', impactoDRE: 1100},
+      { fornecedor: 'Nestlé', bandeira: 'Superpão', uf: 'SC', dataSubmissao: '2024-06-08', status: 'aprovada', variacao: '+5.1%', impactoDRE: 3200},
+      { fornecedor: 'Coca-Cola', bandeira: 'Boa Supermercados', uf: 'SP', dataSubmissao: '2024-06-07', status: 'reprovada', variacao: '-1.8%', impactoDRE: 1100},
+      { fornecedor: 'BRF', bandeira: 'Supermercados Avenida', uf: 'SP', dataSubmissao: '2024-06-06', status: 'em_analise', variacao: '+7.3%', impactoDRE: 2800},
+      { fornecedor: 'JBS', bandeira: 'Supermercados Avenida', uf: 'SP', dataSubmissao: '2024-06-05', status: 'aprovada', variacao: '+4.0%', impactoDRE: 2100},
+      { fornecedor: 'Unilever', bandeira: 'Grupo Amigão', uf: 'PR', dataSubmissao: '2024-06-04', status: 'reprovada', variacao: '-0.5%', impactoDRE: 500},
+      { fornecedor: 'Ambev', bandeira: 'Grupo Amigão', uf: 'SP', dataSubmissao: '2024-06-03', status: 'em_analise', variacao: '+2.8%', impactoDRE: 1300},
+      { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-02', status: 'aprovada', variacao: '+3.7%', impactoDRE: 1700},
+      { fornecedor: 'Coca-Cola', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-01', status: 'reprovada', variacao: '-2.6%', impactoDRE: 600}
     ];
     // Passo 36: Fornecedores reais
     const fornecedores = ['Ambev', 'Nestlé', 'Coca-Cola', 'BRF', 'JBS', 'Unilever'];
@@ -641,10 +610,6 @@
       let impacto = dados.map(item => Number(item.impactoDRE));
       let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
       document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
-      let icN = dados.map(item => Number(item.icNielsen));
-      let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
-      document.getElementById('icNielsen').textContent = Math.round(mediaICN);
-      document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
     }
     // Passo 12: Filtrar tabelas
     function filtrarTabelas() {
@@ -679,7 +644,7 @@
       if (!dados.length) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
-        td.colSpan = 9;
+        td.colSpan = 8;
         td.style.textAlign = 'center';
         td.style.padding = '20px';
         td.style.color = '#888';
@@ -702,9 +667,6 @@
         let tdDRE = document.createElement('td');
         tdDRE.textContent = formatarMoeda(Number(item.impactoDRE));
         tr.appendChild(tdDRE);
-        let tdIC = document.createElement('td');
-        tdIC.textContent = item.icNielsen;
-        tr.appendChild(tdIC);
         let tdStatus = document.createElement('td');
         const badgeClass = item.status === 'em_analise' ? 'badge-analise' : item.status === 'aprovada' ? 'badge-aprovada' : 'badge-reprovada';
         const statusTexto = item.status === 'em_analise' ? 'Em Análise' : item.status === 'aprovada' ? 'Aprovada' : 'Reprovada';
@@ -867,7 +829,7 @@
       }
       dados.sort((a, b) => {
         let va = a[coluna], vb = b[coluna];
-        if (coluna === 'impactoDRE' || coluna === 'icNielsen') {
+        if (coluna === 'impactoDRE') {
           va = Number(va); vb = Number(vb);
         }
         if (coluna === 'variacao') {
