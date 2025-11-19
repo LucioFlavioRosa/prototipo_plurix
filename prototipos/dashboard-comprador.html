@@ -13,85 +13,115 @@
       height: 100%;
       margin: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f5f6fa;
+      background: #f7f8fa;
       color: #222;
-      line-height: 1.6;
     }
-    .layout {
+    body {
       display: flex;
       min-height: 100vh;
     }
     .sidebar {
-      width: 240px;
+      width: 260px;
       background: #1a2340;
       border-right: 1px solid #eaeaea;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       padding-top: 32px;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
     }
-    .sidebar img {
-      width: 60px;
-      margin-bottom: 18px;
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
     }
     .sidebar nav {
-      width: 100%;
-      margin-top: 8px;
+      flex: 1;
+      gap: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
     }
-    .sidebar a {
-      display: block;
-      width: 100%;
-      padding: 12px 32px;
-      color: #1976d2;
-      font-weight: 600;
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
       text-decoration: none;
-      border-radius: 6px 0 0 6px;
       font-size: 1.08rem;
-      transition: background 0.15s, color 0.15s;
+      border-left: 4px solid transparent;
+      font-weight: 600;
+      margin-bottom: 2px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    .sidebar a.active, .sidebar a:hover {
-      background: #e0edff;
-      color: #144fa1;
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
     }
     .main-content {
       flex: 1;
-      padding: 0 40px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0 0 0 0;
+      background: none;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .main-header {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+      background: none;
+      letter-spacing: 0.5px;
+      margin-bottom: 0;
+    }
+    .dashboard-section {
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      padding: 32px 40px 40px 40px;
       display: flex;
       flex-direction: column;
     }
-    .main-header {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #eaeaea;
-      background: #fff;
-      margin-bottom: 36px;
-      padding-left: 0;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: 1px;
-    }
     .filters {
       display: flex;
-      gap: 20px;
+      gap: 18px;
       margin-bottom: 28px;
       flex-wrap: wrap;
     }
     .filters label {
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: #444;
       margin-right: 6px;
     }
     .filters select, .filters input[type="date"] {
       padding: 9px 16px;
       border-radius: 5px;
-      border: 1px solid #d1d5db;
+      border: 1px solid #b7b9c6;
       font-size: 1rem;
       background: #fff;
       color: #222;
@@ -120,7 +150,7 @@
     .card {
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
       padding: 32px 24px 24px 24px;
       display: flex;
       flex-direction: column;
@@ -130,7 +160,7 @@
     }
     .card-title {
       font-size: 1rem;
-      color: #666;
+      color: #444;
       font-weight: 600;
     }
     .card-value {
@@ -145,16 +175,23 @@
       font-weight: 600;
       margin-left: 8px;
     }
+    .panel {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 24px 24px;
+      margin-bottom: 32px;
+    }
     .table-section {
       background: #fff;
       border-radius: 14px;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
       padding: 32px 24px 24px 24px;
     }
     .section-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #1a2340;
       margin-bottom: 20px;
     }
     .data-table {
@@ -170,7 +207,7 @@
       text-align: left;
     }
     .data-table th {
-      background: #f0f2f5;
+      background: #e8eaf0;
       color: #222;
       font-weight: 700;
       border-bottom: 2px solid #eaeaea;
@@ -190,7 +227,7 @@
       border: none;
       padding: 9px 20px;
       border-radius: 6px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
@@ -198,33 +235,48 @@
     .btn-table:hover {
       background: #144fa1;
     }
-    .modal {
+    .modal-overlay {
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
     }
     .modal-content {
       background-color: #fff;
       margin: 5% auto;
-      padding: 36px;
       border-radius: 14px;
       width: 80%;
       max-width: 900px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      padding: 32px 24px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
+    .modal-close-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
+      align-self: flex-end;
+      margin-top: 18px;
+      transition: background 0.18s;
     }
-    .close:hover {
-      color: #000;
+    .modal-close-btn:hover {
+      background: #b93a2e;
     }
     .badge {
       padding: 5px 12px;
@@ -259,25 +311,23 @@
       content: ' ▼';
     }
     @media (max-width: 1000px) {
-      .main-content {
-        padding: 0 4vw 24px 4vw;
-      }
       .sidebar {
-        width: 60px;
-        padding: 10px 0;
+        width: 70px;
+        padding-top: 12px;
       }
-      .sidebar nav a {
-        font-size: 0.95rem;
-        padding: 10px 10px;
-        text-align: center;
-      }
-      .sidebar img { width: 38px; }
+      .sidebar .logo img { width: 44px; }
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
       .card-grid { grid-template-columns: 1fr; }
       .sidebar { display: none; }
-      .main-content { padding: 0 2vw 18px 2vw; }
+      .dashboard-section { padding: 0 2vw 18px 2vw; }
       .modal-content {
         width: 95%;
         margin: 10% auto;
@@ -291,16 +341,21 @@
   </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar" aria-label="Menu principal">
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="logo">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
-      <nav>
-        <a href="dashboard-comprador.html" class="active">Dashboard</a>
-        <a href="index.html" style="color:#d4380d;">Sair</a>
-      </nav>
-    </aside>
-    <main class="main-content">
-      <header class="main-header">Dashboard do Comprador</header>
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html" class="active">Dashboard</a>
+      <a href="index.html" style="color:#d4380d;">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <div class="header">
+      <h1 class="main-header">Dashboard do Comprador</h1>
+    </div>
+    <main class="dashboard-section">
       <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
         <label>Fornecedor:
           <select id="fornecedor">
@@ -337,7 +392,7 @@
         </label>
         <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
       </form>
-      <section class="table-section">
+      <section class="table-section panel">
         <div class="section-title">Tabelas Submetidas</div>
         <table class="data-table" aria-label="Tabelas submetidas">
           <thead>
@@ -359,9 +414,8 @@
       </section>
     </main>
   </div>
-  <div id="modalDetalhes" class="modal" style="display:none;">
+  <div id="modalDetalhes" class="modal-overlay">
     <div class="modal-content">
-      <span class="close" onclick="fecharModal()">&times;</span>
       <h2>Detalhes da Tabela Submetida</h2>
       <table class="data-table">
         <thead>
@@ -376,14 +430,10 @@
         </thead>
         <tbody id="modalTabelaBody"></tbody>
       </table>
+      <button class="modal-close-btn" onclick="fecharModal()">Fechar</button>
     </div>
   </div>
   <script>
-    // Função auxiliar para normalizar strings (remove acentos, espaços e converte para minúsculas)
-    function normalizarString(str) {
-      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '').toLowerCase();
-    }
-
     // Passo 3: Mapeamento de bandeiras para UFs
     const bandeiraUF = {
       superpao: ['PR','SC','RS'],
@@ -518,10 +568,10 @@
       return tabelasSubmetidas.filter(item => {
         let ok = true;
         if (fornecedor && item.fornecedor !== fornecedor) ok = false;
-        if (bandeira && normalizarString(item.bandeira) !== normalizarString(bandeira)) ok = false;
+        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) ok = false;
         if (uf && item.uf !== uf) ok = false;
         if (status && item.status !== status) ok = false;
-        if (data && item.dataSubmissao !== data) ok = false;
+        if (data && item.dataSubmissao < data) ok = false;
         return ok;
       });
     }
@@ -601,19 +651,19 @@
         opt.textContent = f;
         fornecedorSelect.appendChild(opt);
       });
-      // Popular UFs
-      const ufSet = new Set(tabelasSubmetidas.map(item => item.uf));
-      const ufsOrdenadas = Array.from(ufSet).sort();
-      const ufSelect = document.getElementById('uf');
-      ufSelect.innerHTML = '<option value="">Todas</option>';
-      ufsOrdenadas.forEach(uf => {
-        let opt = document.createElement('option');
-        opt.value = uf;
-        opt.textContent = uf;
-        ufSelect.appendChild(opt);
-      });
       // Event listeners
       document.getElementById('bandeira').addEventListener('change', function() {
+        const ufSelect = document.getElementById('uf');
+        const bandeira = this.value;
+        ufSelect.innerHTML = '<option value="">Todas</option>';
+        if (bandeira && bandeiraUF[bandeira]) {
+          bandeiraUF[bandeira].forEach(uf => {
+            let opt = document.createElement('option');
+            opt.value = uf;
+            opt.textContent = uf;
+            ufSelect.appendChild(opt);
+          });
+        }
         atualizarTabela();
       });
       document.getElementById('fornecedor').addEventListener('change', atualizarTabela);
@@ -681,13 +731,13 @@
           tr.innerHTML = `<td>${item.sku}</td><td>${item.descricao}</td><td>${item.precoAntigo}</td><td>${item.precoNovo}</td><td>${item.variacao}</td><td>${item.dataSubmissao}</td>`;
           tbody.appendChild(tr);
         });
-        document.getElementById('modalDetalhes').style.display = 'block';
+        document.getElementById('modalDetalhes').classList.add('active');
       } catch(e) {
         console.error('Erro ao abrir modal:', e);
       }
     }
     function fecharModal() {
-      document.getElementById('modalDetalhes').style.display = 'none';
+      document.getElementById('modalDetalhes').classList.remove('active');
     }
     // Passo 33: Fechar modal ao clicar fora
     window.onclick = function(event) {
@@ -700,16 +750,7 @@
     function resetarFiltros() {
       document.getElementById('fornecedor').value = '';
       document.getElementById('bandeira').value = '';
-      const ufSet = new Set(tabelasSubmetidas.map(item => item.uf));
-      const ufsOrdenadas = Array.from(ufSet).sort();
-      const ufSelect = document.getElementById('uf');
-      ufSelect.innerHTML = '<option value="">Todas</option>';
-      ufsOrdenadas.forEach(uf => {
-        let opt = document.createElement('option');
-        opt.value = uf;
-        opt.textContent = uf;
-        ufSelect.appendChild(opt);
-      });
+      document.getElementById('uf').innerHTML = '<option value="">Todas</option>';
       document.getElementById('status').value = '';
       document.getElementById('dataFiltro').value = '';
       atualizarTabela();
