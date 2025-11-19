@@ -344,6 +344,10 @@
     .modal-table tr:last-child {
       border-bottom: none;
     }
+    .filtro-ativo {
+      background-color: #fef3c7 !important;
+      border-color: #f9b233 !important;
+    }
     @media (max-width: 1000px) {
       .sidebar {
         width: 70px;
@@ -390,6 +394,28 @@
         <h1 class="main-header">Dashboard do Comprador</h1>
       </header>
       <main class="dashboard-section">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">Tabelas Pendentes</div>
+            <div class="card-value" id="tabelasPendentes"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Variação Média (%)</div>
+            <div class="card-value" id="variacaoMedia"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Impacto DRE</div>
+            <div class="card-value" id="impactoDRE"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">IC Nielsen</div>
+            <div class="card-value" id="icNielsen"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">IC Objetiva</div>
+            <div class="card-value" id="icObjetiva"></div>
+          </div>
+        </div>
         <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
           <label>Fornecedor:
             <select id="fornecedor">
@@ -411,6 +437,33 @@
           <label>UF:
             <select id="uf">
               <option value="">Todas</option>
+              <option value="AC">AC</option>
+              <option value="AL">AL</option>
+              <option value="AP">AP</option>
+              <option value="AM">AM</option>
+              <option value="BA">BA</option>
+              <option value="CE">CE</option>
+              <option value="DF">DF</option>
+              <option value="ES">ES</option>
+              <option value="GO">GO</option>
+              <option value="MA">MA</option>
+              <option value="MT">MT</option>
+              <option value="MS">MS</option>
+              <option value="MG">MG</option>
+              <option value="PA">PA</option>
+              <option value="PB">PB</option>
+              <option value="PR">PR</option>
+              <option value="PE">PE</option>
+              <option value="PI">PI</option>
+              <option value="RJ">RJ</option>
+              <option value="RN">RN</option>
+              <option value="RS">RS</option>
+              <option value="RO">RO</option>
+              <option value="RR">RR</option>
+              <option value="SC">SC</option>
+              <option value="SP">SP</option>
+              <option value="SE">SE</option>
+              <option value="TO">TO</option>
             </select>
           </label>
           <label>Data:
@@ -479,7 +532,20 @@
       amigao: ['BA','SE','AL'],
       parana: ['PR','SP']
     };
-
+    // Mapeamento reverso para bandeira normalizada
+    const bandeiraNormalizada = {
+      'superpao': 'Superpão',
+      'boa': 'Boa Supermercados',
+      'avenida': 'Supermercados Avenida',
+      'compremais': 'Compre Mais',
+      'emporio': 'Empório Dom Olívio',
+      'amigao': 'Grupo Amigão',
+      'parana': 'Paraná Supermercados'
+    };
+    // UFs estáticas
+    const UFS = [
+      'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'
+    ];
     // Passo 11: Estrutura de dados simulando tabelas submetidas
     const tabelasSubmetidas = [
       { fornecedor: 'Ambev', bandeira: 'Superpão', uf: 'PR', dataSubmissao: '2024-06-15', status: 'em_analise', variacao: '+3.2%', impactoDRE: 2100, icNielsen: 88 },
@@ -498,13 +564,10 @@
       { fornecedor: 'Nestlé', bandeira: 'Paraná Supermercados', uf: 'PR', dataSubmissao: '2024-06-02', status: 'aprovada', variacao: '+3.7%', impactoDRE: 1700, icNielsen: 90 },
       { fornecedor: 'Coca-Cola', bandeira: 'Superpão', uf: 'RS', dataSubmissao: '2024-06-01', status: 'reprovada', variacao: '-2.6%', impactoDRE: 600, icNielsen: 86 }
     ];
-
     // Passo 36: Fornecedores reais
     const fornecedores = ['Ambev', 'Nestlé', 'Coca-Cola', 'BRF', 'JBS', 'Unilever'];
-
     // Passo 19: Gerar dados fictícios para o modal
     function gerarDadosModal(fornecedor, bandeira, uf, data) {
-      // Dados fictícios baseados no fornecedor
       const exemplos = {
         'Ambev': [
           { sku: 'AMB001', descricao: 'Cerveja Brahma Lata 350ml', precoAntigo: 2.50, precoNovo: 2.65 },
@@ -551,19 +614,16 @@
         };
       });
     }
-
     // Passo 26: Formatar data para DD/MM/YYYY
     function formatarData(dataISO) {
       if (!dataISO) return '';
       const [ano, mes, dia] = dataISO.split('-');
       return dia + '/' + mes + '/' + ano;
     }
-
     // Passo 27: Formatar moeda
     function formatarMoeda(valor) {
       return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/\d(?=(\d{3})+,)/g, '$&.');
     }
-
     // Passo 30: Estilo de status
     function aplicarEstiloStatus(status) {
       if (status === 'em_analise') return 'badge badge-analise';
@@ -571,28 +631,21 @@
       if (status === 'reprovada') return 'badge badge-reprovada';
       return '';
     }
-
     // Passo 22: Atualizar cards de métricas
     function atualizarCards(dados) {
-      // Tabelas pendentes
       const pendentes = dados.filter(item => item.status === 'em_analise').length;
       document.getElementById('tabelasPendentes').textContent = pendentes;
-      // Variação média
       let variacoes = dados.map(item => parseFloat(item.variacao.replace('%','').replace(',','.')));
       let mediaVariacao = variacoes.length ? (variacoes.reduce((a,b)=>a+b,0)/variacoes.length) : 0;
       document.getElementById('variacaoMedia').textContent = (mediaVariacao >= 0 ? '+' : '') + mediaVariacao.toFixed(1).replace('.', ',') + '%';
-      // Impacto DRE
       let impacto = dados.map(item => Number(item.impactoDRE));
       let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
       document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
-      // IC Nielsen (Média)
       let icN = dados.map(item => Number(item.icNielsen));
       let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
       document.getElementById('icNielsen').textContent = Math.round(mediaICN);
-      // IC Objetiva (Média) - simulação: igual ao IC Nielsen para efeito visual
       document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
     }
-
     // Passo 12: Filtrar tabelas
     function filtrarTabelas() {
       const fornecedor = document.getElementById('fornecedor').value;
@@ -603,17 +656,24 @@
       return tabelasSubmetidas.filter(item => {
         let ok = true;
         if (fornecedor && item.fornecedor !== fornecedor) ok = false;
-        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) ok = false;
+        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) {
+          // Usar mapeamento reverso para garantir correspondência
+          if (bandeiraNormalizada[bandeira] !== item.bandeira) ok = false;
+        }
         if (uf && item.uf !== uf) ok = false;
         if (status && item.status !== status) ok = false;
         if (data && item.dataSubmissao < data) ok = false;
         return ok;
       });
     }
-
-    // Passo 13/28/29/32/25/7: Renderizar tabela
+    // Passo 13/28/29/32/25/7: Renderizar tabela com otimização
     let ordemAtual = { coluna: null, asc: true };
+    let cacheTabela = '';
     function renderizarTabela(dados) {
+      // Otimização: comparar hash do estado
+      const hash = JSON.stringify(dados);
+      if (cacheTabela === hash) return;
+      cacheTabela = hash;
       const tbody = document.getElementById('tabelaSubmetidasBody');
       tbody.innerHTML = '';
       if (!dados.length) {
@@ -635,29 +695,23 @@
           `<td>${item.bandeira}</td>`+
           `<td>${item.uf}</td>`+
           `<td>${formatarData(item.dataSubmissao)}</td>`;
-        // Variação (%) com cor
         let tdVar = document.createElement('td');
         tdVar.textContent = item.variacao;
         tdVar.style.color = item.variacao.startsWith('+') ? '#d4380d' : '#059669';
         tr.appendChild(tdVar);
-        // Impacto DRE
         let tdDRE = document.createElement('td');
         tdDRE.textContent = formatarMoeda(Number(item.impactoDRE));
         tr.appendChild(tdDRE);
-        // IC Nielsen
         let tdIC = document.createElement('td');
         tdIC.textContent = item.icNielsen;
         tr.appendChild(tdIC);
-        // Status badge
         let tdStatus = document.createElement('td');
         const badgeClass = item.status === 'em_analise' ? 'badge-analise' : item.status === 'aprovada' ? 'badge-aprovada' : 'badge-reprovada';
         const statusTexto = item.status === 'em_analise' ? 'Em Análise' : item.status === 'aprovada' ? 'Aprovada' : 'Reprovada';
         tdStatus.innerHTML = `<span class=\"badge ${badgeClass}\">${statusTexto}</span>`;
         tr.appendChild(tdStatus);
-        // Ações
         let tdAcoes = document.createElement('td');
         if (item.status === 'em_analise') {
-          // Redireciona para analise-tabela.html com parâmetros na URL
           const url = `analise-tabela.html?fornecedor=${encodeURIComponent(item.fornecedor)}&bandeira=${encodeURIComponent(item.bandeira)}&uf=${encodeURIComponent(item.uf)}&data=${encodeURIComponent(item.dataSubmissao)}`;
           tdAcoes.innerHTML = `<button class=\"btn-table\" onclick=\"window.location.href='${url}'\">Analisar</button>`;
         } else {
@@ -667,14 +721,13 @@
         tbody.appendChild(tr);
       });
     }
-
     // Passo 14/23: Atualizar tabela e cards
     function atualizarTabela() {
       const dadosFiltrados = filtrarTabelas();
       renderizarTabela(dadosFiltrados);
       atualizarCards(dadosFiltrados);
+      atualizarValidacaoVisualFiltros();
     }
-
     // Passo 15/36/6/12/18: Inicialização
     function init() {
       // Popular fornecedores
@@ -687,20 +740,7 @@
         fornecedorSelect.appendChild(opt);
       });
       // Event listeners
-      document.getElementById('bandeira').addEventListener('change', function() {
-        const ufSelect = document.getElementById('uf');
-        const bandeira = this.value;
-        ufSelect.innerHTML = '<option value="">Todas</option>';
-        if (bandeira && bandeiraUF[bandeira]) {
-          bandeiraUF[bandeira].forEach(uf => {
-            let opt = document.createElement('option');
-            opt.value = uf;
-            opt.textContent = uf;
-            ufSelect.appendChild(opt);
-          });
-        }
-        atualizarTabela();
-      });
+      document.getElementById('bandeira').addEventListener('change', atualizarTabela);
       document.getElementById('fornecedor').addEventListener('change', atualizarTabela);
       document.getElementById('uf').addEventListener('change', atualizarTabela);
       document.getElementById('status').addEventListener('change', atualizarTabela);
@@ -711,7 +751,7 @@
           ordenarTabela(this.getAttribute('data-col'));
         });
       });
-      // Passo 6/15: Processar decisões do localStorage (aprovação/reprovação)
+      // Processar decisões do localStorage (aprovação/reprovação)
       try {
         const stored = localStorage.getItem('decisoesTabelas');
         if (stored) {
@@ -723,7 +763,6 @@
             console.error('Erro ao parsear decisoesTabelas do localStorage:', e);
             decisoes = [];
           }
-          // Para cada decisão, atualizar o status correspondente
           decisoes.forEach(decisao => {
             if (!decisao || !decisao.fornecedor || !decisao.bandeira || !decisao.uf || !decisao.dataSubmissao || !decisao.acao) return;
             const idx = tabelasSubmetidas.findIndex(item =>
@@ -737,18 +776,16 @@
               else if (decisao.acao === 'reprovar') tabelasSubmetidas[idx].status = 'reprovada';
             }
           });
-          // Limpar localStorage após processar
           localStorage.removeItem('decisoesTabelas');
         }
       } catch(e) {
         console.error('Erro ao processar decisões do localStorage:', e);
       }
-      // Passo 18: Atualizar interface após decisões
       renderizarTabela(tabelasSubmetidas);
       atualizarCards(tabelasSubmetidas);
+      atualizarValidacaoVisualFiltros();
     }
     window.onload = init;
-
     // Passo 10/20/37: Modal de detalhes
     function abrirModal(btn) {
       try {
@@ -774,7 +811,7 @@
     function fecharModal() {
       document.getElementById('modalDetalhes').style.display = 'none';
     }
-    // Passo 33: Fechar modal ao clicar fora
+    // Fechar modal ao clicar fora
     window.onclick = function(event) {
       const modal = document.getElementById('modalDetalhes');
       if (event.target === modal) {
@@ -785,12 +822,41 @@
     function resetarFiltros() {
       document.getElementById('fornecedor').value = '';
       document.getElementById('bandeira').value = '';
-      document.getElementById('uf').innerHTML = '<option value="">Todas</option>';
+      const ufSelect = document.getElementById('uf');
+      ufSelect.innerHTML = '<option value="">Todas</option>';
+      UFS.forEach(uf => {
+        let opt = document.createElement('option');
+        opt.value = uf;
+        opt.textContent = uf;
+        ufSelect.appendChild(opt);
+      });
       document.getElementById('status').value = '';
       document.getElementById('dataFiltro').value = '';
       atualizarTabela();
     }
-    // Passo 39: Ordenação da tabela
+    // Validação visual dos filtros ativos
+    function atualizarValidacaoVisualFiltros() {
+      const selects = [
+        document.getElementById('fornecedor'),
+        document.getElementById('bandeira'),
+        document.getElementById('uf'),
+        document.getElementById('status')
+      ];
+      selects.forEach(sel => {
+        if (sel.value && sel.value !== '') {
+          sel.classList.add('filtro-ativo');
+        } else {
+          sel.classList.remove('filtro-ativo');
+        }
+      });
+      const dataInput = document.getElementById('dataFiltro');
+      if (dataInput.value && dataInput.value !== '') {
+        dataInput.classList.add('filtro-ativo');
+      } else {
+        dataInput.classList.remove('filtro-ativo');
+      }
+    }
+    // Ordenação da tabela
     function ordenarTabela(coluna) {
       let dados = filtrarTabelas();
       if (ordemAtual.coluna === coluna) {
@@ -816,7 +882,6 @@
         return 0;
       });
       renderizarTabela(dados);
-      // Atualizar indicadores visuais
       document.querySelectorAll('.data-table th').forEach(th => {
         th.classList.remove('sort-asc','sort-desc');
         if (th.getAttribute('data-col') === coluna) {
@@ -825,13 +890,5 @@
       });
     }
   </script>
-  <div style="display:none">
-    <!-- Cards de métricas (apenas para garantir que atualizarCards funcione) -->
-    <span id="tabelasPendentes"></span>
-    <span id="variacaoMedia"></span>
-    <span id="impactoDRE"></span>
-    <span id="icNielsen"></span>
-    <span id="icObjetiva"></span>
-  </div>
 </body>
 </html>
