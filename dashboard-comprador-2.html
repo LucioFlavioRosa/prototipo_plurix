@@ -40,6 +40,7 @@
       box-shadow: 2px 0 8px rgba(30,40,80,0.07);
       position: relative;
       z-index: 2;
+      min-height: 100vh;
     }
     .sidebar .logo {
       display: flex;
@@ -348,6 +349,10 @@
       background-color: #fef3c7 !important;
       border-color: #f9b233 !important;
     }
+    .data-table th:nth-child(7), .data-table td:nth-child(7), .data-table th:nth-child(8), .data-table td:nth-child(8) {
+      text-align: center;
+      vertical-align: middle;
+    }
     @media (max-width: 1000px) {
       .sidebar {
         width: 70px;
@@ -404,16 +409,8 @@
             <div class="card-value" id="variacaoMedia"></div>
           </div>
           <div class="card">
-            <div class="card-title">Impacto DRE</div>
+            <div class="card-title">Impacto Médio DRE</div>
             <div class="card-value" id="impactoDRE"></div>
-          </div>
-          <div class="card">
-            <div class="card-title">IC Nielsen</div>
-            <div class="card-value" id="icNielsen"></div>
-          </div>
-          <div class="card">
-            <div class="card-title">IC Objetiva</div>
-            <div class="card-value" id="icObjetiva"></div>
           </div>
         </div>
         <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
@@ -640,10 +637,6 @@
       let impacto = dados.map(item => Number(item.impactoDRE));
       let somaImpacto = impacto.length ? impacto.reduce((a,b)=>a+b,0) : 0;
       document.getElementById('impactoDRE').textContent = formatarMoeda(somaImpacto);
-      let icN = dados.map(item => Number(item.icNielsen));
-      let mediaICN = icN.length ? (icN.reduce((a,b)=>a+b,0)/icN.length) : 0;
-      document.getElementById('icNielsen').textContent = Math.round(mediaICN);
-      document.getElementById('icObjetiva').textContent = Math.round(mediaICN);
     }
     // Passo 12: Filtrar tabelas
     function filtrarTabelas() {
@@ -678,7 +671,7 @@
       if (!dados.length) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
-        td.colSpan = 9;
+        td.colSpan = 8;
         td.style.textAlign = 'center';
         td.style.padding = '20px';
         td.style.color = '#888';
@@ -701,9 +694,6 @@
         let tdDRE = document.createElement('td');
         tdDRE.textContent = formatarMoeda(Number(item.impactoDRE));
         tr.appendChild(tdDRE);
-        let tdIC = document.createElement('td');
-        tdIC.textContent = item.icNielsen;
-        tr.appendChild(tdIC);
         let tdStatus = document.createElement('td');
         const badgeClass = item.status === 'em_analise' ? 'badge-analise' : item.status === 'aprovada' ? 'badge-aprovada' : 'badge-reprovada';
         const statusTexto = item.status === 'em_analise' ? 'Em Análise' : item.status === 'aprovada' ? 'Aprovada' : 'Reprovada';
@@ -866,7 +856,7 @@
       }
       dados.sort((a, b) => {
         let va = a[coluna], vb = b[coluna];
-        if (coluna === 'impactoDRE' || coluna === 'icNielsen') {
+        if (coluna === 'impactoDRE') {
           va = Number(va); vb = Number(vb);
         }
         if (coluna === 'variacao') {
