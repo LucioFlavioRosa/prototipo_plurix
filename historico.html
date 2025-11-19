@@ -442,11 +442,11 @@
           return;
         }
         var html = '';
-        // Dados de exemplo para tabela
+        // Dados de exemplo para tabela - PRODUTOS AMBEV
         var tabelaMock = [
-          { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 22,90' },
-          { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 8,50' },
-          { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal, garrafa 900ml', preco: 'R$ 7,80' }
+          { sku: '7891991000845', nome: 'Skol Pilsen Lata 350ml', descricao: 'Cerveja Skol Pilsen lata 350ml', preco: 'R$ 3,49' },
+          { sku: '7891149100012', nome: 'Brahma Chopp Long Neck 355ml', descricao: 'Cerveja Brahma Chopp long neck 355ml', preco: 'R$ 4,99' },
+          { sku: '7891991010844', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica PET 2L', preco: 'R$ 7,99' }
         ];
         // Níveis de aprovação
         var nivelAprovacao = [
@@ -547,11 +547,11 @@
      * Gera um arquivo CSV com os dados da tabela de exemplo.
      */
     function baixarPlanilha(arquivo) {
-      // Dados mock para exportação
+      // Dados mock para exportação - PRODUTOS AMBEV
       var tabelaMock = [
-        { sku: '1001', nome: 'Arroz Branco 5kg', descricao: 'Arroz tipo 1, pacote 5kg', preco: 'R$ 22,90' },
-        { sku: '1002', nome: 'Feijão Carioca 1kg', descricao: 'Feijão carioca, pacote 1kg', preco: 'R$ 8,50' },
-        { sku: '1003', nome: 'Óleo de Soja 900ml', descricao: 'Óleo vegetal, garrafa 900ml', preco: 'R$ 7,80' }
+        { sku: '7891991000845', nome: 'Skol Pilsen Lata 350ml', descricao: 'Cerveja Skol Pilsen lata 350ml', preco: 'R$ 3,49' },
+        { sku: '7891149100012', nome: 'Brahma Chopp Long Neck 355ml', descricao: 'Cerveja Brahma Chopp long neck 355ml', preco: 'R$ 4,99' },
+        { sku: '7891991010844', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica PET 2L', preco: 'R$ 7,99' }
       ];
       var csv = 'SKU,Nome,Descrição,Preço\n';
       tabelaMock.forEach(function(row) {
