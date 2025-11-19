@@ -409,6 +409,81 @@
     }
   </style>
   <script>
+    // =============================================
+    // Sistema de tabelas mock de produtos Ambev por arquivo
+    // Cada arquivo de submissão possui uma tabela de produtos Ambev distinta.
+    // Mapeamento:
+    // 'precos_maio.xlsx'         => tabelaMock (Brahma Duplo Malte, Skol Beats Senses, Guaraná Antarctica)
+    // 'precos_abril.xlsx'        => tabelaMockReprovada1 (Stella Artois, Budweiser, Pepsi Black)
+    // 'precos_marco.xlsx'        => tabelaMockReprovada2 (Bohemia Puro Malte, Skol Puro Malte, H2OH! Limoneto)
+    // 'precos_janeiro.xlsx'      => tabelaMockReprovada3 (Antarctica Sub Zero, Brahma 0.0%, Gatorade Laranja)
+    // 'precos_abril_v2.xlsx'     => tabelaMockAprovada2 (Corona Extra, Skol Beats GT, Sukita Laranja)
+    // 'precos_marco_v2.xlsx'     => tabelaMockAprovada3 (Spaten Puro Malte, Brahma Extra Lager, Lipton Ice Tea Limão)
+    // Outros arquivos podem usar uma tabela padrão.
+    // =============================================
+
+    // Tabela mock para 'precos_maio.xlsx' (Aprovada)
+    var tabelaMock = [
+      { sku: '2001', nome: 'Brahma Duplo Malte 350ml Lata', descricao: 'Cerveja Brahma Duplo Malte, lata 350ml', preco: 'R$ 3,20' },
+      { sku: '2002', nome: 'Skol Beats Senses 313ml Long Neck', descricao: 'Bebida mista Skol Beats Senses, garrafa 313ml', preco: 'R$ 4,50' },
+      { sku: '2003', nome: 'Guaraná Antarctica 2L PET', descricao: 'Refrigerante Guaraná Antarctica, garrafa 2 litros', preco: 'R$ 6,90' }
+    ];
+
+    // Tabela mock para 'precos_abril.xlsx' (Reprovada)
+    var tabelaMockReprovada1 = [
+      { sku: '3001', nome: 'Stella Artois 330ml Long Neck', descricao: 'Cerveja Stella Artois, garrafa 330ml', preco: 'R$ 4,80' },
+      { sku: '3002', nome: 'Budweiser 269ml Lata', descricao: 'Cerveja Budweiser, lata 269ml', preco: 'R$ 2,90' },
+      { sku: '3003', nome: 'Pepsi Black 350ml Lata', descricao: 'Refrigerante Pepsi Black, lata 350ml', preco: 'R$ 2,50' }
+    ];
+
+    // Tabela mock para 'precos_marco.xlsx' (Reprovada)
+    var tabelaMockReprovada2 = [
+      { sku: '4001', nome: 'Bohemia Puro Malte 350ml Lata', descricao: 'Cerveja Bohemia Puro Malte, lata 350ml', preco: 'R$ 3,50' },
+      { sku: '4002', nome: 'Skol Puro Malte 269ml Lata', descricao: 'Cerveja Skol Puro Malte, lata 269ml', preco: 'R$ 2,70' },
+      { sku: '4003', nome: 'H2OH! Limoneto 500ml PET', descricao: 'Bebida H2OH! sabor Limoneto, garrafa 500ml', preco: 'R$ 3,80' }
+    ];
+
+    // Tabela mock para 'precos_janeiro.xlsx' (Reprovada)
+    var tabelaMockReprovada3 = [
+      { sku: '5001', nome: 'Antarctica Sub Zero 350ml Lata', descricao: 'Cerveja Antarctica Sub Zero, lata 350ml', preco: 'R$ 3,10' },
+      { sku: '5002', nome: 'Brahma 0.0% 350ml Lata', descricao: 'Cerveja sem álcool Brahma 0.0%, lata 350ml', preco: 'R$ 3,40' },
+      { sku: '5003', nome: 'Gatorade Laranja 500ml PET', descricao: 'Isotônico Gatorade sabor Laranja, garrafa 500ml', preco: 'R$ 4,20' }
+    ];
+
+    // Tabela mock para 'precos_abril_v2.xlsx' (Aprovada)
+    var tabelaMockAprovada2 = [
+      { sku: '6001', nome: 'Corona Extra 330ml Long Neck', descricao: 'Cerveja Corona Extra, garrafa 330ml', preco: 'R$ 5,20' },
+      { sku: '6002', nome: 'Skol Beats GT 313ml Long Neck', descricao: 'Bebida mista Skol Beats GT, garrafa 313ml', preco: 'R$ 4,70' },
+      { sku: '6003', nome: 'Sukita Laranja 2L PET', descricao: 'Refrigerante Sukita sabor Laranja, garrafa 2 litros', preco: 'R$ 5,90' }
+    ];
+
+    // Tabela mock para 'precos_marco_v2.xlsx' (Aprovada)
+    var tabelaMockAprovada3 = [
+      { sku: '7001', nome: 'Spaten Puro Malte 350ml Lata', descricao: 'Cerveja Spaten Puro Malte, lata 350ml', preco: 'R$ 3,60' },
+      { sku: '7002', nome: 'Brahma Extra Lager 350ml Lata', descricao: 'Cerveja Brahma Extra Lager, lata 350ml', preco: 'R$ 3,30' },
+      { sku: '7003', nome: 'Lipton Ice Tea Limão 300ml PET', descricao: 'Chá gelado Lipton sabor Limão, garrafa 300ml', preco: 'R$ 3,50' }
+    ];
+
+    // Tabela padrão caso o arquivo não tenha uma tabela específica
+    var tabelaMockPadrao = [
+      { sku: '9991', nome: 'Produto Ambev Genérico 1', descricao: 'Produto Ambev padrão', preco: 'R$ 1,00' },
+      { sku: '9992', nome: 'Produto Ambev Genérico 2', descricao: 'Produto Ambev padrão', preco: 'R$ 2,00' },
+      { sku: '9993', nome: 'Produto Ambev Genérico 3', descricao: 'Produto Ambev padrão', preco: 'R$ 3,00' }
+    ];
+
+    /**
+     * Mapeamento de arquivos para suas respectivas tabelas mock de produtos Ambev.
+     * Facilita a seleção dinâmica da tabela correta para cada arquivo.
+     */
+    var tabelasPorArquivo = {
+      'precos_maio.xlsx': tabelaMock,
+      'precos_abril.xlsx': tabelaMockReprovada1,
+      'precos_marco.xlsx': tabelaMockReprovada2,
+      'precos_janeiro.xlsx': tabelaMockReprovada3,
+      'precos_abril_v2.xlsx': tabelaMockAprovada2,
+      'precos_marco_v2.xlsx': tabelaMockAprovada3
+    };
+
     // Função para navegação
     function goTo(page) {
       window.location.href = page;
@@ -423,10 +498,7 @@
     /**
      * Função principal para abrir o modal de detalhes de submissão.
      * Exibe diferentes conteúdos conforme o status: 'aprovada', 'reprovada', 'pendente'.
-     * - 'aprovada': mostra tabela mock e botão de download.
-     * - 'reprovada': mostra tabela mock editável inline com botões de ação.
-     * - 'pendente': mostra níveis de aprovação com indicador verde.
-     * Cada arquivo pendente tem um estágio diferente.
+     * Utiliza o sistema de mapeamento de tabelas para exibir produtos Ambev variados por arquivo.
      */
     function abrirDetalhes(status, arquivo, data) {
       try {
@@ -442,12 +514,6 @@
           return;
         }
         var html = '';
-        // Dados de exemplo para tabela - PRODUTOS AMBEV
-        var tabelaMock = [
-          { sku: '7891991000845', nome: 'Skol Pilsen Lata 350ml', descricao: 'Cerveja Skol Pilsen lata 350ml', preco: 'R$ 3,49' },
-          { sku: '7891149100012', nome: 'Brahma Chopp Long Neck 355ml', descricao: 'Cerveja Brahma Chopp long neck 355ml', preco: 'R$ 4,99' },
-          { sku: '7891991010844', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica PET 2L', preco: 'R$ 7,99' }
-        ];
         // Níveis de aprovação
         var nivelAprovacao = [
           'Gerente Categoria Bandeira',
@@ -464,13 +530,18 @@
           'precos_fevereiro_v3.xlsx': 0
         };
         var nivelAtual = nivelAtualMap[arquivo] !== undefined ? nivelAtualMap[arquivo] : 0;
+
+        // Seleciona a tabela correta de acordo com o arquivo
+        // Se não houver tabela específica, usa a tabela padrão
+        var tabelaSelecionada = tabelasPorArquivo[arquivo] || tabelaMockPadrao;
+
         if (status === 'aprovada') {
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Aprovada</div>';
           html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Preços:</div>';
           html += '<table class="detalhe-table" aria-label="Tabela de Preços">';
           html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
-          tabelaMock.forEach(function(row) {
+          tabelaSelecionada.forEach(function(row) {
             html += '<tr>' +
               '<td>' + row.sku + '</td>' +
               '<td>' + row.nome + '</td>' +
@@ -489,7 +560,7 @@
           html += '<form id="form-edicao-inline" onsubmit="salvarEdicaoInline(event)">';
           html += '<table class="detalhe-table-edit" aria-label="Editar Tabela">';
           html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
-          tabelaMock.forEach(function(row, idx) {
+          tabelaSelecionada.forEach(function(row, idx) {
             html += '<tr>' +
               '<td><input type="text" name="sku_' + idx + '" value="' + row.sku + '" required></td>' +
               '<td><input type="text" name="nome_' + idx + '" value="' + row.nome + '" required></td>' +
@@ -544,17 +615,14 @@
 
     /**
      * Função para baixar a planilha de exemplo (mock).
-     * Gera um arquivo CSV com os dados da tabela de exemplo.
+     * Gera um arquivo CSV com os dados da tabela de produtos Ambev correspondente ao arquivo.
+     * Utiliza o sistema de mapeamento de tabelas.
      */
     function baixarPlanilha(arquivo) {
-      // Dados mock para exportação - PRODUTOS AMBEV
-      var tabelaMock = [
-        { sku: '7891991000845', nome: 'Skol Pilsen Lata 350ml', descricao: 'Cerveja Skol Pilsen lata 350ml', preco: 'R$ 3,49' },
-        { sku: '7891149100012', nome: 'Brahma Chopp Long Neck 355ml', descricao: 'Cerveja Brahma Chopp long neck 355ml', preco: 'R$ 4,99' },
-        { sku: '7891991010844', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica PET 2L', preco: 'R$ 7,99' }
-      ];
+      // Seleciona a tabela correta de acordo com o arquivo
+      var tabelaSelecionada = tabelasPorArquivo[arquivo] || tabelaMockPadrao;
       var csv = 'SKU,Nome,Descrição,Preço\n';
-      tabelaMock.forEach(function(row) {
+      tabelaSelecionada.forEach(function(row) {
         csv += [row.sku, row.nome, row.descricao, row.preco].map(function(val) {
           return '"' + val.replace(/"/g, '""') + '"';
         }).join(',') + '\n';
