@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise Comercial da Tabela - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+      gap: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-radius: 0;
+      border-left: 4px solid transparent;
+      font-weight: 600;
+      margin-bottom: 2px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0 0 0 0;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .main-header {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+      background: none;
+      letter-spacing: 0.5px;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 24px 24px;
+      margin-bottom: 32px;
+    }
+    .panel-header {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .panel-header div {
+      font-size: 1.1rem;
+      color: #444;
+      font-weight: 600;
+    }
+    .panel-header strong {
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .filters {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filters label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 6px;
+    }
+    .filters select, .filters input[type="text"] {
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: 1px solid #b7b9c6;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    .data-table th, .data-table td {
+      padding: 12px 10px;
+      text-align: left;
+    }
+    .data-table th {
+      background: #e8eaf0;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .data-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .data-table tr:last-child {
+      border-bottom: none;
+    }
+    .btn-drill {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-drill:hover {
+      background: #e1a12a;
+    }
+    .btn-acao {
+      border: none;
+      padding: 7px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background 0.18s;
+      color: #fff;
+    }
+    .btn-aprovar {
+      background: #16a34a;
+    }
+    .btn-aprovar:hover {
+      background: #15803d;
+    }
+    .btn-reprovar {
+      background: #d4380d;
+    }
+    .btn-reprovar:hover {
+      background: #a82e0b;
+    }
+    .modal-overlay-acao {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay-acao.active {
+      display: flex;
+    }
+    .modal-content-acao {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-width: 420px;
+      width: 96vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px 24px 24px 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .modal-content-acao h3 {
+      margin-top: 0;
+      font-size: 1.18rem;
+      color: #1a6ae5;
+      font-weight: 700;
+    }
+    .modal-content-acao textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      font-size: 1rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+    .btn-enviar-acao {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-end;
+      margin-top: 8px;
+      transition: background 0.18s;
+    }
+    .btn-enviar-acao:hover {
+      background: #e1a12a;
+    }
+    .btn-cancelar-acao {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background 0.18s;
+      align-self: flex-end;
+    }
+    .btn-cancelar-acao:hover {
+      background: #b93a2e;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-width: 700px;
+      width: 98vw;
+      max-height: 95vh;
+      overflow-y: auto;
+      padding: 32px 24px 24px 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .modal-close-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-end;
+      margin-top: 18px;
+      transition: background 0.18s;
+    }
+    .modal-close-btn:hover {
+      background: #b93a2e;
+    }
+    .modal-section {
+      margin-bottom: 18px;
+    }
+    .modal-section:last-child {
+      margin-bottom: 0;
+    }
+    .modal-chart {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 18px auto;
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 12px 0;
+    }
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.97rem;
+    }
+    .modal-table th, .modal-table td {
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .modal-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .modal-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-table tr:last-child {
+      border-bottom: none;
+    }
+    @media (max-width: 1000px) {
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+    }
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .main-header { font-size: 1.1rem; }
+      .dashboard-section { padding: 0 2vw 18px 2vw; }
+      .panel-header { flex-direction: column; gap: 8px; }
+      .modal-content { padding: 16px 4px 12px 4px; }
+      .modal-content-acao { padding: 16px 4px 12px 4px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // --- Passo 12: Popula cabeçalho com parâmetros da URL ---
+    function getURLParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        fornecedor: params.get('fornecedor') || '',
+        bandeira: params.get('bandeira') || '',
+        uf: params.get('uf') || '',
+        data: params.get('data') || ''
+      };
+    }
+    function populateHeader() {
+      const params = getURLParams();
+      document.getElementById('header-fornecedor').innerHTML = params.fornecedor ? `<strong>${params.fornecedor}</strong>` : '<em>Não informado</em>';
+      document.getElementById('header-bandeira').innerHTML = params.bandeira ? `<strong>${params.bandeira}</strong>` : '<em>Não informado</em>';
+      document.getElementById('header-uf').innerHTML = params.uf ? `<strong>${params.uf}</strong>` : '<em>Não informado</em>';
+      document.getElementById('header-data').innerHTML = params.data ? `<strong>${params.data}</strong>` : '<em>Não informado</em>';
+    }
+    // --- Passo 14, 18: Dados realistas por fornecedor/SKU ---
+    const fornecedoresProdutos = {
+      'Ambev': [
+        {
+          sku: '7891910000197',
+          descricao: 'Cerveja Skol Lata 350ml',
+          precoAntigo: 3.49,
+          precoNovo: 3.69,
+          atualizacaoPercentual: 5.7,
+          atualizacaoPonderada: 4.2,
+          impactoDRE: 1200,
+          pesoVendas: 13.2,
+          icNielsen: 92,
+          icObjetiva: 89,
+          dataUltimaAtualizacao: '2024-06-01',
+          historico: {
+            precos: [3.29, 3.39, 3.49, 3.59, 3.69],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [90, 91, 91, 92, 92],
+            icObjetiva: [87, 88, 88, 89, 89],
+            vendas: [12000, 13000, 12800, 13100, 13500],
+            margem: [18, 17.5, 17, 16.8, 16.5],
+            outrosFornecedores: [3.59, 3.65, 3.68, 3.72, 3.74]
+          }
+        },
+        {
+          sku: '7891991000848',
+          descricao: 'Cerveja Brahma Lata 350ml',
+          precoAntigo: 3.39,
+          precoNovo: 3.59,
+          atualizacaoPercentual: 5.9,
+          atualizacaoPonderada: 4.2,
+          impactoDRE: 1050,
+          pesoVendas: 11.7,
+          icNielsen: 91,
+          icObjetiva: 88,
+          dataUltimaAtualizacao: '2024-06-01',
+          historico: {
+            precos: [3.19, 3.29, 3.39, 3.49, 3.59],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [89, 90, 90, 91, 91],
+            icObjetiva: [86, 87, 87, 88, 88],
+            vendas: [11000, 11500, 11700, 11900, 12000],
+            margem: [17, 16.7, 16.5, 16.3, 16.0],
+            outrosFornecedores: [3.49, 3.55, 3.58, 3.62, 3.65]
+          }
+        },
+        {
+          sku: '7896005800015',
+          descricao: 'Guaraná Antarctica 2L',
+          precoAntigo: 7.99,
+          precoNovo: 8.49,
+          atualizacaoPercentual: 6.3,
+          atualizacaoPonderada: 4.2,
+          impactoDRE: 800,
+          pesoVendas: 7.5,
+          icNielsen: 93,
+          icObjetiva: 90,
+          dataUltimaAtualizacao: '2024-06-01',
+          historico: {
+            precos: [7.59, 7.69, 7.99, 8.19, 8.49],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [91, 92, 92, 93, 93],
+            icObjetiva: [88, 89, 89, 90, 90],
+            vendas: [8000, 8500, 8600, 8700, 9000],
+            margem: [22, 21.8, 21.5, 21.2, 21.0],
+            outrosFornecedores: [8.19, 8.25, 8.29, 8.35, 8.39]
+          }
+        }
+      ],
+      'Nestlé': [
+        {
+          sku: '7891000240104',
+          descricao: 'Leite Condensado Moça 395g',
+          precoAntigo: 7.29,
+          precoNovo: 7.59,
+          atualizacaoPercentual: 4.1,
+          atualizacaoPonderada: 3.8,
+          impactoDRE: 700,
+          pesoVendas: 6.2,
+          icNielsen: 95,
+          icObjetiva: 92,
+          dataUltimaAtualizacao: '2024-06-03',
+          historico: {
+            precos: [6.99, 7.09, 7.19, 7.39, 7.59],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [93, 94, 94, 95, 95],
+            icObjetiva: [90, 91, 91, 92, 92],
+            vendas: [6000, 6200, 6400, 6600, 6800],
+            margem: [25, 24.7, 24.5, 24.3, 24.0],
+            outrosFornecedores: [7.39, 7.45, 7.49, 7.55, 7.59]
+          }
+        },
+        {
+          sku: '7891000060108',
+          descricao: 'Nescau 2.0 400g',
+          precoAntigo: 6.49,
+          precoNovo: 6.79,
+          atualizacaoPercentual: 4.6,
+          atualizacaoPonderada: 3.8,
+          impactoDRE: 500,
+          pesoVendas: 4.1,
+          icNielsen: 93,
+          icObjetiva: 90,
+          dataUltimaAtualizacao: '2024-06-03',
+          historico: {
+            precos: [6.29, 6.39, 6.49, 6.59, 6.79],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [91, 92, 92, 93, 93],
+            icObjetiva: [88, 89, 89, 90, 90],
+            vendas: [4000, 4100, 4200, 4300, 4400],
+            margem: [23, 22.8, 22.5, 22.3, 22.0],
+            outrosFornecedores: [6.59, 6.65, 6.69, 6.75, 6.79]
+          }
+        }
+      ],
+      'BRF': [
+        {
+          sku: '7896004000019',
+          descricao: 'Presunto Sadia 1kg',
+          precoAntigo: 27.90,
+          precoNovo: 28.90,
+          atualizacaoPercentual: 3.6,
+          atualizacaoPonderada: 3.2,
+          impactoDRE: 900,
+          pesoVendas: 9.2,
+          icNielsen: 90,
+          icObjetiva: 87,
+          dataUltimaAtualizacao: '2024-06-02',
+          historico: {
+            precos: [27.00, 27.30, 27.60, 28.10, 28.90],
+            datas: ['2024-02','2024-03','2024-04','2024-05','2024-06'],
+            icNielsen: [88, 89, 90, 90, 90],
+            icObjetiva: [85, 86, 87, 87, 87],
+            vendas: [5000, 5200, 5300, 5400, 5500],
+            margem: [21, 20.8, 20.5, 20.3, 20.0],
+            outrosFornecedores: [28.10, 28.20, 28.30, 28.50, 28.80]
+          }
+        }
+      ]
+    };
+    function getProdutosFornecedor(fornecedor) {
+      return fornecedoresProdutos[fornecedor] || [];
+    }
+    // --- Passo 13: Atualizar tabela de preços ---
+    function renderTabelaProdutos() {
+      const params = getURLParams();
+      const produtos = getProdutosFornecedor(params.fornecedor);
+      const tbody = document.getElementById('produtos-tbody');
+      tbody.innerHTML = '';
+      produtos.forEach(prod => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${prod.sku}</td>
+          <td>${prod.descricao}</td>
+          <td>R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}</td>
+          <td>R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}</td>
+          <td style="color:${prod.atualizacaoPercentual>=0?'#d4380d':'#16a34a'};">${prod.atualizacaoPercentual>0?'+':''}${prod.atualizacaoPercentual.toFixed(1)}%</td>
+          <td>${prod.atualizacaoPonderada.toFixed(1)}%</td>
+          <td>R$ ${prod.impactoDRE.toLocaleString('pt-BR')}</td>
+          <td>${prod.pesoVendas.toFixed(1)}%</td>
+          <td>${prod.icNielsen} / ${prod.icObjetiva}</td>
+          <td>${prod.dataUltimaAtualizacao}</td>
+          <td><button class="btn-drill" onclick="abrirModalAnalise('${prod.sku}')">Análise</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    // --- Passo 15, 16, 17, 18: Modal de análise detalhada ---
+    let chart1 = null, chart2 = null;
+    function abrirModalAnalise(sku) {
+      const params = getURLParams();
+      const produtos = getProdutosFornecedor(params.fornecedor);
+      const prod = produtos.find(p => p.sku === sku);
+      if (!prod) return;
+      // Preencher modal
+      document.getElementById('modal-sku').textContent = prod.sku;
+      document.getElementById('modal-descricao').textContent = prod.descricao;
+      document.getElementById('modal-preco-atual').textContent = `R$ ${prod.precoNovo.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-preco-antigo').textContent = `R$ ${prod.precoAntigo.toFixed(2).replace('.', ',')}`;
+      document.getElementById('modal-ic-nielsen').textContent = prod.icNielsen;
+      document.getElementById('modal-ic-objetiva').textContent = prod.icObjetiva;
+      document.getElementById('modal-peso-vendas').textContent = prod.pesoVendas.toFixed(1) + '%';
+      document.getElementById('modal-impacto-dre').textContent = `R$ ${prod.impactoDRE.toLocaleString('pt-BR')}`;
+      document.getElementById('modal-margem').textContent = prod.historico.margem[prod.historico.margem.length-1].toFixed(1) + '%';
+      document.getElementById('modal-data-ult-atualizacao').textContent = prod.dataUltimaAtualizacao;
+      // Render gráfico de evolução de preço
+      const ctx1 = document.getElementById('chart-preco').getContext('2d');
+      if (chart1) chart1.destroy();
+      chart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: prod.historico.datas,
+          datasets: [
+            {
+              label: 'Preço do SKU',
+              data: prod.historico.precos,
+              borderColor: '#1a6ae5',
+              backgroundColor: 'rgba(26,106,229,0.1)',
+              fill: true,
+              tension: 0.2
+            },
+            {
+              label: 'Preço Médio Mercado',
+              data: prod.historico.outrosFornecedores,
+              borderColor: '#f5b800',
+              backgroundColor: 'rgba(245,184,0,0.07)',
+              fill: true,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Evolução de Preço do SKU vs Mercado' }
+          }
+        }
+      });
+      // Gráfico de ICs
+      const ctx2 = document.getElementById('chart-ic').getContext('2d');
+      if (chart2) chart2.destroy();
+      chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: prod.historico.datas,
+          datasets: [
+            {
+              label: 'IC Nielsen',
+              data: prod.historico.icNielsen,
+              borderColor: '#16a34a',
+              backgroundColor: 'rgba(22,163,74,0.08)',
+              fill: true,
+              tension: 0.2
+            },
+            {
+              label: 'IC Objetiva',
+              data: prod.historico.icObjetiva,
+              borderColor: '#0098d8',
+              backgroundColor: 'rgba(0,152,216,0.08)',
+              fill: true,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Histórico de ICs do SKU' }
+          }
+        }
+      });
+      // Tabela de histórico
+      const histTable = document.getElementById('modal-tabela-historico');
+      histTable.innerHTML = '';
+      for (let i = 0; i < prod.historico.datas.length; i++) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${prod.historico.datas[i]}</td>
+          <td>R$ ${prod.historico.precos[i].toFixed(2).replace('.', ',')}</td>
+          <td>${prod.historico.icNielsen[i]}</td>
+          <td>${prod.historico.icObjetiva[i]}</td>
+          <td>${prod.historico.vendas[i]}</td>
+          <td>${prod.historico.margem[i].toFixed(1)}%</td>
+        `;
+        histTable.appendChild(tr);
+      }
+      // Sugestões de análise
+      document.getElementById('modal-sugestoes').innerHTML = `
+        <ul>
+          <li>Comparar evolução do preço do SKU com a média de mercado.</li>
+          <li>Observar tendências de IC Nielsen e Objetiva ao longo dos meses.</li>
+          <li>Analisar o peso do SKU nas vendas totais do fornecedor.</li>
+          <li>Verificar impacto no DRE/DLP e margem de lucro histórica.</li>
+          <li>Comparar volume de vendas do SKU em relação ao histórico.</li>
+        </ul>
+      `;
+      document.getElementById('modal-overlay').classList.add('active');
+    }
+    // --- Passo 20: Fechar modal ---
+    function fecharModalAnalise() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      // Limpa gráficos para liberar memória
+      if (chart1) { chart1.destroy(); chart1 = null; }
+      if (chart2) { chart2.destroy(); chart2 = null; }
+      document.getElementById('modal-tabela-historico').innerHTML = '';
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      populateHeader();
+      renderTabelaProdutos();
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html">Dashboard</a>
+      <a href="#" style="color:#d4380d;">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1 class="main-header">Análise Comercial da Tabela</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="panel">
+        <div class="panel-header">
+          <div>Fornecedor: <span id="header-fornecedor"></span></div>
+          <div>Bandeira: <span id="header-bandeira"></span></div>
+          <div>UF: <span id="header-uf"></span></div>
+          <div>Data Submissão: <span id="header-data"></span></div>
+        </div>
+        <div style="margin-bottom: 18px;">
+          <button class="btn-acao btn-aprovar" type="button" onclick="abrirModalAcao('aprovar')">Aprovar</button>
+          <button class="btn-acao btn-reprovar" type="button" onclick="abrirModalAcao('reprovar')">Reprovar</button>
+        </div>
+        <form class="filters" aria-label="Filtros avançados">
+          <label>SKU:
+            <input type="text" placeholder="Buscar SKU">
+          </label>
+          <label>Descrição:
+            <input type="text" placeholder="Buscar descrição">
+          </label>
+          <label>IC Nielsen:
+            <select>
+              <option>Todos</option>
+              <option>&lt; 80</option>
+              <option>80 - 90</option>
+              <option>&gt; 90</option>
+            </select>
+          </label>
+          <label>IC Objetiva:
+            <select>
+              <option>Todos</option>
+              <option>&lt; 80</option>
+              <option>80 - 90</option>
+              <option>&gt; 90</option>
+            </select>
+          </label>
+        </form>
+        <table class="data-table" aria-label="Tabela comparativa de preços">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Descrição</th>
+              <th>Preço Antigo</th>
+              <th>Preço Novo</th>
+              <th>Atualização em % por produto</th>
+              <th>Atualização em % ponderada total do fornecedor</th>
+              <th>Impacto total no DRE/DLP da cia/fornecedor</th>
+              <th>Peso do produto nas vendas totais do fornecedor</th>
+              <th>ICs (Geral Nielsen & Objetiva)</th>
+              <th>Data da última atualização de preço do SKU</th>
+              <th>Análise</th>
+            </tr>
+          </thead>
+          <tbody id="produtos-tbody">
+            </tbody>
+        </table>
+      </section>
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content">
+          <h3>Análise Detalhada do SKU <span id="modal-sku"></span></h3>
+          <div class="modal-section">
+            <strong>Descrição:</strong> <span id="modal-descricao"></span><br>
+            <strong>Preço Atual:</strong> <span id="modal-preco-atual"></span><br>
+            <strong>Preço Anterior:</strong> <span id="modal-preco-antigo"></span><br>
+            <strong>IC Nielsen:</strong> <span id="modal-ic-nielsen"></span> &nbsp; <strong>IC Objetiva:</strong> <span id="modal-ic-objetiva"></span><br>
+            <strong>Peso nas Vendas:</strong> <span id="modal-peso-vendas"></span><br>
+            <strong>Impacto no DRE/DLP:</strong> <span id="modal-impacto-dre"></span><br>
+            <strong>Margem Atual:</strong> <span id="modal-margem"></span><br>
+            <strong>Data da Última Atualização:</strong> <span id="modal-data-ult-atualizacao"></span>
+          </div>
+          <div class="modal-section">
+            <div class="modal-chart">
+              <canvas id="chart-preco" width="600" height="240" aria-label="Gráfico de preço"></canvas>
+            </div>
+            <div class="modal-chart">
+              <canvas id="chart-ic" width="600" height="240" aria-label="Gráfico de ICs"></canvas>
+            </div>
+          </div>
+          <div class="modal-section">
+            <h4>Histórico do SKU</h4>
+            <table class="modal-table">
+              <thead>
+                <tr>
+                  <th>Mês</th>
+                  <th>Preço</th>
+                  <th>IC Nielsen</th>
+                  <th>IC Objetiva</th>
+                  <th>Volume de Vendas</th>
+                  <th>Margem (%)</th>
+                </tr>
+              </thead>
+              <tbody id="modal-tabela-historico">
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-section">
+            <h4>Sugestões de Análise</h4>
+            <div id="modal-sugestoes"></div>
+          </div>
+          <button class="modal-close-btn" onclick="fecharModalAnalise()">Fechar</button>
+        </div>
+      </div>
+      <div class="modal-overlay-acao" id="modal-overlay-acao">
+        <div class="modal-content-acao">
+          <h3 id="titulo-modal-acao">Justificativa</h3>
+          <textarea id="justificativa-acao" placeholder="Insira a justificativa para a ação..."></textarea>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn-cancelar-acao" type="button" onclick="fecharModalAcao()">Cancelar</button>
+            <button class="btn-enviar-acao" type="button" onclick="enviarAcao()">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    // --- Modal Aprovação/Reprovação ---
+    let acaoSelecionada = null;
+    function abrirModalAcao(acao) {
+      acaoSelecionada = acao;
+      document.getElementById('justificativa-acao').value = '';
+      document.getElementById('titulo-modal-acao').textContent = acao === 'aprovar' ? 'Justificativa para Aprovação' : 'Justificativa para Reprovação';
+      document.getElementById('modal-overlay-acao').classList.add('active');
+    }
+    function fecharModalAcao() {
+      document.getElementById('modal-overlay-acao').classList.remove('active');
+      acaoSelecionada = null;
+    }
+    function enviarAcao() {
+      // Aqui você pode capturar a justificativa se desejar
+      const justificativa = document.getElementById('justificativa-acao').value.trim();
+      if (!justificativa) {
+        alert('Por favor, insira uma justificativa.');
+        return;
+      }
+      // Redireciona para dashboard-comprador.html com parâmetros de ação
+      const params = getURLParams();
+      
+      // --- CORREÇÃO AQUI: Usar window.location.href para manter o caminho relativo correto ---
+      const url = new URL('dashboard-comprador.html', window.location.href);
+      // Limpa search params antigos que possam vir da URL base, se for o mesmo arquivo, mas como mudamos o nome, o search já vem limpo no objeto URL
+      
+      url.searchParams.set('fornecedor', params.fornecedor);
+      url.searchParams.set('bandeira', params.bandeira);
+      url.searchParams.set('uf', params.uf);
+      url.searchParams.set('data', params.data);
+      url.searchParams.set('acao', acaoSelecionada);
+      url.searchParams.set('justificativa', justificativa); // O objeto URL já faz o encode
+      
+      window.location.href = url.toString();
+    }
+  </script>
+</body>
+</html>
