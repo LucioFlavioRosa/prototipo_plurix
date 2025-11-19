@@ -12,25 +12,25 @@
     html, body {
       height: 100%;
       margin: 0;
+      padding: 0;
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
-      background: #f7f8fa;;
+      background: #f7f8fa;
       color: #222;
+      line-height: 1.6;
     }
-    .body {
+    body {
       display: flex;
       min-height: 100vh;
     }
     .sidebar {
       width: 260px;
       background: #1a2340;
-      border-right: 1px solid #eaeaea;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
       padding-top: 32px;
       box-shadow: 2px 0 8px rgba(30,40,80,0.07);
       position: relative;
       z-index: 2;
+      display: flex;
+      flex-direction: column;
     }
     .sidebar .logo {
       display: flex;
@@ -55,6 +55,7 @@
       color: #fff;
       text-decoration: none;
       font-size: 1.08rem;
+      border-radius: 0;
       border-left: 4px solid transparent;
       font-weight: 600;
       margin-bottom: 2px;
@@ -77,7 +78,6 @@
       flex-direction: column;
       min-height: 100vh;
       padding: 0 0 0 0;
-      background: none;
     }
     .header {
       background: #fff;
@@ -96,50 +96,12 @@
       margin: 0;
       background: none;
       letter-spacing: 0.5px;
-      margin-bottom: 0;
     }
     .dashboard-section {
+      padding: 32px 40px 40px 40px;
       flex: 1;
       background: #f7f8fa;
       min-height: 0;
-      padding: 32px 40px 40px 40px;
-      display: flex;
-      flex-direction: column;
-    }
-    .filters {
-      display: flex;
-      gap: 18px;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-    }
-    .filters label {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #444;
-      margin-right: 6px;
-    }
-    .filters select, .filters input[type="date"] {
-      padding: 9px 16px;
-      border-radius: 5px;
-      border: 1px solid #b7b9c6;
-      font-size: 1rem;
-      background: #fff;
-      color: #222;
-    }
-    .btn-limpar {
-      background: #9ca3af;
-      color: #fff;
-      border: none;
-      padding: 9px 20px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: background 0.2s;
-    }
-    .btn-limpar:hover {
-      background: #6b7280;
     }
     .card-grid {
       display: grid;
@@ -150,7 +112,7 @@
     .card {
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      box-shadow: 0 2px 14px rgba(0,0,0,0.08);
       padding: 32px 24px 24px 24px;
       display: flex;
       flex-direction: column;
@@ -160,7 +122,7 @@
     }
     .card-title {
       font-size: 1rem;
-      color: #444;
+      color: #666;
       font-weight: 600;
     }
     .card-value {
@@ -182,11 +144,40 @@
       padding: 28px 24px 24px 24px;
       margin-bottom: 32px;
     }
-    .table-section {
+    .filters {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .filters label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #444;
+      margin-right: 6px;
+    }
+    .filters select, .filters input[type="date"] {
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: 1px solid #b7b9c6;
+      font-size: 1rem;
       background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
-      padding: 32px 24px 24px 24px;
+      color: #222;
+    }
+    .btn-limpar {
+      background: #9ca3af;
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background 0.2s;
+    }
+    .btn-limpar:hover {
+      background: #6b7280;
     }
     .section-title {
       font-size: 1.3rem;
@@ -247,15 +238,18 @@
     .modal-content {
       background-color: #fff;
       margin: 5% auto;
-      padding: 36px;
+      padding: 32px 24px 24px 24px;
       border-radius: 14px;
       width: 80%;
       max-width: 900px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
     }
     .close {
       color: #aaa;
-      float: right;
+      position: absolute;
+      top: 16px;
+      right: 16px;
       font-size: 28px;
       font-weight: bold;
       cursor: pointer;
@@ -308,7 +302,15 @@
         padding: 10px 10px;
         text-align: center;
       }
-      .sidebar img { width: 38px; }
+      .sidebar .logo img { width: 38px; }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
     }
     @media (max-width: 700px) {
       .main-header { font-size: 1.1rem; }
@@ -328,53 +330,80 @@
   </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar" aria-label="Menu principal">
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="logo">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
-      <nav>
-        <a href="dashboard-comprador.html" class="active">Dashboard</a>
-        <a href="index.html" style="color:#d4380d;">Sair</a>
-      </nav>
-    </aside>
-    <main class="main-content">
-      <header class="main-header">Dashboard do Comprador</header>
-      <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
-        <label>Fornecedor:
-          <select id="fornecedor">
-            <option value="">Todos</option>
-          </select>
-        </label>
-        <label>Bandeira:
-          <select id="bandeira">
-            <option value="">Todas</option>
-            <option value="superpao">Superpão</option>
-            <option value="boa">Boa Supermercados</option>
-            <option value="avenida">Supermercados Avenida</option>
-            <option value="compremais">Compre Mais</option>
-            <option value="emporio">Empório Dom Olívio</option>
-            <option value="amigao">Grupo Amigão</option>
-            <option value="parana">Paraná Supermercados</option>
-          </select>
-        </label>
-        <label>UF:
-          <select id="uf">
-            <option value="">Todas</option>
-          </select>
-        </label>
-        <label>Data:
-          <input type="date" id="dataFiltro">
-        </label>
-        <label>Status:
-          <select id="status">
-            <option value="">Todos</option>
-            <option value="em_analise">Em Análise</option>
-            <option value="aprovada">Aprovada</option>
-            <option value="reprovada">Reprovada</option>
-          </select>
-        </label>
-        <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
-      </form>
-      <section class="table-section">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html" class="active">Dashboard</a>
+      <a href="index.html" style="color:#d4380d;">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1 class="main-header">Dashboard do Comprador</h1>
+    </header>
+    <main class="dashboard-section">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">Tabelas Pendentes</div>
+          <div class="card-value" id="tabelasPendentes"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Variação Média (%)</div>
+          <div class="card-value" id="variacaoMedia"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Impacto DRE</div>
+          <div class="card-value" id="impactoDRE"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">IC Nielsen</div>
+          <div class="card-value" id="icNielsen"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">IC Objetiva</div>
+          <div class="card-value" id="icObjetiva"></div>
+        </div>
+      </div>
+      <section class="panel">
+        <form class="filters" aria-label="Filtros de pesquisa" onsubmit="return false;">
+          <label>Fornecedor:
+            <select id="fornecedor">
+              <option value="">Todos</option>
+            </select>
+          </label>
+          <label>Bandeira:
+            <select id="bandeira">
+              <option value="">Todas</option>
+              <option value="superpao">Superpão</option>
+              <option value="boa">Boa Supermercados</option>
+              <option value="avenida">Supermercados Avenida</option>
+              <option value="compremais">Compre Mais</option>
+              <option value="emporio">Empório Dom Olívio</option>
+              <option value="amigao">Grupo Amigão</option>
+              <option value="parana">Paraná Supermercados</option>
+            </select>
+          </label>
+          <label>UF:
+            <select id="uf">
+              <option value="">Todas</option>
+            </select>
+          </label>
+          <label>Data:
+            <input type="date" id="dataFiltro">
+          </label>
+          <label>Status:
+            <select id="status">
+              <option value="">Todos</option>
+              <option value="em_analise">Em Análise</option>
+              <option value="aprovada">Aprovada</option>
+              <option value="reprovada">Reprovada</option>
+            </select>
+          </label>
+          <button type="button" class="btn-limpar" onclick="resetarFiltros()">Limpar Filtros</button>
+        </form>
         <div class="section-title">Tabelas Submetidas</div>
         <table class="data-table" aria-label="Tabelas submetidas">
           <thead>
@@ -415,12 +444,15 @@
       </table>
     </div>
   </div>
+  <div style="display:none">
+    <!-- Cards de métricas (apenas para garantir que atualizarCards funcione) -->
+    <span id="tabelasPendentes"></span>
+    <span id="variacaoMedia"></span>
+    <span id="impactoDRE"></span>
+    <span id="icNielsen"></span>
+    <span id="icObjetiva"></span>
+  </div>
   <script>
-    // Função auxiliar para normalizar strings (remove acentos, espaços e converte para minúsculas)
-    function normalizarString(str) {
-      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '').toLowerCase();
-    }
-
     // Passo 3: Mapeamento de bandeiras para UFs
     const bandeiraUF = {
       superpao: ['PR','SC','RS'],
@@ -555,10 +587,10 @@
       return tabelasSubmetidas.filter(item => {
         let ok = true;
         if (fornecedor && item.fornecedor !== fornecedor) ok = false;
-        if (bandeira && normalizarString(item.bandeira) !== normalizarString(bandeira)) ok = false;
+        if (bandeira && item.bandeira.replace(/ /g,'').toLowerCase() !== bandeira) ok = false;
         if (uf && item.uf !== uf) ok = false;
         if (status && item.status !== status) ok = false;
-        if (data && item.dataSubmissao !== data) ok = false;
+        if (data && item.dataSubmissao < data) ok = false;
         return ok;
       });
     }
@@ -638,19 +670,19 @@
         opt.textContent = f;
         fornecedorSelect.appendChild(opt);
       });
-      // Popular UFs
-      const ufSet = new Set(tabelasSubmetidas.map(item => item.uf));
-      const ufsOrdenadas = Array.from(ufSet).sort();
-      const ufSelect = document.getElementById('uf');
-      ufSelect.innerHTML = '<option value="">Todas</option>';
-      ufsOrdenadas.forEach(uf => {
-        let opt = document.createElement('option');
-        opt.value = uf;
-        opt.textContent = uf;
-        ufSelect.appendChild(opt);
-      });
       // Event listeners
       document.getElementById('bandeira').addEventListener('change', function() {
+        const ufSelect = document.getElementById('uf');
+        const bandeira = this.value;
+        ufSelect.innerHTML = '<option value="">Todas</option>';
+        if (bandeira && bandeiraUF[bandeira]) {
+          bandeiraUF[bandeira].forEach(uf => {
+            let opt = document.createElement('option');
+            opt.value = uf;
+            opt.textContent = uf;
+            ufSelect.appendChild(opt);
+          });
+        }
         atualizarTabela();
       });
       document.getElementById('fornecedor').addEventListener('change', atualizarTabela);
@@ -737,16 +769,7 @@
     function resetarFiltros() {
       document.getElementById('fornecedor').value = '';
       document.getElementById('bandeira').value = '';
-      const ufSet = new Set(tabelasSubmetidas.map(item => item.uf));
-      const ufsOrdenadas = Array.from(ufSet).sort();
-      const ufSelect = document.getElementById('uf');
-      ufSelect.innerHTML = '<option value="">Todas</option>';
-      ufsOrdenadas.forEach(uf => {
-        let opt = document.createElement('option');
-        opt.value = uf;
-        opt.textContent = uf;
-        ufSelect.appendChild(opt);
-      });
+      document.getElementById('uf').innerHTML = '<option value="">Todas</option>';
       document.getElementById('status').value = '';
       document.getElementById('dataFiltro').value = '';
       atualizarTabela();
@@ -786,13 +809,5 @@
       });
     }
   </script>
-  <div style="display:none">
-    <!-- Cards de métricas (apenas para garantir que atualizarCards funcione) -->
-    <span id="tabelasPendentes"></span>
-    <span id="variacaoMedia"></span>
-    <span id="impactoDRE"></span>
-    <span id="icNielsen"></span>
-    <span id="icObjetiva"></span>
-  </div>
 </body>
 </html>
