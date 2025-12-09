@@ -1,0 +1,20 @@
+<!-- Componente Sidebar Navigation - Reutilizável -->
+<!-- Uso: Inclua esta sidebar em todas as páginas internas para navegação consistente. O link ativo recebe a classe 'active'. -->
+<aside class="sidebar" style="width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2;">
+  <div class="logo" style="display: flex; align-items: center; justify-content: center; margin-bottom: 40px;">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" style="width: 120px; height: auto;">
+  </div>
+  <nav style="flex: 1;">
+    <a href="dashboard-comprador.html" class="{{dashboardActive}}">Dashboard</a>
+    <a href="nova-cotacao.html" class="{{novaCotacaoActive}}">Nova Cotação</a>
+    <a href="historico-cotacoes.html" class="{{historicoActive}}">Histórico</a>
+    <a href="index.html" onclick="sair()">Sair</a>
+  </nav>
+  <div class="bottom" style="margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6;">&copy; 2024 Plurix</div>
+</aside>
+<!--
+Documentação de uso:
+- Adicione a classe 'active' ao link correspondente à página atual (ex: {{dashboardActive}} = 'active').
+- Os links podem ser ajustados conforme o fluxo do sistema de gestão de cotações.
+- O estilo e responsividade seguem o template original.
+-->
