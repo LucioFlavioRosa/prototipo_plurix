@@ -29,16 +29,19 @@
       box-shadow: 2px 0 8px rgba(30,40,80,0.07);
       position: relative;
       z-index: 2;
+      border-radius: 0 12px 12px 0;
     }
     .sidebar .logo {
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 40px;
+      padding: 0 8px;
     }
     .sidebar .logo img {
       width: 120px;
       height: auto;
+      border-radius: 12px;
     }
     .sidebar nav {
       flex: 1;
@@ -53,8 +56,10 @@
       border-left: 4px solid transparent;
       transition: background 0.15s, border-color 0.15s;
       margin-bottom: 2px;
+      border-radius: 6px 0 0 6px;
+      outline: none;
     }
-    .sidebar nav a.active, .sidebar nav a:hover {
+    .sidebar nav a.active, .sidebar nav a:hover, .sidebar nav a:focus {
       background: #222b4a;
       border-left: 4px solid #f9b233;
       color: #f9b233;
@@ -67,7 +72,7 @@
     }
     .main-content {
       flex: 1;
-      padding: 0 0 0 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -82,12 +87,14 @@
       position: sticky;
       top: 0;
       z-index: 1;
+      border-radius: 0 0 12px 12px;
     }
     .header h1 {
       font-size: 2rem;
       font-weight: 700;
       color: #1a2340;
       margin: 0;
+      letter-spacing: 0.01em;
     }
     .header .cta-upload {
       background: #f9b233;
@@ -100,8 +107,9 @@
       cursor: pointer;
       transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      outline: none;
     }
-    .header .cta-upload:hover {
+    .header .cta-upload:hover, .header .cta-upload:focus {
       background: #e1a12a;
     }
     .dashboard-section {
@@ -124,17 +132,23 @@
       display: flex;
       flex-direction: column;
       min-height: 180px;
+      margin-bottom: 0;
     }
     .card-title {
       font-size: 1.35rem;
       font-weight: 700;
       color: #1a2340;
       margin-bottom: 12px;
+      letter-spacing: 0.01em;
     }
     .card-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 1.05rem;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(30,40,80,0.04);
     }
     .card-table th, .card-table td {
       padding: 10px 12px;
@@ -145,6 +159,10 @@
       background: #e8eaf0;
       color: #1a2340;
       font-weight: 700;
+      font-size: 1.08rem;
+    }
+    .card-table tr:last-child td {
+      border-bottom: none;
     }
     .status {
       display: inline-block;
@@ -153,37 +171,24 @@
       font-size: 1rem;
       font-weight: 700;
       color: #fff;
+      letter-spacing: 0.01em;
     }
     .status-pendente { background: #f9b233; }
     .status-aprovada { background: #4bb543; }
     .status-reprovada { background: #e74c3c; }
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 1.02rem;
-    }
-    .history-table th, .history-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eaeaea;
-    }
-    .history-table th {
-      background: #e8eaf0;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .history-table tr:last-child td {
-      border-bottom: none;
-    }
     .link-detalhes {
       color: #1a2340;
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.15s, text-decoration 0.15s;
+      outline: none;
+      border-radius: 4px;
+      padding: 2px 6px;
     }
-    .link-detalhes:hover {
+    .link-detalhes:hover, .link-detalhes:focus {
       color: #f9b233;
       text-decoration: none;
+      background: #f7f8fa;
     }
     /* Modal Styles */
     .modal {
@@ -212,6 +217,7 @@
       max-height: 90vh;
       overflow-y: auto;
       animation: slideIn 0.3s ease;
+      outline: none;
     }
     .modal-header {
       display: flex;
@@ -234,71 +240,18 @@
       line-height: 1;
       margin-left: 16px;
       transition: color 0.18s;
+      outline: none;
+      border-radius: 4px;
+      padding: 2px 8px;
     }
-    .modal-close:hover {
+    .modal-close:hover, .modal-close:focus {
       color: #e74c3c;
+      background: #f7f8fa;
     }
     .modal-body {
       font-size: 1.05rem;
       line-height: 1.6;
       color: #222;
-    }
-    .nivel-aprovacao {
-      display: flex;
-      align-items: center;
-      margin: 16px 0;
-      flex-wrap: wrap;
-    }
-    .nivel-item {
-      display: flex;
-      align-items: center;
-      margin-right: 24px;
-      font-size: 1.08rem;
-      font-weight: 600;
-      color: #1a2340;
-    }
-    .status-circle {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #ddd;
-      border: 2px solid #ccc;
-      transition: background 0.2s;
-    }
-    .status-circle.ativo {
-      background: #4bb543;
-      border-color: #4bb543;
-    }
-    .nivel-linha {
-      height: 2px;
-      width: 40px;
-      background: #ddd;
-      margin: 0 8px;
-      display: inline-block;
-      vertical-align: middle;
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .nivel-linha.ativo {
-      background: #4bb543;
-    }
-    .motivo-item {
-      margin-bottom: 20px;
-      padding: 16px;
-      background: #f9f9f9;
-      border-left: 4px solid #f9b233;
-      border-radius: 6px;
-    }
-    .motivo-titulo {
-      font-weight: 700;
-      color: #1a2340;
-      margin-bottom: 8px;
-      font-size: 1.08rem;
-    }
-    .motivo-valor {
-      color: #555;
-      font-size: 1.02rem;
     }
     /* Modal Editor Styles */
     .modal-editor {
@@ -327,6 +280,7 @@
       max-height: 92vh;
       overflow-y: auto;
       animation: slideIn 0.3s ease;
+      outline: none;
     }
     .modal-editor-header {
       display: flex;
@@ -349,40 +303,20 @@
       line-height: 1;
       margin-left: 16px;
       transition: color 0.18s;
-    }
-    .modal-editor-close:hover {
-      color: #e74c3c;
-    }
-    .editor-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 22px;
-      font-size: 1.01rem;
-    }
-    .editor-table th, .editor-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #eaeaea;
-      text-align: left;
-    }
-    .editor-table th {
-      background: #e8eaf0;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .editor-table input {
-      width: 100%;
-      padding: 5px 6px;
-      border: 1px solid #b7b9c6;
+      outline: none;
       border-radius: 4px;
-      font-size: 1rem;
+      padding: 2px 8px;
+    }
+    .modal-editor-close:hover, .modal-editor-close:focus {
+      color: #e74c3c;
       background: #f7f8fa;
+    }
+    .modal-editor-body {
+      font-size: 1.05rem;
+      line-height: 1.6;
       color: #222;
-      box-sizing: border-box;
     }
-    .editor-table input:focus {
-      outline: 2px solid #f9b233;
-      background: #fffbe7;
-    }
+    /* Botões editor */
     .btn-salvar-edicao, .btn-cancelar-edicao {
       padding: 10px 24px;
       font-size: 1.08rem;
@@ -393,19 +327,20 @@
       margin-right: 12px;
       margin-top: 8px;
       transition: background 0.18s;
+      outline: none;
     }
     .btn-salvar-edicao {
       background: #4bb543;
       color: #fff;
     }
-    .btn-salvar-edicao:hover {
+    .btn-salvar-edicao:hover, .btn-salvar-edicao:focus {
       background: #399a36;
     }
     .btn-cancelar-edicao {
       background: #e74c3c;
       color: #fff;
     }
-    .btn-cancelar-edicao:hover {
+    .btn-cancelar-edicao:hover, .btn-cancelar-edicao:focus {
       background: #b93a2e;
     }
     /* Tabela editável para status reprovada */
@@ -415,6 +350,9 @@
       margin-bottom: 18px;
       font-size: 1.04rem;
       background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(30,40,80,0.04);
     }
     .tabela-editavel th, .tabela-editavel td {
       padding: 8px 10px;
@@ -425,6 +363,10 @@
       background: #f7f8fa;
       color: #1a2340;
       font-weight: 700;
+      font-size: 1.08rem;
+    }
+    .tabela-editavel tr:last-child td {
+      border-bottom: none;
     }
     .tabela-editavel input {
       width: 100%;
@@ -436,6 +378,7 @@
       color: #222;
       box-sizing: border-box;
       transition: border 0.15s, background 0.15s;
+      outline: none;
     }
     .tabela-editavel input:focus {
       outline: 2px solid #f9b233;
@@ -456,31 +399,21 @@
       transition: background 0.18s;
       box-shadow: 0 2px 8px rgba(249,178,51,0.08);
       display: inline-block;
+      outline: none;
     }
-    .btn-download-excel:hover {
+    .btn-download-excel:hover, .btn-download-excel:focus {
       background: #e1a12a;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @media (max-width: 900px) {
+    /* Responsividade */
+    @media (max-width: 1024px) {
       .dashboard-section {
-        padding: 24px 10px 24px 10px;
+        padding: 24px 16px 24px 16px;
       }
       .header {
-        padding: 18px 10px 12px 10px;
+        padding: 18px 16px 12px 16px;
       }
       .sidebar {
-        width: 70px;
+        width: 90px;
         padding-top: 12px;
       }
       .sidebar .logo img {
@@ -516,6 +449,100 @@
         padding: 6px 4px;
       }
     }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        padding-top: 0;
+        padding-bottom: 0;
+        box-shadow: none;
+        border-radius: 0;
+        min-height: 64px;
+        height: 64px;
+      }
+      .sidebar .logo {
+        margin-bottom: 0;
+        margin-right: 12px;
+        padding: 0 4px;
+      }
+      .sidebar .logo img {
+        width: 36px;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin-right: 12px;
+      }
+      .sidebar nav a {
+        padding: 8px 10px;
+        font-size: 0.95rem;
+        border-radius: 6px;
+      }
+      .sidebar .bottom {
+        display: none;
+      }
+      .main-content {
+        padding: 0;
+      }
+      .dashboard-section {
+        padding: 12px 4px 12px 4px;
+      }
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .card {
+        padding: 16px 8px 14px 8px;
+        min-height: 120px;
+      }
+      .card-title {
+        font-size: 1.1rem;
+      }
+      .modal-content, .modal-editor-content {
+        max-width: 99vw;
+        width: 99vw;
+        padding: 8px;
+      }
+    }
+    @media (max-width: 375px) {
+      .header h1 {
+        font-size: 1.1rem;
+      }
+      .header .cta-upload {
+        padding: 8px 12px;
+        font-size: 0.98rem;
+      }
+      .dashboard-section {
+        padding: 4px 2px 4px 2px;
+      }
+      .card {
+        padding: 8px 2px 8px 2px;
+      }
+      .card-title {
+        font-size: 1rem;
+      }
+      .modal-content, .modal-editor-content {
+        padding: 4px;
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
   </style>
   <!-- SheetJS CDN para exportação Excel -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -531,7 +558,6 @@
     function uploadCTA() {
       window.location.href = 'upload-tabela.html';
     }
-
     // Função para abrir detalhes conforme status
     function abrirDetalhes(status, arquivo, data) {
       try {
@@ -579,16 +605,16 @@
           html += '</tr></thead><tbody>';
           for (var i = 0; i < dadosTabela.length; i++) {
             html += '<tr>' +
-              '<td><input type="text" name="sku" value="' + dadosTabela[i].sku + '" required></td>' +
-              '<td><input type="text" name="nome" value="' + dadosTabela[i].nome + '" required></td>' +
-              '<td><input type="text" name="descricao" value="' + dadosTabela[i].descricao + '" required></td>' +
-              '<td><input type="number" name="preco" value="' + dadosTabela[i].preco + '" min="0" step="0.01" required></td>' +
+              '<td><input type="text" name="sku" value="' + dadosTabela[i].sku + '" required aria-label="SKU"></td>' +
+              '<td><input type="text" name="nome" value="' + dadosTabela[i].nome + '" required aria-label="Nome"></td>' +
+              '<td><input type="text" name="descricao" value="' + dadosTabela[i].descricao + '" required aria-label="Descrição"></td>' +
+              '<td><input type="number" name="preco" value="' + dadosTabela[i].preco + '" min="0" step="0.01" required aria-label="Preço (R$)"></td>' +
             '</tr>';
           }
           html += '</tbody></table></form>';
           html += '<div style="margin-top:18px;">' +
-            '<button class="btn-salvar-edicao" onclick="salvarTabelaEditavel();return false;">Salvar Alterações</button>' +
-            '<button class="btn-cancelar-edicao" onclick="fecharModal();return false;">Cancelar</button>' +
+            '<button class="btn-salvar-edicao" onclick="salvarTabelaEditavel();return false;" aria-label="Salvar Alterações">Salvar Alterações</button>' +
+            '<button class="btn-cancelar-edicao" onclick="fecharModal();return false;" aria-label="Cancelar">Cancelar</button>' +
             '</div>';
         } else if (status === 'aprovada') {
           modalTitle.textContent = 'Tabela Aprovada - ' + arquivo;
@@ -607,19 +633,19 @@
             '</tr>';
           }
           html += '</tbody></table>';
-          html += '<button class="btn-download-excel" onclick="gerarDownloadExcel(\'' + arquivo + '\')">Download .xlsx</button>';
+          html += '<button class="btn-download-excel" onclick="gerarDownloadExcel(\'' + arquivo + '\')" aria-label="Download Excel">Download .xlsx</button>';
         } else if (status === 'pendente') {
           modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
           html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
           html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
-          html += '<div class="nivel-aprovacao">';
+          html += '<div class="nivel-aprovacao" role="list" aria-label="Níveis de Aprovação">';
           for (var i = 0; i < nivelAprovacao.length; i++) {
-            html += '<div class="nivel-item">';
-            html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
+            html += '<div class="nivel-item" role="listitem">';
+            html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '" aria-label="' + nivelAprovacao[i] + (i === nivelAtual ? ' (Atual)' : '') + '"></span>';
             html += nivelAprovacao[i];
             html += '</div>';
             if (i < nivelAprovacao.length - 1) {
-              html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
+              html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '" aria-hidden="true"></span>';
             }
           }
           html += '</div>';
@@ -646,7 +672,6 @@
         }
       }
     }
-
     // Função para salvar tabela editável (status reprovada)
     function salvarTabelaEditavel() {
       var form = document.getElementById('form-tabela-editavel');
@@ -671,14 +696,11 @@
         alert('Por favor, preencha todos os campos corretamente.');
         return;
       }
-      // Aqui poderia ser feito um envio para backend...
       alert('Alterações salvas com sucesso!');
       fecharModal();
     }
-
     // Função para gerar download Excel (status aprovada)
     function gerarDownloadExcel(arquivo) {
-      // Dados mock iguais aos exibidos na tabela - PRODUTOS AMBEV
       var dadosTabela = [
         { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
         { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
@@ -697,7 +719,6 @@
       var nomeArquivo = arquivo.replace(/\.[^.]+$/, '') + '.xlsx';
       XLSX.writeFile(wb, nomeArquivo);
     }
-
     function fecharModal() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -708,14 +729,12 @@
         }, 250);
       }
     }
-
     // MODAL EDITOR DE PLANILHA (mantido para compatibilidade, não usado nos novos modais)
     function abrirEditorPlanilha(arquivo) {
       var modal = document.getElementById('modal-editor');
       if (!modal) return;
       var modalTitle = modal.querySelector('.modal-editor-title');
       modalTitle.textContent = 'Editar Planilha - ' + arquivo;
-      // Dados mock realistas - PRODUTOS AMBEV
       var dados = [
         { sku: '7891991000849', produto: 'Skol Lata 350ml', preco_atual: 'R$ 3,99', novo_preco: 'R$ 4,29', aumento: '+7.5%', categoria: 'Cervejas' },
         { sku: '7891149100015', produto: 'Brahma Long Neck 355ml', preco_atual: 'R$ 5,49', novo_preco: 'R$ 5,99', aumento: '+9.1%', categoria: 'Cervejas' },
@@ -731,12 +750,12 @@
       var tbody = '';
       for (var i = 0; i < dados.length; i++) {
         tbody += '<tr>' +
-          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
-          '<td><input type="text" value="' + dados[i].produto + '"></td>' +
-          '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
-          '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
-          '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
-          '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
+          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1" aria-label="SKU"></td>' +
+          '<td><input type="text" value="' + dados[i].produto + '" aria-label="Produto"></td>' +
+          '<td><input type="text" value="' + dados[i].preco_atual + '" aria-label="Preço Atual"></td>' +
+          '<td><input type="text" value="' + dados[i].novo_preco + '" aria-label="Novo Preço"></td>' +
+          '<td><input type="text" value="' + dados[i].aumento + '" aria-label="% Aumento"></td>' +
+          '<td><input type="text" value="' + dados[i].categoria + '" aria-label="Categoria"></td>' +
         '</tr>';
       }
       var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
@@ -746,8 +765,8 @@
       var modalBody = modal.querySelector('.modal-editor-body');
       modalBody.innerHTML = tableHtml +
         '<div style="margin-top:18px;">' +
-        '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
-        '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
+        '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()" aria-label="Salvar Alterações">Salvar Alterações</button>' +
+        '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()" aria-label="Cancelar">Cancelar</button>' +
         '</div>';
       modal.style.display = 'flex';
       modal.classList.remove('closing');
@@ -756,7 +775,6 @@
         if(content) content.focus();
       }, 100);
     }
-
     function fecharModalEditor() {
       var modal = document.getElementById('modal-editor');
       if (modal) {
@@ -767,12 +785,10 @@
         }, 250);
       }
     }
-
     function salvarEdicaoPlanilha() {
       alert('Alterações salvas com sucesso!');
       fecharModalEditor();
     }
-
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -805,30 +821,54 @@
           closeBtnEditor.addEventListener('click', fecharModalEditor);
         }
       }
+      // Navegação por Tab nos modais
+      [modal, modalEditor].forEach(function(modalEl) {
+        if (!modalEl) return;
+        modalEl.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+            var focusable = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            focusable = Array.prototype.slice.call(focusable).filter(function(el){ return el.offsetParent !== null; });
+            if (focusable.length === 0) return;
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (e.shiftKey) {
+              if (document.activeElement === first) {
+                last.focus();
+                e.preventDefault();
+              }
+            } else {
+              if (document.activeElement === last) {
+                first.focus();
+                e.preventDefault();
+              }
+            }
+          }
+        });
+      });
     });
   </script>
 </head>
 <body>
-  <aside class="sidebar">
+  <aside class="sidebar" role="navigation" aria-label="Menu Principal">
     <div class="logo">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
-    <nav>
-      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
-      <a href="upload-tabela.html">Nova Tabela</a>
-      <a href="historico.html">Histórico</a>
-      <a href="index.html" onclick="sair()">Sair</a>
+    <nav aria-label="Navegação do Dashboard">
+      <a href="dashboard-fornecedor.html" class="active" aria-label="Dashboard" tabindex="0">Dashboard</a>
+      <a href="upload-tabela.html" aria-label="Nova Tabela" tabindex="0">Nova Tabela</a>
+      <a href="historico.html" aria-label="Histórico" tabindex="0">Histórico</a>
+      <a href="index.html" onclick="sair()" aria-label="Sair" tabindex="0">Sair</a>
     </nav>
     <div class="bottom">&copy; 2024 Plurix</div>
   </aside>
   <div class="main-content">
-    <header class="header">
+    <header class="header" role="banner">
       <h1>Dashboard do Fornecedor</h1>
-      <button class="cta-upload" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
+      <button class="cta-upload" onclick="uploadCTA()" aria-label="Nova Tabela de Preços" tabindex="0">+ Nova Tabela de Preços</button>
     </header>
-    <main class="dashboard-section">
-      <section class="dashboard-cards">
-        <div class="card">
+    <main class="dashboard-section" role="main">
+      <section class="dashboard-cards" aria-label="Painéis do Dashboard">
+        <div class="card" role="region" aria-label="Tabelas Submetidas Recentes">
           <div class="card-title">Tabelas Submetidas Recentes</div>
           <table class="card-table" aria-label="Tabelas Submetidas">
             <thead>
@@ -843,25 +883,25 @@
               <tr>
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-pendente" aria-label="Status Pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;" aria-label="Ver Detalhes da Tabela precos_junho.xlsx" tabindex="0">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-aprovada" aria-label="Status Aprovada">Aprovada</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;" aria-label="Ver Detalhes da Tabela precos_maio.xlsx" tabindex="0">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-reprovada" aria-label="Status Reprovada">Reprovada</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;" aria-label="Ver Detalhes da Tabela precos_abril.xlsx" tabindex="0">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="card">
+        <div class="card" role="region" aria-label="Resumo de Submissões">
           <div class="card-title">Resumo de Submissões</div>
           <table class="card-table" aria-label="Resumo de Submissões">
             <thead>
@@ -872,15 +912,15 @@
             </thead>
             <tbody>
               <tr>
-                <td><span class="status status-pendente">Pendente</span></td>
+                <td><span class="status status-pendente" aria-label="Status Pendente">Pendente</span></td>
                 <td>1</td>
               </tr>
               <tr>
-                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td><span class="status status-aprovada" aria-label="Status Aprovada">Aprovada</span></td>
                 <td>4</td>
               </tr>
               <tr>
-                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td><span class="status status-reprovada" aria-label="Status Reprovada">Reprovada</span></td>
                 <td>2</td>
               </tr>
             </tbody>
@@ -889,22 +929,22 @@
       </section>
     </main>
   </div>
-  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" aria-label="Detalhes da Tabela" style="display:none;">
     <div class="modal-content" tabindex="0">
       <div class="modal-header">
         <span class="modal-title">Detalhes</span>
-        <button class="modal-close" aria-label="Fechar">&times;</button>
+        <button class="modal-close" aria-label="Fechar" tabindex="0">&times;</button>
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico -->
       </div>
     </div>
   </div>
-  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" aria-label="Editor de Planilha" style="display:none;">
     <div class="modal-editor-content" tabindex="0">
       <div class="modal-editor-header">
         <span class="modal-editor-title">Editar Planilha</span>
-        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
+        <button class="modal-editor-close" aria-label="Fechar" tabindex="0">&times;</button>
       </div>
       <div class="modal-editor-body">
         <!-- Tabela editável será inserida via JS -->
