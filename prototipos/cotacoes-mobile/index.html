@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema de Gestão de Cotações Mobile | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-header {
+      background: #1a2340;
+      color: #fff;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .mobile-header .logo {
+      display: flex;
+      align-items: center;
+    }
+    .mobile-header .logo img {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+    }
+    .mobile-header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
+    }
+    .mobile-header .menu-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+    .mobile-nav {
+      background: #222b4a;
+      color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80vw;
+      max-width: 320px;
+      height: 100vh;
+      z-index: 999;
+      transform: translateX(-100%);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.13);
+    }
+    .mobile-nav.open {
+      transform: translateX(0);
+    }
+    .mobile-nav .nav-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 16px;
+      border-bottom: 1px solid #2e375a;
+    }
+    .mobile-nav .nav-header img {
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
+    }
+    .mobile-nav .nav-header span {
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: #f9b233;
+    }
+    .mobile-nav nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-top: 24px;
+    }
+    .mobile-nav nav a {
+      padding: 14px 24px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+      outline: none;
+    }
+    .mobile-nav nav a.active, .mobile-nav nav a:focus, .mobile-nav nav a:hover {
+      background: #1a2340;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .mobile-nav .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.18);
+      z-index: 998;
+      display: none;
+    }
+    .overlay.open {
+      display: block;
+    }
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px 8px 32px 8px;
+      background: #f7f8fa;
+    }
+    .section {
+      margin-bottom: 32px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 18px 14px;
+    }
+    .section-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table, .tabela-editavel {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.01rem;
+      margin-bottom: 10px;
+    }
+    .card-table th, .card-table td, .tabela-editavel th, .tabela-editavel td {
+      padding: 8px 6px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th, .tabela-editavel th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 12px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      outline: none;
+    }
+    .link-detalhes:focus, .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    .cta-upload {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-bottom: 10px;
+      width: 100%;
+      outline: none;
+    }
+    .cta-upload:focus, .cta-upload:hover {
+      background: #e1a12a;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-content {
+      background: #fff;
+      max-width: 98vw;
+      width: 98vw;
+      padding: 20px 10px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+      outline: none;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+      outline: none;
+    }
+    .modal-close:focus, .modal-close:hover {
+      color: #e74c3c;
+    }
+    .modal-body {
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    .btn-download-excel {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 1.01rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      margin-bottom: 8px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      display: inline-block;
+      outline: none;
+    }
+    .btn-download-excel:focus, .btn-download-excel:hover {
+      background: #e1a12a;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 8px 2px 18px 2px;
+      }
+      .section {
+        padding: 12px 4px;
+      }
+      .modal-content {
+        padding: 10px 2px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    // Mobile nav
+    function openNav() {
+      document.getElementById('mobileNav').classList.add('open');
+      document.getElementById('overlay').classList.add('open');
+      document.getElementById('mobileNav').querySelector('a').focus();
+    }
+    function closeNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+      document.getElementById('overlay').classList.remove('open');
+    }
+    // Modal detalhes
+    function abrirDetalhes(status, arquivo, data) {
+      var modal = document.getElementById('modal-detalhes');
+      var modalBody = modal.querySelector('.modal-body');
+      var modalTitle = modal.querySelector('.modal-title');
+      var dadosTabela = [
+        { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
+        { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
+        { sku: '7891991010848', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica 2 Litros', preco: '7.99' },
+        { sku: '7892840800011', nome: 'Pepsi Lata 350ml', descricao: 'Refrigerante Pepsi Lata 350ml', preco: '3.49' }
+      ];
+      var html = '';
+      if (status === 'aprovada') {
+        modalTitle.textContent = 'Tabela Aprovada - ' + arquivo;
+        html += '<div><strong>Status:</strong> Aprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos:</div>';
+        html += '<table class="tabela-editavel" aria-label="Tabela Leitura">';
+        html += '<thead><tr>';
+        html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
+        html += '</tr></thead><tbody>';
+        for (var i = 0; i < dadosTabela.length; i++) {
+          html += '<tr>' +
+            '<td>' + dadosTabela[i].sku + '</td>' +
+            '<td>' + dadosTabela[i].nome + '</td>' +
+            '<td>' + dadosTabela[i].descricao + '</td>' +
+            '<td>' + dadosTabela[i].preco + '</td>' +
+          '</tr>';
+        }
+        html += '</tbody></table>';
+        html += '<button class="btn-download-excel" onclick="gerarDownloadExcel(\'' + arquivo + '\')">Download .xlsx</button>';
+      } else if (status === 'pendente') {
+        modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
+        html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
+        var nivelAprovacao = ['Gerente Categoria Bandeira','Dir. Comercial Bandeira','Dir. Comercial Holding','VP'];
+        var nivelAtual = 0;
+        if (arquivo === 'precos_junho.xlsx') nivelAtual = 0;
+        else if (arquivo === 'precos_maio.xlsx') nivelAtual = 2;
+        else if (arquivo === 'precos_abril.xlsx') nivelAtual = 3;
+        html += '<div class="nivel-aprovacao">';
+        for (var i = 0; i < nivelAprovacao.length; i++) {
+          html += '<div class="nivel-item">';
+          html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
+          html += nivelAprovacao[i];
+          html += '</div>';
+          if (i < nivelAprovacao.length - 1) {
+            html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
+          }
+        }
+        html += '</div>';
+        html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
+      } else if (status === 'reprovada') {
+        modalTitle.textContent = 'Editar Planilha Reprovada - ' + arquivo;
+        html += '<div><strong>Status:</strong> Reprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos (editável):</div>';
+        html += '<form id="form-tabela-editavel"><table class="tabela-editavel" aria-label="Tabela Editável">';
+        html += '<thead><tr>';
+        html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
+        html += '</tr></thead><tbody>';
+        for (var i = 0; i < dadosTabela.length; i++) {
+          html += '<tr>' +
+            '<td><input type="text" name="sku" value="' + dadosTabela[i].sku + '" required aria-label="SKU"></td>' +
+            '<td><input type="text" name="nome" value="' + dadosTabela[i].nome + '" required aria-label="Nome"></td>' +
+            '<td><input type="text" name="descricao" value="' + dadosTabela[i].descricao + '" required aria-label="Descrição"></td>' +
+            '<td><input type="number" name="preco" value="' + dadosTabela[i].preco + '" min="0" step="0.01" required aria-label="Preço"></td>' +
+          '</tr>';
+        }
+        html += '</tbody></table></form>';
+        html += '<div style="margin-top:18px;">' +
+          '<button class="btn-download-excel" onclick="salvarTabelaEditavel();return false;">Salvar Alterações</button>' +
+          '<button class="btn-download-excel" style="background:#e74c3c;" onclick="fecharModal();return false;">Cancelar</button>' +
+          '</div>';
+      } else {
+        modalTitle.textContent = 'Detalhes';
+        html = '<div>Informações não disponíveis para este status.</div>';
+      }
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModal() {
+      var modal = document.getElementById('modal-detalhes');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    function salvarTabelaEditavel() {
+      var form = document.getElementById('form-tabela-editavel');
+      if (!form) {
+        alert('Formulário não encontrado.');
+        return;
+      }
+      var linhas = form.querySelectorAll('tbody tr');
+      var valido = true;
+      linhas.forEach(function(tr) {
+        var sku = tr.querySelector('input[name="sku"]').value.trim();
+        var nome = tr.querySelector('input[name="nome"]').value.trim();
+        var descricao = tr.querySelector('input[name="descricao"]').value.trim();
+        var preco = tr.querySelector('input[name="preco"]').value.trim();
+        if (!sku || !nome || !descricao || !preco || isNaN(Number(preco))) {
+          valido = false;
+        }
+      });
+      if (!valido) {
+        alert('Por favor, preencha todos os campos corretamente.');
+        return;
+      }
+      alert('Alterações salvas com sucesso!');
+      fecharModal();
+    }
+    function gerarDownloadExcel(arquivo) {
+      var dadosTabela = [
+        { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
+        { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
+        { sku: '7891991010848', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica 2 Litros', preco: '7.99' },
+        { sku: '7892840800011', nome: 'Pepsi Lata 350ml', descricao: 'Refrigerante Pepsi Lata 350ml', preco: '3.49' }
+      ];
+      var ws_data = [
+        ['SKU', 'Nome', 'Descrição', 'Preço (R$)']
+      ];
+      dadosTabela.forEach(function(item) {
+        ws_data.push([item.sku, item.nome, item.descricao, item.preco]);
+      });
+      var ws = XLSX.utils.aoa_to_sheet(ws_data);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Tabela');
+      var nomeArquivo = arquivo.replace(/\.[^.]+$/, '') + '.xlsx';
+      XLSX.writeFile(wb, nomeArquivo);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('menuBtn').addEventListener('click', openNav);
+      document.getElementById('overlay').addEventListener('click', closeNav);
+      document.getElementById('closeNavBtn').addEventListener('click', closeNav);
+      var modal = document.getElementById('modal-detalhes');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) {
+            fecharModal();
+          }
+        });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModal);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModal();
+          closeNav();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <header class="mobile-header" role="banner">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" aria-label="Logo Plurix">
+      <h1>Sistema de Gestão de Cotações</h1>
+    </div>
+    <button id="menuBtn" class="menu-btn" aria-label="Abrir menu de navegação" tabindex="0">&#9776;</button>
+  </header>
+  <div id="overlay" class="overlay"></div>
+  <nav id="mobileNav" class="mobile-nav" aria-label="Menu principal" tabindex="-1">
+    <div class="nav-header">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span>Plurix</span>
+      <button id="closeNavBtn" class="menu-btn" aria-label="Fechar menu" tabindex="0">&times;</button>
+    </div>
+    <nav>
+      <a href="#dashboard" class="active" tabindex="0">Dashboard</a>
+      <a href="#nova-tabela" tabindex="0">Nova Tabela</a>
+      <a href="#historico" tabindex="0">Histórico</a>
+      <a href="#cotacoes" tabindex="0">Cotações</a>
+      <a href="#sair" tabindex="0">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </nav>
+  <main>
+    <section id="dashboard" class="section" aria-labelledby="dashboard-title">
+      <div class="section-title" id="dashboard-title">Dashboard do Fornecedor</div>
+      <button class="cta-upload" onclick="abrirDetalhes('nova', '', '')" aria-label="Nova Tabela de Preços">+ Nova Tabela de Preços</button>
+      <table class="card-table" aria-label="Tabelas Submetidas">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Arquivo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10/06/2024</td>
+            <td>precos_junho.xlsx</td>
+            <td><span class="status status-pendente">Pendente</span></td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;" tabindex="0">Ver Detalhes</a></td>
+          </tr>
+          <tr>
+            <td>02/06/2024</td>
+            <td>precos_maio.xlsx</td>
+            <td><span class="status status-aprovada">Aprovada</span></td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;" tabindex="0">Ver Detalhes</a></td>
+          </tr>
+          <tr>
+            <td>15/05/2024</td>
+            <td>precos_abril.xlsx</td>
+            <td><span class="status status-reprovada">Reprovada</span></td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;" tabindex="0">Ver Detalhes</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="cotacoes" class="section" aria-labelledby="cotacoes-title">
+      <div class="section-title" id="cotacoes-title">Solicitações de Cotação</div>
+      <table class="card-table" aria-label="Solicitações de Cotação">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Volume</th>
+            <th>Prazo</th>
+            <th>Responder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Banana Prata</td>
+            <td>500kg</td>
+            <td>24h</td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('cotacao', 'banana_prata', ''); return false;" tabindex="0">Responder</a></td>
+          </tr>
+          <tr>
+            <td>Tomate Italiano</td>
+            <td>300kg</td>
+            <td>48h</td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('cotacao', 'tomate_italiano', ''); return false;" tabindex="0">Responder</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="historico" class="section" aria-labelledby="historico-title">
+      <div class="section-title" id="historico-title">Histórico de Submissões</div>
+      <table class="card-table" aria-label="Histórico de Submissões">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Arquivo</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10/06/2024</td>
+            <td>precos_junho.xlsx</td>
+            <td><span class="status status-pendente">Pendente</span></td>
+          </tr>
+          <tr>
+            <td>02/06/2024</td>
+            <td>precos_maio.xlsx</td>
+            <td><span class="status status-aprovada">Aprovada</span></td>
+          </tr>
+          <tr>
+            <td>15/05/2024</td>
+            <td>precos_abril.xlsx</td>
+            <td><span class="status status-reprovada">Reprovada</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="resumo" class="section" aria-labelledby="resumo-title">
+      <div class="section-title" id="resumo-title">Resumo de Submissões</div>
+      <table class="card-table" aria-label="Resumo de Submissões">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Quantidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="status status-pendente">Pendente</span></td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td><span class="status status-aprovada">Aprovada</span></td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td><span class="status status-reprovada">Reprovada</span></td>
+            <td>2</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Detalhes</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+  <footer style="text-align:center; padding:12px 0; background:#222b4a; color:#fff; font-size:0.98rem;">
+    &copy; 2024 Plurix - Sistema de Gestão de Cotações Mobile-First
+  </footer>
+</body>
+</html>
