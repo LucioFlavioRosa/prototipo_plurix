@@ -1,0 +1,13 @@
+<!-- Componente Header Comprador - Reutilizável -->
+<!-- Uso: Inclua este header no topo das páginas do comprador. O título e o botão de ação são dinâmicos. -->
+<header class="header" style="background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1;">
+  <h1 id="header-comprador-titulo" style="font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0;">{{titulo}}</h1>
+  <button id="header-comprador-cta" class="cta-upload" style="background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08);" onclick="{{acaoOnClick}}">{{acaoTexto}}</button>
+</header>
+<!--
+Documentação de uso:
+- Substitua {{titulo}} pelo título da página (ex: 'Minhas Cotações').
+- Substitua {{acaoTexto}} pelo texto do botão (ex: '+ Nova Cotação').
+- Substitua {{acaoOnClick}} pela ação JS (ex: "window.location.href='nova-cotacao.html'").
+- O estilo e responsividade seguem o template original.
+-->
