@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bem-vindo | Sistema de Cotações Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      background: #1a2340;
+      color: #fff;
+      padding: 18px 0;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .main-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .main-header .logo img {
+      width: 48px;
+      height: 48px;
+    }
+    .main-header .logo span {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .welcome-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px 32px 16px;
+    }
+    .welcome-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(30,40,80,0.09);
+      padding: 40px 32px 32px 32px;
+      max-width: 410px;
+      width: 100%;
+      text-align: center;
+    }
+    .welcome-card h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .welcome-card p {
+      font-size: 1.13rem;
+      color: #555;
+      margin-bottom: 32px;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      transition: background 0.18s;
+      margin-bottom: 0;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-secondary {
+      background: #1a2340;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.08);
+      transition: background 0.18s;
+      width: 100%;
+    }
+    .btn-secondary:hover {
+      background: #222b4a;
+    }
+    .main-footer {
+      background: #fff;
+      color: #b7b9c6;
+      text-align: center;
+      padding: 18px 0 12px 0;
+      font-size: 0.98rem;
+      box-shadow: 0 -2px 8px rgba(30,40,80,0.04);
+      margin-top: auto;
+    }
+    @media (max-width: 600px) {
+      .welcome-card {
+        padding: 24px 8px 18px 8px;
+        max-width: 98vw;
+      }
+      .main-header .logo img {
+        width: 36px;
+        height: 36px;
+      }
+      .main-header .logo span {
+        font-size: 1.05rem;
+      }
+      .welcome-card h1 {
+        font-size: 1.35rem;
+      }
+      .btn-primary, .btn-secondary {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <span>Sistema de Cotações Plurix</span>
+    </div>
+  </header>
+  <main class="welcome-section">
+    <section class="welcome-card" aria-label="Boas-vindas">
+      <h1>Bem-vindo ao Sistema de Cotações</h1>
+      <p>Automatize o fluxo de compras e integrações entre Indicatore e ERP Totvs Com5.<br>Faça login para acessar sua área e iniciar o processo de cotação.</p>
+      <div class="btn-group">
+        <button class="btn-primary" onclick="window.location.href='dashboard-comprador.html'" aria-label="Entrar como Comprador">Entrar como Comprador</button>
+        <button class="btn-secondary" onclick="window.location.href='resposta-fornecedor-mobile.html'" aria-label="Simular Resposta Fornecedor">Simular Resposta Fornecedor</button>
+      </div>
+    </section>
+  </main>
+  <footer class="main-footer">
+    &copy; 2024 Plurix. Integração Indicatore &amp; ERP Totvs Com5.
+  </footer>
+</body>
+</html>
