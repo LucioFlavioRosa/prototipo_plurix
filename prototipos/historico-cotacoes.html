@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-cotacoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 26px;
+      align-items: flex-end;
+    }
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 180px;
+    }
+    .filtro-item label {
+      font-size: 1.01rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+    }
+    .filtro-item select, .filtro-item input {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+      box-sizing: border-box;
+    }
+    .btn-filtrar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-top: 18px;
+      min-width: 120px;
+    }
+    .btn-filtrar:hover {
+      background: #e1a12a;
+    }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 1.02rem;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+    }
+    .history-table th, .history-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .history-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .history-table th, .history-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script>
+    // Dados mock para histórico de cotações
+    const cotacoesMock = [
+      { data: '10/06/2024', fornecedor: 'Ambev', produto: 'Skol Lata 350ml', volume: '500', preco: '3.99', status: 'pendente' },
+      { data: '09/06/2024', fornecedor: 'Coca-Cola', produto: 'Coca-Cola PET 2L', volume: '300', preco: '7.49', status: 'aprovada' },
+      { data: '08/06/2024', fornecedor: 'Pepsico', produto: 'Pepsi Lata 350ml', volume: '200', preco: '3.49', status: 'reprovada' },
+      { data: '07/06/2024', fornecedor: 'Ambev', produto: 'Guaraná Antarctica 2L', volume: '400', preco: '7.99', status: 'aprovada' },
+      { data: '06/06/2024', fornecedor: 'Nestlé', produto: 'Água Nestlé 500ml', volume: '1000', preco: '1.99', status: 'aprovada' },
+      { data: '05/06/2024', fornecedor: 'Ambev', produto: 'Brahma Long Neck 355ml', volume: '150', preco: '5.49', status: 'reprovada' },
+      { data: '04/06/2024', fornecedor: 'Pepsico', produto: 'Pepsi Black Lata 350ml', volume: '120', preco: '3.69', status: 'aprovada' },
+      { data: '03/06/2024', fornecedor: 'Coca-Cola', produto: 'Fanta Laranja 2L', volume: '250', preco: '6.99', status: 'pendente' },
+      { data: '02/06/2024', fornecedor: 'Ambev', produto: 'Skol Beats 269ml', volume: '80', preco: '7.49', status: 'aprovada' },
+      { data: '01/06/2024', fornecedor: 'Nestlé', produto: 'Água Nestlé 1.5L', volume: '600', preco: '2.99', status: 'aprovada' },
+      { data: '31/05/2024', fornecedor: 'Pepsico', produto: 'H2OH! Limão 500ml', volume: '300', preco: '3.99', status: 'pendente' },
+      { data: '30/05/2024', fornecedor: 'Ambev', produto: 'Guaraná Antarctica Zero 2L', volume: '220', preco: '8.49', status: 'reprovada' },
+      { data: '29/05/2024', fornecedor: 'Coca-Cola', produto: 'Sprite 2L', volume: '180', preco: '6.49', status: 'aprovada' },
+      { data: '28/05/2024', fornecedor: 'Ambev', produto: 'Antarctica Subzero Lata 350ml', volume: '90', preco: '3.89', status: 'pendente' },
+      { data: '27/05/2024', fornecedor: 'Pepsico', produto: 'Pepsi Lata 350ml', volume: '210', preco: '3.49', status: 'aprovada' },
+      { data: '26/05/2024', fornecedor: 'Ambev', produto: 'Beats Senses 269ml', volume: '60', preco: '6.99', status: 'aprovada' },
+      { data: '25/05/2024', fornecedor: 'Nestlé', produto: 'Água Nestlé 500ml', volume: '700', preco: '1.99', status: 'reprovada' },
+      { data: '24/05/2024', fornecedor: 'Coca-Cola', produto: 'Coca-Cola PET 2L', volume: '350', preco: '7.49', status: 'aprovada' },
+      { data: '23/05/2024', fornecedor: 'Ambev', produto: 'Guaraná Antarctica 2L', volume: '410', preco: '7.99', status: 'aprovada' },
+      { data: '22/05/2024', fornecedor: 'Pepsico', produto: 'Pepsi Black Lata 350ml', volume: '130', preco: '3.69', status: 'aprovada' },
+      { data: '21/05/2024', fornecedor: 'Ambev', produto: 'Skol Lata 350ml', volume: '520', preco: '3.99', status: 'pendente' },
+      { data: '20/05/2024', fornecedor: 'Nestlé', produto: 'Água Nestlé 1.5L', volume: '650', preco: '2.99', status: 'aprovada' }
+    ];
+    function filtrarCotacoes() {
+      const periodo = document.getElementById('filtro-periodo').value;
+      const fornecedor = document.getElementById('filtro-fornecedor').value;
+      const produto = document.getElementById('filtro-produto').value;
+      const status = document.getElementById('filtro-status').value;
+      let dataLimite = new Date();
+      if (periodo === '30') {
+        dataLimite.setDate(dataLimite.getDate() - 30);
+      } else if (periodo === '90') {
+        dataLimite.setDate(dataLimite.getDate() - 90);
+      } else if (periodo === '180') {
+        dataLimite.setDate(dataLimite.getDate() - 180);
+      } else {
+        dataLimite = null;
+      }
+      const resultado = cotacoesMock.filter(item => {
+        let passa = true;
+        if (periodo !== 'all' && dataLimite) {
+          const [dia, mes, ano] = item.data.split('/');
+          const dataItem = new Date(`${ano}-${mes}-${dia}`);
+          passa = passa && (dataItem >= dataLimite);
+        }
+        if (fornecedor && fornecedor !== 'all') {
+          passa = passa && (item.fornecedor === fornecedor);
+        }
+        if (produto && produto !== 'all') {
+          passa = passa && (item.produto === produto);
+        }
+        if (status && status !== 'all') {
+          passa = passa && (item.status === status);
+        }
+        return passa;
+      });
+      renderTabela(resultado);
+    }
+    function renderTabela(lista) {
+      const tbody = document.getElementById('tbody-cotacoes');
+      tbody.innerHTML = '';
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;">Nenhuma cotação encontrada.</td></tr>';
+        return;
+      }
+      lista.forEach(item => {
+        let statusClass = 'status-pendente';
+        let statusLabel = 'Pendente';
+        if (item.status === 'aprovada') { statusClass = 'status-aprovada'; statusLabel = 'Aprovada'; }
+        else if (item.status === 'reprovada') { statusClass = 'status-reprovada'; statusLabel = 'Reprovada'; }
+        tbody.innerHTML += `<tr>
+          <td>${item.data}</td>
+          <td>${item.fornecedor}</td>
+          <td>${item.produto}</td>
+          <td>${item.volume}</td>
+          <td>R$ ${item.preco}</td>
+          <td><span class="status ${statusClass}">${statusLabel}</span></td>
+          <td><a href="#" class="link-detalhes" aria-label="Ver detalhes da cotação" onclick="alert('Fluxo de detalhes da cotação em protótipo.');return false;">Ver Detalhes</a></td>
+        </tr>`;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Preencher selects de fornecedor e produto
+      const fornecedores = [...new Set(cotacoesMock.map(c => c.fornecedor))];
+      const produtos = [...new Set(cotacoesMock.map(c => c.produto))];
+      const fornecedorSelect = document.getElementById('filtro-fornecedor');
+      fornecedores.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        fornecedorSelect.appendChild(opt);
+      });
+      const produtoSelect = document.getElementById('filtro-produto');
+      produtos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        produtoSelect.appendChild(opt);
+      });
+      renderTabela(cotacoesMock);
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="prototipos/historico-cotacoes.html" class="active">Histórico de Cotações</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Histórico de Cotações</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-cotacoes" onsubmit="filtrarCotacoes(); return false;" aria-label="Filtros de Histórico de Cotações">
+        <div class="filtro-item">
+          <label for="filtro-periodo">Período</label>
+          <select id="filtro-periodo" name="periodo">
+            <option value="all">Todos</option>
+            <option value="30">Últimos 30 dias</option>
+            <option value="90">Últimos 3 meses</option>
+            <option value="180">Últimos 6 meses</option>
+          </select>
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-fornecedor">Fornecedor</label>
+          <select id="filtro-fornecedor" name="fornecedor">
+            <option value="all">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-produto">Produto</label>
+          <select id="filtro-produto" name="produto">
+            <option value="all">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-item">
+          <label for="filtro-status">Status</label>
+          <select id="filtro-status" name="status">
+            <option value="all">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="aprovada">Aprovada</option>
+            <option value="reprovada">Reprovada</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-filtrar">Filtrar</button>
+      </form>
+      <section>
+        <table class="history-table" aria-label="Histórico de Cotações">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Fornecedor</th>
+              <th>Produto</th>
+              <th>Volume</th>
+              <th>Preço</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-cotacoes">
+            <!-- Registros serão inseridos via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
