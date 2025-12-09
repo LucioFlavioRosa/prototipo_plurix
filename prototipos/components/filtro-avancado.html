@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Filtro Avançado - Cotações</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    body {
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .filtro-avancado {
+      background: #fff;
+      padding: 32px 28px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      max-width: 1100px;
+      margin: 32px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px 24px;
+    }
+    .filtro-campo {
+      flex: 1 1 220px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+    }
+    .filtro-label {
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 6px;
+      font-size: 1.08rem;
+    }
+    .filtro-input, .filtro-select, .filtro-multiselect {
+      padding: 8px 10px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      background: #f7f8fa;
+      color: #222;
+      margin-bottom: 2px;
+    }
+    .filtro-multiselect {
+      height: 38px;
+      overflow-y: auto;
+    }
+    .filtro-botoes {
+      display: flex;
+      gap: 18px;
+      align-items: flex-end;
+      margin-top: 18px;
+      flex: 1 1 100%;
+    }
+    .btn-aplicar, .btn-limpar {
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .btn-aplicar {
+      background: #f9b233;
+      color: #fff;
+    }
+    .btn-aplicar:hover {
+      background: #e1a12a;
+    }
+    .btn-limpar {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-limpar:hover {
+      background: #b93a2e;
+    }
+    @media (max-width: 900px) {
+      .filtro-avancado {
+        flex-direction: column;
+        gap: 18px 0;
+        padding: 18px 8px;
+      }
+      .filtro-campo {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form class="filtro-avancado" aria-label="Filtro Avançado de Cotações">
+    <div class="filtro-campo">
+      <label class="filtro-label" for="periodo-inicio">Período Início</label>
+      <input type="date" id="periodo-inicio" name="periodo-inicio" class="filtro-input">
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="periodo-fim">Período Fim</label>
+      <input type="date" id="periodo-fim" name="periodo-fim" class="filtro-input">
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="fornecedores">Fornecedores</label>
+      <select id="fornecedores" name="fornecedores" class="filtro-multiselect" multiple aria-label="Seleção múltipla de fornecedores">
+        <option value="ambev">Ambev</option>
+        <option value="cargill">Cargill</option>
+        <option value="jbs">JBS</option>
+        <option value="brf">BRF</option>
+        <option value="nestle">Nestlé</option>
+        <option value="danone">Danone</option>
+      </select>
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="produtos">Produtos</label>
+      <select id="produtos" name="produtos" class="filtro-multiselect" multiple aria-label="Seleção múltipla de produtos">
+        <option value="cerveja">Cerveja</option>
+        <option value="refrigerante">Refrigerante</option>
+        <option value="carne">Carne Bovina</option>
+        <option value="frango">Frango</option>
+        <option value="leite">Leite</option>
+        <option value="iogurte">Iogurte</option>
+      </select>
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="categorias">Categorias</label>
+      <select id="categorias" name="categorias" class="filtro-multiselect" multiple aria-label="Seleção múltipla de categorias">
+        <option value="bebidas">Bebidas</option>
+        <option value="alimentos">Alimentos</option>
+        <option value="laticinios">Laticínios</option>
+        <option value="proteina">Proteína Animal</option>
+      </select>
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="coligadas">Coligadas</label>
+      <select id="coligadas" name="coligadas" class="filtro-multiselect" multiple aria-label="Seleção múltipla de coligadas">
+        <option value="bandeira1">Bandeira 1</option>
+        <option value="bandeira2">Bandeira 2</option>
+        <option value="bandeira3">Bandeira 3</option>
+      </select>
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="status">Status</label>
+      <select id="status" name="status" class="filtro-multiselect" multiple aria-label="Seleção múltipla de status">
+        <option value="em_andamento">Em andamento</option>
+        <option value="aprovada">Aprovada</option>
+        <option value="reprovada">Reprovada</option>
+        <option value="pendente">Pendente</option>
+        <option value="finalizada">Finalizada</option>
+      </select>
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="valor-min">Valor Mínimo (R$)</label>
+      <input type="number" id="valor-min" name="valor-min" class="filtro-input" min="0" step="0.01" placeholder="0,00">
+    </div>
+    <div class="filtro-campo">
+      <label class="filtro-label" for="valor-max">Valor Máximo (R$)</label>
+      <input type="number" id="valor-max" name="valor-max" class="filtro-input" min="0" step="0.01" placeholder="0,00">
+    </div>
+    <div class="filtro-botoes">
+      <button type="submit" class="btn-aplicar" aria-label="Aplicar Filtros">Aplicar Filtros</button>
+      <button type="reset" class="btn-limpar" aria-label="Limpar Filtros">Limpar</button>
+    </div>
+  </form>
+</body>
+</html>
