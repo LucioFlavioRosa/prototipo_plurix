@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios Comparativos de Preços | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-upload {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .cta-upload:hover {
+      background: #e1a12a;
+    }
+    .relatorios-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-relatorio {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 18px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px 24px;
+      align-items: flex-end;
+    }
+    .filtros-relatorio label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1.08rem;
+    }
+    .filtros-relatorio input,
+    .filtros-relatorio select {
+      font-size: 1.05rem;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      background: #f7f8fa;
+      color: #222;
+      width: 180px;
+      margin-bottom: 0;
+      box-sizing: border-box;
+    }
+    .filtros-relatorio .multi-select {
+      width: 220px;
+      height: 38px;
+      font-size: 1.05rem;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+    }
+    .filtros-relatorio .btn-filtrar {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+    }
+    .filtros-relatorio .btn-filtrar:hover {
+      background: #399a36;
+    }
+    .relatorio-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 32px;
+      min-width: 0;
+      overflow-x: auto;
+    }
+    .relatorio-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .comparativo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      min-width: 900px;
+    }
+    .comparativo-table th, .comparativo-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .comparativo-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .comparativo-table tr:last-child td {
+      border-bottom: none;
+    }
+    .melhor-oferta {
+      color: #4bb543;
+      font-weight: 700;
+    }
+    .indice-mercado {
+      color: #f9b233;
+      font-weight: 600;
+    }
+    .btn-exportar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 12px;
+      margin-bottom: 8px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      display: inline-block;
+    }
+    .btn-exportar:hover {
+      background: #e1a12a;
+    }
+    .grafico-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 32px;
+      min-width: 0;
+    }
+    @media (max-width: 900px) {
+      .relatorios-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .relatorio-card, .grafico-card {
+        padding: 14px 4px 12px 4px;
+      }
+      .comparativo-table th, .comparativo-table td {
+        padding: 6px 4px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+  <!-- SheetJS CDN para exportação Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Chart.js CDN para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="relatorios-comparativos.html" class="active">Relatórios Comparativos</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Relatórios Comparativos de Preços</h1>
+      <button class="cta-upload" onclick="window.location.href='dashboard-fornecedor.html'">Voltar ao Dashboard</button>
+    </header>
+    <main class="relatorios-section">
+      <form class="filtros-relatorio" id="form-filtros" autocomplete="off" onsubmit="aplicarFiltros();return false;" aria-label="Filtros de Relatório">
+        <div>
+          <label for="periodo-inicio">Data Início</label>
+          <input type="date" id="periodo-inicio" name="periodo-inicio" value="2024-06-01">
+        </div>
+        <div>
+          <label for="periodo-fim">Data Fim</label>
+          <input type="date" id="periodo-fim" name="periodo-fim" value="2024-06-10">
+        </div>
+        <div>
+          <label for="fornecedores">Fornecedor</label>
+          <select id="fornecedores" name="fornecedores" class="multi-select" multiple aria-label="Selecionar Fornecedores">
+            <option value="ambev" selected>Ambev</option>
+            <option value="coca-cola">Coca-Cola</option>
+            <option value="pepsico">Pepsico</option>
+            <option value="nestle">Nestlé</option>
+          </select>
+        </div>
+        <div>
+          <label for="produto">Produto/Categoria</label>
+          <select id="produto" name="produto">
+            <option value="todas">Todas</option>
+            <option value="cervejas" selected>Cervejas</option>
+            <option value="refrigerantes">Refrigerantes</option>
+            <option value="aguas">Águas Saborizadas</option>
+            <option value="alcolicas">Bebidas Alcoólicas</option>
+          </select>
+        </div>
+        <div>
+          <label for="coligada">Coligada</label>
+          <select id="coligada" name="coligada">
+            <option value="todas" selected>Todas</option>
+            <option value="bandeira1">Bandeira 1</option>
+            <option value="bandeira2">Bandeira 2</option>
+            <option value="holding">Holding</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="btn-filtrar">Filtrar</button>
+        </div>
+      </form>
+      <section class="relatorio-card">
+        <div class="relatorio-card-title">Tabela Comparativa de Preços</div>
+        <div style="margin-bottom:12px;">
+          <button class="btn-exportar" onclick="exportarExcel()">Exportar Excel</button>
+          <button class="btn-exportar" onclick="exportarPDF()">Exportar PDF</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="comparativo-table" id="comparativo-table" aria-label="Tabela Comparativa de Preços">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Fornecedor Ambev</th>
+                <th>Fornecedor Coca-Cola</th>
+                <th>Fornecedor Pepsico</th>
+                <th>Melhor Oferta</th>
+                <th>Diferença %</th>
+                <th>Índice Mercado<br><span style="font-size:0.95em;color:#b7b9c6;">(Esalq/Milkpoint)</span></th>
+              </tr>
+            </thead>
+            <tbody id="comparativo-tbody">
+              <!-- Linhas mockadas serão preenchidas via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="grafico-card">
+        <div class="relatorio-card-title">Gráfico Comparativo de Preços por Produto</div>
+        <canvas id="grafico-comparativo" aria-label="Gráfico Comparativo de Preços" height="320"></canvas>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Mock de dados de cotações por produto e fornecedor
+    const dadosComparativos = [
+      {
+        produto: 'Skol Lata 350ml',
+        ambev: 3.99,
+        cocacola: 4.29,
+        pepsico: 4.19,
+        indice_mercado: 4.15,
+        categoria: 'cervejas'
+      },
+      {
+        produto: 'Brahma Long Neck 355ml',
+        ambev: 5.49,
+        cocacola: 5.69,
+        pepsico: 5.59,
+        indice_mercado: 5.62,
+        categoria: 'cervejas'
+      },
+      {
+        produto: 'Guaraná Antarctica 2L',
+        ambev: 7.99,
+        cocacola: 8.29,
+        pepsico: 8.09,
+        indice_mercado: 8.15,
+        categoria: 'refrigerantes'
+      },
+      {
+        produto: 'Pepsi Lata 350ml',
+        ambev: 3.49,
+        cocacola: 3.69,
+        pepsico: 3.59,
+        indice_mercado: 3.65,
+        categoria: 'refrigerantes'
+      },
+      {
+        produto: 'H2OH! Limão 500ml',
+        ambev: 4.39,
+        cocacola: 4.49,
+        pepsico: 4.29,
+        indice_mercado: 4.45,
+        categoria: 'aguas'
+      },
+      {
+        produto: 'Beats Senses 269ml',
+        ambev: 7.49,
+        cocacola: 7.69,
+        pepsico: 7.59,
+        indice_mercado: 7.62,
+        categoria: 'alcolicas'
+      }
+    ];
+
+    function aplicarFiltros() {
+      const inicio = document.getElementById('periodo-inicio').value;
+      const fim = document.getElementById('periodo-fim').value;
+      const fornecedoresSel = Array.from(document.getElementById('fornecedores').selectedOptions).map(o => o.value);
+      const produtoSel = document.getElementById('produto').value;
+      const coligadaSel = document.getElementById('coligada').value;
+      // Filtragem mockada
+      let filtrados = dadosComparativos.filter(item => {
+        let catOk = produtoSel === 'todas' || item.categoria === produtoSel;
+        return catOk;
+      });
+      renderTabela(filtrados, fornecedoresSel);
+      renderGrafico(filtrados, fornecedoresSel);
+    }
+
+    function renderTabela(dados, fornecedoresSel) {
+      const tbody = document.getElementById('comparativo-tbody');
+      tbody.innerHTML = '';
+      dados.forEach(item => {
+        let precos = [];
+        if (fornecedoresSel.includes('ambev')) precos.push(item.ambev);
+        if (fornecedoresSel.includes('coca-cola')) precos.push(item.cocacola);
+        if (fornecedoresSel.includes('pepsico')) precos.push(item.pepsico);
+        let melhor = Math.min(...precos);
+        let melhorFornecedor = '';
+        if (item.ambev === melhor) melhorFornecedor = 'Ambev';
+        else if (item.cocacola === melhor) melhorFornecedor = 'Coca-Cola';
+        else if (item.pepsico === melhor) melhorFornecedor = 'Pepsico';
+        let difPercent = ((item.indice_mercado - melhor) / item.indice_mercado * 100).toFixed(1);
+        tbody.innerHTML += `<tr>
+          <td>${item.produto}</td>
+          <td>R$ ${item.ambev.toFixed(2)}</td>
+          <td>R$ ${item.cocacola.toFixed(2)}</td>
+          <td>R$ ${item.pepsico.toFixed(2)}</td>
+          <td class="melhor-oferta">${melhorFornecedor} <br><span>R$ ${melhor.toFixed(2)}</span></td>
+          <td>${difPercent}%</td>
+          <td class="indice-mercado">R$ ${item.indice_mercado.toFixed(2)}</td>
+        </tr>`;
+      });
+    }
+
+    let grafico = null;
+    function renderGrafico(dados, fornecedoresSel) {
+      const ctx = document.getElementById('grafico-comparativo').getContext('2d');
+      const labels = dados.map(item => item.produto);
+      const datasets = [];
+      if (fornecedoresSel.includes('ambev')) {
+        datasets.push({
+          label: 'Ambev',
+          data: dados.map(item => item.ambev),
+          backgroundColor: '#4bb543'
+        });
+      }
+      if (fornecedoresSel.includes('coca-cola')) {
+        datasets.push({
+          label: 'Coca-Cola',
+          data: dados.map(item => item.cocacola),
+          backgroundColor: '#f9b233'
+        });
+      }
+      if (fornecedoresSel.includes('pepsico')) {
+        datasets.push({
+          label: 'Pepsico',
+          data: dados.map(item => item.pepsico),
+          backgroundColor: '#1a2340'
+        });
+      }
+      datasets.push({
+        label: 'Índice Mercado',
+        data: dados.map(item => item.indice_mercado),
+        backgroundColor: '#e8eaf0'
+      });
+      if (grafico) grafico.destroy();
+      grafico = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Preço (R$)' } }
+          }
+        }
+      });
+    }
+
+    function exportarExcel() {
+      // Exporta a tabela comparativa
+      const table = document.getElementById('comparativo-table');
+      const ws = XLSX.utils.table_to_sheet(table);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Comparativo');
+      XLSX.writeFile(wb, 'relatorio-comparativo.xlsx');
+    }
+    function exportarPDF() {
+      alert('Exportação para PDF simulada. (Funcionalidade real será implementada na versão final)');
+    }
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      // Seleciona todos fornecedores por padrão
+      const fornecedores = document.getElementById('fornecedores');
+      for (let i = 0; i < fornecedores.options.length; i++) {
+        fornecedores.options[i].selected = true;
+      }
+      aplicarFiltros();
+    });
+  </script>
+</body>
+</html>
