@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .btn-cadastrar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .btn-cadastrar:hover {
+      background: #e1a12a;
+    }
+    .fornecedores-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-ativo { background: #4bb543; }
+    .status-inativo { background: #e74c3c; }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      cursor: pointer;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    .btn-acao {
+      background: none;
+      border: none;
+      color: #1a2340;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 1.01rem;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+    .btn-acao:hover {
+      color: #f9b233;
+      text-decoration: underline;
+    }
+    @media (max-width: 900px) {
+      .fornecedores-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 14px 4px 12px 4px;
+      }
+      .card-table th, .card-table td {
+        padding: 6px 4px;
+      }
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-content {
+      background: #fff;
+      max-width: 600px;
+      width: 100%;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-close:hover {
+      color: #e74c3c;
+    }
+    .modal-body {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #222;
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../index.html';
+      }
+    }
+    function cadastrarFornecedor() {
+      window.location.href = 'cadastro-fornecedor.html';
+    }
+    function editarFornecedor(id) {
+      window.location.href = 'cadastro-fornecedor.html?id=' + id;
+    }
+    function abrirModalHistorico(nome) {
+      var modal = document.getElementById('modal-historico');
+      var modalTitle = modal.querySelector('.modal-title');
+      var modalBody = modal.querySelector('.modal-body');
+      modalTitle.textContent = 'Histórico de Cotações - ' + nome;
+      modalBody.innerHTML = '<ul style="padding-left:18px;">' +
+        '<li>12/06/2024 - Cotação enviada (R$ 1.200,00)</li>' +
+        '<li>05/06/2024 - Cotação respondida (R$ 1.180,00)</li>' +
+        '<li>28/05/2024 - Cotação enviada (R$ 1.250,00)</li>' +
+        '<li>20/05/2024 - Cotação respondida (R$ 1.210,00)</li>' +
+        '</ul>';
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function desativarFornecedor(nome) {
+      if(confirm('Deseja desativar o fornecedor ' + nome + '?')) {
+        alert('Fornecedor desativado com sucesso!');
+      }
+    }
+    function fecharModal() {
+      var modal = document.getElementById('modal-historico');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-historico');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) {
+            fecharModal();
+          }
+        });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModal);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModal();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="lista-fornecedores.html" class="active">Fornecedores</a>
+      <a href="../index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Fornecedores Cadastrados</h1>
+      <button class="btn-cadastrar" onclick="cadastrarFornecedor()">+ Cadastrar Fornecedor</button>
+    </header>
+    <main class="fornecedores-section">
+      <div class="card">
+        <div class="card-title">Base de Fornecedores</div>
+        <table class="card-table" aria-label="Lista de Fornecedores">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Status</th>
+              <th>Último Contato</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frutas do Vale</td>
+              <td>Hortifruti</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>12/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(1)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Frutas do Vale')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Frutas do Vale')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Verduras São Pedro</td>
+              <td>Hortifruti</td>
+              <td><span class="status status-inativo">Inativo</span></td>
+              <td>05/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(2)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Verduras São Pedro')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Verduras São Pedro')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Carnes Premium</td>
+              <td>Carnes</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>10/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(3)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Carnes Premium')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Carnes Premium')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Laticínios Bom Leite</td>
+              <td>Laticínios</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>09/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(4)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Laticínios Bom Leite')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Laticínios Bom Leite')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Peixaria do Porto</td>
+              <td>Pescados</td>
+              <td><span class="status status-inativo">Inativo</span></td>
+              <td>28/05/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(5)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Peixaria do Porto')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Peixaria do Porto')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Padaria Pão Nosso</td>
+              <td>Panificação</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>12/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(6)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Padaria Pão Nosso')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Padaria Pão Nosso')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Doces da Serra</td>
+              <td>Doces</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>11/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(7)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Doces da Serra')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Doces da Serra')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Bebidas Rio Claro</td>
+              <td>Bebidas</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>10/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(8)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Bebidas Rio Claro')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Bebidas Rio Claro')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Queijos Minas Gerais</td>
+              <td>Laticínios</td>
+              <td><span class="status status-inativo">Inativo</span></td>
+              <td>02/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(9)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Queijos Minas Gerais')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Queijos Minas Gerais')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Legumes Frescor</td>
+              <td>Hortifruti</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>08/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(10)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Legumes Frescor')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Legumes Frescor')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Ovos Caipira Sul</td>
+              <td>Ovos</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>07/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(11)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Ovos Caipira Sul')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Ovos Caipira Sul')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Congelados Polar</td>
+              <td>Congelados</td>
+              <td><span class="status status-inativo">Inativo</span></td>
+              <td>03/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(12)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Congelados Polar')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Congelados Polar')">Histórico</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Grãos do Campo</td>
+              <td>Grãos</td>
+              <td><span class="status status-ativo">Ativo</span></td>
+              <td>06/06/2024</td>
+              <td>
+                <button class="btn-acao" onclick="editarFornecedor(13)">Editar</button>
+                <button class="btn-acao" onclick="desativarFornecedor('Grãos do Campo')">Desativar</button>
+                <span class="link-detalhes" onclick="abrirModalHistorico('Grãos do Campo')">Histórico</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <div id="modal-historico" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Histórico</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
