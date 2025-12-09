@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalhes da Cotação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0 0 0 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; display: flex; flex-direction: column; min-height: 180px; margin-bottom: 32px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 12px; }
+    .info-list { margin-bottom: 18px; }
+    .info-list li { margin-bottom: 7px; font-size: 1.09rem; color: #222; }
+    .fornecedores-list { margin-bottom: 18px; }
+    .fornecedores-list li { margin-bottom: 5px; font-size: 1.05rem; color: #222; }
+    .resposta-card { background: #f7f8fa; border-radius: 7px; padding: 14px 18px; margin-bottom: 14px; border-left: 4px solid #f9b233; }
+    .resposta-card .nome-fornecedor { font-weight: 700; color: #1a2340; margin-bottom: 4px; }
+    .resposta-card .tipo-resposta { font-size: 0.97rem; color: #555; margin-bottom: 6px; }
+    .resposta-card .texto-resposta { font-size: 1.05rem; color: #222; }
+    .resposta-card .btn-transcricao { background: none; border: none; color: #1a2340; text-decoration: underline; font-weight: 600; cursor: pointer; font-size: 1.01rem; margin-top: 6px; }
+    .btn-comparar { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); margin-bottom: 18px; }
+    .btn-comparar:hover { background: #e1a12a; }
+    .comparativo-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; margin-top: 12px; }
+    .comparativo-table th, .comparativo-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .comparativo-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .comparativo-table tr:last-child td { border-bottom: none; }
+    .status-preco { font-weight: 700; padding: 3px 10px; border-radius: 12px; color: #fff; font-size: 1.01rem; }
+    .status-menor { background: #4bb543; }
+    .status-maior { background: #e74c3c; }
+    .status-intermediario { background: #f9b233; }
+    /* Modal para transcrição de áudio */
+    .modal-transcricao { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+    .modal-transcricao-content { background: #fff; max-width: 600px; width: 96%; padding: 28px 22px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 80vh; overflow-y: auto; animation: slideIn 0.3s ease; }
+    .modal-transcricao-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+    .modal-transcricao-title { font-size: 1.18rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-transcricao-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-transcricao-close:hover { color: #e74c3c; }
+    .modal-transcricao-body { font-size: 1.05rem; line-height: 1.6; color: #222; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .card { padding: 18px 10px 14px 10px; }
+      .modal-transcricao-content { width: 99%; padding: 14px 2px 12px 2px; max-height: 96vh; }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = 'index.html';
+      }
+    }
+    function abrirTranscricaoAudio() {
+      var modal = document.getElementById('modal-transcricao');
+      if (!modal) return;
+      var modalTitle = modal.querySelector('.modal-transcricao-title');
+      modalTitle.textContent = 'Transcrição de Áudio - Fornecedor Hortifruti Ideal';
+      var modalBody = modal.querySelector('.modal-transcricao-body');
+      modalBody.innerHTML = '<p><strong>Transcrição:</strong></p>' +
+        '<p>"Olá, bom dia! Sobre o Tomate Carmem 20kg, consigo entregar por R$ 175,00 a caixa, fresquinho, colheita de ontem. Entrega até sexta-feira. Qualquer dúvida, estou à disposição."</p>';
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-transcricao-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModalTranscricao() {
+      var modal = document.getElementById('modal-transcricao');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-transcricao');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) {
+            fecharModalTranscricao();
+          }
+        });
+        var closeBtn = modal.querySelector('.modal-transcricao-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModalTranscricao);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModalTranscricao();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Detalhes da Cotação</h1>
+    </header>
+    <main class="dashboard-section">
+      <div class="card">
+        <div class="card-title">Produto Solicitado</div>
+        <ul class="info-list">
+          <li><strong>Produto:</strong> Tomate Carmem 20kg</li>
+          <li><strong>Unidade:</strong> Caixa</li>
+          <li><strong>Quantidade:</strong> 10 caixas</li>
+          <li><strong>Data da Cotação:</strong> 11/06/2024</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Fornecedores Contatados</div>
+        <ul class="fornecedores-list">
+          <li>Hortifruti Ideal</li>
+          <li>Distribuidora Carmem</li>
+          <li>Mercado do Produtor</li>
+          <li>Frutas & Cia</li>
+          <li>AgroTomate</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Respostas Recebidas</div>
+        <div class="resposta-card">
+          <div class="nome-fornecedor">Hortifruti Ideal</div>
+          <div class="tipo-resposta">Áudio transcrito</div>
+          <button class="btn-transcricao" onclick="abrirTranscricaoAudio()">Ver Transcrição de Áudio</button>
+        </div>
+        <div class="resposta-card">
+          <div class="nome-fornecedor">Distribuidora Carmem</div>
+          <div class="tipo-resposta">Texto</div>
+          <div class="texto-resposta">"Oferto Tomate Carmem 20kg por R$ 180,00 a caixa, entrega em até 2 dias úteis."</div>
+        </div>
+        <div class="resposta-card">
+          <div class="nome-fornecedor">Mercado do Produtor</div>
+          <div class="tipo-resposta">Texto</div>
+          <div class="texto-resposta">"Tenho disponibilidade para 10 caixas, valor R$ 178,00 cada. Entrega imediata."</div>
+        </div>
+        <button class="btn-comparar" onclick="goTo('comparativo-cotacoes.html')">Comparar Respostas</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Comparativo de Preços</div>
+        <table class="comparativo-table" aria-label="Comparativo de Preços">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Preço (R$)</th>
+              <th>Condição de Entrega</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hortifruti Ideal</td>
+              <td>175,00</td>
+              <td>Entrega até sexta-feira</td>
+              <td><span class="status-preco status-menor">Menor Preço</span></td>
+            </tr>
+            <tr>
+              <td>Mercado do Produtor</td>
+              <td>178,00</td>
+              <td>Entrega imediata</td>
+              <td><span class="status-preco status-intermediario">Intermediário</span></td>
+            </tr>
+            <tr>
+              <td>Distribuidora Carmem</td>
+              <td>180,00</td>
+              <td>Entrega em até 2 dias úteis</td>
+              <td><span class="status-preco status-maior">Maior Preço</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <div id="modal-transcricao" class="modal-transcricao" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-transcricao-content" tabindex="0">
+      <div class="modal-transcricao-header">
+        <span class="modal-transcricao-title">Transcrição de Áudio</span>
+        <button class="modal-transcricao-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-transcricao-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
