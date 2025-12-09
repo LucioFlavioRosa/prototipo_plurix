@@ -39,6 +39,8 @@
     .sidebar .logo img {
       width: 120px;
       height: auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.10);
     }
     .sidebar nav {
       flex: 1;
@@ -53,11 +55,15 @@
       border-left: 4px solid transparent;
       transition: background 0.15s, border-color 0.15s;
       margin-bottom: 2px;
+      border-radius: 4px 0 0 4px;
     }
     .sidebar nav a.active, .sidebar nav a:hover {
       background: #222b4a;
       border-left: 4px solid #f9b233;
       color: #f9b233;
+    }
+    .sidebar nav a[aria-label] {
+      outline: none;
     }
     .sidebar .bottom {
       margin-bottom: 32px;
@@ -103,6 +109,9 @@
     }
     .header .cta-upload:hover {
       background: #e1a12a;
+    }
+    .header .cta-upload[aria-label] {
+      outline: none;
     }
     .dashboard-section {
       padding: 32px 40px 40px 40px;
@@ -157,33 +166,17 @@
     .status-pendente { background: #f9b233; }
     .status-aprovada { background: #4bb543; }
     .status-reprovada { background: #e74c3c; }
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 1.02rem;
-    }
-    .history-table th, .history-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eaeaea;
-    }
-    .history-table th {
-      background: #e8eaf0;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .history-table tr:last-child td {
-      border-bottom: none;
-    }
     .link-detalhes {
       color: #1a2340;
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.15s, text-decoration 0.15s;
     }
-    .link-detalhes:hover {
+    .link-detalhes:hover, .link-detalhes:focus {
       color: #f9b233;
       text-decoration: none;
+      outline: 2px solid #f9b233;
+      border-radius: 4px;
     }
     /* Modal Styles */
     .modal {
@@ -212,6 +205,7 @@
       max-height: 90vh;
       overflow-y: auto;
       animation: slideIn 0.3s ease;
+      outline: none;
     }
     .modal-header {
       display: flex;
@@ -234,244 +228,18 @@
       line-height: 1;
       margin-left: 16px;
       transition: color 0.18s;
+      border-radius: 4px;
     }
-    .modal-close:hover {
+    .modal-close:hover, .modal-close:focus {
       color: #e74c3c;
+      outline: 2px solid #e74c3c;
     }
     .modal-body {
       font-size: 1.05rem;
       line-height: 1.6;
       color: #222;
     }
-    .nivel-aprovacao {
-      display: flex;
-      align-items: center;
-      margin: 16px 0;
-      flex-wrap: wrap;
-    }
-    .nivel-item {
-      display: flex;
-      align-items: center;
-      margin-right: 24px;
-      font-size: 1.08rem;
-      font-weight: 600;
-      color: #1a2340;
-    }
-    .status-circle {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #ddd;
-      border: 2px solid #ccc;
-      transition: background 0.2s;
-    }
-    .status-circle.ativo {
-      background: #4bb543;
-      border-color: #4bb543;
-    }
-    .nivel-linha {
-      height: 2px;
-      width: 40px;
-      background: #ddd;
-      margin: 0 8px;
-      display: inline-block;
-      vertical-align: middle;
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .nivel-linha.ativo {
-      background: #4bb543;
-    }
-    .motivo-item {
-      margin-bottom: 20px;
-      padding: 16px;
-      background: #f9f9f9;
-      border-left: 4px solid #f9b233;
-      border-radius: 6px;
-    }
-    .motivo-titulo {
-      font-weight: 700;
-      color: #1a2340;
-      margin-bottom: 8px;
-      font-size: 1.08rem;
-    }
-    .motivo-valor {
-      color: #555;
-      font-size: 1.02rem;
-    }
-    /* Modal Editor Styles */
-    .modal-editor {
-      display: none;
-      position: fixed;
-      z-index: 1100;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(30,40,80,0.35);
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease;
-    }
-    .modal-editor.closing {
-      animation: fadeOut 0.25s ease forwards;
-    }
-    .modal-editor-content {
-      background: #fff;
-      max-width: 950px;
-      width: 98%;
-      padding: 32px 24px 24px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
-      max-height: 92vh;
-      overflow-y: auto;
-      animation: slideIn 0.3s ease;
-    }
-    .modal-editor-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-    .modal-editor-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1a2340;
-      margin: 0;
-    }
-    .modal-editor-close {
-      cursor: pointer;
-      font-size: 28px;
-      color: #999;
-      background: none;
-      border: none;
-      line-height: 1;
-      margin-left: 16px;
-      transition: color 0.18s;
-    }
-    .modal-editor-close:hover {
-      color: #e74c3c;
-    }
-    .editor-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 22px;
-      font-size: 1.01rem;
-    }
-    .editor-table th, .editor-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #eaeaea;
-      text-align: left;
-    }
-    .editor-table th {
-      background: #e8eaf0;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .editor-table input {
-      width: 100%;
-      padding: 5px 6px;
-      border: 1px solid #b7b9c6;
-      border-radius: 4px;
-      font-size: 1rem;
-      background: #f7f8fa;
-      color: #222;
-      box-sizing: border-box;
-    }
-    .editor-table input:focus {
-      outline: 2px solid #f9b233;
-      background: #fffbe7;
-    }
-    .btn-salvar-edicao, .btn-cancelar-edicao {
-      padding: 10px 24px;
-      font-size: 1.08rem;
-      font-weight: 700;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      margin-right: 12px;
-      margin-top: 8px;
-      transition: background 0.18s;
-    }
-    .btn-salvar-edicao {
-      background: #4bb543;
-      color: #fff;
-    }
-    .btn-salvar-edicao:hover {
-      background: #399a36;
-    }
-    .btn-cancelar-edicao {
-      background: #e74c3c;
-      color: #fff;
-    }
-    .btn-cancelar-edicao:hover {
-      background: #b93a2e;
-    }
-    /* Tabela editável para status reprovada */
-    .tabela-editavel {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 18px;
-      font-size: 1.04rem;
-      background: #fff;
-    }
-    .tabela-editavel th, .tabela-editavel td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #eaeaea;
-      text-align: left;
-    }
-    .tabela-editavel th {
-      background: #f7f8fa;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .tabela-editavel input {
-      width: 100%;
-      padding: 6px 7px;
-      border: 1px solid #b7b9c6;
-      border-radius: 4px;
-      font-size: 1rem;
-      background: #f7f8fa;
-      color: #222;
-      box-sizing: border-box;
-      transition: border 0.15s, background 0.15s;
-    }
-    .tabela-editavel input:focus {
-      outline: 2px solid #f9b233;
-      background: #fffbe7;
-    }
-    /* Botão Download Excel */
-    .btn-download-excel {
-      background: #f9b233;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 28px;
-      font-size: 1.08rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 16px;
-      margin-bottom: 8px;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
-      display: inline-block;
-    }
-    .btn-download-excel:hover {
-      background: #e1a12a;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    /* Responsividade Mobile */
     @media (max-width: 900px) {
       .dashboard-section {
         padding: 24px 10px 24px 10px;
@@ -499,25 +267,64 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      .nivel-item {
-        margin-right: 12px;
+    }
+    @media (max-width: 600px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100vw;
+        height: 60px;
+        flex-direction: row;
+        align-items: center;
+        padding-top: 0;
+        box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+      .sidebar .logo {
+        margin-bottom: 0;
+        margin-left: 12px;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-around;
+      }
+      .sidebar nav a {
+        padding: 10px 8px;
         font-size: 0.95rem;
+        margin-bottom: 0;
       }
-      .motivo-item {
-        padding: 12px;
+      .sidebar .bottom {
+        display: none;
+      }
+      .main-content {
+        padding-top: 60px;
+      }
+      .dashboard-section {
+        padding: 10px 2px 10px 2px;
+      }
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .card {
+        padding: 18px 8px 16px 8px;
+        min-height: 120px;
+      }
+      .card-title {
+        font-size: 1.1rem;
+      }
+      .card-table th, .card-table td {
+        padding: 7px 6px;
         font-size: 0.98rem;
-      }
-      .modal-editor-content {
-        width: 99%;
-        padding: 14px 2px 12px 2px;
-        max-height: 96vh;
-      }
-      .tabela-editavel th, .tabela-editavel td {
-        padding: 6px 4px;
       }
     }
   </style>
-  <!-- SheetJS CDN para exportação Excel -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     function goTo(page) {
@@ -531,123 +338,85 @@
     function uploadCTA() {
       window.location.href = 'upload-tabela.html';
     }
-
-    // Função para abrir detalhes conforme status
     function abrirDetalhes(status, arquivo, data) {
-      try {
-        var modal = document.getElementById('modal-detalhes');
-        if (!modal) {
-          alert('Erro: modal não encontrado.');
-          return;
-        }
-        var modalBody = modal.querySelector('.modal-body');
-        var modalTitle = modal.querySelector('.modal-title');
-        if (!modalBody || !modalTitle) {
-          alert('Erro: estrutura do modal inválida.');
-          return;
-        }
-        // Dados mock para tabela - PRODUTOS AMBEV
-        var dadosTabela = [
-          { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
-          { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
-          { sku: '7891991010848', nome: 'Guaraná Antarctica 2L', descricao: 'Refrigerante Guaraná Antarctica 2 Litros', preco: '7.99' },
-          { sku: '7892840800011', nome: 'Pepsi Lata 350ml', descricao: 'Refrigerante Pepsi Lata 350ml', preco: '3.49' }
-        ];
-        // Níveis de aprovação
-        var nivelAprovacao = [
-          'Gerente Categoria Bandeira',
-          'Dir. Comercial Bandeira',
-          'Dir. Comercial Holding',
-          'VP'
-        ];
-        // Determinar nivelAtual para pendente
-        var nivelAtual = 0;
-        if (status === 'pendente') {
-          if (arquivo === 'precos_junho.xlsx') nivelAtual = 0;
-          else if (arquivo === 'precos_maio.xlsx') nivelAtual = 2;
-          else if (arquivo === 'precos_abril.xlsx') nivelAtual = 3;
-          else nivelAtual = 0;
-        }
-        var html = '';
-        if (status === 'reprovada') {
-          modalTitle.textContent = 'Editar Planilha Reprovada - ' + arquivo;
-          html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos (editável):</div>';
-          html += '<form id="form-tabela-editavel"><table class="tabela-editavel" aria-label="Tabela Editável">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < dadosTabela.length; i++) {
-            html += '<tr>' +
-              '<td><input type="text" name="sku" value="' + dadosTabela[i].sku + '" required></td>' +
-              '<td><input type="text" name="nome" value="' + dadosTabela[i].nome + '" required></td>' +
-              '<td><input type="text" name="descricao" value="' + dadosTabela[i].descricao + '" required></td>' +
-              '<td><input type="number" name="preco" value="' + dadosTabela[i].preco + '" min="0" step="0.01" required></td>' +
-            '</tr>';
-          }
-          html += '</tbody></table></form>';
-          html += '<div style="margin-top:18px;">' +
-            '<button class="btn-salvar-edicao" onclick="salvarTabelaEditavel();return false;">Salvar Alterações</button>' +
-            '<button class="btn-cancelar-edicao" onclick="fecharModal();return false;">Cancelar</button>' +
-            '</div>';
-        } else if (status === 'aprovada') {
-          modalTitle.textContent = 'Tabela Aprovada - ' + arquivo;
-          html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos:</div>';
-          html += '<table class="tabela-editavel" aria-label="Tabela Leitura">';
-          html += '<thead><tr>';
-          html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
-          html += '</tr></thead><tbody>';
-          for (var i = 0; i < dadosTabela.length; i++) {
-            html += '<tr>' +
-              '<td>' + dadosTabela[i].sku + '</td>' +
-              '<td>' + dadosTabela[i].nome + '</td>' +
-              '<td>' + dadosTabela[i].descricao + '</td>' +
-              '<td>' + dadosTabela[i].preco + '</td>' +
-            '</tr>';
-          }
-          html += '</tbody></table>';
-          html += '<button class="btn-download-excel" onclick="gerarDownloadExcel(\'' + arquivo + '\')">Download .xlsx</button>';
-        } else if (status === 'pendente') {
-          modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
-          html += '<div class="nivel-aprovacao">';
-          for (var i = 0; i < nivelAprovacao.length; i++) {
-            html += '<div class="nivel-item">';
-            html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
-            html += nivelAprovacao[i];
-            html += '</div>';
-            if (i < nivelAprovacao.length - 1) {
-              html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
-            }
-          }
-          html += '</div>';
-          html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
-        } else {
-          modalTitle.textContent = 'Detalhes';
-          html = '<div>Informações não disponíveis para este status.</div>';
-        }
-        modalBody.innerHTML = html;
-        modal.style.display = 'flex';
-        modal.classList.remove('closing');
-        setTimeout(function() {
-          var content = modal.querySelector('.modal-content');
-          if(content) content.focus();
-        }, 100);
-      } catch (e) {
-        var modal = document.getElementById('modal-detalhes');
-        if (modal && modal.querySelector('.modal-body')) {
-          modal.querySelector('.modal-title').textContent = 'Erro';
-          modal.querySelector('.modal-body').innerHTML = '<div>Ocorreu um erro ao carregar os detalhes. Tente novamente.</div>';
-          modal.style.display = 'flex';
-        } else {
-          alert('Erro inesperado ao abrir detalhes.');
-        }
+      var modal = document.getElementById('modal-detalhes');
+      var modalBody = modal.querySelector('.modal-body');
+      var modalTitle = modal.querySelector('.modal-title');
+      var html = '';
+      if (status === 'pendente') {
+        modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
+        html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
+        html += '<div class="nivel-aprovacao">';
+        html += '<div class="nivel-item"><span class="status-circle ativo"></span>Gerente Categoria Bandeira</div>';
+        html += '<span class="nivel-linha"></span>';
+        html += '<div class="nivel-item"><span class="status-circle"></span>Dir. Comercial Bandeira</div>';
+        html += '<span class="nivel-linha"></span>';
+        html += '<div class="nivel-item"><span class="status-circle"></span>Dir. Comercial Holding</div>';
+        html += '<span class="nivel-linha"></span>';
+        html += '<div class="nivel-item"><span class="status-circle"></span>VP</div>';
+        html += '</div>';
+        html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
+      } else if (status === 'aprovada') {
+        modalTitle.textContent = 'Tabela Aprovada - ' + arquivo;
+        html += '<div><strong>Status:</strong> Aprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos:</div>';
+        html += '<table class="tabela-editavel" aria-label="Tabela Leitura">';
+        html += '<thead><tr>';
+        html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
+        html += '</tr></thead><tbody>';
+        html += '<tr><td>7891991000849</td><td>Skol Lata 350ml</td><td>Cerveja Pilsen Lata 350ml</td><td>3.99</td></tr>';
+        html += '<tr><td>7891149100015</td><td>Brahma Long Neck 355ml</td><td>Cerveja Brahma Long Neck 355ml</td><td>5.49</td></tr>';
+        html += '<tr><td>7891991010848</td><td>Guaraná Antarctica 2L</td><td>Refrigerante Guaraná Antarctica 2 Litros</td><td>7.99</td></tr>';
+        html += '<tr><td>7892840800011</td><td>Pepsi Lata 350ml</td><td>Refrigerante Pepsi Lata 350ml</td><td>3.49</td></tr>';
+        html += '</tbody></table>';
+        html += '<button class="btn-download-excel" aria-label="Download Excel" onclick="gerarDownloadExcel(\'' + arquivo + '\')">Download .xlsx</button>';
+      } else if (status === 'reprovada') {
+        modalTitle.textContent = 'Editar Planilha Reprovada - ' + arquivo;
+        html += '<div><strong>Status:</strong> Reprovada</div>';
+        html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Produtos (editável):</div>';
+        html += '<form id="form-tabela-editavel"><table class="tabela-editavel" aria-label="Tabela Editável">';
+        html += '<thead><tr>';
+        html += '<th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço (R$)</th>';
+        html += '</tr></thead><tbody>';
+        html += '<tr>' +
+          '<td><input type="text" name="sku" value="7891991000849" required aria-label="SKU"></td>' +
+          '<td><input type="text" name="nome" value="Skol Lata 350ml" required aria-label="Nome"></td>' +
+          '<td><input type="text" name="descricao" value="Cerveja Pilsen Lata 350ml" required aria-label="Descrição"></td>' +
+          '<td><input type="number" name="preco" value="3.99" min="0" step="0.01" required aria-label="Preço"></td>' +
+        '</tr>';
+        html += '<tr>' +
+          '<td><input type="text" name="sku" value="7891149100015" required aria-label="SKU"></td>' +
+          '<td><input type="text" name="nome" value="Brahma Long Neck 355ml" required aria-label="Nome"></td>' +
+          '<td><input type="text" name="descricao" value="Cerveja Brahma Long Neck 355ml" required aria-label="Descrição"></td>' +
+          '<td><input type="number" name="preco" value="5.49" min="0" step="0.01" required aria-label="Preço"></td>' +
+        '</tr>';
+        html += '<tr>' +
+          '<td><input type="text" name="sku" value="7891991010848" required aria-label="SKU"></td>' +
+          '<td><input type="text" name="nome" value="Guaraná Antarctica 2L" required aria-label="Nome"></td>' +
+          '<td><input type="text" name="descricao" value="Refrigerante Guaraná Antarctica 2 Litros" required aria-label="Descrição"></td>' +
+          '<td><input type="number" name="preco" value="7.99" min="0" step="0.01" required aria-label="Preço"></td>' +
+        '</tr>';
+        html += '<tr>' +
+          '<td><input type="text" name="sku" value="7892840800011" required aria-label="SKU"></td>' +
+          '<td><input type="text" name="nome" value="Pepsi Lata 350ml" required aria-label="Nome"></td>' +
+          '<td><input type="text" name="descricao" value="Refrigerante Pepsi Lata 350ml" required aria-label="Descrição"></td>' +
+          '<td><input type="number" name="preco" value="3.49" min="0" step="0.01" required aria-label="Preço"></td>' +
+        '</tr>';
+        html += '</tbody></table></form>';
+        html += '<div style="margin-top:18px;">' +
+          '<button class="btn-salvar-edicao" aria-label="Salvar Alterações" onclick="salvarTabelaEditavel();return false;">Salvar Alterações</button>' +
+          '<button class="btn-cancelar-edicao" aria-label="Cancelar" onclick="fecharModal();return false;">Cancelar</button>' +
+          '</div>';
       }
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
     }
-
-    // Função para salvar tabela editável (status reprovada)
     function salvarTabelaEditavel() {
       var form = document.getElementById('form-tabela-editavel');
       if (!form) {
@@ -671,14 +440,10 @@
         alert('Por favor, preencha todos os campos corretamente.');
         return;
       }
-      // Aqui poderia ser feito um envio para backend...
       alert('Alterações salvas com sucesso!');
       fecharModal();
     }
-
-    // Função para gerar download Excel (status aprovada)
     function gerarDownloadExcel(arquivo) {
-      // Dados mock iguais aos exibidos na tabela - PRODUTOS AMBEV
       var dadosTabela = [
         { sku: '7891991000849', nome: 'Skol Lata 350ml', descricao: 'Cerveja Pilsen Lata 350ml', preco: '3.99' },
         { sku: '7891149100015', nome: 'Brahma Long Neck 355ml', descricao: 'Cerveja Brahma Long Neck 355ml', preco: '5.49' },
@@ -697,7 +462,6 @@
       var nomeArquivo = arquivo.replace(/\.[^.]+$/, '') + '.xlsx';
       XLSX.writeFile(wb, nomeArquivo);
     }
-
     function fecharModal() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -708,71 +472,6 @@
         }, 250);
       }
     }
-
-    // MODAL EDITOR DE PLANILHA (mantido para compatibilidade, não usado nos novos modais)
-    function abrirEditorPlanilha(arquivo) {
-      var modal = document.getElementById('modal-editor');
-      if (!modal) return;
-      var modalTitle = modal.querySelector('.modal-editor-title');
-      modalTitle.textContent = 'Editar Planilha - ' + arquivo;
-      // Dados mock realistas - PRODUTOS AMBEV
-      var dados = [
-        { sku: '7891991000849', produto: 'Skol Lata 350ml', preco_atual: 'R$ 3,99', novo_preco: 'R$ 4,29', aumento: '+7.5%', categoria: 'Cervejas' },
-        { sku: '7891149100015', produto: 'Brahma Long Neck 355ml', preco_atual: 'R$ 5,49', novo_preco: 'R$ 5,99', aumento: '+9.1%', categoria: 'Cervejas' },
-        { sku: '7891991010848', produto: 'Guaraná Antarctica 2L', preco_atual: 'R$ 7,99', novo_preco: 'R$ 8,49', aumento: '+6.3%', categoria: 'Refrigerantes' },
-        { sku: '7892840800011', produto: 'Pepsi Lata 350ml', preco_atual: 'R$ 3,49', novo_preco: 'R$ 3,79', aumento: '+8.6%', categoria: 'Refrigerantes' },
-        { sku: '7896045500117', produto: 'Beats Senses 269ml', preco_atual: 'R$ 6,99', novo_preco: 'R$ 7,49', aumento: '+7.2%', categoria: 'Bebidas Alcoólicas' },
-        { sku: '7891991010893', produto: 'Guaraná Antarctica Zero 2L', preco_atual: 'R$ 8,49', novo_preco: 'R$ 8,99', aumento: '+5.9%', categoria: 'Refrigerantes' },
-        { sku: '7891149100022', produto: 'Antarctica Subzero Lata 350ml', preco_atual: 'R$ 3,89', novo_preco: 'R$ 4,19', aumento: '+7.7%', categoria: 'Cervejas' },
-        { sku: '7891991000863', produto: 'Skol Beats 269ml', preco_atual: 'R$ 7,49', novo_preco: 'R$ 7,99', aumento: '+6.7%', categoria: 'Bebidas Alcoólicas' },
-        { sku: '7891991010909', produto: 'H2OH! Limão 500ml', preco_atual: 'R$ 3,99', novo_preco: 'R$ 4,39', aumento: '+10.0%', categoria: 'Águas Saborizadas' },
-        { sku: '7892840800028', produto: 'Pepsi Black Lata 350ml', preco_atual: 'R$ 3,69', novo_preco: 'R$ 3,99', aumento: '+8.1%', categoria: 'Refrigerantes' }
-      ];
-      var tbody = '';
-      for (var i = 0; i < dados.length; i++) {
-        tbody += '<tr>' +
-          '<td><input type="text" value="' + dados[i].sku + '" readonly tabindex="-1"></td>' +
-          '<td><input type="text" value="' + dados[i].produto + '"></td>' +
-          '<td><input type="text" value="' + dados[i].preco_atual + '"></td>' +
-          '<td><input type="text" value="' + dados[i].novo_preco + '"></td>' +
-          '<td><input type="text" value="' + dados[i].aumento + '"></td>' +
-          '<td><input type="text" value="' + dados[i].categoria + '"></td>' +
-        '</tr>';
-      }
-      var tableHtml = '<table class="editor-table" aria-label="Editor de Planilha">' +
-        '<thead><tr>' +
-        '<th>SKU</th><th>Produto</th><th>Preço Atual</th><th>Novo Preço</th><th>% Aumento</th><th>Categoria</th>' +
-        '</tr></thead><tbody>' + tbody + '</tbody></table>';
-      var modalBody = modal.querySelector('.modal-editor-body');
-      modalBody.innerHTML = tableHtml +
-        '<div style="margin-top:18px;">' +
-        '<button class="btn-salvar-edicao" onclick="salvarEdicaoPlanilha()">Salvar Alterações</button>' +
-        '<button class="btn-cancelar-edicao" onclick="fecharModalEditor()">Cancelar</button>' +
-        '</div>';
-      modal.style.display = 'flex';
-      modal.classList.remove('closing');
-      setTimeout(function() {
-        var content = modal.querySelector('.modal-editor-content');
-        if(content) content.focus();
-      }, 100);
-    }
-
-    function fecharModalEditor() {
-      var modal = document.getElementById('modal-editor');
-      if (modal) {
-        modal.classList.add('closing');
-        setTimeout(function() {
-          modal.style.display = 'none';
-          modal.classList.remove('closing');
-        }, 250);
-      }
-    }
-
-    function salvarEdicaoPlanilha() {
-      alert('Alterações salvas com sucesso!');
-      fecharModalEditor();
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
       var modal = document.getElementById('modal-detalhes');
       if (modal) {
@@ -789,46 +488,32 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           fecharModal();
-          fecharModalEditor();
         }
       });
-      // Modal editor
-      var modalEditor = document.getElementById('modal-editor');
-      if (modalEditor) {
-        modalEditor.addEventListener('mousedown', function(e) {
-          if (e.target === modalEditor) {
-            fecharModalEditor();
-          }
-        });
-        var closeBtnEditor = modalEditor.querySelector('.modal-editor-close');
-        if (closeBtnEditor) {
-          closeBtnEditor.addEventListener('click', fecharModalEditor);
-        }
-      }
     });
   </script>
 </head>
 <body>
-  <aside class="sidebar">
+  <aside class="sidebar" role="navigation" aria-label="Menu Principal">
     <div class="logo">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
     <nav>
-      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
-      <a href="upload-tabela.html">Nova Tabela</a>
-      <a href="historico.html">Histórico</a>
-      <a href="index.html" onclick="sair()">Sair</a>
+      <a href="dashboard-fornecedor.html" class="active" aria-label="Dashboard">Dashboard</a>
+      <a href="upload-tabela.html" aria-label="Nova Tabela">Nova Tabela</a>
+      <a href="historico.html" aria-label="Histórico">Histórico</a>
+      <a href="index.html" onclick="sair()" aria-label="Sair">Sair</a>
     </nav>
     <div class="bottom">&copy; 2024 Plurix</div>
   </aside>
   <div class="main-content">
-    <header class="header">
+    <header class="header" role="banner">
       <h1>Dashboard do Fornecedor</h1>
-      <button class="cta-upload" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
+      <button class="cta-upload" aria-label="Nova Tabela de Preços" onclick="uploadCTA()">+ Nova Tabela de Preços</button>
     </header>
-    <main class="dashboard-section">
+    <main class="dashboard-section" role="main">
       <section class="dashboard-cards">
-        <div class="card">
+        <div class="card" role="region" aria-label="Tabelas Submetidas Recentes">
           <div class="card-title">Tabelas Submetidas Recentes</div>
           <table class="card-table" aria-label="Tabelas Submetidas">
             <thead>
@@ -843,25 +528,25 @@
               <tr>
                 <td>10/06/2024</td>
                 <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-pendente" aria-label="Pendente">Pendente</span></td>
+                <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela pendente" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>02/06/2024</td>
                 <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-aprovada" aria-label="Aprovada">Aprovada</span></td>
+                <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela aprovada" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>15/05/2024</td>
                 <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
+                <td><span class="status status-reprovada" aria-label="Reprovada">Reprovada</span></td>
+                <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela reprovada" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="card">
+        <div class="card" role="region" aria-label="Resumo de Submissões">
           <div class="card-title">Resumo de Submissões</div>
           <table class="card-table" aria-label="Resumo de Submissões">
             <thead>
@@ -872,15 +557,15 @@
             </thead>
             <tbody>
               <tr>
-                <td><span class="status status-pendente">Pendente</span></td>
+                <td><span class="status status-pendente" aria-label="Pendente">Pendente</span></td>
                 <td>1</td>
               </tr>
               <tr>
-                <td><span class="status status-aprovada">Aprovada</span></td>
+                <td><span class="status status-aprovada" aria-label="Aprovada">Aprovada</span></td>
                 <td>4</td>
               </tr>
               <tr>
-                <td><span class="status status-reprovada">Reprovada</span></td>
+                <td><span class="status status-reprovada" aria-label="Reprovada">Reprovada</span></td>
                 <td>2</td>
               </tr>
             </tbody>
@@ -889,25 +574,14 @@
       </section>
     </main>
   </div>
-  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" aria-label="Modal de Detalhes" style="display:none;">
     <div class="modal-content" tabindex="0">
       <div class="modal-header">
         <span class="modal-title">Detalhes</span>
-        <button class="modal-close" aria-label="Fechar">&times;</button>
+        <button class="modal-close" aria-label="Fechar Modal">&times;</button>
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico -->
-      </div>
-    </div>
-  </div>
-  <div id="modal-editor" class="modal-editor" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
-    <div class="modal-editor-content" tabindex="0">
-      <div class="modal-editor-header">
-        <span class="modal-editor-title">Editar Planilha</span>
-        <button class="modal-editor-close" aria-label="Fechar">&times;</button>
-      </div>
-      <div class="modal-editor-body">
-        <!-- Tabela editável será inserida via JS -->
       </div>
     </div>
   </div>
