@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparação de Cotações x Índices de Mercado | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-back {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 18px;
+    }
+    .header .cta-back:hover {
+      background: #e1a12a;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-comparacao {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .filtros-comparacao label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1.05rem;
+    }
+    .filtros-comparacao select, .filtros-comparacao input {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #b7b9c6;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+      min-width: 140px;
+    }
+    .filtros-comparacao button {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.18s;
+    }
+    .filtros-comparacao button:hover {
+      background: #399a36;
+    }
+    .comparacao-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 36px;
+    }
+    .comparacao-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .comparacao-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+    }
+    .comparacao-table th, .comparacao-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .comparacao-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .comparacao-table tr:last-child td {
+      border-bottom: none;
+    }
+    .status-indice {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-acima { background: #e74c3c; }
+    .status-abaixo { background: #4bb543; }
+    .status-alinhado { background: #f9b233; }
+    .grafico-comparacao {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 18px;
+    }
+    .grafico-comparacao-title {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .comparacao-card, .grafico-comparacao {
+        padding: 16px 6px 12px 6px;
+      }
+    }
+  </style>
+  <!-- Chart.js CDN para gráfico -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="comparacao-indices-mercado.html" class="active">Comparação Mercado</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Comparação de Cotações x Índices de Mercado</h1>
+      <button class="cta-back" onclick="window.location.href='dashboard-fornecedor.html'">Voltar ao Dashboard</button>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-comparacao" id="form-filtros" autocomplete="off" aria-label="Filtros de Comparação">
+        <div>
+          <label for="filtro-produto">Produto</label>
+          <select id="filtro-produto" name="produto">
+            <option value="todos">Todos</option>
+            <option value="Leite UHT Integral 1L">Leite UHT Integral 1L</option>
+            <option value="Leite em pó 400g">Leite em pó 400g</option>
+            <option value="Muçarela kg">Muçarela kg</option>
+            <option value="Iogurte Natural 170g">Iogurte Natural 170g</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-periodo">Período</label>
+          <input type="month" id="filtro-periodo" name="periodo" value="2024-06">
+        </div>
+        <div>
+          <label for="filtro-indice">Índice de Referência</label>
+          <select id="filtro-indice" name="indice">
+            <option value="todos">Todos</option>
+            <option value="Esalq CEPEA">Esalq CEPEA</option>
+            <option value="Milkpoint">Milkpoint</option>
+            <option value="Safras">Safras</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit">Filtrar</button>
+        </div>
+      </form>
+      <section class="comparacao-card">
+        <div class="comparacao-card-title">Tabela Comparativa de Cotações x Índices de Mercado</div>
+        <table class="comparacao-table" aria-label="Tabela Comparativa">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Cotação Interna (R$)</th>
+              <th>Esalq CEPEA (R$)</th>
+              <th>Milkpoint (R$)</th>
+              <th>Safras (R$)</th>
+              <th>Diferença (%)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-comparacao">
+            <!-- Dados mockados inseridos via JS -->
+          </tbody>
+        </table>
+      </section>
+      <section class="grafico-comparacao">
+        <div class="grafico-comparacao-title">Evolução de Preços Internos vs. Índices de Mercado</div>
+        <canvas id="grafico-precos" height="320" aria-label="Gráfico de Evolução de Preços"></canvas>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Dados mockados realistas para cotações e índices
+    const dadosComparacao = [
+      {
+        produto: 'Leite UHT Integral 1L',
+        cotacao: 3.89,
+        esalq: 3.92,
+        milkpoint: 3.85,
+        safras: 3.88,
+        periodo: '2024-06',
+      },
+      {
+        produto: 'Leite em pó 400g',
+        cotacao: 14.20,
+        esalq: 14.10,
+        milkpoint: 14.35,
+        safras: 14.05,
+        periodo: '2024-06',
+      },
+      {
+        produto: 'Muçarela kg',
+        cotacao: 29.80,
+        esalq: 29.50,
+        milkpoint: 29.90,
+        safras: 29.40,
+        periodo: '2024-06',
+      },
+      {
+        produto: 'Iogurte Natural 170g',
+        cotacao: 2.99,
+        esalq: 3.05,
+        milkpoint: 2.95,
+        safras: 3.00,
+        periodo: '2024-06',
+      }
+    ];
+
+    // Função para calcular diferença percentual e status
+    function calcularStatus(cotacao, indice) {
+      const dif = ((cotacao - indice) / indice) * 100;
+      let status = '';
+      if (Math.abs(dif) < 1.5) status = 'alinhado';
+      else if (dif > 0) status = 'acima';
+      else status = 'abaixo';
+      return { dif: dif.toFixed(2), status };
+    }
+
+    // Renderizar tabela comparativa
+    function renderTabela(produtoFiltro, periodoFiltro, indiceFiltro) {
+      const tbody = document.getElementById('tbody-comparacao');
+      tbody.innerHTML = '';
+      let dadosFiltrados = dadosComparacao.filter(item => {
+        let produtoMatch = produtoFiltro === 'todos' || item.produto === produtoFiltro;
+        let periodoMatch = !periodoFiltro || item.periodo === periodoFiltro;
+        return produtoMatch && periodoMatch;
+      });
+      dadosFiltrados.forEach(item => {
+        let referencia = null;
+        if (indiceFiltro === 'Esalq CEPEA') referencia = item.esalq;
+        else if (indiceFiltro === 'Milkpoint') referencia = item.milkpoint;
+        else if (indiceFiltro === 'Safras') referencia = item.safras;
+        else referencia = (item.esalq + item.milkpoint + item.safras) / 3;
+        const { dif, status } = calcularStatus(item.cotacao, referencia);
+        let statusLabel = '';
+        if (status === 'acima') statusLabel = '<span class="status-indice status-acima">Acima</span>';
+        else if (status === 'abaixo') statusLabel = '<span class="status-indice status-abaixo">Abaixo</span>';
+        else statusLabel = '<span class="status-indice status-alinhado">Alinhado</span>';
+        tbody.innerHTML += `<tr>
+          <td>${item.produto}</td>
+          <td>R$ ${item.cotacao.toFixed(2)}</td>
+          <td>R$ ${item.esalq.toFixed(2)}</td>
+          <td>R$ ${item.milkpoint.toFixed(2)}</td>
+          <td>R$ ${item.safras.toFixed(2)}</td>
+          <td>${dif}%</td>
+          <td>${statusLabel}</td>
+        </tr>`;
+      });
+    }
+
+    // Renderizar gráfico de evolução de preços
+    function renderGrafico(produtoFiltro) {
+      // Mock para 6 meses
+      const meses = ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'];
+      const produtos = {
+        'Leite UHT Integral 1L': {
+          cotacao: [3.55, 3.62, 3.70, 3.80, 3.85, 3.89],
+          esalq:   [3.60, 3.65, 3.72, 3.85, 3.90, 3.92],
+          milkpoint: [3.50, 3.58, 3.68, 3.78, 3.81, 3.85],
+          safras: [3.52, 3.60, 3.69, 3.79, 3.84, 3.88]
+        },
+        'Leite em pó 400g': {
+          cotacao: [13.80, 13.95, 14.00, 14.10, 14.15, 14.20],
+          esalq:   [13.75, 13.90, 13.98, 14.05, 14.09, 14.10],
+          milkpoint: [13.85, 14.00, 14.10, 14.20, 14.30, 14.35],
+          safras: [13.70, 13.85, 13.95, 14.00, 14.03, 14.05]
+        },
+        'Muçarela kg': {
+          cotacao: [28.90, 29.10, 29.30, 29.50, 29.70, 29.80],
+          esalq:   [28.85, 29.05, 29.25, 29.40, 29.45, 29.50],
+          milkpoint: [29.00, 29.20, 29.40, 29.70, 29.80, 29.90],
+          safras: [28.80, 29.00, 29.20, 29.35, 29.38, 29.40]
+        },
+        'Iogurte Natural 170g': {
+          cotacao: [2.80, 2.85, 2.90, 2.95, 2.97, 2.99],
+          esalq:   [2.85, 2.90, 2.95, 3.00, 3.03, 3.05],
+          milkpoint: [2.78, 2.83, 2.89, 2.92, 2.94, 2.95],
+          safras: [2.81, 2.86, 2.92, 2.97, 2.99, 3.00]
+        }
+      };
+      let produto = produtoFiltro && produtoFiltro !== 'todos' ? produtoFiltro : 'Leite UHT Integral 1L';
+      let dados = produtos[produto];
+      const ctx = document.getElementById('grafico-precos').getContext('2d');
+      if (window.graficoPrecos) window.graficoPrecos.destroy();
+      window.graficoPrecos = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: meses,
+          datasets: [
+            {
+              label: 'Cotação Interna',
+              data: dados.cotacao,
+              borderColor: '#1a2340',
+              backgroundColor: 'rgba(26,35,64,0.08)',
+              fill: false,
+              tension: 0.2,
+              pointRadius: 3
+            },
+            {
+              label: 'Esalq CEPEA',
+              data: dados.esalq,
+              borderColor: '#f9b233',
+              backgroundColor: 'rgba(249,178,51,0.08)',
+              fill: false,
+              tension: 0.2,
+              pointRadius: 3
+            },
+            {
+              label: 'Milkpoint',
+              data: dados.milkpoint,
+              borderColor: '#4bb543',
+              backgroundColor: 'rgba(75,181,67,0.08)',
+              fill: false,
+              tension: 0.2,
+              pointRadius: 3
+            },
+            {
+              label: 'Safras',
+              data: dados.safras,
+              borderColor: '#e74c3c',
+              backgroundColor: 'rgba(231,76,60,0.08)',
+              fill: false,
+              tension: 0.2,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { font: { size: 14 } }
+            },
+            title: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: { display: true, text: 'Preço (R$)' }
+            },
+            x: {
+              title: { display: true, text: 'Mês/Ano' }
+            }
+          }
+        }
+      });
+    }
+
+    // Inicialização e filtros
+    function aplicarFiltros(e) {
+      if (e) e.preventDefault();
+      const produto = document.getElementById('filtro-produto').value;
+      const periodo = document.getElementById('filtro-periodo').value;
+      const indice = document.getElementById('filtro-indice').value;
+      renderTabela(produto, periodo, indice);
+      renderGrafico(produto);
+    }
+    document.getElementById('form-filtros').addEventListener('submit', aplicarFiltros);
+    window.addEventListener('DOMContentLoaded', function() {
+      aplicarFiltros();
+    });
+  </script>
+</body>
+</html>
