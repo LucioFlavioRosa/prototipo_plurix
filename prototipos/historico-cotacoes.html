@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .filtros-section {
+      background: #fff;
+      margin: 0 0 24px 0;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 32px;
+      align-items: flex-end;
+    }
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 180px;
+    }
+    .filtro-item label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+    }
+    .filtro-item input, .filtro-item select {
+      padding: 8px 10px;
+      border: 1px solid #b7b9c6;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+    }
+    .filtro-item input:focus, .filtro-item select:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .btn-filtrar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 12px;
+    }
+    .btn-filtrar:hover {
+      background: #e1a12a;
+    }
+    .cotacoes-section {
+      padding: 0 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .cotacoes-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .cotacoes-table th, .cotacoes-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cotacoes-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .cotacoes-table tr:last-child td {
+      border-bottom: none;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-aprovada { background: #4bb543; }
+    .status-rejeitada { background: #e74c3c; }
+    .status-cancelada { background: #b7b9c6; }
+    .status-pendente { background: #f9b233; color: #fff; }
+    .link-acao {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      margin-right: 8px;
+    }
+    .link-acao:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    .paginacao {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .paginacao button {
+      background: #fff;
+      border: 1px solid #b7b9c6;
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-size: 1rem;
+      color: #1a2340;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .paginacao button.active {
+      background: #f9b233;
+      color: #fff;
+      border-color: #f9b233;
+    }
+    .paginacao button:hover:not(.active) {
+      background: #e8eaf0;
+    }
+    @media (max-width: 900px) {
+      .cotacoes-section {
+        padding: 0 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .filtros-section {
+        padding: 14px 10px 8px 10px;
+        gap: 12px 8px;
+      }
+    }
+  </style>
+  <script>
+    // Mock de dados realistas
+    const cotacoesMock = [
+      {
+        id: 'CT202406001',
+        data: '10/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Laticínios Aurora',
+        valor: 18900.00,
+        status: 'aprovada',
+        aprovador: 'João Silva',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406002',
+        data: '09/06/2024',
+        produto: 'Leite UHT Desnatado 1L',
+        fornecedor: 'Piracanjuba',
+        valor: 17250.00,
+        status: 'rejeitada',
+        aprovador: 'Maria Souza',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406003',
+        data: '08/06/2024',
+        produto: 'Queijo Mussarela 5kg',
+        fornecedor: 'Laticínios Tirol',
+        valor: 24800.00,
+        status: 'cancelada',
+        aprovador: 'Carlos Lima',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406004',
+        data: '07/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Italac',
+        valor: 19400.00,
+        status: 'aprovada',
+        aprovador: 'João Silva',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406005',
+        data: '05/06/2024',
+        produto: 'Queijo Prato 5kg',
+        fornecedor: 'Laticínios Aurora',
+        valor: 25500.00,
+        status: 'rejeitada',
+        aprovador: 'Maria Souza',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406006',
+        data: '04/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Piracanjuba',
+        valor: 18600.00,
+        status: 'aprovada',
+        aprovador: 'João Silva',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406007',
+        data: '03/06/2024',
+        produto: 'Queijo Mussarela 5kg',
+        fornecedor: 'Italac',
+        valor: 24200.00,
+        status: 'cancelada',
+        aprovador: 'Carlos Lima',
+        trilha: 'prototipos/trilha-auditoria.html'
+      },
+      {
+        id: 'CT202406008',
+        data: '02/06/2024',
+        produto: 'Leite UHT Desnatado 1L',
+        fornecedor: 'Laticínios Tirol',
+        valor: 17000.00,
+        status: 'aprovada',
+        aprovador: 'João Silva',
+        trilha: 'prototipos/trilha-auditoria.html'
+      }
+    ];
+    // Mock de fornecedores, produtos, aprovadores para filtros
+    const fornecedores = ['Laticínios Aurora', 'Piracanjuba', 'Laticínios Tirol', 'Italac'];
+    const produtos = ['Leite UHT Integral 1L', 'Leite UHT Desnatado 1L', 'Queijo Mussarela 5kg', 'Queijo Prato 5kg'];
+    const aprovadores = ['João Silva', 'Maria Souza', 'Carlos Lima'];
+    const statusList = [
+      { value: '', label: 'Todos' },
+      { value: 'aprovada', label: 'Aprovada' },
+      { value: 'rejeitada', label: 'Rejeitada' },
+      { value: 'cancelada', label: 'Cancelada' }
+    ];
+    // Paginação
+    let paginaAtual = 1;
+    const itensPorPagina = 5;
+    let cotacoesFiltradas = cotacoesMock.slice();
+    function aplicarFiltros() {
+      const periodoDe = document.getElementById('filtro-periodo-de').value;
+      const periodoAte = document.getElementById('filtro-periodo-ate').value;
+      const status = document.getElementById('filtro-status').value;
+      const fornecedor = document.getElementById('filtro-fornecedor').value;
+      const produto = document.getElementById('filtro-produto').value;
+      const aprovador = document.getElementById('filtro-aprovador').value;
+      const valorMin = parseFloat(document.getElementById('filtro-valor-min').value) || null;
+      const valorMax = parseFloat(document.getElementById('filtro-valor-max').value) || null;
+      cotacoesFiltradas = cotacoesMock.filter(function(cot) {
+        let ok = true;
+        if (periodoDe) {
+          ok = ok && compararDatas(cot.data, periodoDe, '>=');
+        }
+        if (periodoAte) {
+          ok = ok && compararDatas(cot.data, periodoAte, '<=');
+        }
+        if (status) {
+          ok = ok && cot.status === status;
+        }
+        if (fornecedor) {
+          ok = ok && cot.fornecedor === fornecedor;
+        }
+        if (produto) {
+          ok = ok && cot.produto === produto;
+        }
+        if (aprovador) {
+          ok = ok && cot.aprovador === aprovador;
+        }
+        if (valorMin !== null) {
+          ok = ok && cot.valor >= valorMin;
+        }
+        if (valorMax !== null) {
+          ok = ok && cot.valor <= valorMax;
+        }
+        return ok;
+      });
+      paginaAtual = 1;
+      renderTabela();
+    }
+    function compararDatas(dataStr, filtroStr, operador) {
+      // dataStr: 'dd/mm/yyyy', filtroStr: 'yyyy-mm-dd'
+      const [d, m, y] = dataStr.split('/');
+      const dataCot = new Date(y, m - 1, d);
+      const dataFiltro = new Date(filtroStr);
+      if (operador === '>=') return dataCot >= dataFiltro;
+      if (operador === '<=') return dataCot <= dataFiltro;
+      return true;
+    }
+    function renderTabela() {
+      const tbody = document.getElementById('cotacoes-tbody');
+      tbody.innerHTML = '';
+      const inicio = (paginaAtual - 1) * itensPorPagina;
+      const fim = inicio + itensPorPagina;
+      const paginaCotacoes = cotacoesFiltradas.slice(inicio, fim);
+      if (paginaCotacoes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;">Nenhuma cotação encontrada.</td></tr>';
+      } else {
+        paginaCotacoes.forEach(function(cot) {
+          tbody.innerHTML += `<tr>
+            <td>${cot.id}</td>
+            <td>${cot.data}</td>
+            <td>${cot.produto}</td>
+            <td>${cot.fornecedor}</td>
+            <td>R$ ${cot.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+            <td><span class="status status-${cot.status}">${cot.status.charAt(0).toUpperCase() + cot.status.slice(1)}</span></td>
+            <td>${cot.aprovador}</td>
+            <td>
+              <a href="#" class="link-acao" onclick="abrirModalDetalhes('${cot.id}');return false;">Ver Detalhes</a>
+              <a href="${cot.trilha}" class="link-acao">Ver Trilha de Auditoria</a>
+            </td>
+          </tr>`;
+        });
+      }
+      renderPaginacao();
+    }
+    function renderPaginacao() {
+      const paginacao = document.getElementById('paginacao');
+      paginacao.innerHTML = '';
+      const totalPaginas = Math.ceil(cotacoesFiltradas.length / itensPorPagina);
+      if (totalPaginas <= 1) return;
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === paginaAtual) btn.classList.add('active');
+        btn.onclick = function() {
+          paginaAtual = i;
+          renderTabela();
+        };
+        paginacao.appendChild(btn);
+      }
+    }
+    function abrirModalDetalhes(idCotacao) {
+      const cot = cotacoesMock.find(c => c.id === idCotacao);
+      if (!cot) return;
+      const modal = document.getElementById('modal-detalhes');
+      const modalTitle = modal.querySelector('.modal-title');
+      const modalBody = modal.querySelector('.modal-body');
+      modalTitle.textContent = `Detalhes da Cotação ${cot.id}`;
+      modalBody.innerHTML = `
+        <div><strong>Data:</strong> ${cot.data}</div>
+        <div><strong>Produto:</strong> ${cot.produto}</div>
+        <div><strong>Fornecedor:</strong> ${cot.fornecedor}</div>
+        <div><strong>Valor:</strong> R$ ${cot.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+        <div><strong>Status Final:</strong> <span class="status status-${cot.status}">${cot.status.charAt(0).toUpperCase() + cot.status.slice(1)}</span></div>
+        <div><strong>Aprovador Final:</strong> ${cot.aprovador}</div>
+        <hr style="margin:18px 0;">
+        <div style="font-weight:600;color:#1a2340;">Resumo da Trilha de Auditoria:</div>
+        <ul style="margin-top:8px;">
+          <li>Solicitação criada por Comprador X em ${cot.data}</li>
+          <li>Aprovador final: ${cot.aprovador}</li>
+          <li>Status: ${cot.status.charAt(0).toUpperCase() + cot.status.slice(1)}</li>
+          <li>Justificativa: ${cot.status === 'rejeitada' ? 'Preço acima do índice Esalq CEPEA' : cot.status === 'cancelada' ? 'Cotação cancelada por mudança de demanda' : 'Cotação aprovada conforme política.'}</li>
+        </ul>
+        <div style="margin-top:18px;">
+          <a href="${cot.trilha}" class="btn-filtrar" style="text-decoration:none;">Ver Trilha Completa</a>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModal() {
+      var modal = document.getElementById('modal-detalhes');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Render filtros dinâmicos
+      const fornecedorSel = document.getElementById('filtro-fornecedor');
+      fornecedores.forEach(function(f) {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        fornecedorSel.appendChild(opt);
+      });
+      const produtoSel = document.getElementById('filtro-produto');
+      produtos.forEach(function(p) {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        produtoSel.appendChild(opt);
+      });
+      const aprovadorSel = document.getElementById('filtro-aprovador');
+      aprovadores.forEach(function(a) {
+        const opt = document.createElement('option');
+        opt.value = a;
+        opt.textContent = a;
+        aprovadorSel.appendChild(opt);
+      });
+      // Status
+      const statusSel = document.getElementById('filtro-status');
+      statusList.forEach(function(s) {
+        const opt = document.createElement('option');
+        opt.value = s.value;
+        opt.textContent = s.label;
+        statusSel.appendChild(opt);
+      });
+      renderTabela();
+      // Modal
+      var modal = document.getElementById('modal-detalhes');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) {
+            fecharModal();
+          }
+        });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModal);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModal();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="prototipos/historico-cotacoes.html" class="active">Histórico de Cotações</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Histórico de Cotações</h1>
+    </header>
+    <section class="filtros-section">
+      <div class="filtro-item">
+        <label for="filtro-periodo-de">Período (de):</label>
+        <input type="date" id="filtro-periodo-de" name="filtro-periodo-de">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-periodo-ate">Período (até):</label>
+        <input type="date" id="filtro-periodo-ate" name="filtro-periodo-ate">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-status">Status:</label>
+        <select id="filtro-status" name="filtro-status"></select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-fornecedor">Fornecedor:</label>
+        <select id="filtro-fornecedor" name="filtro-fornecedor">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-produto">Produto:</label>
+        <select id="filtro-produto" name="filtro-produto">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-aprovador">Aprovador:</label>
+        <select id="filtro-aprovador" name="filtro-aprovador">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-valor-min">Valor (mín):</label>
+        <input type="number" id="filtro-valor-min" name="filtro-valor-min" min="0" step="0.01" placeholder="R$">
+      </div>
+      <div class="filtro-item">
+        <label for="filtro-valor-max">Valor (máx):</label>
+        <input type="number" id="filtro-valor-max" name="filtro-valor-max" min="0" step="0.01" placeholder="R$">
+      </div>
+      <button class="btn-filtrar" onclick="aplicarFiltros()">Filtrar</button>
+    </section>
+    <main class="cotacoes-section">
+      <table class="cotacoes-table" aria-label="Histórico de Cotações">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+            <th>Valor</th>
+            <th>Status Final</th>
+            <th>Aprovador Final</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="cotacoes-tbody">
+          <!-- Linhas dinâmicas -->
+        </tbody>
+      </table>
+      <div class="paginacao" id="paginacao"></div>
+    </main>
+  </div>
+  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Detalhes</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
