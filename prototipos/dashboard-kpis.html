@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Executivo de KPIs | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .kpi-filtros {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 28px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .kpi-filtros label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-right: 8px;
+      font-size: 1.08rem;
+    }
+    .kpi-filtros select, .kpi-filtros input[type="month"] {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      font-size: 1.05rem;
+      background: #fff;
+      color: #222;
+      margin-right: 18px;
+    }
+    .kpi-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 32px;
+      margin-bottom: 44px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 140px;
+    }
+    .kpi-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 10px;
+    }
+    .kpi-card-value {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #f9b233;
+      margin-bottom: 8px;
+    }
+    .kpi-card-desc {
+      font-size: 1.01rem;
+      color: #555;
+    }
+    .kpi-graficos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+    }
+    .grafico-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 18px 18px 18px;
+      margin-bottom: 16px;
+    }
+    .grafico-card-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .kpi-cards {
+        gap: 16px;
+      }
+      .kpi-graficos {
+        gap: 18px;
+      }
+      .grafico-card {
+        padding: 12px 2px 8px 2px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard Fornecedor</a>
+      <a href="dashboard-kpis.html" class="active">KPIs & Auditoria</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>KPIs do Processo de Cotação</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="kpi-filtros">
+        <div>
+          <label for="filtro-coligada">Coligada:</label>
+          <select id="filtro-coligada">
+            <option value="todas">Todas</option>
+            <option value="ambev">Ambev</option>
+            <option value="nestle">Nestlé</option>
+            <option value="jbs">JBS</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-periodo">Período:</label>
+          <input type="month" id="filtro-periodo" value="2024-06">
+        </div>
+      </section>
+      <section class="kpi-cards" id="kpi-cards">
+        <!-- Cards de KPIs serão populados via JS -->
+      </section>
+      <section class="kpi-graficos" id="kpi-graficos">
+        <!-- Gráficos de tendência -->
+      </section>
+    </main>
+  </div>
+  <script>
+    // MOCK: Dados de cotações dos últimos 6 meses (por coligada)
+    const dadosCOTACOES = {
+      ambev: [
+        { mes: '2024-01', tempoResposta: 2.8, spread: 7.2, volume: 32, aprov1: 24, total: 32, sla: 28 },
+        { mes: '2024-02', tempoResposta: 3.1, spread: 6.8, volume: 29, aprov1: 21, total: 29, sla: 25 },
+        { mes: '2024-03', tempoResposta: 2.6, spread: 7.9, volume: 34, aprov1: 27, total: 34, sla: 30 },
+        { mes: '2024-04', tempoResposta: 2.9, spread: 8.1, volume: 31, aprov1: 25, total: 31, sla: 27 },
+        { mes: '2024-05', tempoResposta: 2.7, spread: 7.4, volume: 36, aprov1: 29, total: 36, sla: 33 },
+        { mes: '2024-06', tempoResposta: 2.5, spread: 7.0, volume: 38, aprov1: 31, total: 38, sla: 34 }
+      ],
+      nestle: [
+        { mes: '2024-01', tempoResposta: 3.5, spread: 6.2, volume: 22, aprov1: 16, total: 22, sla: 18 },
+        { mes: '2024-02', tempoResposta: 3.3, spread: 6.5, volume: 24, aprov1: 18, total: 24, sla: 20 },
+        { mes: '2024-03', tempoResposta: 3.1, spread: 6.7, volume: 26, aprov1: 20, total: 26, sla: 22 },
+        { mes: '2024-04', tempoResposta: 2.9, spread: 7.0, volume: 28, aprov1: 22, total: 28, sla: 24 },
+        { mes: '2024-05', tempoResposta: 2.8, spread: 7.3, volume: 30, aprov1: 24, total: 30, sla: 26 },
+        { mes: '2024-06', tempoResposta: 2.6, spread: 7.1, volume: 33, aprov1: 27, total: 33, sla: 29 }
+      ],
+      jbs: [
+        { mes: '2024-01', tempoResposta: 4.2, spread: 8.5, volume: 18, aprov1: 12, total: 18, sla: 14 },
+        { mes: '2024-02', tempoResposta: 4.0, spread: 8.1, volume: 19, aprov1: 13, total: 19, sla: 15 },
+        { mes: '2024-03', tempoResposta: 3.8, spread: 7.8, volume: 21, aprov1: 15, total: 21, sla: 17 },
+        { mes: '2024-04', tempoResposta: 3.6, spread: 7.4, volume: 23, aprov1: 17, total: 23, sla: 19 },
+        { mes: '2024-05', tempoResposta: 3.3, spread: 7.1, volume: 25, aprov1: 19, total: 25, sla: 21 },
+        { mes: '2024-06', tempoResposta: 3.1, spread: 6.9, volume: 27, aprov1: 21, total: 27, sla: 23 }
+      ]
+    };
+    function getDadosFiltrados(coligada, periodo) {
+      if (coligada === 'todas') {
+        // Agregar todos
+        let agregados = [];
+        for (let i = 0; i < 6; i++) {
+          let mes = dadosCOTACOES.ambev[i].mes;
+          let tempoResposta = (dadosCOTACOES.ambev[i].tempoResposta + dadosCOTACOES.nestle[i].tempoResposta + dadosCOTACOES.jbs[i].tempoResposta) / 3;
+          let spread = (dadosCOTACOES.ambev[i].spread + dadosCOTACOES.nestle[i].spread + dadosCOTACOES.jbs[i].spread) / 3;
+          let volume = dadosCOTACOES.ambev[i].volume + dadosCOTACOES.nestle[i].volume + dadosCOTACOES.jbs[i].volume;
+          let aprov1 = dadosCOTACOES.ambev[i].aprov1 + dadosCOTACOES.nestle[i].aprov1 + dadosCOTACOES.jbs[i].aprov1;
+          let total = dadosCOTACOES.ambev[i].total + dadosCOTACOES.nestle[i].total + dadosCOTACOES.jbs[i].total;
+          let sla = dadosCOTACOES.ambev[i].sla + dadosCOTACOES.nestle[i].sla + dadosCOTACOES.jbs[i].sla;
+          agregados.push({ mes, tempoResposta, spread, volume, aprov1, total, sla });
+        }
+        return agregados;
+      } else {
+        return dadosCOTACOES[coligada] || [];
+      }
+    }
+    function renderKPIs(coligada, periodo) {
+      const dados = getDadosFiltrados(coligada, periodo);
+      // Encontrar o mês selecionado
+      const mesSelecionado = periodo;
+      const dadosMes = dados.find(d => d.mes === mesSelecionado) || dados[dados.length-1];
+      // Cálculos
+      const tempoMedio = dadosMes.tempoResposta.toFixed(1);
+      const spreadMedio = dadosMes.spread.toFixed(1);
+      const volumeCotacoes = dadosMes.volume;
+      const taxaAprov1 = ((dadosMes.aprov1 / dadosMes.total) * 100).toFixed(1);
+      const slaAprov = ((dadosMes.sla / dadosMes.total) * 100).toFixed(1);
+      document.getElementById('kpi-cards').innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-card-title">Tempo Médio de Resposta</div>
+          <div class="kpi-card-value">${tempoMedio} <span style="font-size:1.1rem;color:#555;">dias</span></div>
+          <div class="kpi-card-desc">Média de dias entre envio e recebimento de propostas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-title">Spread Médio de Preços</div>
+          <div class="kpi-card-value">${spreadMedio}%</div>
+          <div class="kpi-card-desc">Diferença média percentual entre ofertas recebidas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-title">Volume de Cotações no Mês</div>
+          <div class="kpi-card-value">${volumeCotacoes}</div>
+          <div class="kpi-card-desc">Total de cotações registradas no período</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-title">Taxa de Aprovação no 1º Nível</div>
+          <div class="kpi-card-value">${taxaAprov1}%</div>
+          <div class="kpi-card-desc">Propostas aprovadas no primeiro nível / total</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card-title">SLA de Aprovações</div>
+          <div class="kpi-card-value">${slaAprov}%</div>
+          <div class="kpi-card-desc">Cotações aprovadas dentro do prazo / total</div>
+        </div>
+      `;
+    }
+    function renderGraficos(coligada) {
+      const dados = getDadosFiltrados(coligada, '2024-06');
+      const labels = dados.map(d => d.mes.replace('2024-', 'Junho').replace('01','Janeiro').replace('02','Fevereiro').replace('03','Março').replace('04','Abril').replace('05','Maio').replace('06','Junho'));
+      // Remove gráficos antigos
+      document.getElementById('kpi-graficos').innerHTML = `
+        <div class="grafico-card">
+          <div class="grafico-card-title">Tempo Médio de Resposta (dias)</div>
+          <canvas id="grafico-tempo"></canvas>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-card-title">Spread Médio de Preços (%)</div>
+          <canvas id="grafico-spread"></canvas>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-card-title">Volume de Cotações</div>
+          <canvas id="grafico-volume"></canvas>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-card-title">Taxa de Aprovação no 1º Nível (%)</div>
+          <canvas id="grafico-aprov1"></canvas>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-card-title">SLA de Aprovações (%)</div>
+          <canvas id="grafico-sla"></canvas>
+        </div>
+      `;
+      // Chart.js - Tempo Médio
+      new Chart(document.getElementById('grafico-tempo'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Tempo Médio (dias)',
+            data: dados.map(d => d.tempoResposta),
+            borderColor: '#f9b233',
+            backgroundColor: 'rgba(249,178,51,0.08)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      // Chart.js - Spread
+      new Chart(document.getElementById('grafico-spread'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Spread (%)',
+            data: dados.map(d => d.spread),
+            borderColor: '#4bb543',
+            backgroundColor: 'rgba(75,181,67,0.08)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      // Chart.js - Volume
+      new Chart(document.getElementById('grafico-volume'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Volume',
+            data: dados.map(d => d.volume),
+            backgroundColor: '#1a2340'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      // Chart.js - Taxa de Aprovação 1º Nível
+      new Chart(document.getElementById('grafico-aprov1'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Taxa de Aprovação (%)',
+            data: dados.map(d => ((d.aprov1/d.total)*100).toFixed(1)),
+            borderColor: '#e74c3c',
+            backgroundColor: 'rgba(231,76,60,0.08)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      // Chart.js - SLA
+      new Chart(document.getElementById('grafico-sla'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'SLA (%)',
+            data: dados.map(d => ((d.sla/d.total)*100).toFixed(1)),
+            borderColor: '#222b4a',
+            backgroundColor: 'rgba(34,43,74,0.08)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+    // Filtros
+    document.getElementById('filtro-coligada').addEventListener('change', function() {
+      const coligada = this.value;
+      const periodo = document.getElementById('filtro-periodo').value;
+      renderKPIs(coligada, periodo);
+      renderGraficos(coligada);
+    });
+    document.getElementById('filtro-periodo').addEventListener('change', function() {
+      const periodo = this.value;
+      const coligada = document.getElementById('filtro-coligada').value;
+      renderKPIs(coligada, periodo);
+    });
+    // Inicialização
+    renderKPIs('todas', '2024-06');
+    renderGraficos('todas');
+  </script>
+</body>
+</html>
