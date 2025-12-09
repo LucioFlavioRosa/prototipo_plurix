@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rejeitar Cotação | Portal de Gestão de Cotações</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .form-rejeicao {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.09);
+      padding: 32px 28px 28px 28px;
+      max-width: 580px;
+      width: 100%;
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .form-rejeicao h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #e74c3c;
+      margin-bottom: 8px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #1a2340;
+      font-size: 1.08rem;
+    }
+    .form-textarea {
+      min-height: 90px;
+      max-height: 220px;
+      resize: vertical;
+      padding: 10px 12px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+      transition: border 0.15s, background 0.15s;
+    }
+    .form-textarea:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .form-checkbox {
+      margin-top: 8px;
+      accent-color: #f9b233;
+    }
+    .form-group-revisao {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      animation: fadeIn 0.3s ease;
+    }
+    .form-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .btn-rejeitar, .btn-revisar, .btn-cancelar {
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-rejeitar {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-rejeitar:hover {
+      background: #b93a2e;
+    }
+    .btn-revisar {
+      background: #f9b233;
+      color: #fff;
+    }
+    .btn-revisar:hover {
+      background: #e1a12a;
+    }
+    .btn-cancelar {
+      background: #b7b9c6;
+      color: #fff;
+    }
+    .btn-cancelar:hover {
+      background: #888;
+    }
+    .form-error {
+      color: #e74c3c;
+      font-size: 1rem;
+      margin-top: 2px;
+      font-weight: 600;
+      display: none;
+    }
+    .form-success {
+      color: #4bb543;
+      font-size: 1.08rem;
+      margin-top: 12px;
+      font-weight: 700;
+      display: none;
+      text-align: center;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .form-rejeicao {
+        padding: 14px 4px 14px 4px;
+        max-width: 99vw;
+      }
+    }
+  </style>
+  <script>
+    // Mock de cotação e trilha de auditoria
+    var cotacaoMock = {
+      id: 'COT20240610-001',
+      fornecedor: 'Ambev S.A.',
+      produto: 'Cerveja Skol Lata 350ml',
+      valor: 'R$ 3,99',
+      status: 'em análise'
+    };
+    var trilhaAuditoria = [];
+    function mostrarRevisao(checked) {
+      var revisaoGroup = document.getElementById('form-group-revisao');
+      if (checked) {
+        revisaoGroup.style.display = 'flex';
+      } else {
+        revisaoGroup.style.display = 'none';
+      }
+    }
+    function validarJustificativa() {
+      var justificativa = document.getElementById('justificativa').value.trim();
+      var error = document.getElementById('form-error');
+      if (justificativa.length < 30) {
+        error.textContent = 'A justificativa deve ter pelo menos 30 caracteres.';
+        error.style.display = 'block';
+        return false;
+      }
+      error.style.display = 'none';
+      return true;
+    }
+    function confirmarRejeicao() {
+      if (!validarJustificativa()) return;
+      cotacaoMock.status = 'rejeitada';
+      trilhaAuditoria.push({
+        acao: 'Rejeição',
+        usuario: 'comprador.mock@empresa.com',
+        justificativa: document.getElementById('justificativa').value.trim(),
+        data: new Date().toLocaleString()
+      });
+      document.getElementById('form-success').textContent = 'Cotação rejeitada com sucesso. A ação foi registrada na trilha de auditoria.';
+      document.getElementById('form-success').style.display = 'block';
+      setTimeout(function(){ window.location.href = 'dashboard-fornecedor.html'; }, 1800);
+    }
+    function solicitarRevisao() {
+      if (!validarJustificativa()) return;
+      var observacoes = document.getElementById('observacoes-revisao').value.trim();
+      cotacaoMock.status = 'revisao solicitada';
+      trilhaAuditoria.push({
+        acao: 'Solicitação de Revisão',
+        usuario: 'comprador.mock@empresa.com',
+        justificativa: document.getElementById('justificativa').value.trim(),
+        observacoes: observacoes,
+        data: new Date().toLocaleString()
+      });
+      document.getElementById('form-success').textContent = 'Revisão solicitada ao fornecedor. A ação foi registrada na trilha de auditoria.';
+      document.getElementById('form-success').style.display = 'block';
+      setTimeout(function(){ window.location.href = 'dashboard-fornecedor.html'; }, 1800);
+    }
+    function cancelarRejeicao() {
+      window.location.href = 'dashboard-fornecedor.html';
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Rejeitar Cotação</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="form-rejeicao" autocomplete="off" onsubmit="return false;">
+        <h2>Rejeição de Cotação</h2>
+        <div class="form-group">
+          <span class="form-label">Cotação</span>
+          <div style="font-size:1.05rem;color:#555;">
+            <strong>ID:</strong> COT20240610-001<br>
+            <strong>Fornecedor:</strong> Ambev S.A.<br>
+            <strong>Produto:</strong> Cerveja Skol Lata 350ml<br>
+            <strong>Valor:</strong> R$ 3,99
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="justificativa" class="form-label">Justificativa detalhada da rejeição <span style="color:#e74c3c;">*</span></label>
+          <textarea id="justificativa" name="justificativa" class="form-textarea" minlength="30" required aria-label="Justificativa detalhada" placeholder="Descreva o motivo da rejeição de forma detalhada..."></textarea>
+          <span id="form-error" class="form-error"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="solicitar-revisao">
+            <input type="checkbox" id="solicitar-revisao" class="form-checkbox" onchange="mostrarRevisao(this.checked)"> Solicitar Revisão ao Fornecedor
+          </label>
+        </div>
+        <div id="form-group-revisao" class="form-group-revisao">
+          <label for="observacoes-revisao" class="form-label">Observações para o fornecedor</label>
+          <textarea id="observacoes-revisao" name="observacoes-revisao" class="form-textarea" aria-label="Observações para revisão" placeholder="Insira orientações específicas para o fornecedor..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-rejeitar" onclick="confirmarRejeicao()">Confirmar Rejeição</button>
+          <button type="button" class="btn-revisar" onclick="solicitarRevisao()">Solicitar Revisão</button>
+          <button type="button" class="btn-cancelar" onclick="cancelarRejeicao()">Cancelar</button>
+        </div>
+        <span id="form-success" class="form-success"></span>
+      </form>
+    </main>
+  </div>
+</body>
+</html>
