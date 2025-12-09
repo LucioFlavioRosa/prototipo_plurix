@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trilha de Auditoria da Cotação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .btn-voltar {
+      background: #e8eaf0;
+      color: #1a2340;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-right: 16px;
+    }
+    .header .btn-voltar:hover {
+      background: #d0d3e0;
+    }
+    .header .btn-exportar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .btn-exportar:hover {
+      background: #e1a12a;
+    }
+    .auditoria-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .timeline {
+      position: relative;
+      margin: 0 auto;
+      padding-left: 32px;
+      max-width: 800px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #e8eaf0;
+      border-radius: 2px;
+    }
+    .event {
+      position: relative;
+      margin-bottom: 38px;
+      padding-left: 32px;
+    }
+    .event:last-child {
+      margin-bottom: 0;
+    }
+    .event-marker {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      background: #f9b233;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.10);
+    }
+    .event.aprovacao .event-marker {
+      background: #4bb543;
+    }
+    .event.rejeicao .event-marker {
+      background: #e74c3c;
+    }
+    .event.envio .event-marker {
+      background: #1a2340;
+    }
+    .event.criacao .event-marker {
+      background: #b7b9c6;
+    }
+    .event .event-content {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 18px 24px 14px 18px;
+      font-size: 1.05rem;
+      position: relative;
+      min-width: 280px;
+    }
+    .event .event-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .event .event-title {
+      font-weight: 700;
+      color: #1a2340;
+      font-size: 1.08rem;
+      margin-right: 12px;
+    }
+    .event .event-date {
+      color: #b7b9c6;
+      font-size: 0.98rem;
+      margin-right: 12px;
+    }
+    .event .event-user {
+      color: #4bb543;
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    .event .event-details {
+      color: #222;
+      margin-top: 6px;
+      font-size: 1.01rem;
+    }
+    .event .event-justificativa {
+      margin-top: 8px;
+      background: #fffbe7;
+      border-left: 4px solid #f9b233;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.99rem;
+      color: #555;
+      font-style: italic;
+    }
+    .event .event-valores {
+      margin-top: 8px;
+      background: #e8eaf0;
+      border-left: 4px solid #4bb543;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.99rem;
+      color: #222;
+    }
+    @media (max-width: 900px) {
+      .auditoria-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .timeline {
+        padding-left: 18px;
+      }
+      .event .event-content {
+        padding: 12px 8px 10px 8px;
+        font-size: 0.97rem;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Simulação de recebimento de ID da cotação via query string
+    function getCotacaoId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('cotacaoId') || 'CT20240610-001';
+    }
+
+    // Mock de histórico de ações da cotação
+    const auditoriaMock = {
+      id: 'CT20240610-001',
+      produto: 'Leite UHT Integral 1L',
+      fornecedor: 'Laticínios Aurora',
+      valorInicial: 3.29,
+      eventos: [
+        {
+          tipo: 'criacao',
+          titulo: 'Cotação Criada',
+          usuario: 'Bruno Carvalho',
+          data: '10/06/2024 08:12',
+          detalhes: 'Cotação aberta para Leite UHT Integral 1L, quantidade 10.000 unidades.'
+        },
+        {
+          tipo: 'envio',
+          titulo: 'Envio para Fornecedores',
+          usuario: 'Bruno Carvalho',
+          data: '10/06/2024 08:13',
+          detalhes: 'Convite enviado para 5 fornecedores: Aurora, Piracanjuba, Italac, Parmalat, Tirol.'
+        },
+        {
+          tipo: 'recebimento',
+          titulo: 'Recebimento de Proposta',
+          usuario: 'Amanda Souza',
+          data: '10/06/2024 09:25',
+          detalhes: 'Proposta recebida de Aurora: R$ 3,29/unidade.'
+        },
+        {
+          tipo: 'recebimento',
+          titulo: 'Recebimento de Proposta',
+          usuario: 'Amanda Souza',
+          data: '10/06/2024 09:31',
+          detalhes: 'Proposta recebida de Piracanjuba: R$ 3,35/unidade.'
+        },
+        {
+          tipo: 'recebimento',
+          titulo: 'Recebimento de Proposta',
+          usuario: 'Amanda Souza',
+          data: '10/06/2024 09:35',
+          detalhes: 'Proposta recebida de Italac: R$ 3,28/unidade.'
+        },
+        {
+          tipo: 'aprovacao',
+          titulo: 'Aprovação - Gerente Categoria',
+          usuario: 'Carlos Almeida',
+          data: '10/06/2024 10:02',
+          detalhes: 'Aprovada proposta da Italac: R$ 3,28/unidade.',
+          justificativa: 'Melhor preço entre fornecedores, dentro do índice Esalq CEPEA.'
+        },
+        {
+          tipo: 'aprovacao',
+          titulo: 'Aprovação - Diretor Comercial',
+          usuario: 'Fernanda Lima',
+          data: '10/06/2024 10:19',
+          detalhes: 'Aprovação da escolha Italac confirmada.',
+          justificativa: 'Cotação validada conforme política de compras.'
+        },
+        {
+          tipo: 'alteracao',
+          titulo: 'Alteração de Valor',
+          usuario: 'Amanda Souza',
+          data: '10/06/2024 10:27',
+          detalhes: 'Fornecedor Aurora reduziu proposta para R$ 3,26/unidade.',
+          valores: {
+            anterior: 'R$ 3,29/unidade',
+            novo: 'R$ 3,26/unidade'
+          }
+        },
+        {
+          tipo: 'rejeicao',
+          titulo: 'Rejeição de Proposta',
+          usuario: 'Carlos Almeida',
+          data: '10/06/2024 10:35',
+          detalhes: 'Proposta Aurora rejeitada após alteração de valor.',
+          justificativa: 'Prazo de entrega acima do esperado.'
+        },
+        {
+          tipo: 'aprovacao',
+          titulo: 'Aprovação Final',
+          usuario: 'Fernanda Lima',
+          data: '10/06/2024 10:40',
+          detalhes: 'Cotação final aprovada para Italac: R$ 3,28/unidade.'
+        }
+      ]
+    };
+
+    function renderTimeline(auditoria) {
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+      auditoria.eventos.forEach(function(ev) {
+        const eventDiv = document.createElement('div');
+        eventDiv.className = 'event ' + (ev.tipo || '');
+        eventDiv.innerHTML = `
+          <div class="event-marker" aria-hidden="true"></div>
+          <div class="event-content">
+            <div class="event-header">
+              <span class="event-title">${ev.titulo}</span>
+              <span class="event-date">${ev.data}</span>
+              <span class="event-user">${ev.usuario}</span>
+            </div>
+            <div class="event-details">${ev.detalhes}</div>
+            ${ev.justificativa ? `<div class="event-justificativa"><strong>Justificativa:</strong> ${ev.justificativa}</div>` : ''}
+            ${ev.valores ? `<div class="event-valores"><strong>Valores:</strong> De ${ev.valores.anterior} para ${ev.valores.novo}</div>` : ''}
+          </div>
+        `;
+        timeline.appendChild(eventDiv);
+      });
+    }
+
+    function exportarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 20;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.text('Trilha de Auditoria da Cotação', 15, y);
+      y += 10;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`ID Cotação: ${auditoriaMock.id}`, 15, y);
+      y += 8;
+      doc.text(`Produto: ${auditoriaMock.produto}`, 15, y);
+      y += 8;
+      doc.text(`Fornecedor: ${auditoriaMock.fornecedor}`, 15, y);
+      y += 10;
+      auditoriaMock.eventos.forEach(function(ev, idx) {
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${ev.titulo} (${ev.data})`, 15, y);
+        y += 7;
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Usuário: ${ev.usuario}`, 15, y);
+        y += 6;
+        doc.text(ev.detalhes, 15, y);
+        y += 6;
+        if (ev.justificativa) {
+          doc.text(`Justificativa: ${ev.justificativa}`, 15, y);
+          y += 6;
+        }
+        if (ev.valores) {
+          doc.text(`Valores: De ${ev.valores.anterior} para ${ev.valores.novo}`, 15, y);
+          y += 6;
+        }
+        y += 4;
+        if (y > 270 && idx < auditoriaMock.eventos.length - 1) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+      doc.save(`trilha_auditoria_${auditoriaMock.id}.pdf`);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Simula recebimento do ID da cotação
+      const cotacaoId = getCotacaoId();
+      // Poderia filtrar por cotacaoId, mas só existe um mock
+      renderTimeline(auditoriaMock);
+      document.getElementById('btn-exportar').addEventListener('click', exportarPDF);
+      document.getElementById('btn-voltar').addEventListener('click', function() {
+        window.location.href = '../dashboard-fornecedor.html';
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-fornecedor.html">Dashboard</a>
+      <a href="../upload-tabela.html">Nova Tabela</a>
+      <a href="../historico.html">Histórico</a>
+      <a href="../index.html">Sair</a>
+      <a href="trilha-auditoria.html?cotacaoId=CT20240610-001" class="active">Trilha Auditoria</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <button id="btn-voltar" class="btn-voltar" aria-label="Voltar">&larr; Voltar</button>
+      <h1>Trilha de Auditoria da Cotação</h1>
+      <button id="btn-exportar" class="btn-exportar" aria-label="Exportar Trilha em PDF">Exportar Trilha (PDF)</button>
+    </header>
+    <main class="auditoria-section">
+      <section>
+        <h2 style="font-size:1.25rem;color:#1a2340;font-weight:700;margin-bottom:18px;">Timeline de Eventos</h2>
+        <div id="timeline" class="timeline" aria-label="Timeline de Auditoria"></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
