@@ -1,0 +1,120 @@
+<!-- Componente Card Status Cotação Reutilizável -->
+<!--
+  Uso:
+    <div class="card">
+      <div class="card-title">Título do Card</div>
+      <table class="card-table" aria-label="Status de Cotação">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Arquivo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10/06/2024</td>
+            <td>precos_junho.xlsx</td>
+            <td><span class="status status-pendente">Pendente</span></td>
+            <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver Detalhes</a></td>
+          </tr>
+          <!-- ... outros itens ... -->
+        </tbody>
+      </table>
+    </div>
+  - O status pode ser 'status-pendente', 'status-aprovada' ou 'status-reprovada'.
+  - Ações podem ser customizadas conforme contexto.
+-->
+<div class="card">
+  <div class="card-title"><!-- Título do Card --></div>
+  <table class="card-table" aria-label="Status de Cotação">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Arquivo</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><!-- Data --></td>
+        <td><!-- Arquivo --></td>
+        <td><span class="status status-pendente">Pendente</span></td>
+        <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'arquivo.xlsx', 'data'); return false;">Ver Detalhes</a></td>
+      </tr>
+      <tr>
+        <td><!-- Data --></td>
+        <td><!-- Arquivo --></td>
+        <td><span class="status status-aprovada">Aprovada</span></td>
+        <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'arquivo.xlsx', 'data'); return false;">Ver Detalhes</a></td>
+      </tr>
+      <tr>
+        <td><!-- Data --></td>
+        <td><!-- Arquivo --></td>
+        <td><span class="status status-reprovada">Reprovada</span></td>
+        <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'arquivo.xlsx', 'data'); return false;">Ver Detalhes</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  function abrirDetalhes(status, arquivo, data) {
+    // Implementação de modal de detalhes conforme status
+    alert('Abrir detalhes: ' + status + ' - ' + arquivo + ' - ' + data);
+  }
+</script>
+<style>
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+    padding: 32px 28px 26px 28px;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+  }
+  .card-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1a2340;
+    margin-bottom: 12px;
+  }
+  .card-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.05rem;
+  }
+  .card-table th, .card-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .card-table th {
+    background: #e8eaf0;
+    color: #1a2340;
+    font-weight: 700;
+  }
+  .status {
+    display: inline-block;
+    border-radius: 16px;
+    padding: 4px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .status-pendente { background: #f9b233; }
+  .status-aprovada { background: #4bb543; }
+  .status-reprovada { background: #e74c3c; }
+  .link-detalhes {
+    color: #1a2340;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.15s, text-decoration 0.15s;
+  }
+  .link-detalhes:hover {
+    color: #f9b233;
+    text-decoration: none;
+  }
+</style>
