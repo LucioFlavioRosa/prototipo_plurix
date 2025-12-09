@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .form-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      padding: 36px 32px 28px 32px;
+      max-width: 520px;
+      width: 100%;
+      margin-top: 24px;
+      font-size: 1.05rem;
+    }
+    .form-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+    .form-group input,
+    .form-group select {
+      padding: 10px 12px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+      transition: border 0.15s, background 0.15s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .form-group .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .form-group .checkbox-item {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      color: #1a2340;
+    }
+    .form-group .checkbox-item input[type="checkbox"] {
+      margin-right: 6px;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .btn-salvar-edicao {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.08);
+    }
+    .btn-salvar-edicao:hover {
+      background: #399a36;
+    }
+    .btn-cancelar-edicao {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-cancelar-edicao:hover {
+      background: #b93a2e;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .form-card {
+        padding: 18px 6px 16px 6px;
+        max-width: 99vw;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = 'index.html';
+      }
+    }
+    function cancelarCadastro() {
+      window.location.href = '../dashboard-fornecedor.html';
+    }
+    function salvarCadastroFornecedor(e) {
+      e.preventDefault();
+      var form = document.getElementById('form-cadastro-fornecedor');
+      var nome = form.nome.value.trim();
+      var whatsapp = form.whatsapp.value.trim();
+      var categorias = [];
+      form.querySelectorAll('input[name="categorias[]"]:checked').forEach(function(cb){ categorias.push(cb.value); });
+      var doc = form.documentacao.value.trim();
+      if (!nome || !whatsapp || categorias.length === 0 || !doc) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return false;
+      }
+      alert('Fornecedor cadastrado com sucesso!');
+      window.location.href = '../dashboard-fornecedor.html';
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-fornecedor.html">Dashboard</a>
+      <a href="cadastro-fornecedor.html" class="active">Cadastro de Fornecedor</a>
+      <a href="../upload-tabela.html">Nova Tabela</a>
+      <a href="../historico.html">Histórico</a>
+      <a href="../index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Cadastro de Fornecedor</h1>
+    </header>
+    <main class="dashboard-section">
+      <form id="form-cadastro-fornecedor" class="form-card" autocomplete="off" onsubmit="salvarCadastroFornecedor(event)">
+        <h2>Informações do Fornecedor</h2>
+        <div class="form-group">
+          <label for="nome">Nome do Fornecedor *</label>
+          <input type="text" id="nome" name="nome" required aria-required="true" placeholder="Ex: Ambev S.A.">
+        </div>
+        <div class="form-group">
+          <label for="whatsapp">WhatsApp Business *</label>
+          <input type="tel" id="whatsapp" name="whatsapp" required aria-required="true" placeholder="Ex: +55 11 91234-5678">
+        </div>
+        <div class="form-group">
+          <label>Categorias de Produtos *</label>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="cat-cervejas" name="categorias[]" value="Cervejas" required>
+              <label for="cat-cervejas">Cervejas</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="cat-refrigerantes" name="categorias[]" value="Refrigerantes">
+              <label for="cat-refrigerantes">Refrigerantes</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="cat-bebidas" name="categorias[]" value="Bebidas Alcoólicas">
+              <label for="cat-bebidas">Bebidas Alcoólicas</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="cat-aguas" name="categorias[]" value="Águas Saborizadas">
+              <label for="cat-aguas">Águas Saborizadas</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="cat-pereciveis" name="categorias[]" value="Perecíveis">
+              <label for="cat-pereciveis">Perecíveis</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="documentacao">Documentação (CNPJ, Inscrição Estadual, etc) *</label>
+          <input type="text" id="documentacao" name="documentacao" required aria-required="true" placeholder="Ex: 00.000.000/0001-99">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-salvar-edicao">Salvar</button>
+          <button type="button" class="btn-cancelar-edicao" onclick="cancelarCadastro()">Cancelar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</body>
+</html>
