@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalhes da Cotação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      margin-bottom: 28px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .btn-comparar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-top: 10px;
+      align-self: flex-end;
+    }
+    .btn-comparar:hover {
+      background: #e1a12a;
+    }
+    .resposta-fornecedor {
+      background: #f7f8fa;
+      border-radius: 8px;
+      padding: 18px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(30,40,80,0.04);
+    }
+    .resposta-header {
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 6px;
+      font-size: 1.08rem;
+    }
+    .audio-transcricao-link {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .audio-transcricao-link:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    .comparativo-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 1.05rem;
+    }
+    .comparativo-table th, .comparativo-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .comparativo-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .comparativo-table tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 16px 8px 14px 8px;
+      }
+    }
+  </style>
+  <script>
+    function abrirTranscricaoAudio() {
+      var modal = document.getElementById('modal-audio-transcricao');
+      modal.style.display = 'flex';
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModalAudio() {
+      var modal = document.getElementById('modal-audio-transcricao');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var modalAudio = document.getElementById('modal-audio-transcricao');
+      if (modalAudio) {
+        modalAudio.addEventListener('mousedown', function(e) {
+          if (e.target === modalAudio) {
+            fecharModalAudio();
+          }
+        });
+        var closeBtn = modalAudio.querySelector('.modal-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModalAudio);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModalAudio();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Detalhes da Cotação</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="card">
+        <div class="card-title">Produto Solicitado</div>
+        <table class="card-table" aria-label="Produto Solicitado">
+          <tbody>
+            <tr>
+              <th>Produto</th>
+              <td>Tomate Carmem 20kg</td>
+            </tr>
+            <tr>
+              <th>Data da Cotação</th>
+              <td>12/06/2024</td>
+            </tr>
+            <tr>
+              <th>Quantidade</th>
+              <td>100 caixas</td>
+            </tr>
+            <tr>
+              <th>Solicitante</th>
+              <td>Maria Souza (Compradora)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="card">
+        <div class="card-title">Fornecedores Contatados</div>
+        <table class="card-table" aria-label="Fornecedores Contatados">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Contato</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Frutas do Vale</td><td>(11) 99999-1111</td><td>Respondido</td></tr>
+            <tr><td>Hortifruti Express</td><td>(11) 98888-2222</td><td>Respondido</td></tr>
+            <tr><td>Distribuidora Carmem</td><td>(11) 97777-3333</td><td>Respondido</td></tr>
+            <tr><td>Natural Fresh</td><td>(11) 96666-4444</td><td>Pendente</td></tr>
+            <tr><td>Fazenda Boa Terra</td><td>(11) 95555-5555</td><td>Pendente</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="card">
+        <div class="card-title">Respostas dos Fornecedores</div>
+        <div class="resposta-fornecedor">
+          <div class="resposta-header">Frutas do Vale</div>
+          <div><strong>Resposta (texto):</strong> "Consigo entregar 100 caixas de Tomate Carmem por R$ 85,00 cada. Prazo de entrega: 24h."</div>
+          <div style="margin-top:8px;"><strong>Recebida em:</strong> 12/06/2024 09:15</div>
+        </div>
+        <div class="resposta-fornecedor">
+          <div class="resposta-header">Hortifruti Express</div>
+          <div><strong>Resposta (áudio):</strong> <a class="audio-transcricao-link" href="#" onclick="abrirTranscricaoAudio();return false;">Ver Transcrição de Áudio</a></div>
+          <div style="margin-top:8px;"><strong>Recebida em:</strong> 12/06/2024 09:22</div>
+        </div>
+        <div class="resposta-fornecedor">
+          <div class="resposta-header">Distribuidora Carmem</div>
+          <div><strong>Resposta (texto):</strong> "Preço: R$ 83,50 por caixa. Entrega em até 48h. Pagamento à vista."</div>
+          <div style="margin-top:8px;"><strong>Recebida em:</strong> 12/06/2024 09:40</div>
+        </div>
+        <button class="btn-comparar" onclick="window.location.href='comparativo-cotacoes.html'">Comparar Respostas</button>
+      </section>
+      <section class="card">
+        <div class="card-title">Comparativo de Preços</div>
+        <table class="comparativo-table" aria-label="Comparativo de Preços">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Preço Unitário (R$)</th>
+              <th>Prazo de Entrega</th>
+              <th>Condições</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frutas do Vale</td>
+              <td>85,00</td>
+              <td>24h</td>
+              <td>Entrega Expressa</td>
+            </tr>
+            <tr>
+              <td>Hortifruti Express</td>
+              <td>84,00</td>
+              <td>36h</td>
+              <td>Transcrição disponível</td>
+            </tr>
+            <tr>
+              <td>Distribuidora Carmem</td>
+              <td>83,50</td>
+              <td>48h</td>
+              <td>Pagamento à vista</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div id="modal-audio-transcricao" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Transcrição de Áudio - Hortifruti Express</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Transcrição:</strong></p>
+        <p>"Olá, Maria! Tenho disponibilidade para entregar 100 caixas de Tomate Carmem por R$ 84,00 cada. Consigo entregar em 36 horas. Qualquer dúvida, estou à disposição."</p>
+        <audio controls aria-label="Áudio original da resposta">
+          <source src="audio/hortifruti-express-tomate.mp3" type="audio/mpeg">
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
