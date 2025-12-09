@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Modal de Confirmação</title>
+  <style>
+    .modal-confirmacao {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-confirmacao.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-confirmacao-content {
+      background: #fff;
+      max-width: 400px;
+      width: 100%;
+      padding: 32px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      text-align: center;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-confirmacao-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .modal-confirmacao-msg {
+      font-size: 1.08rem;
+      color: #222;
+      margin-bottom: 24px;
+    }
+    .modal-confirmacao-btns {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+    }
+    .btn-confirmar {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-confirmar:hover {
+      background: #399a36;
+    }
+    .btn-cancelar {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-cancelar:hover {
+      background: #b93a2e;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="modal-confirmacao" class="modal-confirmacao" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-confirmacao-content" tabindex="0">
+      <div class="modal-confirmacao-title">Confirmação</div>
+      <div class="modal-confirmacao-msg">Tem certeza que deseja realizar esta ação?</div>
+      <div class="modal-confirmacao-btns">
+        <button class="btn-confirmar" aria-label="Confirmar">Confirmar</button>
+        <button class="btn-cancelar" aria-label="Cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Função para abrir o modal de confirmação
+    function abrirModalConfirmacao(msg, onConfirm, onCancel) {
+      var modal = document.getElementById('modal-confirmacao');
+      var msgDiv = modal.querySelector('.modal-confirmacao-msg');
+      var btnConfirmar = modal.querySelector('.btn-confirmar');
+      var btnCancelar = modal.querySelector('.btn-cancelar');
+      msgDiv.textContent = msg || 'Tem certeza que deseja realizar esta ação?';
+      btnConfirmar.onclick = function() {
+        if (typeof onConfirm === 'function') onConfirm();
+        fecharModalConfirmacao();
+      };
+      btnCancelar.onclick = function() {
+        if (typeof onCancel === 'function') onCancel();
+        fecharModalConfirmacao();
+      };
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-confirmacao-content');
+        if(content) content.focus();
+      }, 100);
+    }
+    function fecharModalConfirmacao() {
+      var modal = document.getElementById('modal-confirmacao');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        fecharModalConfirmacao();
+      }
+    });
+    document.getElementById('modal-confirmacao').addEventListener('mousedown', function(e) {
+      if (e.target === this) {
+        fecharModalConfirmacao();
+      }
+    });
+  </script>
+</body>
+</html>
