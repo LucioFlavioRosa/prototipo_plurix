@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Comprador | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-cotacao {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .cta-cotacao:hover {
+      background: #e1a12a;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-aguardando { background: #f9b233; }
+    .status-respondida { background: #4bb543; }
+    .status-expirada { background: #e74c3c; }
+    .resumo-metricas {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .resumo-metrica {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 18px 24px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .resumo-metrica-titulo {
+      font-size: 1.08rem;
+      color: #555;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .resumo-metrica-valor {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1a2340;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 18px 10px 14px 10px;
+      }
+      .resumo-metrica {
+        min-width: 120px;
+        padding: 10px 8px;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = 'index.html';
+      }
+    }
+    function novaCotacaoCTA() {
+      window.location.href = 'nova-cotacao.html';
+    }
+    function abrirDetalhesCotacao(status, numero, data) {
+      alert('Detalhes da cotação ' + numero + '\nStatus: ' + status + '\nData: ' + data + '\n(Protótipo: implementar modal detalhado)');
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html" class="active">Dashboard</a>
+      <a href="nova-cotacao.html">Nova Cotação</a>
+      <a href="cotacoes-enviadas.html">Cotações Enviadas</a>
+      <a href="lista-fornecedores.html">Fornecedores</a>
+      <a href="notificacoes-comprador.html">Notificações</a>
+      <a href="historico-cotacoes.html">Histórico</a>
+      <a href="index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Comprador</h1>
+      <button class="cta-cotacao" onclick="novaCotacaoCTA()">+ Nova Cotação</button>
+    </header>
+    <main class="dashboard-section">
+      <section class="resumo-metricas">
+        <div class="resumo-metrica">
+          <div class="resumo-metrica-titulo">Total de Cotações Enviadas</div>
+          <div class="resumo-metrica-valor">27</div>
+        </div>
+        <div class="resumo-metrica">
+          <div class="resumo-metrica-titulo">Taxa de Resposta</div>
+          <div class="resumo-metrica-valor">81%</div>
+        </div>
+        <div class="resumo-metrica">
+          <div class="resumo-metrica-titulo">Tempo Médio de Resposta</div>
+          <div class="resumo-metrica-valor">2h 18min</div>
+        </div>
+      </section>
+      <section class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">Cotações Recentes</div>
+          <table class="card-table" aria-label="Cotações Recentes">
+            <thead>
+              <tr>
+                <th>Nº Cotação</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CT-20240613-001</td>
+                <td>13/06/2024</td>
+                <td><span class="status status-aguardando">Aguardando</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhesCotacao('Aguardando', 'CT-20240613-001', '13/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>CT-20240610-002</td>
+                <td>10/06/2024</td>
+                <td><span class="status status-respondida">Respondida</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhesCotacao('Respondida', 'CT-20240610-002', '10/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>CT-20240605-003</td>
+                <td>05/06/2024</td>
+                <td><span class="status status-expirada">Expirada</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirDetalhesCotacao('Expirada', 'CT-20240605-003', '05/06/2024'); return false;">Ver Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">Resumo de Demandas Indicatore</div>
+          <table class="card-table" aria-label="Resumo de Demandas">
+            <thead>
+              <tr>
+                <th>Demanda</th>
+                <th>Qtde Produtos</th>
+                <th>Previsão</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Demanda Junho/24</td>
+                <td>15</td>
+                <td>Alta</td>
+                <td><span class="status status-aguardando">Aguardando Cotação</span></td>
+              </tr>
+              <tr>
+                <td>Demanda Maio/24</td>
+                <td>12</td>
+                <td>Média</td>
+                <td><span class="status status-respondida">Cotação Respondida</span></td>
+              </tr>
+              <tr>
+                <td>Demanda Abril/24</td>
+                <td>18</td>
+                <td>Baixa</td>
+                <td><span class="status status-expirada">Expirada</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
