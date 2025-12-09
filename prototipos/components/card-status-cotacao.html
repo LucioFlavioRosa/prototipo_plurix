@@ -1,0 +1,31 @@
+<!-- Componente Card Status Cotação - Reutilizável -->
+<!-- Uso: Inclua este card em dashboards ou listagens para exibir status de uma cotação. Os dados são dinâmicos. -->
+<div class="card" style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; display: flex; flex-direction: column; min-height: 180px;">
+  <div class="card-title" style="font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 12px;">{{titulo}}</div>
+  <table class="card-table" aria-label="Status da Cotação" style="width: 100%; border-collapse: collapse; font-size: 1.05rem;">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Produto</th>
+        <th>Fornecedor</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{data}}</td>
+        <td>{{produto}}</td>
+        <td>{{fornecedor}}</td>
+        <td><span class="status {{statusClass}}">{{statusTexto}}</span></td>
+        <td><a href="#" class="link-detalhes" onclick="{{detalhesOnClick}}">Ver Detalhes</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--
+Documentação de uso:
+- Substitua {{titulo}} pelo título do card (ex: 'Cotação #1234').
+- Preencha {{data}}, {{produto}}, {{fornecedor}}, {{statusTexto}}, {{statusClass}} ('status-pendente', 'status-aprovada', 'status-reprovada'), e {{detalhesOnClick}} conforme os dados da cotação.
+- O estilo e responsividade seguem o template original.
+-->
