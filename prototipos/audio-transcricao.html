@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Áudio e Transcrição | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    .modal-audio {
+      display: flex;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-audio-content {
+      background: #fff;
+      max-width: 600px;
+      width: 98%;
+      padding: 32px 24px 24px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+      outline: none;
+    }
+    .modal-audio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .modal-audio-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-audio-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-audio-close:hover {
+      color: #e74c3c;
+    }
+    .audio-player {
+      width: 100%;
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .audio-label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+    .transcricao-label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+      margin-top: 18px;
+    }
+    .transcricao-texto {
+      background: #f7f8fa;
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 1.06rem;
+      color: #222;
+      line-height: 1.7;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      margin-bottom: 8px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 700px) {
+      .modal-audio-content {
+        width: 99%;
+        padding: 14px 2px 12px 2px;
+        max-height: 96vh;
+      }
+      .audio-player {
+        margin-bottom: 12px;
+      }
+      .transcricao-texto {
+        padding: 10px 8px;
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+  <script>
+    function fecharModalAudio() {
+      var modal = document.getElementById('modal-audio');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-audio');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) {
+            fecharModalAudio();
+          }
+        });
+        var closeBtn = modal.querySelector('.modal-audio-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', fecharModalAudio);
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModalAudio();
+        }
+      });
+    });
+  </script>
+</head>
+<body style="background:#f7f8fa;">
+  <!-- Modal de Áudio e Transcrição -->
+  <div id="modal-audio" class="modal-audio" tabindex="-1" aria-modal="true" role="dialog" style="display:flex;">
+    <div class="modal-audio-content" tabindex="0">
+      <div class="modal-audio-header">
+        <span class="modal-audio-title">Áudio enviado pelo fornecedor</span>
+        <button class="modal-audio-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="audio-player">
+        <span class="audio-label">Mensagem de voz:</span>
+        <audio controls aria-label="Player de áudio do fornecedor" style="width:100%;">
+          <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+      </div>
+      <div class="transcricao-label">Transcrição automática:</div>
+      <div class="transcricao-texto" aria-label="Texto transcrito do áudio">
+        Olá, gostaria de informar que a previsão de demanda para o próximo mês aumentou em 12%. Sugiro revisar os pedidos de compra para garantir o abastecimento adequado. Caso haja dúvidas, estou à disposição para esclarecimentos.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
