@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Histórico de Submissões | Plurix</title>
+  <title>Histórico de Cotações | Plurix</title>
   <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
@@ -39,6 +39,8 @@
     .sidebar .logo img {
       width: 120px;
       height: auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.10);
     }
     .sidebar nav {
       flex: 1;
@@ -53,11 +55,15 @@
       border-left: 4px solid transparent;
       transition: background 0.15s, border-color 0.15s;
       margin-bottom: 2px;
+      border-radius: 4px 0 0 4px;
     }
     .sidebar nav a.active, .sidebar nav a:hover {
       background: #222b4a;
       border-left: 4px solid #f9b233;
       color: #f9b233;
+    }
+    .sidebar nav a[aria-label] {
+      outline: none;
     }
     .sidebar .bottom {
       margin-bottom: 32px;
@@ -78,7 +84,7 @@
       box-shadow: 0 2px 8px rgba(30,40,80,0.04);
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -95,29 +101,30 @@
       background: #f7f8fa;
       min-height: 0;
     }
-    .card {
+    .history-card {
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(30,40,80,0.07);
       padding: 32px 28px 26px 28px;
+      max-width: 800px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      min-height: 180px;
     }
-    .card-title {
+    .history-card h2 {
       font-size: 1.35rem;
       font-weight: 700;
       color: #1a2340;
-      margin-bottom: 12px;
+      margin-bottom: 18px;
     }
     .history-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 1.02rem;
+      font-size: 1.05rem;
     }
     .history-table th, .history-table td {
       padding: 10px 12px;
+      text-align: left;
       border-bottom: 1px solid #eaeaea;
     }
     .history-table th {
@@ -145,221 +152,11 @@
       font-weight: 600;
       transition: color 0.15s, text-decoration 0.15s;
     }
-    .link-detalhes:hover {
+    .link-detalhes:hover, .link-detalhes:focus {
       color: #f9b233;
       text-decoration: none;
-    }
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(30,40,80,0.35);
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease;
-    }
-    .modal.closing {
-      animation: fadeOut 0.25s ease forwards;
-    }
-    .modal-content {
-      background: #fff;
-      max-width: 900px;
-      width: 100%;
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
-      max-height: 85vh;
-      overflow-y: auto;
-      animation: slideIn 0.3s ease;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-    .modal-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #1a2340;
-      margin: 0;
-    }
-    .modal-close {
-      cursor: pointer;
-      font-size: 28px;
-      color: #999;
-      background: none;
-      border: none;
-      line-height: 1;
-      margin-left: 16px;
-      transition: color 0.18s;
-    }
-    .modal-close:hover {
-      color: #e74c3c;
-    }
-    .modal-body {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #222;
-    }
-    .nivel-aprovacao {
-      display: flex;
-      align-items: center;
-      margin: 16px 0;
-      flex-wrap: wrap;
-    }
-    .nivel-item {
-      display: flex;
-      align-items: center;
-      margin-right: 24px;
-      font-size: 1.08rem;
-      font-weight: 600;
-      color: #1a2340;
-    }
-    .status-circle {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #ddd;
-      border: 2px solid #ccc;
-      transition: background 0.2s;
-    }
-    .status-circle.ativo {
-      background: #4bb543;
-      border-color: #4bb543;
-    }
-    .nivel-linha {
-      height: 2px;
-      width: 40px;
-      background: #ddd;
-      margin: 0 8px;
-      display: inline-block;
-      vertical-align: middle;
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .nivel-linha.ativo {
-      background: #4bb543;
-    }
-    .motivo-item {
-      margin-bottom: 20px;
-      padding: 16px;
-      background: #f9f9f9;
-      border-left: 4px solid #f9b233;
-      border-radius: 6px;
-    }
-    .motivo-titulo {
-      font-weight: 700;
-      color: #1a2340;
-      margin-bottom: 8px;
-      font-size: 1.08rem;
-    }
-    .motivo-valor {
-      color: #555;
-      font-size: 1.02rem;
-    }
-    /* Tabela de detalhes e edição inline */
-    .detalhe-table, .detalhe-table-edit {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 18px;
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-    }
-    .detalhe-table th, .detalhe-table td, .detalhe-table-edit th, .detalhe-table-edit td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #eaeaea;
-      text-align: left;
-    }
-    .detalhe-table th, .detalhe-table-edit th {
-      background: #e8eaf0;
-      color: #1a2340;
-      font-weight: 700;
-    }
-    .detalhe-table tr:last-child td, .detalhe-table-edit tr:last-child td {
-      border-bottom: none;
-    }
-    .detalhe-table-edit input[type="text"], .detalhe-table-edit input[type="number"] {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-      box-sizing: border-box;
-      background: #f7f8fa;
-      color: #222;
-    }
-    .detalhe-table-edit input:focus {
       outline: 2px solid #f9b233;
-      background: #fffbe7;
-    }
-    .detalhe-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-    .detalhe-download {
-      background: #4bb543;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
-    }
-    .detalhe-download:hover {
-      background: #399c36;
-    }
-    .detalhe-save {
-      background: #4bb543;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
-    }
-    .detalhe-save:hover {
-      background: #399c36;
-    }
-    .detalhe-cancel {
-      background: #e74c3c;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 24px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(231,76,60,0.08);
-    }
-    .detalhe-cancel:hover {
-      background: #c0392b;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      border-radius: 4px;
     }
     @media (max-width: 900px) {
       .dashboard-section {
@@ -379,432 +176,134 @@
         padding: 10px 10px;
         font-size: 0.98rem;
       }
-      .card {
-        padding: 16px 8px 12px 8px;
+      .history-card {
+        padding: 18px 8px 16px 8px;
+        max-width: 98vw;
       }
-      .modal-content {
-        width: 95%;
-        padding: 20px;
-        max-height: 90vh;
+      .history-table th, .history-table td {
+        padding: 7px 6px;
+        font-size: 0.98rem;
       }
-      .modal-header {
+    }
+    @media (max-width: 600px) {
+      body {
         flex-direction: column;
-        align-items: flex-start;
       }
-      .nivel-item {
-        margin-right: 12px;
+      .sidebar {
+        width: 100vw;
+        height: 60px;
+        flex-direction: row;
+        align-items: center;
+        padding-top: 0;
+        box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+      .sidebar .logo {
+        margin-bottom: 0;
+        margin-left: 12px;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-around;
+      }
+      .sidebar nav a {
+        padding: 10px 8px;
         font-size: 0.95rem;
+        margin-bottom: 0;
       }
-      .motivo-item {
-        padding: 12px;
-        font-size: 0.98rem;
+      .sidebar .bottom {
+        display: none;
       }
-      .detalhe-table, .detalhe-table-edit {
-        font-size: 0.98rem;
+      .main-content {
+        padding-top: 60px;
       }
-      .detalhe-download, .detalhe-save, .detalhe-cancel {
-        padding: 8px 14px;
-        font-size: 0.97rem;
+      .dashboard-section {
+        padding: 10px 2px 10px 2px;
+      }
+      .history-card {
+        padding: 12px 2px 10px 2px;
+        max-width: 99vw;
       }
     }
   </style>
   <script>
-    // =============================================
-    // Sistema de tabelas mock de produtos Ambev por arquivo
-    // Cada arquivo de submissão possui uma tabela de produtos Ambev distinta.
-    // Mapeamento:
-    // 'precos_maio.xlsx'         => tabelaMock (Brahma Duplo Malte, Skol Beats Senses, Guaraná Antarctica)
-    // 'precos_abril.xlsx'        => tabelaMockReprovada1 (Stella Artois, Budweiser, Pepsi Black)
-    // 'precos_marco.xlsx'        => tabelaMockReprovada2 (Bohemia Puro Malte, Skol Puro Malte, H2OH! Limoneto)
-    // 'precos_janeiro.xlsx'      => tabelaMockReprovada3 (Antarctica Sub Zero, Brahma 0.0%, Gatorade Laranja)
-    // 'precos_abril_v2.xlsx'     => tabelaMockAprovada2 (Corona Extra, Skol Beats GT, Sukita Laranja)
-    // 'precos_marco_v2.xlsx'     => tabelaMockAprovada3 (Spaten Puro Malte, Brahma Extra Lager, Lipton Ice Tea Limão)
-    // Outros arquivos podem usar uma tabela padrão.
-    // =============================================
-
-    // Tabela mock para 'precos_maio.xlsx' (Aprovada)
-    var tabelaMock = [
-      { sku: '2001', nome: 'Brahma Duplo Malte 350ml Lata', descricao: 'Cerveja Brahma Duplo Malte, lata 350ml', preco: 'R$ 3,20' },
-      { sku: '2002', nome: 'Skol Beats Senses 313ml Long Neck', descricao: 'Bebida mista Skol Beats Senses, garrafa 313ml', preco: 'R$ 4,50' },
-      { sku: '2003', nome: 'Guaraná Antarctica 2L PET', descricao: 'Refrigerante Guaraná Antarctica, garrafa 2 litros', preco: 'R$ 6,90' }
-    ];
-
-    // Tabela mock para 'precos_abril.xlsx' (Reprovada)
-    var tabelaMockReprovada1 = [
-      { sku: '3001', nome: 'Stella Artois 330ml Long Neck', descricao: 'Cerveja Stella Artois, garrafa 330ml', preco: 'R$ 4,80' },
-      { sku: '3002', nome: 'Budweiser 269ml Lata', descricao: 'Cerveja Budweiser, lata 269ml', preco: 'R$ 2,90' },
-      { sku: '3003', nome: 'Pepsi Black 350ml Lata', descricao: 'Refrigerante Pepsi Black, lata 350ml', preco: 'R$ 2,50' }
-    ];
-
-    // Tabela mock para 'precos_marco.xlsx' (Reprovada)
-    var tabelaMockReprovada2 = [
-      { sku: '4001', nome: 'Bohemia Puro Malte 350ml Lata', descricao: 'Cerveja Bohemia Puro Malte, lata 350ml', preco: 'R$ 3,50' },
-      { sku: '4002', nome: 'Skol Puro Malte 269ml Lata', descricao: 'Cerveja Skol Puro Malte, lata 269ml', preco: 'R$ 2,70' },
-      { sku: '4003', nome: 'H2OH! Limoneto 500ml PET', descricao: 'Bebida H2OH! sabor Limoneto, garrafa 500ml', preco: 'R$ 3,80' }
-    ];
-
-    // Tabela mock para 'precos_janeiro.xlsx' (Reprovada)
-    var tabelaMockReprovada3 = [
-      { sku: '5001', nome: 'Antarctica Sub Zero 350ml Lata', descricao: 'Cerveja Antarctica Sub Zero, lata 350ml', preco: 'R$ 3,10' },
-      { sku: '5002', nome: 'Brahma 0.0% 350ml Lata', descricao: 'Cerveja sem álcool Brahma 0.0%, lata 350ml', preco: 'R$ 3,40' },
-      { sku: '5003', nome: 'Gatorade Laranja 500ml PET', descricao: 'Isotônico Gatorade sabor Laranja, garrafa 500ml', preco: 'R$ 4,20' }
-    ];
-
-    // Tabela mock para 'precos_abril_v2.xlsx' (Aprovada)
-    var tabelaMockAprovada2 = [
-      { sku: '6001', nome: 'Corona Extra 330ml Long Neck', descricao: 'Cerveja Corona Extra, garrafa 330ml', preco: 'R$ 5,20' },
-      { sku: '6002', nome: 'Skol Beats GT 313ml Long Neck', descricao: 'Bebida mista Skol Beats GT, garrafa 313ml', preco: 'R$ 4,70' },
-      { sku: '6003', nome: 'Sukita Laranja 2L PET', descricao: 'Refrigerante Sukita sabor Laranja, garrafa 2 litros', preco: 'R$ 5,90' }
-    ];
-
-    // Tabela mock para 'precos_marco_v2.xlsx' (Aprovada)
-    var tabelaMockAprovada3 = [
-      { sku: '7001', nome: 'Spaten Puro Malte 350ml Lata', descricao: 'Cerveja Spaten Puro Malte, lata 350ml', preco: 'R$ 3,60' },
-      { sku: '7002', nome: 'Brahma Extra Lager 350ml Lata', descricao: 'Cerveja Brahma Extra Lager, lata 350ml', preco: 'R$ 3,30' },
-      { sku: '7003', nome: 'Lipton Ice Tea Limão 300ml PET', descricao: 'Chá gelado Lipton sabor Limão, garrafa 300ml', preco: 'R$ 3,50' }
-    ];
-
-    // Tabela padrão caso o arquivo não tenha uma tabela específica
-    var tabelaMockPadrao = [
-      { sku: '9991', nome: 'Produto Ambev Genérico 1', descricao: 'Produto Ambev padrão', preco: 'R$ 1,00' },
-      { sku: '9992', nome: 'Produto Ambev Genérico 2', descricao: 'Produto Ambev padrão', preco: 'R$ 2,00' },
-      { sku: '9993', nome: 'Produto Ambev Genérico 3', descricao: 'Produto Ambev padrão', preco: 'R$ 3,00' }
-    ];
-
-    /**
-     * Mapeamento de arquivos para suas respectivas tabelas mock de produtos Ambev.
-     * Facilita a seleção dinâmica da tabela correta para cada arquivo.
-     */
-    var tabelasPorArquivo = {
-      'precos_maio.xlsx': tabelaMock,
-      'precos_abril.xlsx': tabelaMockReprovada1,
-      'precos_marco.xlsx': tabelaMockReprovada2,
-      'precos_janeiro.xlsx': tabelaMockReprovada3,
-      'precos_abril_v2.xlsx': tabelaMockAprovada2,
-      'precos_marco_v2.xlsx': tabelaMockAprovada3
-    };
-
-    // Função para navegação
     function goTo(page) {
       window.location.href = page;
     }
-    // Função para sair
     function sair() {
       if (confirm('Deseja realmente sair?')) {
-        window.location.href = '../plurix.html';
+        window.location.href = 'index.html';
       }
     }
-
-    /**
-     * Função principal para abrir o modal de detalhes de submissão.
-     * Exibe diferentes conteúdos conforme o status: 'aprovada', 'reprovada', 'pendente'.
-     * Utiliza o sistema de mapeamento de tabelas para exibir produtos Ambev variados por arquivo.
-     */
-    function abrirDetalhes(status, arquivo, data) {
-      try {
-        var modal = document.getElementById('modal-detalhes');
-        if (!modal) {
-          alert('Erro: modal não encontrado.');
-          return;
-        }
-        var modalBody = modal.querySelector('.modal-body');
-        var modalTitle = modal.querySelector('.modal-title');
-        if (!modalBody || !modalTitle) {
-          alert('Erro: estrutura do modal inválida.');
-          return;
-        }
-        var html = '';
-        // Níveis de aprovação
-        var nivelAprovacao = [
-          'Gerente Categoria Bandeira',
-          'Dir. Comercial Bandeira',
-          'Dir. Comercial Holding',
-          'VP'
-        ];
-        // Mapeamento de arquivos pendentes para estágio de aprovação
-        var nivelAtualMap = {
-          'precos_junho.xlsx': 1,
-          'precos_fevereiro.xlsx': 0,
-          'precos_marco.xlsx': 2,
-          'precos_fevereiro_v2.xlsx': 3,
-          'precos_fevereiro_v3.xlsx': 0
-        };
-        var nivelAtual = nivelAtualMap[arquivo] !== undefined ? nivelAtualMap[arquivo] : 0;
-
-        // Seleciona a tabela correta de acordo com o arquivo
-        // Se não houver tabela específica, usa a tabela padrão
-        var tabelaSelecionada = tabelasPorArquivo[arquivo] || tabelaMockPadrao;
-
-        if (status === 'aprovada') {
-          modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Aprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Tabela de Preços:</div>';
-          html += '<table class="detalhe-table" aria-label="Tabela de Preços">';
-          html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
-          tabelaSelecionada.forEach(function(row) {
-            html += '<tr>' +
-              '<td>' + row.sku + '</td>' +
-              '<td>' + row.nome + '</td>' +
-              '<td>' + row.descricao + '</td>' +
-              '<td>' + row.preco + '</td>' +
-              '</tr>';
-          });
-          html += '</tbody></table>';
-          html += '<div class="detalhe-actions">';
-          html += '<button class="detalhe-download" onclick="baixarPlanilha(\'' + arquivo + '\')">Baixar Planilha</button>';
-          html += '</div>';
-        } else if (status === 'reprovada') {
-          modalTitle.textContent = 'Detalhes da Reprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Reprovada</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Editar Tabela:</div>';
-          html += '<form id="form-edicao-inline" onsubmit="salvarEdicaoInline(event)">';
-          html += '<table class="detalhe-table-edit" aria-label="Editar Tabela">';
-          html += '<thead><tr><th>SKU</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr></thead><tbody>';
-          tabelaSelecionada.forEach(function(row, idx) {
-            html += '<tr>' +
-              '<td><input type="text" name="sku_' + idx + '" value="' + row.sku + '" required></td>' +
-              '<td><input type="text" name="nome_' + idx + '" value="' + row.nome + '" required></td>' +
-              '<td><input type="text" name="descricao_' + idx + '" value="' + row.descricao + '" required></td>' +
-              '<td><input type="text" name="preco_' + idx + '" value="' + row.preco + '" required></td>' +
-              '</tr>';
-          });
-          html += '</tbody></table>';
-          html += '<div class="detalhe-actions">';
-          html += '<button type="button" class="detalhe-cancel" onclick="fecharModal()">Cancelar</button>';
-          html += '<button type="submit" class="detalhe-save">Salvar Alterações</button>';
-          html += '</div>';
-          html += '</form>';
-        } else if (status === 'pendente') {
-          modalTitle.textContent = 'Detalhes da Aprovação - ' + arquivo;
-          html += '<div><strong>Status:</strong> Pendente de aprovação</div>';
-          html += '<div style="margin-top: 12px; font-weight: 600; color: #1a2340;">Níveis de Aprovação:</div>';
-          html += '<div class="nivel-aprovacao">';
-          for (var i = 0; i < nivelAprovacao.length; i++) {
-            html += '<div class="nivel-item">';
-            html += '<span class="status-circle' + (i === nivelAtual ? ' ativo' : '') + '"></span>';
-            html += nivelAprovacao[i];
-            html += '</div>';
-            if (i < nivelAprovacao.length - 1) {
-              html += '<span class="nivel-linha' + (i < nivelAtual ? ' ativo' : '') + '"></span>';
-            }
-          }
-          html += '</div>';
-          html += '<div style="margin-top: 18px; color: #555; font-size: 1.01rem;">O ponto em verde indica o nível atual de aprovação. Após aprovação em todos os níveis, a tabela será processada.</div>';
-        } else {
-          modalTitle.textContent = 'Detalhes';
-          html = '<div>Informações não disponíveis para este status.</div>';
-        }
-        modalBody.innerHTML = html;
-        modal.style.display = 'flex';
-        modal.classList.remove('closing');
-        setTimeout(function() {
-          var focusEl = modal.querySelector('.modal-content');
-          if (focusEl) focusEl.focus();
-        }, 100);
-      } catch (e) {
-        var modal = document.getElementById('modal-detalhes');
-        if (modal && modal.querySelector('.modal-body')) {
-          modal.querySelector('.modal-title').textContent = 'Erro';
-          modal.querySelector('.modal-body').innerHTML = '<div>Ocorreu um erro ao carregar os detalhes. Tente novamente.</div>';
-          modal.style.display = 'flex';
-        } else {
-          alert('Erro inesperado ao abrir detalhes.');
-        }
-      }
+    function abrirDetalhesHistorico() {
+      alert('Fluxo de detalhes do histórico (simulação).');
     }
-
-    /**
-     * Função para baixar a planilha de exemplo (mock).
-     * Gera um arquivo CSV com os dados da tabela de produtos Ambev correspondente ao arquivo.
-     * Utiliza o sistema de mapeamento de tabelas.
-     */
-    function baixarPlanilha(arquivo) {
-      // Seleciona a tabela correta de acordo com o arquivo
-      var tabelaSelecionada = tabelasPorArquivo[arquivo] || tabelaMockPadrao;
-      var csv = 'SKU,Nome,Descrição,Preço\n';
-      tabelaSelecionada.forEach(function(row) {
-        csv += [row.sku, row.nome, row.descricao, row.preco].map(function(val) {
-          return '"' + val.replace(/"/g, '""') + '"';
-        }).join(',') + '\n';
-      });
-      var blob = new Blob([csv], { type: 'text/csv' });
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = arquivo.replace(/\.xlsx$/, '') + '_detalhes.csv';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    /**
-     * Função para salvar a edição inline da tabela de planilha reprovada.
-     * Apenas mocka o salvamento e fecha o modal.
-     */
-    function salvarEdicaoInline(event) {
-      event.preventDefault();
-      alert('Alterações salvas com sucesso! (mock)');
-      fecharModal();
-    }
-
-    /**
-     * Função para fechar o modal de detalhes.
-     */
-    function fecharModal() {
-      var modal = document.getElementById('modal-detalhes');
-      if (modal) {
-        modal.classList.add('closing');
-        setTimeout(function() {
-          modal.style.display = 'none';
-          modal.classList.remove('closing');
-        }, 250);
-      }
-    }
-
-    // Event listeners para fechar modais e acessibilidade
     document.addEventListener('DOMContentLoaded', function() {
-      var modal = document.getElementById('modal-detalhes');
-      if (modal) {
-        modal.addEventListener('mousedown', function(e) {
-          if (e.target === modal) {
-            fecharModal();
-          }
-        });
-        var closeBtn = modal.querySelector('.modal-close');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', fecharModal);
-        }
-      }
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-          fecharModal();
+          window.location.href = 'dashboard-fornecedor.html';
         }
       });
     });
   </script>
 </head>
 <body>
-  <aside class="sidebar">
+  <aside class="sidebar" role="navigation" aria-label="Menu Principal">
     <div class="logo">
       <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
     </div>
     <nav>
-      <a href="dashboard-fornecedor.html">Dashboard</a>
-      <a href="upload-tabela.html">Nova Tabela</a>
-      <a href="historico.html" class="active">Histórico</a>
-      <a href="#" onclick="sair()">Sair</a>
+      <a href="dashboard-fornecedor.html" aria-label="Dashboard">Dashboard</a>
+      <a href="upload-tabela.html" aria-label="Nova Tabela">Nova Tabela</a>
+      <a href="historico.html" class="active" aria-label="Histórico">Histórico</a>
+      <a href="index.html" onclick="sair()" aria-label="Sair">Sair</a>
     </nav>
     <div class="bottom">&copy; 2024 Plurix</div>
   </aside>
   <div class="main-content">
-    <header class="header">
-      <h1>Histórico de Submissões</h1>
+    <header class="header" role="banner">
+      <h1>Histórico de Cotações</h1>
     </header>
-    <main class="dashboard-section">
-      <section>
-        <h2 style="font-size: 1.5rem; font-weight: 700; color: #1a2340; margin-bottom: 20px;">Histórico Completo de Submissões</h2>
-        <div class="card">
-          <div class="card-title">Histórico de Submissões</div>
-          <table class="history-table" aria-label="Histórico de Submissões">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Arquivo</th>
-                <th>Status</th>
-                <th>Coligada/UF</th>
-                <th>Enviado por</th>
-                <th>Detalhes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>10/06/2024</td>
-                <td>precos_junho.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td>Avenida / SP</td>
-                <td>ana.souza@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_junho.xlsx', '10/06/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>02/06/2024</td>
-                <td>precos_maio.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>Avenida / SP</td>
-                <td>carlos.martins@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_maio.xlsx', '02/06/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>15/05/2024</td>
-                <td>precos_abril.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>Boa / SP</td>
-                <td>marina.lima@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_abril.xlsx', '15/05/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>01/05/2024</td>
-                <td>precos_abril_v2.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>Boa / SP</td>
-                <td>joao.silva@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_abril_v2.xlsx', '01/05/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>20/04/2024</td>
-                <td>precos_marco.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>Superpão / PR</td>
-                <td>fernando.pereira@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_marco.xlsx', '20/04/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>10/04/2024</td>
-                <td>precos_marco_v2.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>Superpão / SC</td>
-                <td>lucas.almeida@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('aprovada', 'precos_marco_v2.xlsx', '10/04/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>28/03/2024</td>
-                <td>precos_fevereiro.xlsx</td>
-                <td><span class="status status-pendente">Pendente</span></td>
-                <td>Paraná / PR</td>
-                <td>patricia.menezes@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro.xlsx', '28/03/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>15/03/2024</td>
-                <td>precos_fevereiro_v2.xlsx</td>
-                <td><span class="status status-aprovada">Aprovada</span></td>
-                <td>Amigão / MS</td>
-                <td>rodrigo.santos@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('pendente', 'precos_fevereiro_v2.xlsx', '15/03/2024'); return false;">Ver</a></td>
-              </tr>
-              <tr>
-                <td>01/03/2024</td>
-                <td>precos_janeiro.xlsx</td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td>Amigão / SP</td>
-                <td>aline.gomes@fornecedor.com.br</td>
-                <td><a href="#" class="link-detalhes" onclick="abrirDetalhes('reprovada', 'precos_janeiro.xlsx', '01/03/2024'); return false;">Ver</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <main class="dashboard-section" role="main">
+      <section class="history-card" role="region" aria-label="Histórico de Submissões">
+        <h2>Histórico de Submissões</h2>
+        <table class="history-table" aria-label="Tabela de Histórico">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Arquivo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10/06/2024</td>
+              <td>precos_junho.xlsx</td>
+              <td><span class="status status-pendente" aria-label="Pendente">Pendente</span></td>
+              <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela pendente" onclick="abrirDetalhesHistorico(); return false;">Ver Detalhes</a></td>
+            </tr>
+            <tr>
+              <td>02/06/2024</td>
+              <td>precos_maio.xlsx</td>
+              <td><span class="status status-aprovada" aria-label="Aprovada">Aprovada</span></td>
+              <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela aprovada" onclick="abrirDetalhesHistorico(); return false;">Ver Detalhes</a></td>
+            </tr>
+            <tr>
+              <td>15/05/2024</td>
+              <td>precos_abril.xlsx</td>
+              <td><span class="status status-reprovada" aria-label="Reprovada">Reprovada</span></td>
+              <td><a href="#" class="link-detalhes" aria-label="Ver Detalhes da Tabela reprovada" onclick="abrirDetalhesHistorico(); return false;">Ver Detalhes</a></td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </main>
-  </div>
-  <!-- Modal Detalhes -->
-  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
-    <div class="modal-content" tabindex="0">
-      <div class="modal-header">
-        <span class="modal-title">Detalhes</span>
-        <button class="modal-close" aria-label="Fechar">&times;</button>
-      </div>
-      <div class="modal-body">
-        <!-- Conteúdo dinâmico -->
-      </div>
-    </div>
   </div>
 </body>
 </html>
