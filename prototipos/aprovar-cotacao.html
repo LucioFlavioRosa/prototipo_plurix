@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aprovação de Cotação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0 0 0 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .form-section { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; max-width: 700px; margin: 40px auto; }
+    .form-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 18px; }
+    .cotacao-resumo-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; margin-bottom: 22px; }
+    .cotacao-resumo-table th, .cotacao-resumo-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .cotacao-resumo-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .cotacao-resumo-table tr:last-child td { border-bottom: none; }
+    .form-label { display: block; font-weight: 600; color: #1a2340; margin-bottom: 8px; margin-top: 18px; }
+    .form-textarea { width: 100%; min-height: 70px; padding: 10px; border-radius: 6px; border: 1px solid #b7b9c6; font-size: 1.05rem; background: #f7f8fa; color: #222; resize: vertical; box-sizing: border-box; margin-bottom: 6px; }
+    .form-textarea:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    .form-select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #b7b9c6; font-size: 1.05rem; background: #f7f8fa; color: #222; margin-bottom: 12px; }
+    .form-select:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    .form-actions { margin-top: 28px; display: flex; gap: 16px; }
+    .btn-confirmar, .btn-cancelar { padding: 12px 32px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
+    .btn-confirmar { background: #4bb543; color: #fff; }
+    .btn-confirmar:hover { background: #399a36; }
+    .btn-cancelar { background: #e74c3c; color: #fff; }
+    .btn-cancelar:hover { background: #b93a2e; }
+    .form-error { color: #e74c3c; font-size: 1.01rem; margin-top: 6px; margin-bottom: 0; }
+    .success-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+    .success-modal-content { background: #fff; max-width: 500px; width: 95%; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); text-align: center; }
+    .success-title { font-size: 1.25rem; font-weight: 700; color: #1a2340; margin-bottom: 14px; }
+    .success-message { font-size: 1.08rem; color: #222; margin-bottom: 22px; }
+    .btn-voltar-dashboard { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 32px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); }
+    .btn-voltar-dashboard:hover { background: #e1a12a; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 900px) {
+      .form-section { padding: 18px 10px 12px 10px; margin: 18px auto; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+    }
+  </style>
+  <script>
+    // Mock de cotações
+    const cotacoesMock = {
+      'CT20240610': {
+        id: 'CT20240610',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Laticínios Aurora',
+        valor: 'R$ 2,89',
+        especificacoes: 'Validade mínima: 60 dias. Entrega em até 48h após pedido. Marca líder em SC.',
+        periodo: 'Jun/2024',
+        status: 'Pendente',
+        alcadaAtual: 'Gerente de Compras',
+        alcadaProxima: 'Diretor Comercial',
+        aprovadoresProximos: ['Carlos Silva (Diretor Comercial)', 'Fernanda Souza (Diretora Adjunta)'],
+        historico: [
+          { etapa: 'Cotação Criada', usuario: 'João Lima', data: '10/06/2024 09:12' },
+          { etapa: 'Cotação Submetida', usuario: 'João Lima', data: '10/06/2024 09:15' }
+        ]
+      },
+      'CT20240602': {
+        id: 'CT20240602',
+        produto: 'Queijo Mussarela Fatiado 5kg',
+        fornecedor: 'Laticínios Tirol',
+        valor: 'R$ 99,00',
+        especificacoes: 'Entrega refrigerada. Fatiamento padrão 2mm. Origem: PR.',
+        periodo: 'Mai/2024',
+        status: 'Aprovada',
+        alcadaAtual: 'Diretor Comercial',
+        alcadaProxima: 'VP Supply Chain',
+        aprovadoresProximos: ['Marcos Tavares (VP Supply Chain)'],
+        historico: [
+          { etapa: 'Cotação Criada', usuario: 'Lucas Mello', data: '02/06/2024 08:50' },
+          { etapa: 'Cotação Submetida', usuario: 'Lucas Mello', data: '02/06/2024 08:53' },
+          { etapa: 'Aprovada por Diretor Comercial', usuario: 'Carlos Silva', data: '02/06/2024 09:10' }
+        ]
+      }
+    };
+    // Função para obter parâmetro da URL
+    function getCotacaoId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id') || 'CT20240610'; // Default para mock
+    }
+    // Renderizar dados da cotação
+    function renderCotacaoResumo(cotacao) {
+      const table = document.getElementById('cotacao-resumo-table');
+      table.innerHTML = `
+        <tr><th>ID Cotação</th><td>${cotacao.id}</td></tr>
+        <tr><th>Produto</th><td>${cotacao.produto}</td></tr>
+        <tr><th>Fornecedor</th><td>${cotacao.fornecedor}</td></tr>
+        <tr><th>Valor</th><td>${cotacao.valor}</td></tr>
+        <tr><th>Período</th><td>${cotacao.periodo}</td></tr>
+        <tr><th>Especificações</th><td>${cotacao.especificacoes}</td></tr>
+        <tr><th>Alçada Atual</th><td>${cotacao.alcadaAtual}</td></tr>
+        <tr><th>Próxima Alçada</th><td>${cotacao.alcadaProxima}</td></tr>
+      `;
+      // Preencher select de próximo aprovador
+      const select = document.getElementById('proximo-aprovador');
+      select.innerHTML = '';
+      cotacao.aprovadoresProximos.forEach(function(aprovador) {
+        const opt = document.createElement('option');
+        opt.value = aprovador;
+        opt.textContent = aprovador;
+        select.appendChild(opt);
+      });
+    }
+    // Validação e submissão
+    function validarEConfirmar(e) {
+      e.preventDefault();
+      const justificativa = document.getElementById('justificativa').value.trim();
+      const select = document.getElementById('proximo-aprovador');
+      const error = document.getElementById('form-error');
+      error.textContent = '';
+      if (!justificativa || justificativa.length < 12) {
+        error.textContent = 'Justificativa obrigatória (mínimo 12 caracteres).';
+        document.getElementById('justificativa').focus();
+        return false;
+      }
+      // Simular chamada ao workflow engine mock
+      const cotacaoId = getCotacaoId();
+      const cotacao = cotacoesMock[cotacaoId];
+      let msg = `Cotação ${cotacao.id} aprovada com sucesso!<br>`;
+      msg += `Próxima etapa: ${cotacao.alcadaProxima}<br>`;
+      msg += `Responsável: ${select.value}`;
+      // Exibir modal de sucesso
+      document.getElementById('success-message').innerHTML = msg;
+      document.getElementById('success-modal').style.display = 'flex';
+      return false;
+    }
+    function cancelarAprovacao() {
+      window.location.href = '../dashboard-fornecedor.html';
+    }
+    function voltarDashboard() {
+      window.location.href = '../dashboard-fornecedor.html';
+    }
+    window.onload = function() {
+      const cotacaoId = getCotacaoId();
+      const cotacao = cotacoesMock[cotacaoId];
+      renderCotacaoResumo(cotacao);
+      document.getElementById('form-aprovacao').addEventListener('submit', validarEConfirmar);
+      document.getElementById('btn-cancelar').addEventListener('click', function(e){ e.preventDefault(); cancelarAprovacao(); });
+      document.getElementById('btn-voltar-dashboard').addEventListener('click', voltarDashboard);
+    };
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-fornecedor.html">Dashboard</a>
+      <a href="../upload-tabela.html">Nova Tabela</a>
+      <a href="../historico.html">Histórico</a>
+      <a href="../index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Aprovação de Cotação</h1>
+    </header>
+    <main>
+      <section class="form-section">
+        <div class="form-title">Resumo da Cotação</div>
+        <table id="cotacao-resumo-table" class="cotacao-resumo-table" aria-label="Resumo da Cotação"></table>
+        <form id="form-aprovacao" autocomplete="off">
+          <label for="justificativa" class="form-label">Justificativa da Aprovação <span style="color:#e74c3c">*</span></label>
+          <textarea id="justificativa" name="justificativa" class="form-textarea" required aria-required="true" minlength="12" placeholder="Descreva o motivo da aprovação..." aria-label="Justificativa da Aprovação"></textarea>
+          <div id="form-error" class="form-error" role="alert"></div>
+          <label for="proximo-aprovador" class="form-label">Selecionar Próximo Aprovador</label>
+          <select id="proximo-aprovador" name="proximo-aprovador" class="form-select" aria-label="Próximo Aprovador"></select>
+          <div class="form-actions">
+            <button type="submit" class="btn-confirmar">Confirmar Aprovação</button>
+            <button type="button" id="btn-cancelar" class="btn-cancelar">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <div id="success-modal" class="success-modal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="success-modal-content" tabindex="0">
+      <div class="success-title">Aprovação registrada!</div>
+      <div id="success-message" class="success-message"></div>
+      <button id="btn-voltar-dashboard" class="btn-voltar-dashboard">Voltar para Dashboard</button>
+    </div>
+  </div>
+</body>
+</html>
