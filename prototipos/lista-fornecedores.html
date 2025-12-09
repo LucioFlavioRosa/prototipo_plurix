@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerenciar Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0 0 0 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .btn-cadastrar { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); }
+    .btn-cadastrar:hover { background: #e1a12a; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; display: flex; flex-direction: column; min-height: 180px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 12px; }
+    .card-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+    .card-table th, .card-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .status { display: inline-block; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; color: #fff; }
+    .status-ativo { background: #4bb543; }
+    .status-inativo { background: #e74c3c; }
+    .link-detalhes { color: #1a2340; text-decoration: underline; font-weight: 600; transition: color 0.15s, text-decoration 0.15s; cursor: pointer; }
+    .link-detalhes:hover { color: #f9b233; text-decoration: none; }
+    .actions-btn { background: none; border: none; color: #1a2340; font-size: 1.01rem; font-weight: 600; cursor: pointer; margin-right: 10px; text-decoration: underline; transition: color 0.15s; }
+    .actions-btn:hover { color: #f9b233; text-decoration: none; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .card { padding: 14px 4px 12px 4px; }
+      .card-table th, .card-table td { padding: 6px 4px; }
+    }
+  </style>
+  <script>
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = 'index.html';
+      }
+    }
+    function cadastrarFornecedor() {
+      window.location.href = 'cadastro-fornecedor.html';
+    }
+    function editarFornecedor(id) {
+      window.location.href = 'cadastro-fornecedor.html?id=' + id;
+    }
+    function visualizarHistorico(id) {
+      abrirModalHistorico(id);
+    }
+    function desativarFornecedor(id, nome) {
+      if (confirm('Deseja desativar o fornecedor ' + nome + '?')) {
+        alert('Fornecedor desativado (mock)!');
+      }
+    }
+    function abrirModalHistorico(id) {
+      var modal = document.getElementById('modal-historico');
+      var modalBody = modal.querySelector('.modal-body');
+      var modalTitle = modal.querySelector('.modal-title');
+      modalTitle.textContent = 'Histórico de Cotações - ' + fornecedoresMock[id].nome;
+      var historico = fornecedoresMock[id].historico;
+      var html = '<table class="card-table" aria-label="Histórico de Cotações"><thead><tr><th>Data</th><th>Produto</th><th>Valor (R$)</th><th>Status</th></tr></thead><tbody>';
+      for (var i = 0; i < historico.length; i++) {
+        html += '<tr>' +
+          '<td>' + historico[i].data + '</td>' +
+          '<td>' + historico[i].produto + '</td>' +
+          '<td>' + historico[i].valor + '</td>' +
+          '<td>' + historico[i].status + '</td>' +
+        '</tr>';
+      }
+      html += '</tbody></table>';
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() { var content = modal.querySelector('.modal-content'); if(content) content.focus(); }, 100);
+    }
+    function fecharModalHistorico() {
+      var modal = document.getElementById('modal-historico');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+    var fornecedoresMock = [
+      { id: 0, nome: 'Frutas do Vale', categoria: 'Hortifruti', status: 'ativo', ultimo_contato: '10/06/2024', historico: [ {data:'10/06/2024',produto:'Banana Prata',valor:'2.99',status:'Aprovada'}, {data:'05/06/2024',produto:'Maçã Fuji',valor:'4.49',status:'Pendente'} ] },
+      { id: 1, nome: 'Carnes Premium', categoria: 'Carnes', status: 'ativo', ultimo_contato: '09/06/2024', historico: [ {data:'09/06/2024',produto:'Alcatra',valor:'39.90',status:'Aprovada'} ] },
+      { id: 2, nome: 'Laticínios União', categoria: 'Laticínios', status: 'inativo', ultimo_contato: '07/06/2024', historico: [ {data:'07/06/2024',produto:'Leite Integral',valor:'3.79',status:'Reprovada'} ] },
+      { id: 3, nome: 'Verduras Frescas', categoria: 'Hortifruti', status: 'ativo', ultimo_contato: '08/06/2024', historico: [ {data:'08/06/2024',produto:'Alface Crespa',valor:'1.99',status:'Aprovada'} ] },
+      { id: 4, nome: 'Queijos da Serra', categoria: 'Laticínios', status: 'ativo', ultimo_contato: '06/06/2024', historico: [ {data:'06/06/2024',produto:'Queijo Minas',valor:'25.90',status:'Aprovada'} ] },
+      { id: 5, nome: 'Peixes do Mar', categoria: 'Peixes', status: 'ativo', ultimo_contato: '04/06/2024', historico: [ {data:'04/06/2024',produto:'Salmão',valor:'59.90',status:'Pendente'} ] },
+      { id: 6, nome: 'Bebidas Naturais', categoria: 'Bebidas', status: 'ativo', ultimo_contato: '03/06/2024', historico: [ {data:'03/06/2024',produto:'Suco de Laranja',valor:'6.99',status:'Aprovada'} ] },
+      { id: 7, nome: 'Padaria Central', categoria: 'Padaria', status: 'ativo', ultimo_contato: '02/06/2024', historico: [ {data:'02/06/2024',produto:'Pão Francês',valor:'0.49',status:'Aprovada'} ] },
+      { id: 8, nome: 'Doces e Delícias', categoria: 'Doces', status: 'inativo', ultimo_contato: '01/06/2024', historico: [ {data:'01/06/2024',produto:'Brigadeiro',valor:'1.99',status:'Reprovada'} ] },
+      { id: 9, nome: 'Grãos do Campo', categoria: 'Grãos', status: 'ativo', ultimo_contato: '31/05/2024', historico: [ {data:'31/05/2024',produto:'Arroz Integral',valor:'7.49',status:'Aprovada'} ] },
+      { id: 10, nome: 'Temperos da Vó', categoria: 'Temperos', status: 'ativo', ultimo_contato: '30/05/2024', historico: [ {data:'30/05/2024',produto:'Pimenta do Reino',valor:'3.99',status:'Aprovada'} ] },
+      { id: 11, nome: 'Congelados Express', categoria: 'Congelados', status: 'ativo', ultimo_contato: '29/05/2024', historico: [ {data:'29/05/2024',produto:'Ervilha Congelada',valor:'4.99',status:'Pendente'} ] },
+      { id: 12, nome: 'Ovos Caipira', categoria: 'Ovos', status: 'ativo', ultimo_contato: '28/05/2024', historico: [ {data:'28/05/2024',produto:'Ovos Caipira',valor:'9.99',status:'Aprovada'} ] },
+      { id: 13, nome: 'Cereais Matinal', categoria: 'Cereais', status: 'ativo', ultimo_contato: '27/05/2024', historico: [ {data:'27/05/2024',produto:'Granola',valor:'12.99',status:'Aprovada'} ] }
+    ];
+    document.addEventListener('DOMContentLoaded', function() {
+      var tbody = document.getElementById('fornecedores-tbody');
+      fornecedoresMock.forEach(function(f) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + f.nome + '</td>' +
+          '<td>' + f.categoria + '</td>' +
+          '<td><span class="status status-' + f.status + '">' + (f.status === 'ativo' ? 'Ativo' : 'Inativo') + '</span></td>' +
+          '<td>' + f.ultimo_contato + '</td>' +
+          '<td>' +
+            '<button class="actions-btn" onclick="editarFornecedor(' + f.id + ')">Editar</button>' +
+            '<button class="actions-btn" onclick="desativarFornecedor(' + f.id + ', \' ' + f.nome + '\')">Desativar</button>' +
+            '<span class="link-detalhes" onclick="visualizarHistorico(' + f.id + ')">Histórico</span>' +
+          '</td>';
+        tbody.appendChild(tr);
+      });
+      var modal = document.getElementById('modal-historico');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) { if (e.target === modal) { fecharModalHistorico(); } });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) { closeBtn.addEventListener('click', fecharModalHistorico); }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') { fecharModalHistorico(); }
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="prototipos/lista-fornecedores.html" class="active">Fornecedores</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Gerenciamento de Fornecedores</h1>
+      <button class="btn-cadastrar" onclick="cadastrarFornecedor()">+ Cadastrar Fornecedor</button>
+    </header>
+    <main class="dashboard-section">
+      <section class="card">
+        <div class="card-title">Base de Fornecedores</div>
+        <table class="card-table" aria-label="Lista de Fornecedores">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Status</th>
+              <th>Último Contato</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="fornecedores-tbody">
+            <!-- Populado via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div id="modal-historico" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Histórico de Cotações</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
