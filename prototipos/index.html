@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Portal Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .login-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(30,40,80,0.10);
+      padding: 44px 36px 36px 36px;
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-container img {
+      width: 110px;
+      height: auto;
+      margin-bottom: 18px;
+    }
+    .login-container h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .form-input {
+      padding: 12px 14px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.08rem;
+      background: #f7f8fa;
+      color: #222;
+      transition: border 0.15s, background 0.15s;
+    }
+    .form-input:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .btn-login {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 0;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-top: 8px;
+    }
+    .btn-login:hover {
+      background: #e1a12a;
+    }
+    .login-footer {
+      margin-top: 28px;
+      font-size: 0.98rem;
+      color: #b7b9c6;
+      text-align: center;
+    }
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 22px 8px 18px 8px;
+        max-width: 98vw;
+      }
+      .login-container img {
+        width: 70px;
+      }
+      .login-container h2 {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="login-container" aria-label="Login">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      <h2>Bem-vindo ao Portal Plurix</h2>
+      <form class="login-form" action="dashboard-fornecedor.html" method="get" autocomplete="on">
+        <input type="email" name="email" class="form-input" placeholder="Seu e-mail" required aria-label="E-mail">
+        <input type="password" name="senha" class="form-input" placeholder="Sua senha" required aria-label="Senha">
+        <button type="submit" class="btn-login" aria-label="Entrar">Entrar</button>
+      </form>
+      <div class="login-footer">&copy; 2024 Plurix</div>
+    </section>
+  </main>
+</body>
+</html>
