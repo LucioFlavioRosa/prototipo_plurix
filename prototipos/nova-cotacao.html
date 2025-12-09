@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova Cotação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+    }
+    .header {
+      background: #fff;
+      width: 100%;
+      padding: 18px 10px 12px 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 18px 18px 18px;
+      margin: 24px 0;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+    input, select, textarea {
+      padding: 10px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+      margin-bottom: 2px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .btn {
+      padding: 12px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-top: 8px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      display: inline-block;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-secondary {
+      background: #1a2340;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background: #222b4a;
+    }
+    .selected-fornecedores {
+      background: #f7f8fa;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 0.98rem;
+      color: #1a2340;
+    }
+    @media (max-width: 600px) {
+      .card {
+        padding: 12px 4px 12px 4px;
+        max-width: 98vw;
+      }
+      .header {
+        padding: 12px 4px 8px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Nova Cotação</h1>
+    <a href="dashboard-fornecedor.html" class="btn btn-secondary" aria-label="Voltar para Dashboard">Voltar</a>
+  </div>
+  <div class="main-content">
+    <form class="card" autocomplete="off" aria-label="Formulário Nova Cotação" action="#" method="post" onsubmit="return false;">
+      <div class="card-title">Registrar Demanda de Compra</div>
+      <div class="form-group">
+        <label for="produto">Produto</label>
+        <input type="text" id="produto" name="produto" placeholder="Ex: Tomate Italiano" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="quantidade">Quantidade</label>
+        <input type="number" id="quantidade" name="quantidade" min="1" step="any" placeholder="Ex: 100" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="unidade">Unidade</label>
+        <select id="unidade" name="unidade" required>
+          <option value="">Selecione</option>
+          <option value="kg">Kg</option>
+          <option value="cx">Caixa</option>
+          <option value="un">Unidade</option>
+          <option value="lt">Litro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="prazo">Prazo de Entrega</label>
+        <input type="date" id="prazo" name="prazo" required>
+      </div>
+      <div class="form-group">
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" name="observacoes" rows="2" placeholder="Informações adicionais"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Fornecedores Selecionados</label>
+        <div class="selected-fornecedores" id="fornecedores-lista" aria-live="polite">Nenhum fornecedor selecionado.</div>
+        <button type="button" class="btn btn-primary" onclick="window.location.href='selecionar-fornecedores.html'" aria-label="Selecionar Fornecedores">Selecionar Fornecedores</button>
+      </div>
+      <div style="margin-top:18px; display:flex; flex-direction:row;">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='preview-mensagem-whatsapp.html'" aria-label="Revisar Mensagem">Revisar Mensagem</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
