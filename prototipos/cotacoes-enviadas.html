@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cotações Enviadas | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-cotacoes {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filtros-cotacoes label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-right: 8px;
+    }
+    .filtros-cotacoes select {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+    }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 1.02rem;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+    }
+    .history-table th, .history-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .history-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-aguardando { background: #f9b233; }
+    .status-respondida { background: #4bb543; }
+    .status-expirada { background: #e74c3c; }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .history-table th, .history-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="prototipos/cotacoes-enviadas.html" class="active">Cotações Enviadas</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Cotações Enviadas</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-cotacoes" aria-label="Filtros de Status">
+        <label for="filtro-status">Filtrar por Status:</label>
+        <select id="filtro-status" aria-label="Filtro de Status" onchange="filtrarCotacoes()">
+          <option value="todos">Todos</option>
+          <option value="aguardando">Aguardando Resposta</option>
+          <option value="respondida">Respondida</option>
+          <option value="expirada">Expirada</option>
+        </select>
+      </form>
+      <section>
+        <table class="history-table" id="tabela-cotacoes" aria-label="Tabela de Cotações Enviadas">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Produto</th>
+              <th>Fornecedor</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-status="aguardando">
+              <td>CT1001</td>
+              <td>10/06/2024</td>
+              <td>Banana Prata</td>
+              <td>Frutaria Brasil</td>
+              <td><span class="status status-aguardando">Aguardando Resposta</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1001" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="respondida">
+              <td>CT1002</td>
+              <td>09/06/2024</td>
+              <td>Alface Crespa</td>
+              <td>Hortaliças Verdes</td>
+              <td><span class="status status-respondida">Respondida</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1002" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="expirada">
+              <td>CT1003</td>
+              <td>08/06/2024</td>
+              <td>Filé de Peixe</td>
+              <td>Peixaria Mar Azul</td>
+              <td><span class="status status-expirada">Expirada</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1003" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="aguardando">
+              <td>CT1004</td>
+              <td>07/06/2024</td>
+              <td>Tomate Italiano</td>
+              <td>Fazenda Boa Terra</td>
+              <td><span class="status status-aguardando">Aguardando Resposta</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1004" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="respondida">
+              <td>CT1005</td>
+              <td>06/06/2024</td>
+              <td>Frango Resfriado</td>
+              <td>Avícola São Pedro</td>
+              <td><span class="status status-respondida">Respondida</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1005" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="expirada">
+              <td>CT1006</td>
+              <td>05/06/2024</td>
+              <td>Maçã Fuji</td>
+              <td>Fruticultura Sul</td>
+              <td><span class="status status-expirada">Expirada</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1006" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="respondida">
+              <td>CT1007</td>
+              <td>04/06/2024</td>
+              <td>Carne Bovina (Alcatra)</td>
+              <td>Casa das Carnes</td>
+              <td><span class="status status-respondida">Respondida</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1007" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="aguardando">
+              <td>CT1008</td>
+              <td>03/06/2024</td>
+              <td>Cenoura</td>
+              <td>Horta Feliz</td>
+              <td><span class="status status-aguardando">Aguardando Resposta</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1008" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="expirada">
+              <td>CT1009</td>
+              <td>02/06/2024</td>
+              <td>Pimentão Verde</td>
+              <td>Fazenda Primavera</td>
+              <td><span class="status status-expirada">Expirada</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1009" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+            <tr data-status="respondida">
+              <td>CT1010</td>
+              <td>01/06/2024</td>
+              <td>Batata Inglesa</td>
+              <td>Distribuidora Raiz</td>
+              <td><span class="status status-respondida">Respondida</span></td>
+              <td><a href="detalhes-cotacao-comprador.html?id=CT1010" class="link-detalhes">Ver Detalhes</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <script>
+    function filtrarCotacoes() {
+      var filtro = document.getElementById('filtro-status').value;
+      var linhas = document.querySelectorAll('#tabela-cotacoes tbody tr');
+      linhas.forEach(function(tr) {
+        if (filtro === 'todos' || tr.getAttribute('data-status') === filtro) {
+          tr.style.display = '';
+        } else {
+          tr.style.display = 'none';
+        }
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      filtrarCotacoes();
+    });
+  </script>
+</body>
+</html>
