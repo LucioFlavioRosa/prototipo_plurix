@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preview da Mensagem WhatsApp | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-preview {
+      background: #fff;
+      max-width: 600px;
+      width: 100%;
+      padding: 32px 28px 26px 28px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-body {
+      font-size: 1.08rem;
+      line-height: 1.6;
+      color: #222;
+      background: #f7f8fa;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+    .btn-enviar {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+    }
+    .btn-enviar:hover {
+      background: #399a36;
+    }
+    .btn-voltar {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+    }
+    .btn-voltar:hover {
+      background: #b93a2e;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .modal-preview {
+        width: 98%;
+        padding: 14px 2px 12px 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Preview da Mensagem WhatsApp</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="modal-preview" role="dialog" aria-modal="true" aria-label="Preview da Mensagem WhatsApp">
+        <div class="modal-header">
+          <span class="modal-title">Mensagem para Envio</span>
+        </div>
+        <div class="modal-body">
+          <strong>Solicitação de Cotação</strong>
+          <br><br>
+          Prezado fornecedor,
+          <br>
+          Solicitamos cotação para os seguintes produtos:
+          <br><br>
+          - SKU: 7891991000849 | Skol Lata 350ml | Qtde: 500
+          <br>
+          - SKU: 7891149100015 | Brahma Long Neck 355ml | Qtde: 300
+          <br>
+          - SKU: 7891991010848 | Guaraná Antarctica 2L | Qtde: 200
+          <br>
+          <br>
+          Por favor, envie sua proposta até 15/06/2024.
+          <br>
+          Atenciosamente,
+          <br>
+          Equipe Plurix
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-voltar" aria-label="Voltar" onclick="window.location.href='selecionar-fornecedores.html'">Voltar</button>
+          <button type="button" class="btn-enviar" aria-label="Enviar Cotação" onclick="window.location.href='cotacoes-enviadas.html'">Enviar Cotação</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
