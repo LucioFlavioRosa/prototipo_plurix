@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aprovação em Lote de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-avancados {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 28px 18px 28px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 36px;
+      align-items: flex-end;
+    }
+    .filtros-avancados label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1.02rem;
+    }
+    .filtros-avancados input, .filtros-avancados select {
+      padding: 7px 10px;
+      border: 1px solid #b7b9c6;
+      border-radius: 5px;
+      font-size: 1.01rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+      min-width: 120px;
+    }
+    .filtros-avancados button {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 12px;
+    }
+    .filtros-avancados button:hover {
+      background: #e1a12a;
+    }
+    .tabela-cotacoes {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .tabela-cotacoes th, .tabela-cotacoes td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tabela-cotacoes th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .tabela-cotacoes tr:last-child td {
+      border-bottom: none;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .btn-aprovar-lote {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 32px;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+      display: inline-block;
+    }
+    .btn-aprovar-lote:disabled {
+      background: #b7b9c6;
+      cursor: not-allowed;
+    }
+    .btn-aprovar-lote:hover:not(:disabled) {
+      background: #399a36;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-content {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-close:hover {
+      color: #e74c3c;
+    }
+    .modal-body {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    .modal-body .cotacoes-list {
+      margin-bottom: 18px;
+    }
+    .modal-body .cotacoes-list ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .modal-body .cotacoes-list li {
+      margin-bottom: 8px;
+      font-size: 1.01rem;
+    }
+    .modal-body textarea {
+      width: 100%;
+      min-height: 60px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      padding: 8px 10px;
+      font-size: 1.05rem;
+      margin-top: 10px;
+      margin-bottom: 12px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    .modal-body .btn-confirmar-aprovacao {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+      display: inline-block;
+    }
+    .modal-body .btn-confirmar-aprovacao:disabled {
+      background: #b7b9c6;
+      cursor: not-allowed;
+    }
+    .modal-body .btn-confirmar-aprovacao:hover:not(:disabled) {
+      background: #399a36;
+    }
+    .modal-body .btn-cancelar-aprovacao {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: 8px;
+      margin-right: 8px;
+      box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+      display: inline-block;
+    }
+    .modal-body .btn-cancelar-aprovacao:hover {
+      background: #b93a2e;
+    }
+    .modal-body .aprovacao-resumo {
+      background: #f7f8fa;
+      border-left: 4px solid #4bb543;
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 18px;
+      color: #1a2340;
+      font-size: 1.07rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+        max-height: 90vh;
+      }
+      .modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <script>
+    // Mock de cotações pendentes
+    const cotacoesMock = [
+      { id: 'CT20240601', produto: 'Leite UHT Integral 1L', fornecedor: 'Laticínios Aurora', valor: 3.29, status: 'Pendente', categoria: 'Laticínios', coligada: 'Aurora SC' },
+      { id: 'CT20240602', produto: 'Queijo Mussarela 5kg', fornecedor: 'Queijos São João', valor: 129.90, status: 'Pendente', categoria: 'Laticínios', coligada: 'Aurora SC' },
+      { id: 'CT20240603', produto: 'Leite UHT Desnatado 1L', fornecedor: 'Laticínios Piracanjuba', valor: 3.19, status: 'Pendente', categoria: 'Laticínios', coligada: 'Piracanjuba GO' },
+      { id: 'CT20240604', produto: 'Creme de Leite 200g', fornecedor: 'Nestlé', valor: 2.89, status: 'Pendente', categoria: 'Laticínios', coligada: 'Nestlé SP' },
+      { id: 'CT20240605', produto: 'Leite UHT Integral 1L', fornecedor: 'Laticínios Piracanjuba', valor: 3.25, status: 'Pendente', categoria: 'Laticínios', coligada: 'Piracanjuba GO' },
+      { id: 'CT20240606', produto: 'Iogurte Natural 170g', fornecedor: 'Danone', valor: 1.99, status: 'Pendente', categoria: 'Iogurtes', coligada: 'Danone SP' },
+      { id: 'CT20240607', produto: 'Leite UHT Integral 1L', fornecedor: 'Laticínios Tirol', valor: 3.15, status: 'Pendente', categoria: 'Laticínios', coligada: 'Tirol SC' },
+      { id: 'CT20240608', produto: 'Iogurte Natural 170g', fornecedor: 'Nestlé', valor: 2.09, status: 'Pendente', categoria: 'Iogurtes', coligada: 'Nestlé SP' },
+      { id: 'CT20240609', produto: 'Queijo Prato 5kg', fornecedor: 'Queijos São João', valor: 139.90, status: 'Pendente', categoria: 'Laticínios', coligada: 'Aurora SC' },
+      { id: 'CT20240610', produto: 'Leite UHT Integral 1L', fornecedor: 'Laticínios Aurora', valor: 3.27, status: 'Pendente', categoria: 'Laticínios', coligada: 'Aurora SC' }
+    ];
+    let cotacoesFiltradas = [...cotacoesMock];
+    function renderTabelaCotacoes() {
+      const tbody = document.getElementById('tbody-cotacoes');
+      tbody.innerHTML = '';
+      cotacoesFiltradas.forEach((c, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="checkbox" class="checkbox-cotacao" data-idx="${idx}" aria-label="Selecionar cotação ${c.id}"></td>
+          <td>${c.id}</td>
+          <td>${c.produto}</td>
+          <td>${c.fornecedor}</td>
+          <td>R$ ${c.valor.toFixed(2)}</td>
+          <td><span class="status status-pendente">${c.status}</span></td>
+          <td>${c.categoria}</td>
+          <td>${c.coligada}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      atualizarBotaoAprovar();
+    }
+    function filtrarCotacoes() {
+      const valorMin = parseFloat(document.getElementById('filtro-valor-min').value) || 0;
+      const valorMax = parseFloat(document.getElementById('filtro-valor-max').value) || 999999;
+      const categoria = document.getElementById('filtro-categoria').value;
+      const coligada = document.getElementById('filtro-coligada').value;
+      const fornecedor = document.getElementById('filtro-fornecedor').value;
+      cotacoesFiltradas = cotacoesMock.filter(c => {
+        return c.valor >= valorMin && c.valor <= valorMax &&
+          (categoria === '' || c.categoria === categoria) &&
+          (coligada === '' || c.coligada === coligada) &&
+          (fornecedor === '' || c.fornecedor === fornecedor);
+      });
+      renderTabelaCotacoes();
+    }
+    function atualizarBotaoAprovar() {
+      const checkboxes = document.querySelectorAll('.checkbox-cotacao');
+      const btn = document.getElementById('btn-aprovar-lote');
+      let algumSelecionado = false;
+      checkboxes.forEach(chk => { if (chk.checked) algumSelecionado = true; });
+      btn.disabled = !algumSelecionado;
+    }
+    document.addEventListener('change', function(e) {
+      if (e.target.classList.contains('checkbox-cotacao')) {
+        atualizarBotaoAprovar();
+      }
+    });
+    function abrirModalAprovacaoLote() {
+      const checkboxes = document.querySelectorAll('.checkbox-cotacao');
+      const selecionadas = [];
+      checkboxes.forEach((chk, idx) => {
+        if (chk.checked) selecionadas.push(cotacoesFiltradas[idx]);
+      });
+      if (selecionadas.length === 0) {
+        alert('Selecione ao menos uma cotação para aprovar.');
+        return;
+      }
+      const modal = document.getElementById('modal-aprovacao-lote');
+      const modalBody = modal.querySelector('.modal-body');
+      let html = '<div class="cotacoes-list"><strong>Cotações Selecionadas:</strong><ul>';
+      selecionadas.forEach(c => {
+        html += `<li><strong>${c.id}</strong> - ${c.produto} | ${c.fornecedor} | R$ ${c.valor.toFixed(2)} | ${c.categoria} | ${c.coligada}</li>`;
+      });
+      html += '</ul></div>';
+      html += '<label for="justificativa-aprovacao">Justificativa única para aprovação:</label>';
+      html += '<textarea id="justificativa-aprovacao" aria-label="Justificativa para aprovação" placeholder="Descreva o motivo da aprovação em lote..." required></textarea>';
+      html += `<button class="btn-confirmar-aprovacao" onclick="confirmarAprovacaoLote()">Confirmar Aprovação</button>`;
+      html += `<button class="btn-cancelar-aprovacao" onclick="fecharModalAprovacaoLote()">Cancelar</button>`;
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        modal.querySelector('.modal-content').focus();
+      }, 100);
+    }
+    function fecharModalAprovacaoLote() {
+      const modal = document.getElementById('modal-aprovacao-lote');
+      modal.classList.add('closing');
+      setTimeout(function() {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+      }, 250);
+    }
+    function confirmarAprovacaoLote() {
+      const justificativa = document.getElementById('justificativa-aprovacao').value.trim();
+      if (!justificativa) {
+        alert('Por favor, preencha a justificativa para aprovação.');
+        return;
+      }
+      const checkboxes = document.querySelectorAll('.checkbox-cotacao');
+      const selecionadas = [];
+      checkboxes.forEach((chk, idx) => {
+        if (chk.checked) selecionadas.push(cotacoesFiltradas[idx]);
+      });
+      // Simular aprovação: exibir resumo
+      const modal = document.getElementById('modal-aprovacao-lote');
+      const modalBody = modal.querySelector('.modal-body');
+      let html = '<div class="aprovacao-resumo">';
+      html += `<strong>${selecionadas.length} cotações aprovadas com sucesso!</strong><br><br>`;
+      html += '<ul>';
+      selecionadas.forEach(c => {
+        html += `<li>${c.id} - ${c.produto} (${c.fornecedor})</li>`;
+      });
+      html += '</ul>';
+      html += `<br><strong>Justificativa registrada:</strong><br>${justificativa}`;
+      html += '</div>';
+      html += `<button class="btn-cancelar-aprovacao" onclick="fecharModalAprovacaoLote()">Fechar</button>`;
+      modalBody.innerHTML = html;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Preencher filtros
+      const categorias = [...new Set(cotacoesMock.map(c => c.categoria))];
+      const coligadas = [...new Set(cotacoesMock.map(c => c.coligada))];
+      const fornecedores = [...new Set(cotacoesMock.map(c => c.fornecedor))];
+      const selCat = document.getElementById('filtro-categoria');
+      categorias.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        selCat.appendChild(opt);
+      });
+      const selCol = document.getElementById('filtro-coligada');
+      coligadas.forEach(col => {
+        const opt = document.createElement('option');
+        opt.value = col;
+        opt.textContent = col;
+        selCol.appendChild(opt);
+      });
+      const selForn = document.getElementById('filtro-fornecedor');
+      fornecedores.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        selForn.appendChild(opt);
+      });
+      renderTabelaCotacoes();
+      document.getElementById('btn-filtrar').addEventListener('click', filtrarCotacoes);
+      document.getElementById('btn-aprovar-lote').addEventListener('click', abrirModalAprovacaoLote);
+      // Modal esc/fechar
+      const modal = document.getElementById('modal-aprovacao-lote');
+      modal.addEventListener('mousedown', function(e) {
+        if (e.target === modal) fecharModalAprovacaoLote();
+      });
+      const closeBtn = modal.querySelector('.modal-close');
+      if (closeBtn) closeBtn.addEventListener('click', fecharModalAprovacaoLote);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fecharModalAprovacaoLote();
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="aprovacao-lote.html" class="active">Aprovação em Lote</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Aprovação em Lote de Cotações</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-avancados" onsubmit="filtrarCotacoes();return false;" aria-label="Filtros avançados de cotações">
+        <div>
+          <label for="filtro-valor-min">Valor mínimo (R$)</label>
+          <input type="number" id="filtro-valor-min" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div>
+          <label for="filtro-valor-max">Valor máximo (R$)</label>
+          <input type="number" id="filtro-valor-max" min="0" step="0.01" placeholder="9999.99">
+        </div>
+        <div>
+          <label for="filtro-categoria">Categoria</label>
+          <select id="filtro-categoria">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-coligada">Coligada</label>
+          <select id="filtro-coligada">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-fornecedor">Fornecedor</label>
+          <select id="filtro-fornecedor">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" id="btn-filtrar">Filtrar</button>
+        </div>
+      </form>
+      <section>
+        <table class="tabela-cotacoes" aria-label="Tabela de cotações pendentes">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>Produto</th>
+              <th>Fornecedor</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Categoria</th>
+              <th>Coligada</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-cotacoes">
+            <!-- Linhas geradas via JS -->
+          </tbody>
+        </table>
+        <button id="btn-aprovar-lote" class="btn-aprovar-lote" disabled>Aprovar Selecionadas</button>
+      </section>
+    </main>
+  </div>
+  <div id="modal-aprovacao-lote" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Confirmação de Aprovação em Lote</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
