@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise de Performance de Compradores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-upload {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .cta-upload:hover {
+      background: #e1a12a;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .kpi-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 28px;
+      margin-bottom: 38px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 120px;
+    }
+    .kpi-label {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #f9b233;
+      margin-bottom: 4px;
+    }
+    .kpi-desc {
+      font-size: 0.98rem;
+      color: #555;
+    }
+    .filtros {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filtros label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-right: 8px;
+      font-size: 1.02rem;
+    }
+    .filtros select, .filtros input[type="month"] {
+      padding: 7px 10px;
+      border-radius: 5px;
+      border: 1px solid #b7b9c6;
+      font-size: 1.02rem;
+      background: #fff;
+      color: #222;
+    }
+    .ranking-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 28px;
+    }
+    .ranking-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 16px;
+    }
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .ranking-table th, .ranking-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .ranking-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .ranking-table tr:last-child td {
+      border-bottom: none;
+    }
+    .btn-download-excel {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      display: inline-block;
+    }
+    .btn-download-excel:hover {
+      background: #e1a12a;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .kpi-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .ranking-card {
+        padding: 18px 6px 14px 6px;
+      }
+      .ranking-table th, .ranking-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    // Dados mockados de compradores e cotações
+    const compradores = [
+      {
+        nome: 'Ana Paula Souza',
+        coligada: 'Supermercado Alpha',
+        cotacoes_realizadas: 22,
+        melhores_ofertas: 17,
+        economia_gerada: 14500.50,
+        tempo_medio_fechamento: 2.4
+      },
+      {
+        nome: 'Carlos Eduardo Lima',
+        coligada: 'Supermercado Beta',
+        cotacoes_realizadas: 18,
+        melhores_ofertas: 11,
+        economia_gerada: 9800.00,
+        tempo_medio_fechamento: 3.1
+      },
+      {
+        nome: 'Juliana Martins',
+        coligada: 'Supermercado Alpha',
+        cotacoes_realizadas: 15,
+        melhores_ofertas: 12,
+        economia_gerada: 8700.25,
+        tempo_medio_fechamento: 2.9
+      },
+      {
+        nome: 'Roberto Silva',
+        coligada: 'Supermercado Gamma',
+        cotacoes_realizadas: 10,
+        melhores_ofertas: 7,
+        economia_gerada: 4300.00,
+        tempo_medio_fechamento: 4.2
+      }
+    ];
+    const cotacoes = [
+      {
+        comprador: 'Ana Paula Souza',
+        coligada: 'Supermercado Alpha',
+        data: '2024-06-10',
+        ofertas: [3.99, 4.29, 4.15],
+        melhor_oferta: 3.99,
+        tempo_resposta: 1.8
+      },
+      {
+        comprador: 'Ana Paula Souza',
+        coligada: 'Supermercado Alpha',
+        data: '2024-06-08',
+        ofertas: [7.99, 8.49, 7.89],
+        melhor_oferta: 7.89,
+        tempo_resposta: 2.1
+      },
+      {
+        comprador: 'Carlos Eduardo Lima',
+        coligada: 'Supermercado Beta',
+        data: '2024-06-07',
+        ofertas: [5.49, 5.99, 5.39],
+        melhor_oferta: 5.39,
+        tempo_resposta: 2.7
+      },
+      {
+        comprador: 'Juliana Martins',
+        coligada: 'Supermercado Alpha',
+        data: '2024-06-06',
+        ofertas: [3.49, 3.79, 3.59],
+        melhor_oferta: 3.49,
+        tempo_resposta: 2.2
+      },
+      {
+        comprador: 'Roberto Silva',
+        coligada: 'Supermercado Gamma',
+        data: '2024-06-05',
+        ofertas: [6.99, 7.49, 6.89],
+        melhor_oferta: 6.89,
+        tempo_resposta: 3.9
+      },
+      {
+        comprador: 'Ana Paula Souza',
+        coligada: 'Supermercado Alpha',
+        data: '2024-05-28',
+        ofertas: [8.49, 8.99, 8.39],
+        melhor_oferta: 8.39,
+        tempo_resposta: 2.6
+      },
+      {
+        comprador: 'Carlos Eduardo Lima',
+        coligada: 'Supermercado Beta',
+        data: '2024-05-27',
+        ofertas: [3.89, 4.19, 3.79],
+        melhor_oferta: 3.79,
+        tempo_resposta: 3.2
+      }
+    ];
+    // Filtros
+    let filtroPeriodo = '';
+    let filtroColigada = '';
+    function filtrarCotacoes() {
+      let filtradas = cotacoes;
+      if (filtroPeriodo) {
+        filtradas = filtradas.filter(c => c.data.startsWith(filtroPeriodo));
+      }
+      if (filtroColigada && filtroColigada !== 'Todas') {
+        filtradas = filtradas.filter(c => c.coligada === filtroColigada);
+      }
+      return filtradas;
+    }
+    function calcularKPIs() {
+      const cotacoesFiltradas = filtrarCotacoes();
+      const totalCotacoes = cotacoesFiltradas.length;
+      // Taxa de aproveitamento: % de cotações onde melhor oferta foi escolhida
+      let melhoresEscolhas = 0;
+      cotacoesFiltradas.forEach(c => {
+        if (c.melhor_oferta === Math.min(...c.ofertas)) {
+          melhoresEscolhas++;
+        }
+      });
+      const taxaAproveitamento = totalCotacoes ? ((melhoresEscolhas / totalCotacoes) * 100).toFixed(1) : '0.0';
+      // Tempo médio de resposta
+      const tempoMedioResposta = totalCotacoes ? (
+        cotacoesFiltradas.reduce((acc, c) => acc + c.tempo_resposta, 0) / totalCotacoes
+      ).toFixed(2) : '0.00';
+      // Spread médio de preços
+      const spreadMedio = totalCotacoes ? (
+        cotacoesFiltradas.reduce((acc, c) => acc + ((Math.max(...c.ofertas) - Math.min(...c.ofertas)) / Math.min(...c.ofertas) * 100), 0) / totalCotacoes
+      ).toFixed(2) : '0.00';
+      // Volume de cotações
+      const volumeCotacoes = totalCotacoes;
+      document.getElementById('kpi-aproveitamento').textContent = taxaAproveitamento + '%';
+      document.getElementById('kpi-resposta').textContent = tempoMedioResposta + ' dias';
+      document.getElementById('kpi-spread').textContent = spreadMedio + '%';
+      document.getElementById('kpi-volume').textContent = volumeCotacoes;
+    }
+    function popularRanking() {
+      const cotacoesFiltradas = filtrarCotacoes();
+      // Agrupar por comprador
+      const ranking = {};
+      cotacoesFiltradas.forEach(c => {
+        if (!ranking[c.comprador]) {
+          ranking[c.comprador] = {
+            nome: c.comprador,
+            coligada: c.coligada,
+            cotacoes_realizadas: 0,
+            melhores_ofertas: 0,
+            economia_gerada: 0,
+            tempo_medio_fechamento: 0,
+            tempos: []
+          };
+        }
+        ranking[c.comprador].cotacoes_realizadas++;
+        if (c.melhor_oferta === Math.min(...c.ofertas)) {
+          ranking[c.comprador].melhores_ofertas++;
+          ranking[c.comprador].economia_gerada += (Math.max(...c.ofertas) - c.melhor_oferta) * 100; // mock economia
+        }
+        ranking[c.comprador].tempos.push(c.tempo_resposta);
+      });
+      Object.values(ranking).forEach(r => {
+        r.tempo_medio_fechamento = r.tempos.length ? (r.tempos.reduce((a,b)=>a+b,0)/r.tempos.length).toFixed(2) : '0.00';
+      });
+      // Mock ranking: se filtro vazio, mostra todos mockados
+      let listaRanking = Object.values(ranking);
+      if (listaRanking.length === 0) {
+        listaRanking = compradores.map(c => ({
+          nome: c.nome,
+          coligada: c.coligada,
+          cotacoes_realizadas: c.cotacoes_realizadas,
+          melhores_ofertas: c.melhores_ofertas,
+          economia_gerada: c.economia_gerada,
+          tempo_medio_fechamento: c.tempo_medio_fechamento.toFixed(2)
+        }));
+      }
+      const tbody = document.getElementById('ranking-tbody');
+      tbody.innerHTML = '';
+      listaRanking.forEach(r => {
+        const taxa = r.cotacoes_realizadas ? ((r.melhores_ofertas / r.cotacoes_realizadas) * 100).toFixed(1) : '0.0';
+        tbody.innerHTML += `<tr>
+          <td>${r.nome}</td>
+          <td>${r.coligada}</td>
+          <td>${r.cotacoes_realizadas}</td>
+          <td>${taxa}%</td>
+          <td>R$ ${r.economia_gerada.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+          <td>${r.tempo_medio_fechamento} dias</td>
+        </tr>`;
+      });
+    }
+    function atualizarDashboard() {
+      calcularKPIs();
+      popularRanking();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('filtro-periodo').addEventListener('change', function(e){
+        filtroPeriodo = e.target.value;
+        atualizarDashboard();
+      });
+      document.getElementById('filtro-coligada').addEventListener('change', function(e){
+        filtroColigada = e.target.value;
+        atualizarDashboard();
+      });
+      atualizarDashboard();
+    });
+    function downloadRankingExcel() {
+      const headers = ['Nome', 'Coligada', 'Cotações Realizadas', 'Taxa de Aproveitamento (%)', 'Economia Gerada (R$)', 'Tempo Médio de Fechamento (dias)'];
+      const rows = [];
+      const trs = document.querySelectorAll('#ranking-tbody tr');
+      trs.forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        rows.push([tds[0].textContent, tds[1].textContent, tds[2].textContent, tds[3].textContent, tds[4].textContent, tds[5].textContent]);
+      });
+      const ws_data = [headers, ...rows];
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Ranking');
+      XLSX.writeFile(wb, 'ranking_compradores.xlsx');
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="analise-performance.html" class="active">Performance</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Análise de Performance de Compradores</h1>
+      <button class="cta-upload" onclick="window.location.href='upload-tabela.html'">+ Nova Tabela de Preços</button>
+    </header>
+    <main class="dashboard-section">
+      <section class="filtros" aria-label="Filtros de Pesquisa">
+        <label for="filtro-periodo">Período:</label>
+        <input type="month" id="filtro-periodo" aria-label="Filtrar por mês">
+        <label for="filtro-coligada">Coligada:</label>
+        <select id="filtro-coligada" aria-label="Filtrar por coligada">
+          <option value="Todas">Todas</option>
+          <option value="Supermercado Alpha">Supermercado Alpha</option>
+          <option value="Supermercado Beta">Supermercado Beta</option>
+          <option value="Supermercado Gamma">Supermercado Gamma</option>
+        </select>
+      </section>
+      <section class="kpi-cards" aria-label="Painel de KPIs">
+        <div class="kpi-card">
+          <div class="kpi-label">Taxa de Aproveitamento de Melhores Cotações</div>
+          <div class="kpi-value" id="kpi-aproveitamento">0.0%</div>
+          <div class="kpi-desc">% de cotações em que a melhor oferta foi escolhida</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tempo Médio de Resposta de Fornecedores</div>
+          <div class="kpi-value" id="kpi-resposta">0.00 dias</div>
+          <div class="kpi-desc">Média de dias para resposta dos fornecedores</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Spread Médio de Preços</div>
+          <div class="kpi-value" id="kpi-spread">0.00%</div>
+          <div class="kpi-desc">Diferença percentual entre maior e menor oferta</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Volume de Cotações por Período</div>
+          <div class="kpi-value" id="kpi-volume">0</div>
+          <div class="kpi-desc">Total de cotações realizadas no período</div>
+        </div>
+      </section>
+      <section class="ranking-card" aria-label="Ranking de Compradores">
+        <div class="ranking-title">Ranking de Compradores</div>
+        <table class="ranking-table" aria-label="Tabela de Ranking">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Coligada</th>
+              <th>Cotações Realizadas</th>
+              <th>Taxa de Aproveitamento</th>
+              <th>Economia Gerada (R$)</th>
+              <th>Tempo Médio de Fechamento</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-tbody">
+            <!-- Populado via JS -->
+          </tbody>
+        </table>
+        <button class="btn-download-excel" onclick="downloadRankingExcel()">Exportar Ranking (Excel)</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
