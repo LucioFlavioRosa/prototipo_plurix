@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuração de Alçadas de Aprovação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-upload {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .header .cta-upload:hover {
+      background: #e1a12a;
+    }
+    .alcadas-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .alcadas-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .alcadas-table th, .alcadas-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .alcadas-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .alcadas-table tr:last-child td {
+      border-bottom: none;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-edit, .btn-delete {
+      background: #fff;
+      border: 1px solid #b7b9c6;
+      color: #1a2340;
+      border-radius: 6px;
+      padding: 7px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-edit:hover {
+      background: #f7f8fa;
+      border-color: #f9b233;
+      color: #f9b233;
+    }
+    .btn-delete {
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+    .btn-delete:hover {
+      background: #fbeaea;
+      border-color: #e74c3c;
+      color: #b93a2e;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.closing {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    .modal-content {
+      background: #fff;
+      max-width: 600px;
+      width: 98%;
+      padding: 32px 24px 24px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 92vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-close:hover {
+      color: #e74c3c;
+    }
+    .modal-body label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .modal-body input, .modal-body select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #b7b9c6;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+      transition: border 0.15s, background 0.15s;
+    }
+    .modal-body input:focus, .modal-body select:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .modal-actions {
+      margin-top: 12px;
+      text-align: right;
+    }
+    .btn-modal-salvar {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background 0.18s;
+    }
+    .btn-modal-salvar:hover {
+      background: #399a36;
+    }
+    .btn-modal-cancelar {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-modal-cancelar:hover {
+      background: #b93a2e;
+    }
+    .modal-confirm {
+      background: #fff;
+      max-width: 400px;
+      width: 98%;
+      padding: 28px 20px 20px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      animation: slideIn 0.3s ease;
+      text-align: center;
+    }
+    .modal-confirm .modal-title {
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 900px) {
+      .alcadas-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .modal-content {
+        width: 99%;
+        padding: 14px 2px 12px 2px;
+        max-height: 96vh;
+      }
+      .alcadas-table th, .alcadas-table td {
+        padding: 8px 6px;
+      }
+    }
+  </style>
+  <script>
+    // Mock de matriz de alçadas
+    let alcadas = [
+      {
+        de: 0,
+        ate: 10000,
+        categoria: 'Cervejas',
+        coligada: 'Supermercado Sul',
+        nivel1: 'Gerente Categoria',
+        nivel2: 'Dir. Comercial',
+        nivel3: 'Dir. Holding',
+        nivel4: 'VP'
+      },
+      {
+        de: 10001,
+        ate: 50000,
+        categoria: 'Refrigerantes',
+        coligada: 'Supermercado Norte',
+        nivel1: 'Gerente Categoria',
+        nivel2: 'Dir. Comercial',
+        nivel3: 'Dir. Holding',
+        nivel4: 'VP'
+      },
+      {
+        de: 50001,
+        ate: 200000,
+        categoria: 'Bebidas Alcoólicas',
+        coligada: 'Cash & Carry',
+        nivel1: 'Gerente Categoria',
+        nivel2: 'Dir. Comercial',
+        nivel3: 'Dir. Holding',
+        nivel4: 'VP'
+      },
+      {
+        de: 0,
+        ate: 5000,
+        categoria: 'Águas Saborizadas',
+        coligada: 'Supermercado Sul',
+        nivel1: 'Comprador',
+        nivel2: 'Gerente Categoria',
+        nivel3: 'Dir. Comercial',
+        nivel4: 'VP'
+      }
+    ];
+    let editIndex = null;
+    function renderTable() {
+      const tbody = document.getElementById('alcadas-tbody');
+      tbody.innerHTML = '';
+      alcadas.forEach((regra, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>R$ ${regra.de.toLocaleString()}<br>a R$ ${regra.ate.toLocaleString()}</td>
+          <td>${regra.categoria}</td>
+          <td>${regra.coligada}</td>
+          <td>${regra.nivel1}</td>
+          <td>${regra.nivel2}</td>
+          <td>${regra.nivel3}</td>
+          <td>${regra.nivel4}</td>
+          <td>
+            <button class="btn-edit" aria-label="Editar" onclick="abrirModalEdicao(${idx})">Editar</button>
+            <button class="btn-delete" aria-label="Excluir" onclick="abrirModalExclusao(${idx})">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    function abrirModalAdicao() {
+      editIndex = null;
+      document.getElementById('modal-title').textContent = 'Adicionar Nova Regra';
+      document.getElementById('modal-form').reset();
+      document.getElementById('modal-de').value = '';
+      document.getElementById('modal-ate').value = '';
+      document.getElementById('modal-categoria').value = '';
+      document.getElementById('modal-coligada').value = '';
+      document.getElementById('modal-nivel1').value = '';
+      document.getElementById('modal-nivel2').value = '';
+      document.getElementById('modal-nivel3').value = '';
+      document.getElementById('modal-nivel4').value = '';
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function abrirModalEdicao(idx) {
+      editIndex = idx;
+      const regra = alcadas[idx];
+      document.getElementById('modal-title').textContent = 'Editar Regra de Alçada';
+      document.getElementById('modal-de').value = regra.de;
+      document.getElementById('modal-ate').value = regra.ate;
+      document.getElementById('modal-categoria').value = regra.categoria;
+      document.getElementById('modal-coligada').value = regra.coligada;
+      document.getElementById('modal-nivel1').value = regra.nivel1;
+      document.getElementById('modal-nivel2').value = regra.nivel2;
+      document.getElementById('modal-nivel3').value = regra.nivel3;
+      document.getElementById('modal-nivel4').value = regra.nivel4;
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function fecharModal() {
+      document.getElementById('modal').classList.add('closing');
+      setTimeout(function() {
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('modal').classList.remove('closing');
+      }, 250);
+    }
+    function salvarRegra(e) {
+      e.preventDefault();
+      const de = parseFloat(document.getElementById('modal-de').value);
+      const ate = parseFloat(document.getElementById('modal-ate').value);
+      const categoria = document.getElementById('modal-categoria').value.trim();
+      const coligada = document.getElementById('modal-coligada').value.trim();
+      const nivel1 = document.getElementById('modal-nivel1').value.trim();
+      const nivel2 = document.getElementById('modal-nivel2').value.trim();
+      const nivel3 = document.getElementById('modal-nivel3').value.trim();
+      const nivel4 = document.getElementById('modal-nivel4').value.trim();
+      if (isNaN(de) || isNaN(ate) || de < 0 || ate <= de) {
+        alert('Faixa de valor inválida. O valor "Até" deve ser maior que "De" e ambos positivos.');
+        return;
+      }
+      if (!categoria || !coligada || !nivel1 || !nivel2 || !nivel3 || !nivel4) {
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+      }
+      const novaRegra = { de, ate, categoria, coligada, nivel1, nivel2, nivel3, nivel4 };
+      if (editIndex === null) {
+        alcadas.push(novaRegra);
+        alert('Regra adicionada com sucesso!');
+      } else {
+        alcadas[editIndex] = novaRegra;
+        alert('Regra editada com sucesso!');
+      }
+      fecharModal();
+      renderTable();
+    }
+    let excluirIndex = null;
+    function abrirModalExclusao(idx) {
+      excluirIndex = idx;
+      document.getElementById('modal-exclusao').style.display = 'flex';
+    }
+    function fecharModalExclusao() {
+      document.getElementById('modal-exclusao').classList.add('closing');
+      setTimeout(function() {
+        document.getElementById('modal-exclusao').style.display = 'none';
+        document.getElementById('modal-exclusao').classList.remove('closing');
+      }, 250);
+    }
+    function confirmarExclusao() {
+      if (excluirIndex !== null) {
+        alcadas.splice(excluirIndex, 1);
+        alert('Regra excluída com sucesso!');
+        renderTable();
+      }
+      fecharModalExclusao();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTable();
+      document.getElementById('btn-adicionar').addEventListener('click', abrirModalAdicao);
+      document.getElementById('modal-close').addEventListener('click', fecharModal);
+      document.getElementById('modal-cancelar').addEventListener('click', fecharModal);
+      document.getElementById('modal-form').addEventListener('submit', salvarRegra);
+      document.getElementById('modal-exclusao-cancelar').addEventListener('click', fecharModalExclusao);
+      document.getElementById('modal-exclusao-confirmar').addEventListener('click', confirmarExclusao);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          fecharModal();
+          fecharModalExclusao();
+        }
+      });
+      document.getElementById('modal').addEventListener('mousedown', function(e) {
+        if (e.target === this) fecharModal();
+      });
+      document.getElementById('modal-exclusao').addEventListener('mousedown', function(e) {
+        if (e.target === this) fecharModalExclusao();
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="configuracao-alcadas.html" class="active">Configuração de Alçadas</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Configuração de Matriz de Alçadas</h1>
+      <button id="btn-adicionar" class="btn-primary">+ Adicionar Nova Regra</button>
+    </header>
+    <main class="alcadas-section">
+      <section>
+        <table class="alcadas-table" aria-label="Matriz de Alçadas">
+          <thead>
+            <tr>
+              <th>Faixa de Valor (De/Até)</th>
+              <th>Categoria de Produto</th>
+              <th>Coligada</th>
+              <th>Nível de Aprovação 1</th>
+              <th>Nível de Aprovação 2</th>
+              <th>Nível de Aprovação 3</th>
+              <th>Nível de Aprovação 4 (VP)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="alcadas-tbody">
+            <!-- Renderizado via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <!-- Modal Adição/Edição -->
+  <div id="modal" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <form id="modal-form" class="modal-content" autocomplete="off">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Adicionar Nova Regra</span>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="modal-de">Faixa de Valor - De (R$)</label>
+        <input type="number" id="modal-de" name="de" min="0" step="0.01" required aria-label="Valor Inicial">
+        <label for="modal-ate">Faixa de Valor - Até (R$)</label>
+        <input type="number" id="modal-ate" name="ate" min="0" step="0.01" required aria-label="Valor Final">
+        <label for="modal-categoria">Categoria de Produto</label>
+        <select id="modal-categoria" name="categoria" required aria-label="Categoria">
+          <option value="">Selecione...</option>
+          <option value="Cervejas">Cervejas</option>
+          <option value="Refrigerantes">Refrigerantes</option>
+          <option value="Bebidas Alcoólicas">Bebidas Alcoólicas</option>
+          <option value="Águas Saborizadas">Águas Saborizadas</option>
+        </select>
+        <label for="modal-coligada">Coligada</label>
+        <select id="modal-coligada" name="coligada" required aria-label="Coligada">
+          <option value="">Selecione...</option>
+          <option value="Supermercado Sul">Supermercado Sul</option>
+          <option value="Supermercado Norte">Supermercado Norte</option>
+          <option value="Cash & Carry">Cash & Carry</option>
+        </select>
+        <label for="modal-nivel1">Nível de Aprovação 1</label>
+        <input type="text" id="modal-nivel1" name="nivel1" required aria-label="Nível de Aprovação 1">
+        <label for="modal-nivel2">Nível de Aprovação 2</label>
+        <input type="text" id="modal-nivel2" name="nivel2" required aria-label="Nível de Aprovação 2">
+        <label for="modal-nivel3">Nível de Aprovação 3</label>
+        <input type="text" id="modal-nivel3" name="nivel3" required aria-label="Nível de Aprovação 3">
+        <label for="modal-nivel4">Nível de Aprovação 4 (VP)</label>
+        <input type="text" id="modal-nivel4" name="nivel4" required aria-label="Nível de Aprovação 4">
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-modal-salvar">Salvar</button>
+        <button type="button" class="btn-modal-cancelar" id="modal-cancelar">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  <!-- Modal Exclusão -->
+  <div id="modal-exclusao" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-confirm">
+      <span class="modal-title">Confirmar Exclusão</span>
+      <div class="modal-body">
+        Tem certeza que deseja excluir esta regra de alçada?
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-salvar" id="modal-exclusao-confirmar">Sim, Excluir</button>
+        <button type="button" class="btn-modal-cancelar" id="modal-exclusao-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
