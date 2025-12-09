@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Responder Cotação - Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #f7f8fa;
+    }
+    .mobile-header {
+      width: 100%;
+      background: #1a2340;
+      padding: 18px 0 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+    }
+    .mobile-header img {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 6px;
+    }
+    .mobile-header h1 {
+      color: #fff;
+      font-size: 1.28rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+    .cotacao-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      margin: 24px 0 0 0;
+      padding: 28px 18px 22px 18px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .cotacao-card h2 {
+      font-size: 1.13rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0 0 18px 0;
+      text-align: center;
+    }
+    .form-label {
+      font-size: 1.01rem;
+      color: #1a2340;
+      font-weight: 600;
+      margin-bottom: 4px;
+      margin-top: 14px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 10px;
+      font-size: 1.08rem;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      background: #f7f8fa;
+      color: #222;
+      margin-bottom: 2px;
+      box-sizing: border-box;
+      transition: border 0.15s, background 0.15s;
+    }
+    .form-input:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .form-hint {
+      font-size: 0.97rem;
+      color: #888;
+      margin-bottom: 6px;
+      margin-top: 0;
+    }
+    .btn-enviar {
+      width: 100%;
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 16px 0;
+      font-size: 1.18rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 24px;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      transition: background 0.18s;
+      letter-spacing: 0.01em;
+    }
+    .btn-enviar:active, .btn-enviar:hover {
+      background: #e1a12a;
+    }
+    .footer-mobile {
+      width: 100%;
+      text-align: center;
+      color: #b7b9c6;
+      font-size: 0.98rem;
+      margin-top: 38px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 900px) {
+      .cotacao-card {
+        max-width: 98vw;
+        padding: 18px 6vw 18px 6vw;
+        margin: 18px 0 0 0;
+      }
+      .mobile-header {
+        padding: 14px 0 10px 0;
+      }
+      .mobile-header img {
+        width: 40px;
+        height: 40px;
+      }
+      .btn-enviar {
+        padding: 14px 0;
+        font-size: 1.08rem;
+      }
+    }
+    @media (max-width: 400px) {
+      .cotacao-card {
+        padding: 12px 2vw 12px 2vw;
+      }
+      .btn-enviar {
+        padding: 12px 0;
+        font-size: 1.01rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="mobile-header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <h1>Responder Cotação</h1>
+  </header>
+  <main class="cotacao-card" aria-label="Formulário de Resposta de Cotação">
+    <h2>Informe sua proposta</h2>
+    <form id="form-resposta-cotacao" autocomplete="off" onsubmit="enviarResposta(event)">
+      <label for="volume" class="form-label">Volume disponível (unidades ou kg)</label>
+      <input type="number" id="volume" name="volume" class="form-input" inputmode="numeric" pattern="[0-9]*" min="1" required aria-required="true" placeholder="Ex: 100">
+      <p class="form-hint">Informe o volume que pode atender nesta cotação.</p>
+      <label for="preco" class="form-label">Preço unitário (R$)</label>
+      <input type="number" id="preco" name="preco" class="form-input" inputmode="decimal" step="0.01" min="0" required aria-required="true" placeholder="Ex: 12.50">
+      <p class="form-hint">Digite o valor unitário ofertado.</p>
+      <label for="prazo" class="form-label">Prazo de entrega (dias)</label>
+      <input type="number" id="prazo" name="prazo" class="form-input" inputmode="numeric" pattern="[0-9]*" min="1" required aria-required="true" placeholder="Ex: 3">
+      <p class="form-hint">Quantos dias para entrega após confirmação?</p>
+      <button type="submit" class="btn-enviar" aria-label="Enviar resposta de cotação">Enviar Resposta</button>
+    </form>
+  </main>
+  <footer class="footer-mobile">&copy; 2024 Plurix</footer>
+  <script>
+    function enviarResposta(event) {
+      event.preventDefault();
+      // Validação extra pode ser feita aqui se necessário
+      window.location.href = 'confirmacao-resposta-fornecedor.html';
+    }
+  </script>
+</body>
+</html>
