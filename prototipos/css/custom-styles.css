@@ -1,0 +1,132 @@
+/* custom-styles.css - Ajustes finos para auditoria, KPIs e responsividade Plurix */
+
+/* Timeline de auditoria */
+.timeline-auditoria {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 28px 0;
+  padding-left: 18px;
+  border-left: 3px solid #f9b233;
+}
+.timeline-event {
+  position: relative;
+  padding-left: 16px;
+}
+.timeline-event::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background: #f9b233;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.timeline-event strong {
+  color: #1a2340;
+}
+
+/* Cards de KPIs diferenciados */
+.kpi-card {
+  background: linear-gradient(90deg, #f9b233 0%, #ffe7b3 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(249,178,51,0.09);
+  padding: 28px 22px;
+  color: #1a2340;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 220px;
+  margin-bottom: 18px;
+}
+.kpi-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.kpi-sub {
+  font-size: 0.98rem;
+  color: #555;
+}
+
+/* Badges de status de SLA */
+.badge-sla {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #fff;
+  background: #4bb543;
+  margin-right: 6px;
+}
+.badge-sla.atrasado {
+  background: #e74c3c;
+}
+.badge-sla.pendente {
+  background: #f9b233;
+}
+
+/* Destaque visual para cotações atrasadas */
+.cotacao-atrasada {
+  border: 2px solid #e74c3c;
+  background: #fff6f6;
+  box-shadow: 0 0 0 2px #e74c3c33;
+}
+
+/* Estilos para gráficos (bordas, legendas) */
+.grafico-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+  padding: 24px 18px;
+  margin-bottom: 24px;
+}
+.grafico-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+.grafico-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.98rem;
+}
+.grafico-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Ajustes de responsividade para tablets e mobile */
+@media (max-width: 900px) {
+  .kpi-card {
+    padding: 18px 8px;
+    min-width: 140px;
+  }
+  .grafico-container {
+    padding: 12px 4px;
+  }
+  .timeline-auditoria {
+    padding-left: 8px;
+    gap: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .kpi-card {
+    font-size: 0.92rem;
+    padding: 10px 2px;
+  }
+  .grafico-container {
+    padding: 6px 2px;
+  }
+}
