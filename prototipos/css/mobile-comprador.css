@@ -1,0 +1,171 @@
+/* mobile-comprador.css - Adaptações Mobile-First para páginas do comprador */
+
+@media (max-width: 900px) {
+  html, body {
+    font-size: 16px;
+    background: #f7f8fa;
+    color: #222;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+  }
+  .sidebar {
+    width: 70px !important;
+    min-width: 70px;
+    max-width: 70px;
+    padding-top: 12px;
+    transition: width 0.3s;
+    overflow: hidden;
+    box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+  }
+  .sidebar .logo img {
+    width: 44px !important;
+    height: auto;
+    margin-bottom: 0;
+  }
+  .sidebar nav a {
+    padding: 10px 10px;
+    font-size: 0.98rem;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar .bottom {
+    display: none;
+  }
+  .main-content {
+    padding: 0;
+    min-width: 0;
+  }
+  .header {
+    padding: 18px 10px 12px 10px !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .header h1 {
+    font-size: 1.25rem !important;
+    margin-bottom: 6px;
+  }
+  .dashboard-section {
+    padding: 18px 4px 18px 4px !important;
+  }
+  .dashboard-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+  }
+  .card {
+    min-width: 0;
+    width: 100% !important;
+    padding: 18px 8px 14px 8px !important;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .card-title {
+    font-size: 1.08rem !important;
+    margin-bottom: 8px;
+  }
+  .card-table, .history-table, .tabela-editavel, .editor-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.98rem !important;
+    border-radius: 6px;
+  }
+  .card-table th, .card-table td,
+  .history-table th, .history-table td,
+  .tabela-editavel th, .tabela-editavel td,
+  .editor-table th, .editor-table td {
+    padding: 7px 6px !important;
+    min-width: 90px;
+    box-sizing: border-box;
+    font-size: 0.97rem;
+  }
+  .modal-content, .modal-editor-content {
+    width: 98% !important;
+    padding: 12px 2px 10px 2px !important;
+    max-height: 96vh !important;
+    border-radius: 10px !important;
+  }
+  .modal-header, .modal-editor-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px;
+  }
+  .modal-title, .modal-editor-title {
+    font-size: 1.08rem !important;
+    margin-bottom: 4px;
+  }
+  .nivel-item {
+    margin-right: 8px !important;
+    font-size: 0.95rem !important;
+  }
+  .motivo-item {
+    padding: 10px !important;
+    font-size: 0.95rem !important;
+  }
+  .btn-salvar-edicao, .btn-cancelar-edicao, .btn-download-excel, .cta-upload {
+    font-size: 1rem !important;
+    padding: 10px 16px !important;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    display: none !important;
+  }
+  .main-content {
+    width: 100vw !important;
+    min-width: 0;
+    padding: 0 !important;
+  }
+  .header {
+    padding: 10px 2px 6px 2px !important;
+    font-size: 1rem;
+  }
+  .dashboard-section {
+    padding: 8px 2px 8px 2px !important;
+  }
+  .dashboard-cards {
+    gap: 10px !important;
+  }
+  .card {
+    padding: 10px 2px 8px 2px !important;
+    font-size: 0.97rem;
+  }
+  .card-title {
+    font-size: 1rem !important;
+  }
+  .modal-content, .modal-editor-content {
+    width: 100vw !important;
+    padding: 6px 0 6px 0 !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* Scrollbar estilizada para tabelas mobile */
+.card-table::-webkit-scrollbar,
+.history-table::-webkit-scrollbar,
+.tabela-editavel::-webkit-scrollbar,
+.editor-table::-webkit-scrollbar {
+  height: 6px;
+  background: #e8eaf0;
+  border-radius: 4px;
+}
+.card-table::-webkit-scrollbar-thumb,
+.history-table::-webkit-scrollbar-thumb,
+.tabela-editavel::-webkit-scrollbar-thumb,
+.editor-table::-webkit-scrollbar-thumb {
+  background: #b7b9c6;
+  border-radius: 4px;
+}
