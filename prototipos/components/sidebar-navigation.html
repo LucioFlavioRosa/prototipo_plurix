@@ -1,0 +1,99 @@
+<!-- Componente Sidebar Navigation Reutilizável -->
+<!--
+  Uso:
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+      </div>
+      <nav>
+        <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+        <a href="upload-tabela.html">Nova Tabela</a>
+        <a href="historico.html">Histórico</a>
+        <a href="index.html" onclick="sair()">Sair</a>
+      </nav>
+      <div class="bottom">&copy; 2024 Plurix</div>
+    </aside>
+  - O link ativo deve receber a classe 'active'.
+  - Os links podem ser adaptados conforme contexto do usuário (comprador/fornecedor).
+-->
+<aside class="sidebar">
+  <div class="logo">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+  </div>
+  <nav>
+    <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+    <a href="upload-tabela.html">Nova Tabela</a>
+    <a href="historico.html">Histórico</a>
+    <a href="index.html" onclick="sair()">Sair</a>
+  </nav>
+  <div class="bottom">&copy; 2024 Plurix</div>
+</aside>
+<script>
+  function sair() {
+    if (confirm('Deseja realmente sair?')) {
+      window.location.href = 'index.html';
+    }
+  }
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+  .sidebar {
+    width: 260px;
+    background: #1a2340;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding-top: 32px;
+    box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+    position: relative;
+    z-index: 2;
+  }
+  .sidebar .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .sidebar .logo img {
+    width: 120px;
+    height: auto;
+  }
+  .sidebar nav {
+    flex: 1;
+  }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    padding: 14px 32px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.08rem;
+    border-left: 4px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    margin-bottom: 2px;
+  }
+  .sidebar nav a.active, .sidebar nav a:hover {
+    background: #222b4a;
+    border-left: 4px solid #f9b233;
+    color: #f9b233;
+  }
+  .sidebar .bottom {
+    margin-bottom: 32px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #b7b9c6;
+  }
+  @media (max-width: 900px) {
+    .sidebar {
+      width: 70px;
+      padding-top: 12px;
+    }
+    .sidebar .logo img {
+      width: 44px;
+    }
+    .sidebar nav a {
+      padding: 10px 10px;
+      font-size: 0.98rem;
+    }
+  }
+</style>
