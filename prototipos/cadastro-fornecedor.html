@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-voltar {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 16px;
+    }
+    .header .cta-voltar:hover {
+      background: #e1a12a;
+    }
+    .cadastro-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0 0 0;
+      background: #f7f8fa;
+    }
+    .cadastro-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-width: 650px;
+      width: 100%;
+      padding: 36px 32px 28px 32px;
+      margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+    }
+    .cadastro-card-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .cadastro-form label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 1.08rem;
+    }
+    .cadastro-form input,
+    .cadastro-form select,
+    .cadastro-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      background: #f7f8fa;
+      color: #222;
+      margin-bottom: 18px;
+      box-sizing: border-box;
+      transition: border 0.15s, background 0.15s;
+    }
+    .cadastro-form input:focus,
+    .cadastro-form select:focus,
+    .cadastro-form textarea:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .cadastro-form .form-row {
+      display: flex;
+      gap: 18px;
+    }
+    .cadastro-form .form-row > div {
+      flex: 1;
+    }
+    .btn-salvar-cadastro {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 32px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+      display: inline-block;
+    }
+    .btn-salvar-cadastro:hover {
+      background: #399a36;
+    }
+    .btn-cancelar-cadastro {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 32px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-left: 12px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+      display: inline-block;
+    }
+    .btn-cancelar-cadastro:hover {
+      background: #b93a2e;
+    }
+    @media (max-width: 900px) {
+      .cadastro-section {
+        padding: 24px 0 0 0;
+      }
+      .cadastro-card {
+        padding: 18px 8px 16px 8px;
+        max-width: 99vw;
+      }
+    }
+  </style>
+  <script>
+    function voltarDashboard() {
+      window.location.href = '../dashboard-fornecedor.html';
+    }
+    function cancelarCadastro() {
+      if (confirm('Deseja cancelar o cadastro?')) {
+        voltarDashboard();
+      }
+    }
+    function salvarCadastroFornecedor(event) {
+      event.preventDefault();
+      // Simulação de validação básica
+      var form = document.getElementById('form-cadastro-fornecedor');
+      var nome = form.nome.value.trim();
+      var whatsapp = form.whatsapp.value.trim();
+      var categorias = form.categorias.selectedOptions;
+      var doc = form.documentacao.value.trim();
+      if (!nome || !whatsapp || categorias.length === 0 || !doc) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+      alert('Cadastro realizado com sucesso!');
+      voltarDashboard();
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-fornecedor.html">Dashboard</a>
+      <a href="../upload-tabela.html">Nova Tabela</a>
+      <a href="../historico.html">Histórico</a>
+      <a href="../index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Cadastro de Fornecedor</h1>
+      <button class="cta-voltar" onclick="voltarDashboard()">Voltar ao Dashboard</button>
+    </header>
+    <main class="cadastro-section">
+      <section class="cadastro-card" aria-label="Formulário de Cadastro de Fornecedor">
+        <div class="cadastro-card-title">Preencha os dados do novo fornecedor</div>
+        <form id="form-cadastro-fornecedor" class="cadastro-form" autocomplete="off" onsubmit="salvarCadastroFornecedor(event)">
+          <label for="nome">Nome do Fornecedor *</label>
+          <input type="text" id="nome" name="nome" required aria-required="true" placeholder="Ex: Ambev S.A.">
+
+          <label for="whatsapp">WhatsApp Business *</label>
+          <input type="tel" id="whatsapp" name="whatsapp" required aria-required="true" pattern="\d{2}\s\d{5}-\d{4}" placeholder="Ex: 11 91234-5678">
+
+          <label for="categorias">Categorias de Produtos *</label>
+          <select id="categorias" name="categorias" multiple required aria-required="true" size="4">
+            <option value="cervejas">Cervejas</option>
+            <option value="refrigerantes">Refrigerantes</option>
+            <option value="bebidas-alcoolicas">Bebidas Alcoólicas</option>
+            <option value="aguas">Águas Saborizadas</option>
+            <option value="outros">Outros</option>
+          </select>
+
+          <label for="documentacao">Documentação (CNPJ, Inscrição Estadual, etc) *</label>
+          <textarea id="documentacao" name="documentacao" required aria-required="true" rows="3" placeholder="Informe os documentos do fornecedor"></textarea>
+
+          <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <button type="submit" class="btn-salvar-cadastro">Salvar Cadastro</button>
+            <button type="button" class="btn-cancelar-cadastro" onclick="cancelarCadastro()">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
