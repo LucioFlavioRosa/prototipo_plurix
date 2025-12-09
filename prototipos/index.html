@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bem-vindo | Sistema de Gestão de Cotações</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .welcome-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(30,40,80,0.09);
+      padding: 40px 32px 32px 32px;
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 48px;
+    }
+    .welcome-logo {
+      width: 110px;
+      height: auto;
+      margin-bottom: 18px;
+    }
+    .welcome-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .welcome-desc {
+      font-size: 1.08rem;
+      color: #555;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .welcome-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      transition: background 0.18s;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-secondary {
+      background: #1a2340;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.09);
+      transition: background 0.18s;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .btn-secondary:hover {
+      background: #222b4a;
+    }
+    .main-footer {
+      width: 100%;
+      text-align: center;
+      color: #b7b9c6;
+      font-size: 0.98rem;
+      margin-top: 38px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 500px) {
+      .welcome-container {
+        padding: 24px 8px 20px 8px;
+        max-width: 98vw;
+      }
+      .welcome-title {
+        font-size: 1.22rem;
+      }
+      .welcome-desc {
+        font-size: 0.98rem;
+      }
+      .btn-primary, .btn-secondary {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix" class="welcome-logo">
+    <div class="welcome-title">Sistema de Gestão de Cotações</div>
+    <div class="welcome-desc">Digitalize e audite suas negociações de produtos perecíveis. Rastreabilidade completa e integração com WhatsApp Business para fornecedores.</div>
+    <div class="welcome-actions">
+      <a href="dashboard-comprador.html" class="btn-primary" aria-label="Entrar como Comprador">Entrar como Comprador</a>
+      <a href="resposta-fornecedor-mobile.html" class="btn-secondary" aria-label="Simular Resposta Fornecedor">Simular Resposta Fornecedor</a>
+    </div>
+  </div>
+  <footer class="main-footer">
+    &copy; 2024 Plurix. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
