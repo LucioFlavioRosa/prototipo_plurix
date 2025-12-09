@@ -1,0 +1,59 @@
+/* Micro-animações para feedback visual */
+
+/* Botões principais: hover e active */
+.cta-upload, .btn-download-excel, .btn-salvar-edicao, .btn-cancelar-edicao {
+  transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+}
+.cta-upload:hover, .btn-download-excel:hover, .btn-salvar-edicao:hover, .btn-cancelar-edicao:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(249,178,51,0.13);
+}
+
+/* Modal: fadeIn e fadeOut */
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeOutModal {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.97); }
+}
+.modal[style*="display: flex"] .modal-content,
+.modal-editor[style*="display: flex"] .modal-editor-content {
+  animation: fadeInModal 0.32s cubic-bezier(0.4,0.2,0.2,1);
+}
+.modal.closing .modal-content,
+.modal-editor.closing .modal-editor-content {
+  animation: fadeOutModal 0.22s cubic-bezier(0.4,0.2,0.2,1) forwards;
+}
+
+/* Notificações (exemplo) */
+.toast-notification {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.toast-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Links detalhes: underline animado */
+.link-detalhes {
+  position: relative;
+  transition: color 0.15s;
+}
+.link-detalhes::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: #f9b233;
+  transform: scaleX(0);
+  transition: transform 0.18s;
+}
+.link-detalhes:hover::after {
+  transform: scaleX(1);
+}
