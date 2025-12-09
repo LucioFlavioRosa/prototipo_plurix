@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filters {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      align-items: center;
+    }
+    .filters label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-right: 8px;
+      font-size: 1.08rem;
+    }
+    .filters select, .filters input {
+      padding: 7px 12px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f7f8fa;
+      color: #222;
+      margin-right: 18px;
+    }
+    .filters button {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 24px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 12px;
+    }
+    .filters button:hover {
+      background: #e1a12a;
+    }
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 1.02rem;
+    }
+    .history-table th, .history-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .history-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .filters {
+        flex-direction: column;
+        gap: 10px 0;
+        padding: 12px 8px;
+      }
+      .history-table th, .history-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script>
+    // Dados mock para filtros e tabela
+    const fornecedores = ["Ambev", "Coca-Cola", "Nestlé", "Pepsico", "BRF", "JBS", "Aurora", "Unilever", "Danone", "Heineken"];
+    const produtos = ["Skol Lata 350ml", "Guaraná Antarctica 2L", "Brahma Long Neck 355ml", "Pepsi Lata 350ml", "Frango Congelado", "Leite Integral", "Água Mineral", "Cerveja Heineken", "Refrigerante Coca-Cola", "Iogurte Danone"];
+    const statusList = ["pendente", "aprovada", "reprovada"];
+    // Gerar 24 registros mock
+    function gerarHistoricoMock() {
+      const registros = [];
+      const hoje = new Date();
+      for (let i = 0; i < 24; i++) {
+        const diasAtras = Math.floor(Math.random() * 180);
+        const data = new Date(hoje.getTime() - diasAtras * 86400000);
+        const dataStr = data.toLocaleDateString('pt-BR');
+        const fornecedor = fornecedores[Math.floor(Math.random() * fornecedores.length)];
+        const produto = produtos[Math.floor(Math.random() * produtos.length)];
+        const arquivo = `cotacao_${produto.replace(/\s/g, '_').toLowerCase()}_${dataStr.replace(/\//g,'-')}.xlsx`;
+        const status = statusList[Math.floor(Math.random() * statusList.length)];
+        registros.push({
+          data: dataStr,
+          fornecedor,
+          produto,
+          arquivo,
+          status
+        });
+      }
+      // Ordenar por data decrescente
+      registros.sort((a, b) => {
+        const da = a.data.split('/').reverse().join('-');
+        const db = b.data.split('/').reverse().join('-');
+        return db.localeCompare(da);
+      });
+      return registros;
+    }
+    let registrosHistorico = gerarHistoricoMock();
+    // Filtros
+    function aplicarFiltros() {
+      const periodo = document.getElementById('filtro-periodo').value;
+      const fornecedor = document.getElementById('filtro-fornecedor').value;
+      const produto = document.getElementById('filtro-produto').value;
+      const status = document.getElementById('filtro-status').value;
+      let filtrados = registrosHistorico.slice();
+      // Filtro por período
+      if (periodo !== "todos") {
+        const hoje = new Date();
+        let dias = 0;
+        if (periodo === "30") dias = 30;
+        else if (periodo === "90") dias = 90;
+        else if (periodo === "180") dias = 180;
+        filtrados = filtrados.filter(reg => {
+          const partes = reg.data.split('/');
+          const dataReg = new Date(partes[2], partes[1]-1, partes[0]);
+          return (hoje - dataReg) / 86400000 <= dias;
+        });
+      }
+      if (fornecedor !== "todos") {
+        filtrados = filtrados.filter(reg => reg.fornecedor === fornecedor);
+      }
+      if (produto !== "todos") {
+        filtrados = filtrados.filter(reg => reg.produto === produto);
+      }
+      if (status !== "todos") {
+        filtrados = filtrados.filter(reg => reg.status === status);
+      }
+      renderTabela(filtrados);
+    }
+    function renderTabela(registros) {
+      const tbody = document.getElementById('tbody-historico');
+      tbody.innerHTML = '';
+      if (registros.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">Nenhum registro encontrado.</td></tr>';
+        return;
+      }
+      registros.forEach(reg => {
+        let statusClass = 'status-pendente';
+        if (reg.status === 'aprovada') statusClass = 'status-aprovada';
+        else if (reg.status === 'reprovada') statusClass = 'status-reprovada';
+        tbody.innerHTML += `<tr>
+          <td>${reg.data}</td>
+          <td>${reg.fornecedor}</td>
+          <td>${reg.produto}</td>
+          <td>${reg.arquivo}</td>
+          <td><span class="status ${statusClass}">${reg.status.charAt(0).toUpperCase() + reg.status.slice(1)}</span></td>
+          <td><a href="#" class="link-detalhes" onclick="abrirDetalhesHistorico('${reg.status}','${reg.arquivo}','${reg.data}');return false;">Ver Detalhes</a></td>
+        </tr>`;
+      });
+    }
+    // Modal detalhes
+    function abrirDetalhesHistorico(status, arquivo, data) {
+      alert(`Detalhes da cotação:\nArquivo: ${arquivo}\nStatus: ${status}\nData: ${data}`);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Popular selects
+      const fornecedorSel = document.getElementById('filtro-fornecedor');
+      fornecedores.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        fornecedorSel.appendChild(opt);
+      });
+      const produtoSel = document.getElementById('filtro-produto');
+      produtos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        produtoSel.appendChild(opt);
+      });
+      renderTabela(registrosHistorico);
+      document.getElementById('btn-filtrar').addEventListener('click', aplicarFiltros);
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="prototipos/historico-cotacoes.html" class="active">Histórico de Cotações</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Histórico de Cotações</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filters" onsubmit="aplicarFiltros();return false;" aria-label="Filtros avançados de histórico">
+        <label for="filtro-periodo">Período:</label>
+        <select id="filtro-periodo" name="periodo" aria-label="Filtrar por período">
+          <option value="todos">Todos</option>
+          <option value="30">Últimos 30 dias</option>
+          <option value="90">Últimos 3 meses</option>
+          <option value="180">Últimos 6 meses</option>
+        </select>
+        <label for="filtro-fornecedor">Fornecedor:</label>
+        <select id="filtro-fornecedor" name="fornecedor" aria-label="Filtrar por fornecedor">
+          <option value="todos">Todos</option>
+        </select>
+        <label for="filtro-produto">Produto:</label>
+        <select id="filtro-produto" name="produto" aria-label="Filtrar por produto">
+          <option value="todos">Todos</option>
+        </select>
+        <label for="filtro-status">Status:</label>
+        <select id="filtro-status" name="status" aria-label="Filtrar por status">
+          <option value="todos">Todos</option>
+          <option value="pendente">Pendente</option>
+          <option value="aprovada">Aprovada</option>
+          <option value="reprovada">Reprovada</option>
+        </select>
+        <button type="button" id="btn-filtrar">Filtrar</button>
+      </form>
+      <section>
+        <table class="history-table" aria-label="Histórico de Cotações">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Fornecedor</th>
+              <th>Produto</th>
+              <th>Arquivo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-historico">
+            <!-- Registros serão inseridos via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
