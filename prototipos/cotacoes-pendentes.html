@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cotações Pendentes | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .filtros-cotacao { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 24px; background: #fff; padding: 18px 24px; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); }
+    .filtros-cotacao label { font-weight: 600; color: #1a2340; margin-right: 8px; }
+    .filtros-cotacao input, .filtros-cotacao select { padding: 7px 12px; border: 1px solid #b7b9c6; border-radius: 6px; font-size: 1rem; background: #f7f8fa; color: #222; }
+    .filtros-cotacao button { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 10px 24px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-left: 12px; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); }
+    .filtros-cotacao button:hover { background: #e1a12a; }
+    .cotacoes-table-container { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 0 0 18px 0; }
+    .cotacoes-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+    .cotacoes-table th, .cotacoes-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .cotacoes-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; cursor: pointer; user-select: none; }
+    .cotacoes-table th.sortable:hover { color: #f9b233; }
+    .cotacoes-table tr:last-child td { border-bottom: none; }
+    .status-wf { display: inline-block; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; color: #fff; }
+    .status-wf-pendente { background: #f9b233; }
+    .status-wf-aprovacao { background: #4bb543; }
+    .status-wf-reprovada { background: #e74c3c; }
+    .btn-detalhes { background: #1a2340; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.18s; }
+    .btn-detalhes:hover { background: #f9b233; color: #1a2340; }
+    .paginacao { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: 18px 24px 0 0; }
+    .paginacao button { background: #e8eaf0; color: #1a2340; border: none; border-radius: 4px; padding: 6px 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.18s; }
+    .paginacao button.active, .paginacao button:hover { background: #f9b233; color: #fff; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 18px 4px 18px 4px; }
+      .header { padding: 14px 6px 10px 6px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .filtros-cotacao { flex-direction: column; gap: 12px; padding: 12px 6px; }
+      .cotacoes-table th, .cotacoes-table td { padding: 8px 6px; font-size: 0.98rem; }
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.closing { animation: fadeOut 0.25s ease forwards; }
+    .modal-content {
+      background: #fff;
+      max-width: 700px;
+      width: 100%;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-close:hover { color: #e74c3c; }
+    .modal-body { font-size: 1.05rem; line-height: 1.6; color: #222; }
+    .wf-niveis { display: flex; align-items: center; margin: 16px 0; flex-wrap: wrap; }
+    .wf-nivel { display: flex; align-items: center; margin-right: 24px; font-size: 1.08rem; font-weight: 600; color: #1a2340; }
+    .wf-circle { width: 16px; height: 16px; border-radius: 50%; margin-right: 8px; background: #ddd; border: 2px solid #ccc; transition: background 0.2s; }
+    .wf-circle.ativo { background: #4bb543; border-color: #4bb543; }
+    .wf-linha { height: 2px; width: 40px; background: #ddd; margin: 0 8px; display: inline-block; vertical-align: middle; border-radius: 2px; transition: background 0.2s; }
+    .wf-linha.ativo { background: #4bb543; }
+    .auditoria-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 1.01rem; }
+    .auditoria-table th, .auditoria-table td { padding: 8px 10px; border-bottom: 1px solid #eaeaea; text-align: left; }
+    .auditoria-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .auditoria-table tr:last-child td { border-bottom: none; }
+    .btn-exportar { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 10px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; margin-top: 16px; margin-bottom: 8px; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); display: inline-block; }
+    .btn-exportar:hover { background: #e1a12a; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    // MOCK DE DADOS REALISTA
+    const cotacoesMock = [
+      {
+        id: 'COT20240610-01',
+        data: '10/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        quantidade: 12000,
+        fornecedor: 'Laticínios Aurora',
+        valor: 27600.00,
+        status: 'pendente',
+        workflow: {
+          niveis: ['Comprador', 'Gerente Categoria', 'Dir. Comercial', 'VP'],
+          atual: 1
+        },
+        auditoria: [
+          { etapa: 'Solicitação', usuario: 'João Silva', data: '10/06/2024 09:12', acao: 'Solicitou cotação' },
+          { etapa: 'Análise', usuario: 'Maria Souza', data: '10/06/2024 09:45', acao: 'Em análise' }
+        ],
+        detalhes: {
+          produto: 'Leite UHT Integral 1L',
+          quantidade: 12000,
+          fornecedor: 'Laticínios Aurora',
+          valor_unitario: 2.30,
+          valor_total: 27600.00,
+          prazo_entrega: '5 dias',
+          validade: '15 dias',
+          indice_mercado: 'Esalq CEPEA: R$ 2,32/L',
+          comparativo: [
+            { fornecedor: 'Laticínios Aurora', valor: 2.30 },
+            { fornecedor: 'Leite Bom Sabor', valor: 2.33 },
+            { fornecedor: 'Laticínios Vale', valor: 2.29 }
+          ]
+        }
+      },
+      {
+        id: 'COT20240609-02',
+        data: '09/06/2024',
+        produto: 'Queijo Mussarela 5kg',
+        quantidade: 800,
+        fornecedor: 'Queijos Bom Gosto',
+        valor: 30400.00,
+        status: 'pendente',
+        workflow: {
+          niveis: ['Comprador', 'Gerente Categoria', 'Dir. Comercial', 'VP'],
+          atual: 2
+        },
+        auditoria: [
+          { etapa: 'Solicitação', usuario: 'Ana Paula', data: '09/06/2024 10:01', acao: 'Solicitou cotação' },
+          { etapa: 'Análise', usuario: 'Carlos Mendes', data: '09/06/2024 10:22', acao: 'Em análise' },
+          { etapa: 'Aprovação Gerente', usuario: 'Marcos Lima', data: '09/06/2024 10:55', acao: 'Aprovado' }
+        ],
+        detalhes: {
+          produto: 'Queijo Mussarela 5kg',
+          quantidade: 800,
+          fornecedor: 'Queijos Bom Gosto',
+          valor_unitario: 38.00,
+          valor_total: 30400.00,
+          prazo_entrega: '7 dias',
+          validade: '20 dias',
+          indice_mercado: 'Milkpoint: R$ 37,80/kg',
+          comparativo: [
+            { fornecedor: 'Queijos Bom Gosto', valor: 38.00 },
+            { fornecedor: 'Laticínios Vale', valor: 37.90 },
+            { fornecedor: 'Queijos Minas', valor: 38.10 }
+          ]
+        }
+      },
+      {
+        id: 'COT20240608-03',
+        data: '08/06/2024',
+        produto: 'Iogurte Natural 170g',
+        quantidade: 5000,
+        fornecedor: 'Laticínios Vale',
+        valor: 9500.00,
+        status: 'pendente',
+        workflow: {
+          niveis: ['Comprador', 'Gerente Categoria', 'Dir. Comercial', 'VP'],
+          atual: 0
+        },
+        auditoria: [
+          { etapa: 'Solicitação', usuario: 'João Silva', data: '08/06/2024 08:45', acao: 'Solicitou cotação' }
+        ],
+        detalhes: {
+          produto: 'Iogurte Natural 170g',
+          quantidade: 5000,
+          fornecedor: 'Laticínios Vale',
+          valor_unitario: 1.90,
+          valor_total: 9500.00,
+          prazo_entrega: '4 dias',
+          validade: '10 dias',
+          indice_mercado: 'Safras: R$ 1,92/un',
+          comparativo: [
+            { fornecedor: 'Laticínios Vale', valor: 1.90 },
+            { fornecedor: 'Laticínios Aurora', valor: 1.93 },
+            { fornecedor: 'Leite Bom Sabor', valor: 1.91 }
+          ]
+        }
+      }
+    ];
+
+    // FILTROS
+    let filtros = {
+      data: '',
+      produto: '',
+      fornecedor: '',
+      valorMin: '',
+      valorMax: ''
+    };
+    let paginaAtual = 1;
+    const itensPorPagina = 6;
+    let ordenacao = { coluna: '', ordem: 'asc' };
+
+    function filtrarCotacoes() {
+      let lista = cotacoesMock.filter(c => {
+        let ok = true;
+        if (filtros.data && c.data !== filtros.data) ok = false;
+        if (filtros.produto && !c.produto.toLowerCase().includes(filtros.produto.toLowerCase())) ok = false;
+        if (filtros.fornecedor && !c.fornecedor.toLowerCase().includes(filtros.fornecedor.toLowerCase())) ok = false;
+        if (filtros.valorMin && c.valor < parseFloat(filtros.valorMin)) ok = false;
+        if (filtros.valorMax && c.valor > parseFloat(filtros.valorMax)) ok = false;
+        return ok;
+      });
+      // Ordenação
+      if (ordenacao.coluna) {
+        lista.sort((a, b) => {
+          let va = a[ordenacao.coluna];
+          let vb = b[ordenacao.coluna];
+          if (typeof va === 'string') va = va.toLowerCase();
+          if (typeof vb === 'string') vb = vb.toLowerCase();
+          if (va < vb) return ordenacao.ordem === 'asc' ? -1 : 1;
+          if (va > vb) return ordenacao.ordem === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+      return lista;
+    }
+
+    function renderTabelaCotacoes() {
+      const lista = filtrarCotacoes();
+      const inicio = (paginaAtual - 1) * itensPorPagina;
+      const fim = inicio + itensPorPagina;
+      const pagina = lista.slice(inicio, fim);
+      let html = '';
+      if (pagina.length === 0) {
+        html = '<tr><td colspan="8" style="text-align:center;color:#999;padding:28px 0;">Nenhuma cotação encontrada.</td></tr>';
+      } else {
+        pagina.forEach(c => {
+          html += `<tr>
+            <td>${c.id}</td>
+            <td>${c.data}</td>
+            <td>${c.produto}</td>
+            <td>${c.quantidade}</td>
+            <td>${c.fornecedor}</td>
+            <td>R$ ${c.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+            <td><span class="status-wf status-wf-pendente">Pendente</span></td>
+            <td><button class="btn-detalhes" onclick="abrirModalCotacao('${c.id}')">Ver Detalhes</button></td>
+          </tr>`;
+        });
+      }
+      document.getElementById('cotacoes-tbody').innerHTML = html;
+      renderPaginacao(lista.length);
+    }
+
+    function renderPaginacao(total) {
+      const totalPaginas = Math.ceil(total / itensPorPagina);
+      let html = '';
+      for (let i = 1; i <= totalPaginas; i++) {
+        html += `<button class="${i === paginaAtual ? 'active' : ''}" onclick="mudarPagina(${i})">${i}</button>`;
+      }
+      document.getElementById('paginacao').innerHTML = html;
+    }
+
+    function mudarPagina(p) {
+      paginaAtual = p;
+      renderTabelaCotacoes();
+    }
+
+    function aplicarFiltros() {
+      filtros.data = document.getElementById('filtro-data').value;
+      filtros.produto = document.getElementById('filtro-produto').value;
+      filtros.fornecedor = document.getElementById('filtro-fornecedor').value;
+      filtros.valorMin = document.getElementById('filtro-valor-min').value;
+      filtros.valorMax = document.getElementById('filtro-valor-max').value;
+      paginaAtual = 1;
+      renderTabelaCotacoes();
+    }
+
+    function limparFiltros() {
+      filtros = { data: '', produto: '', fornecedor: '', valorMin: '', valorMax: '' };
+      document.getElementById('filtro-data').value = '';
+      document.getElementById('filtro-produto').value = '';
+      document.getElementById('filtro-fornecedor').value = '';
+      document.getElementById('filtro-valor-min').value = '';
+      document.getElementById('filtro-valor-max').value = '';
+      paginaAtual = 1;
+      renderTabelaCotacoes();
+    }
+
+    function ordenarPor(coluna) {
+      if (ordenacao.coluna === coluna) {
+        ordenacao.ordem = ordenacao.ordem === 'asc' ? 'desc' : 'asc';
+      } else {
+        ordenacao.coluna = coluna;
+        ordenacao.ordem = 'asc';
+      }
+      renderTabelaCotacoes();
+    }
+
+    // MODAL DE DETALHES
+    function abrirModalCotacao(id) {
+      const cot = cotacoesMock.find(c => c.id === id);
+      if (!cot) return;
+      const modal = document.getElementById('modal-cotacao');
+      const modalTitle = modal.querySelector('.modal-title');
+      const modalBody = modal.querySelector('.modal-body');
+      modalTitle.textContent = `Cotação ${cot.id}`;
+      let html = '';
+      html += `<div><strong>Produto:</strong> ${cot.detalhes.produto}</div>`;
+      html += `<div><strong>Quantidade:</strong> ${cot.detalhes.quantidade}</div>`;
+      html += `<div><strong>Fornecedor:</strong> ${cot.detalhes.fornecedor}</div>`;
+      html += `<div><strong>Valor Unitário:</strong> R$ ${cot.detalhes.valor_unitario.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>`;
+      html += `<div><strong>Valor Total:</strong> R$ ${cot.detalhes.valor_total.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>`;
+      html += `<div><strong>Prazo de Entrega:</strong> ${cot.detalhes.prazo_entrega}</div>`;
+      html += `<div><strong>Validade da Proposta:</strong> ${cot.detalhes.validade}</div>`;
+      html += `<div style="margin-top:12px;"><strong>Índice de Mercado:</strong> ${cot.detalhes.indice_mercado}</div>`;
+      html += `<div style="margin-top:12px;font-weight:600;color:#1a2340;">Comparativo de Preços:</div>`;
+      html += `<table class="auditoria-table" aria-label="Comparativo de Preços"><thead><tr><th>Fornecedor</th><th>Preço Unitário (R$)</th></tr></thead><tbody>`;
+      cot.detalhes.comparativo.forEach(item => {
+        html += `<tr><td>${item.fornecedor}</td><td>R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      html += `<div style="margin-top:18px;font-weight:600;color:#1a2340;">Workflow de Aprovação:</div>`;
+      html += `<div class="wf-niveis">`;
+      cot.workflow.niveis.forEach((nivel, idx) => {
+        html += `<div class="wf-nivel"><span class="wf-circle${idx === cot.workflow.atual ? ' ativo' : ''}"></span>${nivel}</div>`;
+        if (idx < cot.workflow.niveis.length - 1) {
+          html += `<span class="wf-linha${idx < cot.workflow.atual ? ' ativo' : ''}"></span>`;
+        }
+      });
+      html += `</div>`;
+      html += `<div style="margin-top:18px;font-weight:600;color:#1a2340;">Trilha de Auditoria:</div>`;
+      html += `<table class="auditoria-table" aria-label="Trilha de Auditoria"><thead><tr><th>Etapa</th><th>Usuário</th><th>Data</th><th>Ação</th></tr></thead><tbody>`;
+      cot.auditoria.forEach(a => {
+        html += `<tr><td>${a.etapa}</td><td>${a.usuario}</td><td>${a.data}</td><td>${a.acao}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      html += `<button class="btn-exportar" onclick="exportarCotacaoExcel('${cot.id}')">Exportar Excel</button>`;
+      html += `<button class="btn-exportar" onclick="exportarCotacaoPDF('${cot.id}')">Exportar PDF</button>`;
+      modalBody.innerHTML = html;
+      modal.style.display = 'flex';
+      modal.classList.remove('closing');
+      setTimeout(function() {
+        const content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+    }
+
+    function fecharModalCotacao() {
+      const modal = document.getElementById('modal-cotacao');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(function() {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+        }, 250);
+      }
+    }
+
+    function exportarCotacaoExcel(id) {
+      const cot = cotacoesMock.find(c => c.id === id);
+      if (!cot) return;
+      const ws_data = [
+        ['ID Cotação', cot.id],
+        ['Produto', cot.detalhes.produto],
+        ['Quantidade', cot.detalhes.quantidade],
+        ['Fornecedor', cot.detalhes.fornecedor],
+        ['Valor Unitário', cot.detalhes.valor_unitario],
+        ['Valor Total', cot.detalhes.valor_total],
+        ['Prazo de Entrega', cot.detalhes.prazo_entrega],
+        ['Validade', cot.detalhes.validade],
+        ['Índice Mercado', cot.detalhes.indice_mercado],
+        [],
+        ['Comparativo de Preços'],
+        ['Fornecedor', 'Preço Unitário (R$)'],
+        ...cot.detalhes.comparativo.map(item => [item.fornecedor, item.valor]),
+        [],
+        ['Trilha de Auditoria'],
+        ['Etapa', 'Usuário', 'Data', 'Ação'],
+        ...cot.auditoria.map(a => [a.etapa, a.usuario, a.data, a.acao])
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Cotacao');
+      XLSX.writeFile(wb, cot.id + '.xlsx');
+    }
+
+    function exportarCotacaoPDF(id) {
+      alert('Exportação PDF mockada. (Integrar biblioteca PDF na versão final)');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTabelaCotacoes();
+      // Modal
+      const modal = document.getElementById('modal-cotacao');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) fecharModalCotacao();
+        });
+        const closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) closeBtn.addEventListener('click', fecharModalCotacao);
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fecharModalCotacao();
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="cotacoes-pendentes.html" class="active">Cotações Pendentes</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Cotações Pendentes de Aprovação</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-cotacao" onsubmit="aplicarFiltros(); return false;" aria-label="Filtros de Cotação">
+        <div><label for="filtro-data">Data:</label><input type="date" id="filtro-data" name="filtro-data"></div>
+        <div><label for="filtro-produto">Produto:</label><input type="text" id="filtro-produto" name="filtro-produto" placeholder="Ex: Leite"></div>
+        <div><label for="filtro-fornecedor">Fornecedor:</label><input type="text" id="filtro-fornecedor" name="filtro-fornecedor" placeholder="Ex: Aurora"></div>
+        <div><label for="filtro-valor-min">Valor Mínimo:</label><input type="number" min="0" step="0.01" id="filtro-valor-min" name="filtro-valor-min" placeholder="R$"></div>
+        <div><label for="filtro-valor-max">Valor Máximo:</label><input type="number" min="0" step="0.01" id="filtro-valor-max" name="filtro-valor-max" placeholder="R$"></div>
+        <button type="submit">Filtrar</button>
+        <button type="button" onclick="limparFiltros()">Limpar</button>
+      </form>
+      <section class="cotacoes-table-container">
+        <table class="cotacoes-table" aria-label="Tabela de Cotações Pendentes">
+          <thead>
+            <tr>
+              <th class="sortable" onclick="ordenarPor('id')">ID Cotação</th>
+              <th class="sortable" onclick="ordenarPor('data')">Data Solicitação</th>
+              <th class="sortable" onclick="ordenarPor('produto')">Produto</th>
+              <th class="sortable" onclick="ordenarPor('quantidade')">Quantidade</th>
+              <th class="sortable" onclick="ordenarPor('fornecedor')">Fornecedor</th>
+              <th class="sortable" onclick="ordenarPor('valor')">Valor Total</th>
+              <th>Status Workflow</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="cotacoes-tbody">
+            <!-- Linhas geradas via JS -->
+          </tbody>
+        </table>
+        <div class="paginacao" id="paginacao"></div>
+      </section>
+    </main>
+  </div>
+  <div id="modal-cotacao" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Detalhes</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
