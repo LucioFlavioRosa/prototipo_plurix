@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Selecionar Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .checkbox-custom {
+      position: relative;
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .checkbox-custom input[type="checkbox"] {
+      opacity: 0;
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      cursor: pointer;
+    }
+    .checkbox-custom span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      background: #e8eaf0;
+      border-radius: 6px;
+      border: 2px solid #b7b9c6;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .checkbox-custom input[type="checkbox"]:checked + span {
+      background: #f9b233;
+      border-color: #f9b233;
+    }
+    .checkbox-custom span:after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 7px;
+      height: 13px;
+      border: solid #fff;
+      border-width: 0 3px 3px 0;
+      opacity: 0;
+      transform: scale(0.8) rotate(45deg);
+      transition: opacity 0.18s;
+    }
+    .checkbox-custom input[type="checkbox"]:checked + span:after {
+      opacity: 1;
+    }
+    .btn-enviar-cotacao {
+      background: #4bb543;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(75,181,67,0.08);
+      margin-top: 18px;
+      margin-right: 12px;
+    }
+    .btn-enviar-cotacao:hover {
+      background: #399a36;
+    }
+    .btn-voltar {
+      background: #e8eaf0;
+      color: #1a2340;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: 18px;
+    }
+    .btn-voltar:hover {
+      background: #d0d2db;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 16px 6px 12px 6px;
+        max-width: 98vw;
+      }
+      .card-table th, .card-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = 'index.html';
+      }
+    }
+    function enviarCotacao() {
+      var checked = document.querySelectorAll('input[name="fornecedor[]"]:checked');
+      if (checked.length === 0) {
+        alert('Selecione ao menos um fornecedor para enviar a cotação.');
+        return;
+      }
+      var nomes = Array.from(checked).map(function(cb) {
+        return cb.getAttribute('data-nome');
+      });
+      alert('Cotação enviada para: ' + nomes.join(', '));
+      window.location.href = 'dashboard-fornecedor.html';
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Selecionar Fornecedores</h1>
+    </header>
+    <main class="dashboard-section">
+      <div class="card">
+        <div class="card-title">Escolha os fornecedores para envio da cotação</div>
+        <form id="form-fornecedores" autocomplete="off" onsubmit="enviarCotacao(); return false;">
+          <table class="card-table" aria-label="Lista de Fornecedores">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Fornecedor</th>
+                <th>CNPJ</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="checkbox-custom">
+                    <input type="checkbox" name="fornecedor[]" value="ambev" data-nome="Ambev" aria-label="Selecionar Ambev">
+                    <span></span>
+                  </label>
+                </td>
+                <td>Ambev</td>
+                <td>07.526.557/0001-00</td>
+                <td><span class="status status-aprovada">Ativo</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="checkbox-custom">
+                    <input type="checkbox" name="fornecedor[]" value="coca-cola" data-nome="Coca-Cola" aria-label="Selecionar Coca-Cola">
+                    <span></span>
+                  </label>
+                </td>
+                <td>Coca-Cola</td>
+                <td>00.000.000/0001-91</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="checkbox-custom">
+                    <input type="checkbox" name="fornecedor[]" value="pepsico" data-nome="Pepsico" aria-label="Selecionar Pepsico">
+                    <span></span>
+                  </label>
+                </td>
+                <td>Pepsico</td>
+                <td>12.345.678/0001-99</td>
+                <td><span class="status status-aprovada">Ativo</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="checkbox-custom">
+                    <input type="checkbox" name="fornecedor[]" value="heineken" data-nome="Heineken" aria-label="Selecionar Heineken">
+                    <span></span>
+                  </label>
+                </td>
+                <td>Heineken</td>
+                <td>98.765.432/0001-11</td>
+                <td><span class="status status-reprovada">Inativo</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="checkbox-custom">
+                    <input type="checkbox" name="fornecedor[]" value="nestle" data-nome="Nestlé" aria-label="Selecionar Nestlé">
+                    <span></span>
+                  </label>
+                </td>
+                <td>Nestlé</td>
+                <td>11.222.333/0001-44</td>
+                <td><span class="status status-aprovada">Ativo</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="submit" class="btn-enviar-cotacao">Enviar Cotação</button>
+          <button type="button" class="btn-voltar" onclick="goTo('dashboard-fornecedor.html')">Voltar</button>
+        </form>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
