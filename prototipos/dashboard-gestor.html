@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Gestor | Portal de Gestão de Cotações</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-block;
+      border-radius: 16px;
+      padding: 4px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .status-pendente { background: #f9b233; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .btn-aprovar, .btn-rejeitar {
+      padding: 8px 18px;
+      font-size: 1.01rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 2px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.08);
+    }
+    .btn-aprovar {
+      background: #4bb543;
+      color: #fff;
+    }
+    .btn-aprovar:hover {
+      background: #399a36;
+    }
+    .btn-rejeitar {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-rejeitar:hover {
+      background: #b93a2e;
+    }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      margin-left: 8px;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    .kpi-panel {
+      margin-top: 32px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 28px 18px 28px;
+      min-width: 220px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .kpi-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f9b233;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .kpi-panel {
+        gap: 18px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    // Dados mockados para cards
+    const cotacoesAguardando = [
+      {
+        id: 1,
+        data: '12/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Laticínios Aurora',
+        valor: 'R$ 2,98',
+        status: 'aguardando',
+        indiceMercado: 'R$ 3,05 (Esalq CEPEA)',
+        periodo: 'Jun/2024'
+      },
+      {
+        id: 2,
+        data: '11/06/2024',
+        produto: 'Queijo Mussarela Kg',
+        fornecedor: 'Queijos Minas Ltda',
+        valor: 'R$ 31,50',
+        status: 'aguardando',
+        indiceMercado: 'R$ 32,10 (Milkpoint)',
+        periodo: 'Jun/2024'
+      }
+    ];
+    const cotacoesEmAndamento = [
+      {
+        id: 3,
+        produto: 'Leite UHT Integral 1L',
+        fornecedores: [
+          { nome: 'Laticínios Aurora', valor: 'R$ 2,98', status: 'aguardando' },
+          { nome: 'Laticínios Tirol', valor: 'R$ 3,12', status: 'aprovada' },
+          { nome: 'Laticínios Piracanjuba', valor: 'R$ 3,05', status: 'reprovada' }
+        ],
+        periodo: 'Jun/2024',
+        indiceMercado: 'R$ 3,05 (Esalq CEPEA)'
+      },
+      {
+        id: 4,
+        produto: 'Queijo Mussarela Kg',
+        fornecedores: [
+          { nome: 'Queijos Minas Ltda', valor: 'R$ 31,50', status: 'aguardando' },
+          { nome: 'Queijos Bom Sabor', valor: 'R$ 32,00', status: 'aprovada' }
+        ],
+        periodo: 'Jun/2024',
+        indiceMercado: 'R$ 32,10 (Milkpoint)'
+      }
+    ];
+    const historicoCotacoes = [
+      {
+        id: 5,
+        data: '05/06/2024',
+        produto: 'Leite UHT Integral 1L',
+        fornecedor: 'Laticínios Tirol',
+        valor: 'R$ 3,12',
+        status: 'aprovada',
+        periodo: 'Mai/2024',
+        indiceMercado: 'R$ 3,08 (Esalq CEPEA)'
+      },
+      {
+        id: 6,
+        data: '28/05/2024',
+        produto: 'Queijo Mussarela Kg',
+        fornecedor: 'Queijos Bom Sabor',
+        valor: 'R$ 32,00',
+        status: 'aprovada',
+        periodo: 'Mai/2024',
+        indiceMercado: 'R$ 32,15 (Milkpoint)'
+      }
+    ];
+    const kpis = [
+      { titulo: 'Tempo Médio de Resposta', valor: '2h 14min' },
+      { titulo: 'Spread de Preços', valor: 'R$ 1,20' },
+      { titulo: 'Volume de Cotações (30 dias)', valor: '18' },
+      { titulo: 'Taxa de Aproveitamento', valor: '82%' }
+    ];
+    // Renderização dos cards
+    function renderCards() {
+      // Card: Cotações Aguardando Aprovação
+      let aguardandoHtml = '<table class="card-table" aria-label="Cotações Aguardando Aprovação"><thead><tr>' +
+        '<th>Data</th><th>Produto</th><th>Fornecedor</th><th>Valor</th><th>Índice Mercado</th><th>Ações</th></tr></thead><tbody>';
+      cotacoesAguardando.forEach(cot => {
+        aguardandoHtml += '<tr>' +
+          `<td>${cot.data}</td>` +
+          `<td>${cot.produto}</td>` +
+          `<td>${cot.fornecedor}</td>` +
+          `<td>${cot.valor}</td>` +
+          `<td>${cot.indiceMercado}</td>` +
+          `<td><button class="btn-aprovar" onclick="aprovarCotacao(${cot.id})">Aprovar</button>` +
+          `<button class="btn-rejeitar" onclick="rejeitarCotacao(${cot.id})">Rejeitar</button>` +
+          `<a href="#" class="link-detalhes" onclick="verDetalhesCotacao(${cot.id});return false;">Ver Detalhes</a></td>` +
+          '</tr>';
+      });
+      aguardandoHtml += '</tbody></table>';
+      document.getElementById('card-aguardando').innerHTML = aguardandoHtml;
+      // Card: Cotações em Andamento
+      let andamentoHtml = '';
+      cotacoesEmAndamento.forEach(cot => {
+        andamentoHtml += `<div style="margin-bottom:18px;"><strong>${cot.produto}</strong> <span style="color:#888;font-size:0.98rem;">(${cot.periodo})</span><br>`;
+        andamentoHtml += `<span style="font-size:0.97rem;color:#555;">Índice Mercado: ${cot.indiceMercado}</span>`;
+        andamentoHtml += '<table class="card-table" aria-label="Cotações por Fornecedor"><thead><tr>' +
+          '<th>Fornecedor</th><th>Valor</th><th>Status</th></tr></thead><tbody>';
+        cot.fornecedores.forEach(f => {
+          andamentoHtml += '<tr>' +
+            `<td>${f.nome}</td>` +
+            `<td>${f.valor}</td>` +
+            `<td><span class="status status-${f.status}">${f.status.charAt(0).toUpperCase() + f.status.slice(1)}</span></td>` +
+            '</tr>';
+        });
+        andamentoHtml += '</tbody></table></div>';
+      });
+      document.getElementById('card-andamento').innerHTML = andamentoHtml;
+      // Card: Histórico de Cotações Aprovadas
+      let historicoHtml = '<table class="card-table" aria-label="Histórico de Cotações"><thead><tr>' +
+        '<th>Data</th><th>Produto</th><th>Fornecedor</th><th>Valor</th><th>Índice Mercado</th></tr></thead><tbody>';
+      historicoCotacoes.forEach(cot => {
+        historicoHtml += '<tr>' +
+          `<td>${cot.data}</td>` +
+          `<td>${cot.produto}</td>` +
+          `<td>${cot.fornecedor}</td>` +
+          `<td>${cot.valor}</td>` +
+          `<td>${cot.indiceMercado}</td>` +
+          '</tr>';
+      });
+      historicoHtml += '</tbody></table>';
+      document.getElementById('card-historico').innerHTML = historicoHtml;
+      // KPIs
+      let kpiHtml = '';
+      kpis.forEach(kpi => {
+        kpiHtml += `<div class="kpi-card"><div class="kpi-title">${kpi.titulo}</div><div class="kpi-value">${kpi.valor}</div></div>`;
+      });
+      document.getElementById('kpi-panel').innerHTML = kpiHtml;
+    }
+    // Interações dos botões
+    function aprovarCotacao(id) {
+      alert('Cotação #' + id + ' aprovada com sucesso! (mock)');
+    }
+    function rejeitarCotacao(id) {
+      alert('Cotação #' + id + ' rejeitada. Justificativa obrigatória será solicitada no sistema real. (mock)');
+    }
+    function verDetalhesCotacao(id) {
+      const cot = cotacoesAguardando.find(c => c.id === id);
+      if (!cot) return;
+      let html = `<div><strong>Produto:</strong> ${cot.produto}</div>` +
+        `<div><strong>Fornecedor:</strong> ${cot.fornecedor}</div>` +
+        `<div><strong>Valor Cotado:</strong> ${cot.valor}</div>` +
+        `<div><strong>Índice de Mercado:</strong> ${cot.indiceMercado}</div>` +
+        `<div><strong>Período:</strong> ${cot.periodo}</div>` +
+        `<div style="margin-top:14px;"><button class="btn-aprovar" onclick="aprovarCotacao(${cot.id})">Aprovar</button>` +
+        `<button class="btn-rejeitar" onclick="rejeitarCotacao(${cot.id})">Rejeitar</button></div>`;
+      document.getElementById('modal-title').textContent = 'Detalhes da Cotação';
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('modal-detalhes').style.display = 'flex';
+    }
+    function fecharModal() {
+      document.getElementById('modal-detalhes').style.display = 'none';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCards();
+      document.getElementById('modal-close').addEventListener('click', fecharModal);
+      document.getElementById('modal-detalhes').addEventListener('mousedown', function(e) {
+        if (e.target === this) fecharModal();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fecharModal();
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-gestor.html" class="active">Dashboard</a>
+      <a href="dashboard-fornecedor.html">Fornecedor</a>
+      <a href="#">Relatórios</a>
+      <a href="#">Auditoria</a>
+      <a href="#">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Gestor/Comprador</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">Cotações Aguardando Aprovação</div>
+          <div id="card-aguardando"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cotações em Andamento</div>
+          <div id="card-andamento"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Histórico de Cotações Aprovadas (últimos 30 dias)</div>
+          <div id="card-historico"></div>
+        </div>
+      </section>
+      <section class="kpi-panel" id="kpi-panel"></section>
+    </main>
+  </div>
+  <div id="modal-detalhes" class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:none;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span id="modal-title">Detalhes</span>
+        <button id="modal-close" class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <!-- Conteúdo dinâmico -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
