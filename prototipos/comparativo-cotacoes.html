@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparativo de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .header .cta-back {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      margin-left: 16px;
+    }
+    .header .cta-back:hover {
+      background: #e1a12a;
+    }
+    .comparativo-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      margin-bottom: 32px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .editor-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 22px;
+      font-size: 1.01rem;
+    }
+    .editor-table th, .editor-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eaeaea;
+      text-align: left;
+    }
+    .editor-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .editor-table tr:last-child td {
+      border-bottom: none;
+    }
+    .melhor-oferta {
+      background: #eafbe7 !important;
+      color: #399a36 !important;
+      font-weight: 700;
+    }
+    .melhor-preco {
+      background: #eafbe7 !important;
+      color: #399a36 !important;
+      font-weight: 700;
+    }
+    .melhor-prazo {
+      background: #eafbe7 !important;
+      color: #399a36 !important;
+      font-weight: 700;
+    }
+    .fornecedor-nome {
+      font-weight: 700;
+      color: #1a2340;
+      font-size: 1.08rem;
+    }
+    @media (max-width: 900px) {
+      .comparativo-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 18px 8px 14px 8px;
+      }
+      .editor-table th, .editor-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Comparativo de Cotações</h1>
+      <button class="cta-back" onclick="goTo('dashboard-fornecedor.html')">Voltar ao Dashboard</button>
+    </header>
+    <main class="comparativo-section">
+      <div class="card">
+        <div class="card-title">Cotação #20240610 - Produto: Guaraná Antarctica 2L</div>
+        <table class="editor-table" aria-label="Comparativo de Respostas de Fornecedores">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Preço Unitário (R$)</th>
+              <th>Prazo de Entrega (dias)</th>
+              <th>Condições de Pagamento</th>
+              <th>Observações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fornecedor-nome">Distribuidora Ambev</td>
+              <td class="melhor-preco">7.89</td>
+              <td>6</td>
+              <td>30 dias</td>
+              <td>Entrega em palete, frete incluso</td>
+            </tr>
+            <tr>
+              <td class="fornecedor-nome">Bebidas Brasil</td>
+              <td>8.10</td>
+              <td class="melhor-prazo">4</td>
+              <td>Antecipado</td>
+              <td>Desconto para pedidos acima de 500 un.</td>
+            </tr>
+            <tr>
+              <td class="fornecedor-nome">Super Bebidas</td>
+              <td>8.05</td>
+              <td>7</td>
+              <td>15 dias</td>
+              <td>Entrega parcial permitida</td>
+            </tr>
+            <tr>
+              <td class="fornecedor-nome">Central Distribuição</td>
+              <td>8.20</td>
+              <td>5</td>
+              <td>30/60 dias</td>
+              <td>Frete a negociar</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 18px; font-size: 1.02rem; color: #399a36;">
+          <strong>Destaques:</strong> <span style="background:#eafbe7; padding:2px 8px; border-radius:4px;">Melhor Preço</span> e <span style="background:#eafbe7; padding:2px 8px; border-radius:4px;">Melhor Prazo</span> destacados em verde.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Resumo das Ofertas</div>
+        <table class="editor-table" aria-label="Resumo das Ofertas">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Oferta Destaque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Distribuidora Ambev</td>
+              <td class="melhor-preco">Melhor Preço</td>
+            </tr>
+            <tr>
+              <td>Bebidas Brasil</td>
+              <td class="melhor-prazo">Melhor Prazo</td>
+            </tr>
+            <tr>
+              <td>Super Bebidas</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Central Distribuição</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
