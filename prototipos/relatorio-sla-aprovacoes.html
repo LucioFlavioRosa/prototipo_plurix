@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatório SLA de Aprovações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .filtros-relatorio {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .filtros-relatorio label {
+      font-weight: 600;
+      color: #1a2340;
+      margin-right: 8px;
+      font-size: 1.05rem;
+    }
+    .filtros-relatorio select, .filtros-relatorio input {
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid #b7b9c6;
+      font-size: 1.03rem;
+      background: #fff;
+      color: #222;
+      margin-right: 12px;
+    }
+    .filtros-relatorio button {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+    }
+    .filtros-relatorio button:hover {
+      background: #e1a12a;
+    }
+    .relatorio-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 38px;
+    }
+    .relatorio-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 18px;
+    }
+    .relatorio-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .relatorio-table th, .relatorio-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .relatorio-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .relatorio-table tr.atrasado {
+      background: #fff0f0;
+    }
+    .relatorio-table td.status-sla {
+      font-weight: 700;
+      color: #fff;
+      border-radius: 16px;
+      padding: 4px 16px;
+      text-align: center;
+    }
+    .status-dentro {
+      background: #4bb543;
+    }
+    .status-atrasado {
+      background: #e74c3c;
+    }
+    .icon-alert {
+      color: #e74c3c;
+      font-size: 1.2rem;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .grafico-funil-container {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 24px 18px 24px;
+      margin-bottom: 18px;
+    }
+    .grafico-funil-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 18px 6px 18px 6px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .relatorio-card {
+        padding: 18px 6px 12px 6px;
+      }
+      .grafico-funil-container {
+        padding: 12px 2px 8px 2px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html">Dashboard</a>
+      <a href="upload-tabela.html">Nova Tabela</a>
+      <a href="historico.html">Histórico</a>
+      <a href="relatorio-sla-aprovacoes.html" class="active">Relatório SLA</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Relatório de SLA de Aprovações</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-relatorio" id="form-filtros" autocomplete="off" aria-label="Filtros de Relatório">
+        <div>
+          <label for="filtro-periodo">Período:</label>
+          <input type="date" id="filtro-inicio" name="inicio" value="2024-06-01">
+          <span style="margin:0 8px;">a</span>
+          <input type="date" id="filtro-fim" name="fim" value="2024-06-15">
+        </div>
+        <div>
+          <label for="filtro-coligada">Coligada:</label>
+          <select id="filtro-coligada" name="coligada">
+            <option value="todas">Todas</option>
+            <option value="ambev">Ambev</option>
+            <option value="brf">BRF</option>
+            <option value="jbs">JBS</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-aprovador">Aprovador:</label>
+          <select id="filtro-aprovador" name="aprovador">
+            <option value="todos">Todos</option>
+            <option value="joao">João Silva</option>
+            <option value="maria">Maria Souza</option>
+            <option value="carlos">Carlos Lima</option>
+            <option value="ana">Ana Paula</option>
+          </select>
+        </div>
+        <button type="button" onclick="filtrarRelatorio()">Filtrar</button>
+      </form>
+      <section class="relatorio-card">
+        <div class="relatorio-card-title">Cotações em Andamento</div>
+        <table class="relatorio-table" aria-label="Tabela de SLA de Aprovações">
+          <thead>
+            <tr>
+              <th>ID Cotação</th>
+              <th>Produto</th>
+              <th>Valor</th>
+              <th>Data Entrada</th>
+              <th>Nível Atual</th>
+              <th>Aprovador Atual</th>
+              <th>Tempo no Nível (dias)</th>
+              <th>SLA Definido (dias)</th>
+              <th>Status SLA</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-relatorio">
+            <!-- Linhas mockadas inseridas via JS -->
+          </tbody>
+        </table>
+      </section>
+      <section class="grafico-funil-container">
+        <div class="grafico-funil-title">Funil de Aprovação - Volume & Tempo Médio por Nível</div>
+        <canvas id="graficoFunil" height="180" aria-label="Gráfico Funil de Aprovação"></canvas>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Mock de cotações em andamento
+    const cotacoes = [
+      {
+        id: 'CT-20240601-001',
+        produto: 'Leite UHT Integral 1L',
+        valor: 'R$ 14.200,00',
+        dataEntrada: '2024-06-10',
+        nivelAtual: 'Dir. Comercial Bandeira',
+        aprovadorAtual: 'João Silva',
+        tempoNivel: 5,
+        slaNivel: 3,
+        coligada: 'ambev'
+      },
+      {
+        id: 'CT-20240601-002',
+        produto: 'Frango Congelado 1kg',
+        valor: 'R$ 8.500,00',
+        dataEntrada: '2024-06-08',
+        nivelAtual: 'Gerente Categoria Bandeira',
+        aprovadorAtual: 'Maria Souza',
+        tempoNivel: 7,
+        slaNivel: 7,
+        coligada: 'brf'
+      },
+      {
+        id: 'CT-20240601-003',
+        produto: 'Carne Bovina Picanha 1kg',
+        valor: 'R$ 22.000,00',
+        dataEntrada: '2024-06-03',
+        nivelAtual: 'VP',
+        aprovadorAtual: 'Carlos Lima',
+        tempoNivel: 12,
+        slaNivel: 10,
+        coligada: 'jbs'
+      },
+      {
+        id: 'CT-20240601-004',
+        produto: 'Queijo Mussarela 500g',
+        valor: 'R$ 3.800,00',
+        dataEntrada: '2024-06-12',
+        nivelAtual: 'Dir. Comercial Holding',
+        aprovadorAtual: 'Ana Paula',
+        tempoNivel: 3,
+        slaNivel: 5,
+        coligada: 'ambev'
+      },
+      {
+        id: 'CT-20240601-005',
+        produto: 'Iogurte Natural 170g',
+        valor: 'R$ 1.200,00',
+        dataEntrada: '2024-06-14',
+        nivelAtual: 'Gerente Categoria Bandeira',
+        aprovadorAtual: 'Maria Souza',
+        tempoNivel: 1,
+        slaNivel: 7,
+        coligada: 'brf'
+      }
+    ];
+
+    function renderTabela(cotacoesFiltradas) {
+      const tbody = document.getElementById('tbody-relatorio');
+      tbody.innerHTML = '';
+      cotacoesFiltradas.forEach(cotacao => {
+        const atrasado = cotacao.tempoNivel > cotacao.slaNivel;
+        const statusSLA = atrasado ? 'Atrasado' : 'Dentro';
+        const tr = document.createElement('tr');
+        if (atrasado) tr.classList.add('atrasado');
+        tr.innerHTML = `
+          <td>${cotacao.id}</td>
+          <td>${cotacao.produto}</td>
+          <td>${cotacao.valor}</td>
+          <td>${cotacao.dataEntrada}</td>
+          <td>${cotacao.nivelAtual}</td>
+          <td>${cotacao.aprovadorAtual}</td>
+          <td>${cotacao.tempoNivel}</td>
+          <td>${cotacao.slaNivel}</td>
+          <td class="status-sla ${atrasado ? 'status-atrasado' : 'status-dentro'}">
+            ${atrasado ? '<span class="icon-alert" aria-label="Atrasado">&#9888;</span>' : ''}${statusSLA}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filtrarRelatorio() {
+      const inicio = document.getElementById('filtro-inicio').value;
+      const fim = document.getElementById('filtro-fim').value;
+      const coligada = document.getElementById('filtro-coligada').value;
+      const aprovador = document.getElementById('filtro-aprovador').value;
+      let filtradas = cotacoes.filter(c => {
+        let ok = true;
+        if (coligada !== 'todas') ok = ok && c.coligada === coligada;
+        if (aprovador !== 'todos') ok = ok && c.aprovadorAtual.toLowerCase().includes(aprovador);
+        if (inicio) ok = ok && c.dataEntrada >= inicio;
+        if (fim) ok = ok && c.dataEntrada <= fim;
+        return ok;
+      });
+      renderTabela(filtradas);
+      renderGraficoFunil(filtradas);
+    }
+
+    function renderGraficoFunil(cotacoesFiltradas) {
+      // Mock: níveis e volume
+      const niveis = [
+        'Gerente Categoria Bandeira',
+        'Dir. Comercial Bandeira',
+        'Dir. Comercial Holding',
+        'VP'
+      ];
+      const volumes = niveis.map(nivel => cotacoesFiltradas.filter(c => c.nivelAtual === nivel).length);
+      const tempos = niveis.map(nivel => {
+        const cotacoesNivel = cotacoesFiltradas.filter(c => c.nivelAtual === nivel);
+        if (cotacoesNivel.length === 0) return 0;
+        return (
+          cotacoesNivel.reduce((acc, c) => acc + c.tempoNivel, 0) / cotacoesNivel.length
+        ).toFixed(1);
+      });
+      const ctx = document.getElementById('graficoFunil').getContext('2d');
+      if (window.graficoFunilInstance) window.graficoFunilInstance.destroy();
+      window.graficoFunilInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: niveis,
+          datasets: [
+            {
+              label: 'Volume de Cotações',
+              data: volumes,
+              backgroundColor: '#f9b233',
+              borderRadius: 8,
+              yAxisID: 'y',
+            },
+            {
+              label: 'Tempo Médio (dias)',
+              data: tempos,
+              backgroundColor: '#1a2340',
+              borderRadius: 8,
+              yAxisID: 'y1',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              type: 'linear',
+              position: 'left',
+              title: { display: true, text: 'Volume' },
+              beginAtZero: true,
+              grid: { drawOnChartArea: false }
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              title: { display: true, text: 'Tempo Médio (dias)' },
+              beginAtZero: true,
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTabela(cotacoes);
+      renderGraficoFunil(cotacoes);
+    });
+  </script>
+</body>
+</html>
