@@ -1,0 +1,62 @@
+<!-- Componente Header Comprador Reutilizável -->
+<!--
+  Uso:
+    <header class="header">
+      <h1>Título da Página</h1>
+      <button class="cta-upload" onclick="acaoContextual()">Ação Contextual</button>
+    </header>
+  - O título (<h1>) é dinâmico e deve ser alterado conforme contexto da página.
+  - O botão pode ser substituído por outro elemento de ação relevante.
+  - Reutilizar estilos do template para garantir identidade visual.
+-->
+<header class="header">
+  <h1><!-- Título dinâmico --></h1>
+  <button class="cta-upload" onclick="acaoContextual()"><!-- Texto do botão contextual --></button>
+</header>
+<script>
+  // Exemplo de função contextual
+  function acaoContextual() {
+    // Implementar ação conforme contexto da página
+    alert('Ação contextual executada!');
+  }
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+  .header {
+    background: #fff;
+    padding: 24px 40px 16px 40px;
+    box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a2340;
+    margin: 0;
+  }
+  .header .cta-upload {
+    background: #f9b233;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 28px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s;
+    box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+  }
+  .header .cta-upload:hover {
+    background: #e1a12a;
+  }
+  @media (max-width: 900px) {
+    .header {
+      padding: 18px 10px 12px 10px;
+    }
+  }
+</style>
