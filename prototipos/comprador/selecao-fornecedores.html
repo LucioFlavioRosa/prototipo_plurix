@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seleção de Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    .main-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 0 0 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .info-cotacao {
+      font-size: 1.09rem;
+      color: #222;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-top: 12px;
+      margin-bottom: 18px;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .card-table tr:last-child td {
+      border-bottom: none;
+    }
+    .kpi-bar {
+      display: inline-block;
+      height: 12px;
+      border-radius: 8px;
+      background: #e8eaf0;
+      width: 80px;
+      vertical-align: middle;
+      margin-right: 6px;
+      position: relative;
+    }
+    .kpi-bar-inner {
+      display: inline-block;
+      height: 12px;
+      border-radius: 8px;
+      background: #4bb543;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .kpi-label {
+      font-size: 0.98rem;
+      color: #222;
+      margin-left: 4px;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 16px;
+      transition: background 0.18s;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-cancelar {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-cancelar:hover {
+      background: #b93a2e;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        padding: 12px 0 0 0;
+      }
+      .card {
+        padding: 14px 6px 12px 6px;
+      }
+      .card-table th, .card-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+  <script>
+    function dispararCotacao() {
+      alert('Cotação disparada para fornecedores selecionados!');
+      window.location.href = 'dashboard-comprador.html';
+    }
+    function cancelar() {
+      window.location.href = 'dashboard-comprador.html';
+    }
+    function toggleCheckbox(id) {
+      // Placeholder para lógica futura
+    }
+  </script>
+</head>
+<body>
+  <div class="main-content">
+    <div class="card">
+      <div class="card-title">Cotação: Alcatra Bovina Resfriada</div>
+      <div class="info-cotacao">
+        <strong>Quantidade:</strong> 200 kg<br>
+        <strong>Condições:</strong> Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.<br>
+        <strong>Data de Entrega:</strong> 15/06/2024
+      </div>
+      <table class="card-table" aria-label="Seleção de Fornecedores">
+        <thead>
+          <tr>
+            <th>Fornecedor</th>
+            <th>KPI Qualidade</th>
+            <th>KPI Pontualidade</th>
+            <th>Histórico de Preços</th>
+            <th>Selecionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Frigorífico Boa Carne</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:90%;background:#4bb543;"></span></span>
+              <span class="kpi-label">9.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:85%;background:#4bb543;"></span></span>
+              <span class="kpi-label">8.5</span>
+            </td>
+            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="boa-carne" checked onclick="toggleCheckbox(1)"></td>
+          </tr>
+          <tr>
+            <td>CarneFácil Distribuidora</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:80%;background:#f9b233;"></span></span>
+              <span class="kpi-label">8.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:70%;background:#f9b233;"></span></span>
+              <span class="kpi-label">7.0</span>
+            </td>
+            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="carnefácil" onclick="toggleCheckbox(2)"></td>
+          </tr>
+          <tr>
+            <td>SuperCarnes Ltda</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:60%;background:#e74c3c;"></span></span>
+              <span class="kpi-label">6.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:65%;background:#e74c3c;"></span></span>
+              <span class="kpi-label">6.5</span>
+            </td>
+            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="supercarnes" onclick="toggleCheckbox(3)"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:24px;text-align:right;">
+        <button class="btn-primary" onclick="dispararCotacao()">Disparar Cotação</button>
+        <button class="btn-cancelar" onclick="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
