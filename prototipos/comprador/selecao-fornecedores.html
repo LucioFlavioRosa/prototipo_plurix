@@ -139,9 +139,69 @@
       display: block;
       animation: fadeInCotacaoMsg 0.7s ease;
     }
-    @keyframes fadeInCotacaoMsg {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay.visible {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 900px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn-fechar-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .btn-fechar-modal:hover {
+      background: #b93a2e;
+    }
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .legenda-grafico {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
     }
     @media (max-width: 900px) {
       .main-content {
@@ -153,8 +213,19 @@
       .card-table th, .card-table td {
         padding: 6px 4px;
       }
+      .modal-content {
+        padding: 20px;
+        max-width: 95%;
+      }
+      .modal-title {
+        font-size: 1.2rem;
+      }
+      #grafico-historico {
+        max-height: 300px;
+      }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script>
     function isInIframe() {
       try {
@@ -192,6 +263,199 @@
     function toggleCheckbox(id) {
       // Placeholder para lógica futura
     }
+
+    // Modal Gráfico - Chart.js
+    var chartHistorico = null;
+
+    function abrirModalGrafico(nomeFornecedor) {
+      var modal = document.getElementById('modal-grafico');
+      if (modal) {
+        modal.classList.add('visible');
+        renderizarGrafico(nomeFornecedor);
+      }
+    }
+
+    function fecharModalGrafico() {
+      var modal = document.getElementById('modal-grafico');
+      if (modal) {
+        modal.classList.remove('visible');
+      }
+      // Limpar canvas Chart.js
+      var canvas = document.getElementById('grafico-historico');
+      if (chartHistorico) {
+        chartHistorico.destroy();
+        chartHistorico = null;
+      }
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      // Limpa mensagens de erro do modal
+      var titulo = document.getElementById('titulo-modal-grafico');
+      if (titulo) {
+        titulo.textContent = '';
+      }
+    }
+
+    function renderizarGrafico(nomeFornecedor) {
+      var dadosHistorico = {
+        'Frigorífico Boa Carne': [22.5, 21.8, 22.0, 21.5, 22.2, 22.8],
+        'CarneFácil Distribuidora': [21.2, 20.9, 21.5, 21.0, 21.7, 21.9],
+        'SuperCarnes Ltda': [19.8, 20.1, 19.5, 20.3, 20.0, 19.7]
+      };
+      var mercadoEsalq = [21.8, 21.6, 21.9, 22.1, 22.0, 22.3];
+      var mercadoMilkpoint = [20.5, 20.7, 20.6, 20.8, 20.9, 21.0];
+      var mercadoSafras = [23.0, 22.7, 22.9, 23.2, 23.1, 23.3];
+      var meses = ['Jan/24', 'Fev/24', 'Mar/24', 'Abr/24', 'Mai/24', 'Jun/24'];
+      var titulo = document.getElementById('titulo-modal-grafico');
+      var canvas = document.getElementById('grafico-historico');
+      var legenda = document.querySelector('.legenda-grafico');
+      // Limpa mensagens de erro
+      if (titulo) {
+        titulo.textContent = '';
+      }
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      if (chartHistorico) {
+        chartHistorico.destroy();
+        chartHistorico = null;
+      }
+      if (!dadosHistorico[nomeFornecedor]) {
+        if (titulo) {
+          titulo.textContent = 'Dados não disponíveis para este fornecedor.';
+        }
+        return;
+      }
+      if (titulo) {
+        titulo.textContent = 'Histórico de Preços - ' + nomeFornecedor;
+      }
+      chartHistorico = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: meses,
+          datasets: [
+            {
+              label: nomeFornecedor,
+              data: dadosHistorico[nomeFornecedor],
+              borderColor: '#3498db',
+              backgroundColor: 'rgba(52,152,219,0.12)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 4,
+              pointBackgroundColor: '#3498db',
+              pointBorderColor: '#3498db',
+              borderWidth: 3
+            },
+            {
+              label: 'Esalq CEPEA',
+              data: mercadoEsalq,
+              borderColor: '#4bb543',
+              backgroundColor: 'rgba(75,181,67,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#4bb543',
+              pointBorderColor: '#4bb543',
+              borderWidth: 2
+            },
+            {
+              label: 'Milkpoint',
+              data: mercadoMilkpoint,
+              borderColor: '#f9b233',
+              backgroundColor: 'rgba(249,178,51,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#f9b233',
+              pointBorderColor: '#f9b233',
+              borderWidth: 2
+            },
+            {
+              label: 'Safras',
+              data: mercadoSafras,
+              borderColor: '#9b59b6',
+              backgroundColor: 'rgba(155,89,182,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#9b59b6',
+              pointBorderColor: '#9b59b6',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                font: {
+                  size: 13
+                }
+              }
+            },
+            title: {
+              display: false
+            },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += 'R$ ' + context.parsed.y.toFixed(2).replace('.', ',');
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Preço (R$/kg)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return 'R$ ' + value.toFixed(2).replace('.', ',');
+                }
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Mês'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnFechar = document.querySelector('.btn-fechar-modal');
+      if(btnFechar) {
+        btnFechar.addEventListener('click', fecharModalGrafico);
+      }
+      var modalOverlay = document.getElementById('modal-grafico');
+      if(modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+          if(e.target === modalOverlay) {
+            fecharModalGrafico();
+          }
+        });
+      }
+    });
   </script>
 </head>
 <body>
@@ -224,7 +488,7 @@
               <span class="kpi-bar"><span class="kpi-bar-inner" style="width:85%;background:#4bb543;"></span></span>
               <span class="kpi-label">8.5</span>
             </td>
-            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><a href="#" onclick="abrirModalGrafico('Frigorífico Boa Carne')">Ver Gráfico</a></td>
             <td><input type="checkbox" name="fornecedor" value="boa-carne" checked onclick="toggleCheckbox(1)"></td>
           </tr>
           <tr>
@@ -237,7 +501,7 @@
               <span class="kpi-bar"><span class="kpi-bar-inner" style="width:70%;background:#f9b233;"></span></span>
               <span class="kpi-label">7.0</span>
             </td>
-            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><a href="#" onclick="abrirModalGrafico('CarneFácil Distribuidora')">Ver Gráfico</a></td>
             <td><input type="checkbox" name="fornecedor" value="carnefácil" onclick="toggleCheckbox(2)"></td>
           </tr>
           <tr>
@@ -250,7 +514,7 @@
               <span class="kpi-bar"><span class="kpi-bar-inner" style="width:65%;background:#e74c3c;"></span></span>
               <span class="kpi-label">6.5</span>
             </td>
-            <td><a href="#" onclick="alert('Gráfico em breve!')">Ver Gráfico</a></td>
+            <td><a href="#" onclick="abrirModalGrafico('SuperCarnes Ltda')">Ver Gráfico</a></td>
             <td><input type="checkbox" name="fornecedor" value="supercarnes" onclick="toggleCheckbox(3)"></td>
           </tr>
         </tbody>
@@ -259,6 +523,19 @@
       <div style="margin-top:24px;text-align:right;">
         <button class="btn-primary" onclick="dispararCotacao()">Disparar Cotação</button>
         <button class="btn-cancelar" onclick="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Gráfico -->
+  <div id="modal-grafico" class="modal-overlay">
+    <div class="modal-content">
+      <button class="btn-fechar-modal" title="Fechar">&times;</button>
+      <div id="titulo-modal-grafico" class="modal-title"></div>
+      <div style="width:100%;height:350px;max-height:60vh;">
+        <canvas id="grafico-historico" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="legenda-grafico">
+        Comparação entre o histórico de preços do fornecedor e as médias de mercado (Esalq CEPEA, Milkpoint, Safras) para Alcatra Bovina Resfriada (kg) nos últimos 6 meses.
       </div>
     </div>
   </div>
