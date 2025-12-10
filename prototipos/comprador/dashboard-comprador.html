@@ -148,6 +148,17 @@
       color: #f9b233;
       text-decoration: none;
     }
+    .fornecedor-link {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    .fornecedor-link:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
     @media (max-width: 1100px) {
       .dashboard-section {
         flex-direction: column;
@@ -205,6 +216,29 @@
         observacoes: 'Priorizar frutas de calibre médio. Entregar até 12h.'
       }
     };
+
+    // Dados mocados para cotações em andamento
+    const cotacoesAndamentoMock = [
+      {
+        produto: 'Filé de Frango',
+        quantidade: '300 kg',
+        dataEntrega: '14/06/2024',
+        status: 'Em Cotação',
+        fornecedores: [
+          { nome: 'Frango Bom Sabor', url: '#' }
+        ]
+      },
+      {
+        produto: 'Banana Prata',
+        quantidade: '800 kg',
+        dataEntrega: '16/06/2024',
+        status: 'Cotação Pronta',
+        fornecedores: [
+          { nome: 'Ceasa Sul', url: '#' },
+          { nome: 'Frutas do Vale', url: '#' }
+        ]
+      }
+    ];
 
     // Função para abrir o modal de detalhes da cotação pendente em overlay com iframe
     function abrirModalCotacaoPendente(id) {
@@ -357,6 +391,79 @@
     }
     window.fecharOverlayModal = fecharOverlayModal;
     window.abrirModalSelecaoFornecedores = abrirModalSelecaoFornecedores;
+
+    // Função para abrir cotação pronta
+    function abrirCotacaoPronta(produto) {
+      // Salva no sessionStorage o produto selecionado
+      sessionStorage.setItem('cotacaoProntaProduto', produto);
+      window.location.href = 'cotacao-pronta.html';
+    }
+
+    // Função para abrir modal de proposta do fornecedor
+    function abrirModalPropostaFornecedor(fornecedor, produto) {
+      // Salva no sessionStorage os dados do fornecedor e produto
+      sessionStorage.setItem('modalPropostaFornecedor', JSON.stringify({ fornecedor: fornecedor, produto: produto }));
+      // Abre modal em overlay com iframe
+      if (document.getElementById('overlay-modal-proposta-fornecedor')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-proposta-fornecedor';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = 'modal-proposta-fornecedor.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '98vw';
+      iframe.style.maxWidth = '800px';
+      iframe.style.height = '95vh';
+      iframe.style.maxHeight = '800px';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      overlay.appendChild(iframe);
+      document.body.appendChild(overlay);
+
+      setTimeout(function() {
+        iframe.focus();
+      }, 100);
+
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModalPropostaFornecedor();
+      });
+
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModalPropostaFornecedor();
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+    }
+
+    function fecharOverlayModalPropostaFornecedor() {
+      const overlay = document.getElementById('overlay-modal-proposta-fornecedor');
+      if (overlay) {
+        if (overlay._escListener) {
+          document.removeEventListener('keydown', overlay._escListener);
+        }
+        overlay.remove();
+        sessionStorage.removeItem('modalPropostaFornecedor');
+      }
+    }
+    window.abrirModalPropostaFornecedor = abrirModalPropostaFornecedor;
+    window.fecharOverlayModalPropostaFornecedor = fecharOverlayModalPropostaFornecedor;
   </script>
 </head>
 <body>
@@ -390,6 +497,7 @@
                 <th>Quantidade</th>
                 <th>Data de Entrega</th>
                 <th>Status</th>
+                <th>Fornecedor</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -399,14 +507,19 @@
                 <td>300 kg</td>
                 <td>14/06/2024</td>
                 <td><span style="color:#f9b233;font-weight:700">Em Cotação</span></td>
-                <td><a href="#" class="link-detalhes" onclick="window.location.href='selecao-fornecedores.html';return false;">Ver Detalhes</a></td>
+                <td><span class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Frango Bom Sabor', 'Filé de Frango')">Frango Bom Sabor</span></td>
+                <td><a href="#" class="link-detalhes" onclick="abrirModalSelecaoFornecedores();return false;">Ver Detalhes</a></td>
               </tr>
               <tr>
                 <td>Banana Prata</td>
                 <td>800 kg</td>
                 <td>16/06/2024</td>
                 <td><span style="color:#4bb543;font-weight:700">Cotação Pronta</span></td>
-                <td><a href="#" class="link-detalhes" onclick="alert('Fluxo de cotação pronta em breve!');return false;">Ver Detalhes</a></td>
+                <td>
+                  <span class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Ceasa Sul', 'Banana Prata')">Ceasa Sul</span>,
+                  <span class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Frutas do Vale', 'Banana Prata')">Frutas do Vale</span>
+                </td>
+                <td><a href="#" class="link-detalhes" onclick="abrirCotacaoPronta('Banana Prata');return false;">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
