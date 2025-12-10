@@ -182,24 +182,34 @@
       }
     }
 
-    // Dados mocados das cotações pendentes
+    // Dados mocados das cotações pendentes (realistas)
     const cotacoesPendentesMock = {
       1: {
+        id: 1,
         produto: 'Alcatra Bovina Resfriada',
         quantidade: '200 kg',
-        condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.',
-        dataEntrega: '15/06/2024'
+        condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas lacradas. Validade mínima: 5 dias. Unidade: kg.',
+        dataEntrega: '15/06/2024',
+        fornecedorSugerido: 'Frigorífico Boa Carne',
+        precoEstimado: 'R$ 36,90/kg',
+        observacoes: 'Solicitar nota fiscal eletrônica. Entrega no período da manhã.'
       },
       2: {
+        id: 2,
         produto: 'Maçã Fuji',
         quantidade: '500 kg',
-        condicoes: 'Transporte refrigerado. Entrega em caixas de 20kg. Unidade: kg.',
-        dataEntrega: '17/06/2024'
+        condicoes: 'Transporte refrigerado a 6°C. Entrega em caixas de papelão reforçadas de 20kg. Frutas selecionadas, sem machucados. Unidade: kg.',
+        dataEntrega: '17/06/2024',
+        fornecedorSugerido: 'Frutas do Vale',
+        precoEstimado: 'R$ 5,80/kg',
+        observacoes: 'Priorizar frutas de calibre médio. Entregar até 12h.'
       }
     };
 
     // Função para abrir o modal de detalhes da cotação pendente em overlay com iframe
     function abrirModalCotacaoPendente(id) {
+      // Armazena os dados da cotação selecionada no sessionStorage
+      sessionStorage.setItem('cotacaoAtual', JSON.stringify(cotacoesPendentesMock[id]));
       // Cria overlay
       if (document.getElementById('overlay-modal-cotacao')) return; // Evita múltiplos overlays
       const overlay = document.createElement('div');
@@ -230,6 +240,7 @@
       iframe.setAttribute('aria-modal', 'true');
       iframe.setAttribute('role', 'dialog');
       iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
 
       overlay.appendChild(iframe);
       document.body.appendChild(overlay);
@@ -254,18 +265,97 @@
       overlay._escListener = escListener;
     }
 
+    // Função para abrir o modal de seleção de fornecedores
+    function abrirModalSelecaoFornecedores() {
+      if (document.getElementById('overlay-modal-selecao-fornecedores')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-selecao-fornecedores';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      // Cria iframe para seleção de fornecedores
+      const iframe = document.createElement('iframe');
+      iframe.src = 'selecao-fornecedores.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '95vw';
+      iframe.style.maxWidth = '950px';
+      iframe.style.height = '90vh';
+      iframe.style.maxHeight = '700px';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      overlay.appendChild(iframe);
+      document.body.appendChild(overlay);
+
+      // Foco no iframe
+      setTimeout(function() {
+        iframe.focus();
+      }, 100);
+
+      // Fecha overlay ao clicar fora do iframe
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModal();
+      });
+
+      // Fecha overlay ao pressionar ESC
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModal();
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+
+      // Listener para mensagens do iframe (disparo de cotação)
+      function messageListener(event) {
+        // Aceita apenas mensagens vindas do mesmo domínio
+        if (event.data && event.data.type === 'cotacao_disparada_sucesso') {
+          fecharOverlayModal();
+          alert('Cotação disparada para fornecedores selecionados com sucesso!');
+        }
+      }
+      window.addEventListener('message', messageListener);
+      overlay._messageListener = messageListener;
+    }
+
     // Função global para fechar o overlay modal
     function fecharOverlayModal() {
-      const overlay = document.getElementById('overlay-modal-cotacao');
-      if (overlay) {
-        // Remove event listener ESC
-        if (overlay._escListener) {
-          document.removeEventListener('keydown', overlay._escListener);
+      // Remove overlay de cotação
+      const overlayCotacao = document.getElementById('overlay-modal-cotacao');
+      if (overlayCotacao) {
+        if (overlayCotacao._escListener) {
+          document.removeEventListener('keydown', overlayCotacao._escListener);
         }
-        overlay.remove();
+        overlayCotacao.remove();
       }
+      // Remove overlay de seleção de fornecedores
+      const overlaySelecao = document.getElementById('overlay-modal-selecao-fornecedores');
+      if (overlaySelecao) {
+        if (overlaySelecao._escListener) {
+          document.removeEventListener('keydown', overlaySelecao._escListener);
+        }
+        if (overlaySelecao._messageListener) {
+          window.removeEventListener('message', overlaySelecao._messageListener);
+        }
+        overlaySelecao.remove();
+      }
+      // Limpa sessionStorage da cotação atual
+      sessionStorage.removeItem('cotacaoAtual');
     }
     window.fecharOverlayModal = fecharOverlayModal;
+    window.abrirModalSelecaoFornecedores = abrirModalSelecaoFornecedores;
   </script>
 </head>
 <body>
