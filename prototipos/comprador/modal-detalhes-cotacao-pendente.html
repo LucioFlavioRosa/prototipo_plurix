@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalhes da Cotação Pendente | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    .modal {
+      display: flex;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-content {
+      background: #fff;
+      max-width: 500px;
+      width: 100%;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
+      animation: slideIn 0.3s ease;
+      outline: none;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 28px;
+      color: #999;
+      background: none;
+      border: none;
+      line-height: 1;
+      margin-left: 16px;
+      transition: color 0.18s;
+    }
+    .modal-close:hover {
+      color: #e74c3c;
+    }
+    .modal-body {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    .modal-body strong {
+      color: #1a2340;
+    }
+    .modal-body button {
+      margin-top: 22px;
+      margin-right: 16px;
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .modal-body button:last-child {
+      background: #e74c3c;
+    }
+    .modal-body button:hover {
+      opacity: 0.9;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+  <script>
+    function fazerCotacao() {
+      window.location.href = 'selecao-fornecedores.html';
+    }
+    function fecharModal() {
+      window.history.back();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var closeBtn = document.querySelector('.modal-close');
+      if (closeBtn) closeBtn.addEventListener('click', fecharModal);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fecharModal();
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="modal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Detalhes da Cotação Pendente</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div><strong>Produto:</strong> Alcatra Bovina Resfriada</div>
+        <div style="margin-top:8px;"><strong>Quantidade:</strong> 200 kg</div>
+        <div style="margin-top:8px;"><strong>Condições:</strong> Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.</div>
+        <div style="margin-top:8px;"><strong>Data de Entrega:</strong> 15/06/2024</div>
+        <div style="margin-top:22px;display:flex;gap:16px;">
+          <button onclick="fazerCotacao()">Fazer Cotação</button>
+          <button onclick="fecharModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
