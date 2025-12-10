@@ -43,6 +43,39 @@
     .btn-confirmar:hover { background: #399a36; }
     .btn-cancelar { background: #b7b9c6; color: #fff; }
     .btn-cancelar:hover { background: #8c8e99; }
+    /* Spinner para carregamento do modal do fornecedor */
+    .spinner-overlay {
+      position: fixed;
+      z-index: 10001;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,40,80,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #f9b233;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinner-msg {
+      color: #fff;
+      font-size: 1.13rem;
+      font-weight: 600;
+      text-shadow: 0 1px 4px #222b4a;
+      text-align: center;
+    }
     @media (max-width: 900px) {
       .dashboard-section { padding: 18px 6px 18px 6px; }
       .header { padding: 18px 10px 12px 10px; }
@@ -54,8 +87,51 @@
     }
   </style>
   <script>
-    // Carregar dados mokados de Banana Prata se existirem no sessionStorage
+    /*
+      ============================================================================
+      Plurix - Comprador - Cotação Pronta
+      --------------------------------------------------------------------------
+      Este script gerencia:
+      - Inicialização dos dados mokados da cotação de Banana Prata no sessionStorage
+      - Renderização dinâmica das propostas na tabela
+      - Abertura do modal de proposta do fornecedor (modal-proposta-fornecedor.html) ao clicar no nome do fornecedor
+      - Comunicação via sessionStorage para passagem de dados ao modal
+      - Tratamento de erro e indicador de carregamento (spinner) durante a abertura do modal
+      - Fechamento do modal via botão, overlay ou tecla 'Esc'
+      Dependência: modal-proposta-fornecedor.html deve estar acessível no mesmo domínio
+      ============================================================================
+    */
+
+    // Inicialização dos dados mokados da cotação de Banana Prata no sessionStorage
     document.addEventListener('DOMContentLoaded', function() {
+      // Se não houver cotacaoPronta no sessionStorage, cria os dados mokados
+      if (!sessionStorage.getItem('cotacaoPronta')) {
+        const cotacaoPronta = {
+          produto: 'Banana Prata',
+          quantidade: '800',
+          unidade: 'Quilograma',
+          condicoes: 'Entrega refrigerada, validade mínima 4 dias, embalagem retornável',
+          dataEntrega: '16/06/2024',
+          status: 'Pronta para Pedido',
+          propostas: [
+            {
+              fornecedor: 'Frutas Tropicais LTDA',
+              preco: '4,20',
+              quantidade: '800 kg',
+              dataEnvio: '13/06/2024'
+            },
+            {
+              fornecedor: 'Ceasa Sul',
+              preco: '4,35',
+              quantidade: '800 kg',
+              dataEnvio: '13/06/2024'
+            }
+          ]
+        };
+        sessionStorage.setItem('cotacaoPronta', JSON.stringify(cotacaoPronta));
+      }
+
+      // Carregar dados mokados de Banana Prata do sessionStorage
       var cotacao = sessionStorage.getItem('cotacaoPronta');
       if (cotacao) {
         cotacao = JSON.parse(cotacao);
@@ -81,6 +157,124 @@
         });
       }
     });
+
+    /**
+     * Abre o modal de proposta do fornecedor (modal-proposta-fornecedor.html)
+     * Salva fornecedor e produto atual no sessionStorage para o modal consumir
+     * Cria overlay e iframe dinamicamente, com tratamento de erro e spinner de carregamento
+     * Fecha ao clicar fora, botão fechar ou tecla 'Esc'
+     * @param {string} fornecedor Nome do fornecedor
+     */
+    function abrirModalPropostaFornecedor(fornecedor) {
+      // Salva fornecedor e produto atual para o modal usar
+      var produto = document.getElementById('produto').textContent;
+      sessionStorage.setItem('modalPropostaFornecedor', JSON.stringify({fornecedor: fornecedor, produto: produto}));
+
+      // Se overlay já existe, não cria outro
+      if (document.getElementById('overlay-modal-proposta')) return;
+
+      // Cria overlay
+      var overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-proposta';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      // Cria spinner de carregamento
+      var spinnerOverlay = document.createElement('div');
+      spinnerOverlay.className = 'spinner-overlay';
+      spinnerOverlay.id = 'spinner-modal-proposta';
+      spinnerOverlay.innerHTML = '<div><div class="spinner"></div><div class="spinner-msg">Carregando...</div></div>';
+      document.body.appendChild(spinnerOverlay);
+
+      // Cria iframe para o modal
+      var iframe = document.createElement('iframe');
+      iframe.src = 'modal-proposta-fornecedor.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '98vw';
+      iframe.style.maxWidth = '700px';
+      iframe.style.height = '95vh';
+      iframe.style.maxHeight = '90vh';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      // Tratamento de erro: timeout de 5s se iframe não carregar
+      var iframeLoaded = false;
+      var timeoutId = setTimeout(function() {
+        if (!iframeLoaded) {
+          removerSpinnerModalProposta();
+          fecharOverlayModalProposta();
+          alert('Erro ao carregar o modal do fornecedor. Por favor, tente novamente mais tarde.');
+        }
+      }, 5000);
+
+      // Quando iframe carregar, remove spinner
+      iframe.onload = function() {
+        iframeLoaded = true;
+        removerSpinnerModalProposta();
+      };
+
+      // Tratamento de erro na criação do iframe
+      try {
+        overlay.appendChild(iframe);
+        document.body.appendChild(overlay);
+        setTimeout(function() { iframe.focus(); }, 100);
+      } catch (e) {
+        removerSpinnerModalProposta();
+        alert('Não foi possível abrir o modal do fornecedor. Erro: ' + e.message);
+        return;
+      }
+
+      // Fecha modal ao clicar fora do iframe
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModalProposta();
+      });
+
+      // Fecha modal ao pressionar 'Esc'
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModalProposta();
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+    }
+
+    /**
+     * Remove o overlay/modal do fornecedor e limpa dados do sessionStorage
+     */
+    function fecharOverlayModalProposta() {
+      var overlay = document.getElementById('overlay-modal-proposta');
+      if (overlay) {
+        if (overlay._escListener) document.removeEventListener('keydown', overlay._escListener);
+        overlay.remove();
+        sessionStorage.removeItem('modalPropostaFornecedor');
+      }
+      removerSpinnerModalProposta();
+    }
+    window.fecharOverlayModalProposta = fecharOverlayModalProposta;
+
+    /**
+     * Remove o spinner de carregamento do modal do fornecedor
+     */
+    function removerSpinnerModalProposta() {
+      var spinner = document.getElementById('spinner-modal-proposta');
+      if (spinner) spinner.remove();
+    }
+
+    // Modal de quantidade (mantido original)
     function abrirModalQuantidade(fornecedor) {
       document.getElementById('modal-bg').style.display = 'flex';
       document.getElementById('modal-fornecedor-nome').textContent = fornecedor;
@@ -108,62 +302,6 @@
       alert('Pedido de compra enviado para os fornecedores selecionados!');
       window.location.href = 'dashboard.html';
     }
-    // NOVO: abrir modal de proposta do fornecedor
-    function abrirModalPropostaFornecedor(fornecedor) {
-      // Salva fornecedor e produto atual para o modal usar
-      var produto = document.getElementById('produto').textContent;
-      sessionStorage.setItem('modalPropostaFornecedor', JSON.stringify({fornecedor: fornecedor, produto: produto}));
-      // Overlay modal
-      if (document.getElementById('overlay-modal-proposta')) return;
-      var overlay = document.createElement('div');
-      overlay.id = 'overlay-modal-proposta';
-      overlay.style.position = 'fixed';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100vw';
-      overlay.style.height = '100vh';
-      overlay.style.background = 'rgba(30,40,80,0.35)';
-      overlay.style.zIndex = '9999';
-      overlay.style.display = 'flex';
-      overlay.style.alignItems = 'center';
-      overlay.style.justifyContent = 'center';
-      overlay.tabIndex = -1;
-      var iframe = document.createElement('iframe');
-      iframe.src = 'modal-proposta-fornecedor.html';
-      iframe.style.border = 'none';
-      iframe.style.borderRadius = '12px';
-      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
-      iframe.style.background = '#fff';
-      iframe.style.width = '98vw';
-      iframe.style.maxWidth = '700px';
-      iframe.style.height = '95vh';
-      iframe.style.maxHeight = '90vh';
-      iframe.style.overflow = 'hidden';
-      iframe.setAttribute('aria-modal', 'true');
-      iframe.setAttribute('role', 'dialog');
-      iframe.tabIndex = 0;
-      iframe.scrolling = 'no';
-      overlay.appendChild(iframe);
-      document.body.appendChild(overlay);
-      setTimeout(function() { iframe.focus(); }, 100);
-      overlay.addEventListener('mousedown', function(e) {
-        if (e.target === overlay) fecharOverlayModalProposta();
-      });
-      function escListener(e) {
-        if (e.key === 'Escape') fecharOverlayModalProposta();
-      }
-      document.addEventListener('keydown', escListener);
-      overlay._escListener = escListener;
-    }
-    function fecharOverlayModalProposta() {
-      var overlay = document.getElementById('overlay-modal-proposta');
-      if (overlay) {
-        if (overlay._escListener) document.removeEventListener('keydown', overlay._escListener);
-        overlay.remove();
-        sessionStorage.removeItem('modalPropostaFornecedor');
-      }
-    }
-    window.fecharOverlayModalProposta = fecharOverlayModalProposta;
   </script>
 </head>
 <body>
@@ -210,22 +348,7 @@
             </tr>
           </thead>
           <tbody id="propostas-tbody">
-            <tr>
-              <td><input type="checkbox" class="select-checkbox" aria-label="Selecionar Frutas Tropicais LTDA"></td>
-              <td><a href="#" class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Frutas Tropicais LTDA');return false;">Frutas Tropicais LTDA</a></td>
-              <td>4,20</td>
-              <td>800 kg</td>
-              <td>13/06/2024</td>
-              <td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade('Frutas Tropicais LTDA')">Selecionar</button></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="select-checkbox" aria-label="Selecionar Ceasa Sul"></td>
-              <td><a href="#" class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Ceasa Sul');return false;">Ceasa Sul</a></td>
-              <td>4,35</td>
-              <td>800 kg</td>
-              <td>13/06/2024</td>
-              <td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade('Ceasa Sul')">Selecionar</button></td>
-            </tr>
+            <!-- Preenchido dinamicamente pelo JS -->
           </tbody>
         </table>
       </div>
