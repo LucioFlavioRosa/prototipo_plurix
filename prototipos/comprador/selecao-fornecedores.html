@@ -19,8 +19,8 @@
     }
     .main-content {
       max-width: 100%;
-      margin: 0 auto;
-      padding: 16px;
+      margin: 0;
+      padding: 8px;
       min-height: auto;
       display: flex;
       flex-direction: column;
@@ -33,6 +33,8 @@
       margin-bottom: 32px;
       display: flex;
       flex-direction: column;
+      max-height: 100vh;
+      overflow-y: auto;
     }
     .card-title {
       font-size: 1.35rem;
@@ -118,9 +120,18 @@
     .btn-cancelar:hover {
       background: #b93a2e;
     }
+    .cotacao-success-message {
+      display: none;
+      text-align: center;
+      color: #4bb543;
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 12px;
+    }
     @media (max-width: 900px) {
       .main-content {
-        padding: 12px 0 0 0;
+        padding: 8px 0 0 0;
       }
       .card {
         padding: 14px 6px 12px 6px;
@@ -132,13 +143,21 @@
   </style>
   <script>
     function dispararCotacao() {
-      alert('✓ Cotação disparada com sucesso para os fornecedores selecionados!');
+      // Exibe mensagem de sucesso personalizada
+      var msg = document.getElementById('cotacao-success-message');
+      if (msg) {
+        msg.style.display = 'block';
+      }
+      // Envia mensagem ao dashboard principal
       if (window.parent && typeof window.parent.postMessage === 'function') {
-        window.parent.postMessage({action: 'cotacaoDisparada'}, '*');
+        window.parent.postMessage({type: 'cotacao_disparada_sucesso'}, '*');
       }
-      if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
-        window.parent.fecharOverlayModal();
-      }
+      // Fecha o modal após um pequeno delay para o usuário ver a mensagem
+      setTimeout(function() {
+        if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+          window.parent.fecharOverlayModal();
+        }
+      }, 1100);
     }
     function cancelar() {
       if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
@@ -211,6 +230,7 @@
           </tr>
         </tbody>
       </table>
+      <div id="cotacao-success-message" class="cotacao-success-message">✓ Cotação disparada com sucesso para os fornecedores selecionados!</div>
       <div style="margin-top:24px;text-align:right;">
         <button class="btn-primary" onclick="dispararCotacao()">Disparar Cotação</button>
         <button class="btn-cancelar" onclick="cancelar()">Cancelar</button>
