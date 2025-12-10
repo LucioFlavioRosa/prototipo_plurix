@@ -357,6 +357,35 @@
     }
     window.fecharOverlayModal = fecharOverlayModal;
     window.abrirModalSelecaoFornecedores = abrirModalSelecaoFornecedores;
+
+    // NOVO: Função para redirecionar para cotacao-pronta.html com dados mokados de Banana Prata
+    function verCotacaoProntaBananaPrata() {
+      // Dados mokados para Banana Prata
+      const cotacaoProntaBanana = {
+        produto: 'Banana Prata',
+        quantidade: '800 kg',
+        unidade: 'Quilograma',
+        condicoes: 'Entrega refrigerada, validade mínima 4 dias, embalagem retornável',
+        dataEntrega: '16/06/2024',
+        status: 'Pronta para Pedido',
+        propostas: [
+          {
+            fornecedor: 'Frutas Tropicais LTDA',
+            preco: '4,20',
+            quantidade: '800 kg',
+            dataEnvio: '13/06/2024'
+          },
+          {
+            fornecedor: 'Ceasa Sul',
+            preco: '4,35',
+            quantidade: '800 kg',
+            dataEnvio: '13/06/2024'
+          }
+        ]
+      };
+      sessionStorage.setItem('cotacaoPronta', JSON.stringify(cotacaoProntaBanana));
+      window.location.href = 'cotacao-pronta.html';
+    }
   </script>
 </head>
 <body>
@@ -406,7 +435,7 @@
                 <td>800 kg</td>
                 <td>16/06/2024</td>
                 <td><span style="color:#4bb543;font-weight:700">Cotação Pronta</span></td>
-                <td><a href="#" class="link-detalhes" onclick="alert('Fluxo de cotação pronta em breve!');return false;">Ver Detalhes</a></td>
+                <td><a href="#" class="link-detalhes" onclick="verCotacaoProntaBananaPrata();return false;">Ver Detalhes</a></td>
               </tr>
             </tbody>
           </table>
