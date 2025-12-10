@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Justificativa de Aprovação/Reprovação | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    .modal { display: flex; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+    .modal-content { background: #fff; max-width: 500px; width: 98%; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; outline: none; }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+    .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-close:hover { color: #e74c3c; }
+    .modal-body { font-size: 1.05rem; line-height: 1.6; color: #222; }
+    .info-cotacao { background: #f7f8fa; border-radius: 7px; padding: 14px 16px; margin-bottom: 18px; font-size: 1.01rem; color: #1a2340; }
+    label { font-weight: 600; color: #1a2340; margin-bottom: 4px; display: block; font-size: 1.04rem; }
+    textarea { width: 100%; min-height: 70px; padding: 8px 12px; border: 1px solid #b7b9c6; border-radius: 4px; font-size: 1.05rem; background: #f7f8fa; color: #222; resize: vertical; margin-bottom: 14px; }
+    textarea:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 14px; }
+    .btn-aprovar, .btn-reprovar, .btn-cancelar { padding: 10px 24px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
+    .btn-aprovar { background: #4bb543; color: #fff; }
+    .btn-aprovar:hover { background: #399a36; }
+    .btn-reprovar { background: #e74c3c; color: #fff; }
+    .btn-reprovar:hover { background: #b93a2e; }
+    .btn-cancelar { background: #b7b9c6; color: #fff; }
+    .btn-cancelar:hover { background: #888; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 600px) { .modal-content { padding: 12px; } }
+  </style>
+</head>
+<body>
+  <div class="modal" tabindex="-1" aria-modal="true" role="dialog" style="display:flex;">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Justificativa</span>
+        <button class="modal-close" aria-label="Fechar" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-cotacao" id="info-cotacao">
+          Produto: <strong id="cot-produto">---</strong><br>
+          Fornecedor: <strong id="cot-fornecedor">---</strong><br>
+          Valor Total: <strong id="cot-valor">---</strong><br>
+          Nível de Alçada: <strong id="cot-nivel">---</strong>
+        </div>
+        <form id="form-justificativa" autocomplete="off">
+          <label for="justificativa">Justificativa <span style="color:#e74c3c">*</span></label>
+          <textarea id="justificativa" name="justificativa" required aria-required="true" placeholder="Descreva o motivo da aprovação ou reprovação..."></textarea>
+          <div class="modal-footer">
+            <button type="button" class="btn-aprovar" id="btn-aprovar" onclick="confirmar('aprovar')">Confirmar Aprovação</button>
+            <button type="button" class="btn-reprovar" id="btn-reprovar" onclick="confirmar('reprovar')">Confirmar Reprovação</button>
+            <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Mock de dados para simular carregamento
+    const cotacoes = {
+      1: { produto: 'Alcatra Bovino', fornecedor: 'Fornecedor Carnes', valor: 'R$ 12.500,00', nivel: 'Dir. Comercial Holding' },
+      2: { produto: 'Banana Nanica', fornecedor: 'Fornecedor Hortifruti', valor: 'R$ 3.200,00', nivel: 'Gerente Categoria Bandeira' },
+      3: { produto: 'Tomate Italiano', fornecedor: 'Fornecedor Hortifruti', valor: 'R$ 2.100,00', nivel: 'VP' }
+    };
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    function preencherInfo() {
+      const id = getQueryParam('id') || 1;
+      const tipo = getQueryParam('tipo') || 'aprovar';
+      const cot = cotacoes[id] || cotacoes[1];
+      document.getElementById('cot-produto').textContent = cot.produto;
+      document.getElementById('cot-fornecedor').textContent = cot.fornecedor;
+      document.getElementById('cot-valor').textContent = cot.valor;
+      document.getElementById('cot-nivel').textContent = cot.nivel;
+      if (tipo === 'aprovar') {
+        document.getElementById('modal-title').textContent = 'Justificativa de Aprovação';
+        document.getElementById('btn-aprovar').style.display = '';
+        document.getElementById('btn-reprovar').style.display = 'none';
+      } else if (tipo === 'reprovar') {
+        document.getElementById('modal-title').textContent = 'Justificativa de Reprovação';
+        document.getElementById('btn-aprovar').style.display = 'none';
+        document.getElementById('btn-reprovar').style.display = '';
+      } else {
+        document.getElementById('modal-title').textContent = 'Detalhes da Cotação';
+        document.getElementById('btn-aprovar').style.display = 'none';
+        document.getElementById('btn-reprovar').style.display = 'none';
+        document.getElementById('justificativa').style.display = 'none';
+      }
+    }
+    function confirmar(tipo) {
+      const justificativa = document.getElementById('justificativa').value.trim();
+      if (!justificativa) {
+        alert('A justificativa é obrigatória.');
+        document.getElementById('justificativa').focus();
+        return;
+      }
+      if (tipo === 'aprovar') {
+        alert('Cotação aprovada com justificativa: ' + justificativa);
+      } else {
+        alert('Cotação reprovada com justificativa: ' + justificativa);
+      }
+      window.location.href = 'aprovacoes-pendentes.html';
+    }
+    function fecharModal() {
+      window.location.href = 'aprovacoes-pendentes.html';
+    }
+    window.onload = preencherInfo;
+  </script>
+</body>
+</html>
