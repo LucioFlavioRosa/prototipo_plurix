@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proposta do Fornecedor | Plurix Comprador</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    .modal-bg { display: flex; justify-content: center; align-items: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); }
+    .modal-content { background: #fff; max-width: 700px; width: 98%; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+    .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-close:hover { color: #e74c3c; }
+    .modal-body { font-size: 1.05rem; line-height: 1.6; color: #222; }
+    .card-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; margin-bottom: 18px; }
+    .card-table th, .card-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .kpi-section { margin: 18px 0 10px 0; }
+    .kpi-title { font-size: 1.13rem; font-weight: 700; color: #1a2340; margin-bottom: 8px; }
+    .kpi-graphs { display: flex; flex-wrap: wrap; gap: 24px; }
+    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 12px 10px; flex: 1 1 240px; min-width: 220px; text-align: center; }
+    .kpi-graph img { max-width: 180px; height: 90px; object-fit: contain; }
+    .modal-actions { margin-top: 24px; display: flex; gap: 16px; justify-content: flex-end; }
+    .btn { padding: 12px 28px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
+    .btn-aceitar { background: #4bb543; color: #fff; }
+    .btn-aceitar:hover { background: #399a36; }
+    .btn-rejeitar { background: #e74c3c; color: #fff; }
+    .btn-rejeitar:hover { background: #b93a2e; }
+    .btn-fechar { background: #b7b9c6; color: #fff; }
+    .btn-fechar:hover { background: #8c8e99; }
+    @media (max-width: 700px) {
+      .modal-content { padding: 12px 2px 12px 2px; }
+      .kpi-graphs { flex-direction: column; gap: 10px; }
+    }
+  </style>
+  <script>
+    function fecharModal() {
+      window.history.back();
+    }
+    function aceitarProposta() {
+      alert('Proposta aceita!');
+      window.location.href = 'cotacao-pronta.html';
+    }
+    function rejeitarProposta() {
+      alert('Proposta rejeitada.');
+      fecharModal();
+    }
+  </script>
+</head>
+<body>
+  <div class="modal-bg" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Proposta de Alimentos Verdes LTDA</span>
+        <button class="modal-close" aria-label="Fechar" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:18px;">
+          <strong>Produto:</strong> Tomate Italiano &nbsp; | &nbsp;
+          <strong>Quantidade:</strong> 1.000 kg &nbsp; | &nbsp;
+          <strong>Data de Entrega:</strong> 18/06/2024
+        </div>
+        <table class="card-table" aria-label="Proposta do Fornecedor">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Preço Unitário (R$)</th>
+              <th>Quantidade</th>
+              <th>Data Envio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Alimentos Verdes LTDA</td>
+              <td>5,80</td>
+              <td>1.000 kg</td>
+              <td>14/06/2024</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="kpi-section">
+          <div class="kpi-title">KPIs Históricos do Fornecedor</div>
+          <div class="kpi-graphs">
+            <div class="kpi-graph">
+              <div>Pontualidade na Entrega</div>
+              <img src="https://dummyimage.com/180x90/ddd/1a2340&text=Pontualidade" alt="Gráfico Pontualidade">
+            </div>
+            <div class="kpi-graph">
+              <div>Qualidade da Entrega</div>
+              <img src="https://dummyimage.com/180x90/ddd/1a2340&text=Qualidade" alt="Gráfico Qualidade">
+            </div>
+          </div>
+        </div>
+        <div class="kpi-section">
+          <div class="kpi-title">Histórico de Preço vs. Índices de Mercado</div>
+          <div class="kpi-graphs">
+            <div class="kpi-graph">
+              <div>Comparativo: Fornecedor x Esalq CEPEA x Milkpoint x Safras</div>
+              <img src="https://dummyimage.com/180x90/ccc/1a2340&text=Hist.+de+Preços" alt="Gráfico Histórico de Preço">
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-aceitar" onclick="aceitarProposta()">Aceitar Proposta</button>
+          <button class="btn btn-rejeitar" onclick="rejeitarProposta()">Rejeitar</button>
+          <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
