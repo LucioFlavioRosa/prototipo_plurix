@@ -43,7 +43,7 @@
     .btn-confirmar:hover { background: #399a36; }
     .btn-cancelar { background: #b7b9c6; color: #fff; }
     .btn-cancelar:hover { background: #8c8e99; }
-    /* Spinner para carregamento do modal do fornecedor */
+    /* Spinner para carregamento do modal do fornecedor e quantidade */
     .spinner-overlay {
       position: fixed;
       z-index: 10001;
@@ -152,7 +152,7 @@
             '<td>'+p.preco+'</td>'+
             '<td>'+p.quantidade+'</td>'+
             '<td>'+p.dataEnvio+'</td>'+
-            '<td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade(\''+p.fornecedor+'\')">Selecionar</button></td>';
+            '<td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade(\''+p.fornecedor+'\', \''+p.preco+'\', \''+cotacao.produto+'\', \''+p.quantidade+'\')">Selecionar</button></td>';
           tbody.appendChild(tr);
         });
       }
@@ -226,6 +226,7 @@
       iframe.onload = function() {
         iframeLoaded = true;
         removerSpinnerModalProposta();
+        clearTimeout(timeoutId);
       };
 
       // Tratamento de erro na criação do iframe
@@ -274,25 +275,132 @@
       if (spinner) spinner.remove();
     }
 
-    // Modal de quantidade (mantido original)
-    function abrirModalQuantidade(fornecedor) {
-      document.getElementById('modal-bg').style.display = 'flex';
-      document.getElementById('modal-fornecedor-nome').textContent = fornecedor;
-      document.getElementById('input-quantidade').value = '';
-      document.getElementById('input-quantidade').focus();
-    }
-    function fecharModal() {
-      document.getElementById('modal-bg').style.display = 'none';
-    }
-    function confirmarQuantidade() {
-      var quantidade = document.getElementById('input-quantidade').value;
-      if (!quantidade || isNaN(Number(quantidade)) || Number(quantidade) <= 0) {
-        alert('Informe uma quantidade válida.');
+    /**
+     * Abre o modal de quantidade de compra (modal-quantidade-compra.html)
+     * Salva os dados do fornecedor, preco, produto e quantidade no sessionStorage
+     * Cria overlay e iframe dinamicamente, com tratamento de erro e spinner de carregamento
+     * Fecha ao clicar fora, botão fechar ou tecla 'Esc'
+     * @param {string} fornecedor
+     * @param {string} preco
+     * @param {string} produto
+     * @param {string} quantidade
+     */
+    function abrirModalQuantidade(fornecedor, preco, produto, quantidade) {
+      // Salva os dados para o modal consumir
+      sessionStorage.setItem('modalQuantidadeCompra', JSON.stringify({
+        fornecedor: fornecedor,
+        preco: preco,
+        produto: produto,
+        quantidade: quantidade
+      }));
+
+      // Se overlay já existe, não cria outro
+      if (document.getElementById('overlay-modal-quantidade')) return;
+
+      // Cria overlay
+      var overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-quantidade';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      // Cria spinner de carregamento
+      var spinnerOverlay = document.createElement('div');
+      spinnerOverlay.className = 'spinner-overlay';
+      spinnerOverlay.id = 'spinner-modal-quantidade';
+      spinnerOverlay.innerHTML = '<div><div class="spinner"></div><div class="spinner-msg">Carregando...</div></div>';
+      document.body.appendChild(spinnerOverlay);
+
+      // Cria iframe para o modal
+      var iframe = document.createElement('iframe');
+      iframe.src = 'modal-quantidade-compra.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '98vw';
+      iframe.style.maxWidth = '700px';
+      iframe.style.height = '95vh';
+      iframe.style.maxHeight = '90vh';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      // Tratamento de erro: timeout de 5s se iframe não carregar
+      var iframeLoaded = false;
+      var timeoutId = setTimeout(function() {
+        if (!iframeLoaded) {
+          removerSpinnerModalQuantidade();
+          fecharOverlayModalQuantidade();
+          alert('Erro ao carregar o modal de quantidade. Por favor, tente novamente mais tarde.');
+        }
+      }, 5000);
+
+      // Quando iframe carregar, remove spinner
+      iframe.onload = function() {
+        iframeLoaded = true;
+        removerSpinnerModalQuantidade();
+        clearTimeout(timeoutId);
+      };
+
+      // Tratamento de erro na criação do iframe
+      try {
+        overlay.appendChild(iframe);
+        document.body.appendChild(overlay);
+        setTimeout(function() { iframe.focus(); }, 100);
+      } catch (e) {
+        removerSpinnerModalQuantidade();
+        alert('Não foi possível abrir o modal de quantidade. Erro: ' + e.message);
         return;
       }
-      alert('Quantidade definida: ' + quantidade + ' kg.');
-      fecharModal();
+
+      // Fecha modal ao clicar fora do iframe
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModalQuantidade();
+      });
+
+      // Fecha modal ao pressionar 'Esc'
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModalQuantidade();
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
     }
+
+    /**
+     * Remove o overlay/modal de quantidade e limpa dados do sessionStorage
+     */
+    function fecharOverlayModalQuantidade() {
+      var overlay = document.getElementById('overlay-modal-quantidade');
+      if (overlay) {
+        if (overlay._escListener) document.removeEventListener('keydown', overlay._escListener);
+        overlay.remove();
+        sessionStorage.removeItem('modalQuantidadeCompra');
+      }
+      removerSpinnerModalQuantidade();
+    }
+    window.fecharOverlayModalQuantidade = fecharOverlayModalQuantidade;
+
+    /**
+     * Remove o spinner de carregamento do modal de quantidade
+     */
+    function removerSpinnerModalQuantidade() {
+      var spinner = document.getElementById('spinner-modal-quantidade');
+      if (spinner) spinner.remove();
+    }
+
+    // Modal de quantidade (inline) e funções antigas foram removidas
+
     function enviarPedidoCompra() {
       var checkboxes = document.querySelectorAll('.select-checkbox:checked');
       if (checkboxes.length === 0) {
@@ -355,21 +463,6 @@
       <button class="btn-enviar-pedido" onclick="enviarPedidoCompra()">Enviar Pedido de Compra</button>
     </main>
   </div>
-  <div id="modal-bg" class="modal-bg" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-content" tabindex="0">
-      <div class="modal-header">
-        <span class="modal-title">Indicar Quantidade de Compra para <span id="modal-fornecedor-nome">Fornecedor</span></span>
-        <button class="modal-close" aria-label="Fechar" onclick="fecharModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <label for="input-quantidade"><strong>Quantidade (kg):</strong></label>
-        <input type="number" id="input-quantidade" min="1" step="0.01" style="width:100%;padding:8px 6px;margin-top:8px;margin-bottom:18px;border:1px solid #b7b9c6;border-radius:4px;font-size:1.04rem;" required>
-        <div class="modal-actions">
-          <button class="btn-modal btn-confirmar" onclick="confirmarQuantidade()">Confirmar</button>
-          <button class="btn-modal btn-cancelar" onclick="fecharModal()">Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Modal inline de quantidade removido -->
 </body>
 </html>
