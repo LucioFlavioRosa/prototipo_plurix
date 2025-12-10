@@ -208,10 +208,8 @@
 
     // Função para abrir o modal de detalhes da cotação pendente em overlay com iframe
     function abrirModalCotacaoPendente(id) {
-      // Armazena os dados da cotação selecionada no sessionStorage
       sessionStorage.setItem('cotacaoAtual', JSON.stringify(cotacoesPendentesMock[id]));
-      // Cria overlay
-      if (document.getElementById('overlay-modal-cotacao')) return; // Evita múltiplos overlays
+      if (document.getElementById('overlay-modal-cotacao')) return;
       const overlay = document.createElement('div');
       overlay.id = 'overlay-modal-cotacao';
       overlay.style.position = 'fixed';
@@ -226,7 +224,6 @@
       overlay.style.justifyContent = 'center';
       overlay.tabIndex = -1;
 
-      // Cria iframe
       const iframe = document.createElement('iframe');
       iframe.src = 'modal-detalhes-cotacao-pendente.html?id=' + encodeURIComponent(id);
       iframe.style.border = 'none';
@@ -245,23 +242,18 @@
       overlay.appendChild(iframe);
       document.body.appendChild(overlay);
 
-      // Foco no iframe
       setTimeout(function() {
         iframe.focus();
       }, 100);
 
-      // Fecha overlay ao clicar fora do iframe
       overlay.addEventListener('mousedown', function(e) {
-        if (e.target === overlay) fecharOverlayModal();
+        if (e.target === overlay) fecharOverlayModal('cotacao');
       });
 
-      // Fecha overlay ao pressionar ESC
       function escListener(e) {
-        if (e.key === 'Escape') fecharOverlayModal();
+        if (e.key === 'Escape') fecharOverlayModal('cotacao');
       }
       document.addEventListener('keydown', escListener);
-
-      // Remove o escListener ao fechar
       overlay._escListener = escListener;
     }
 
@@ -282,7 +274,6 @@
       overlay.style.justifyContent = 'center';
       overlay.tabIndex = -1;
 
-      // Cria iframe para seleção de fornecedores
       const iframe = document.createElement('iframe');
       iframe.src = 'selecao-fornecedores.html';
       iframe.style.border = 'none';
@@ -302,28 +293,25 @@
       overlay.appendChild(iframe);
       document.body.appendChild(overlay);
 
-      // Foco no iframe
       setTimeout(function() {
         iframe.focus();
       }, 100);
 
-      // Fecha overlay ao clicar fora do iframe
       overlay.addEventListener('mousedown', function(e) {
-        if (e.target === overlay) fecharOverlayModal();
+        if (e.target === overlay) fecharOverlayModal('selecao');
       });
 
-      // Fecha overlay ao pressionar ESC
       function escListener(e) {
-        if (e.key === 'Escape') fecharOverlayModal();
+        if (e.key === 'Escape') fecharOverlayModal('selecao');
       }
       document.addEventListener('keydown', escListener);
       overlay._escListener = escListener;
 
       // Listener para mensagens do iframe (disparo de cotação)
       function messageListener(event) {
-        // Aceita apenas mensagens vindas do mesmo domínio
         if (event.data && event.data.type === 'cotacao_disparada_sucesso') {
-          fecharOverlayModal();
+          console.log('[Dashboard] Mensagem recebida: cotacao_disparada_sucesso');
+          fecharOverlayModal('selecao', true); // true indica que a cotação foi disparada
           alert('Cotação disparada para fornecedores selecionados com sucesso!');
         }
       }
@@ -331,29 +319,41 @@
       overlay._messageListener = messageListener;
     }
 
-    // Função global para fechar o overlay modal
-    function fecharOverlayModal() {
+    /**
+     * Função global para fechar overlays modais.
+     * @param {string} tipo - 'cotacao' ou 'selecao' ou undefined para ambos.
+     * @param {boolean} cotacaoDisparada - se true, limpa sessionStorage ao fechar seleção de fornecedores.
+     */
+    function fecharOverlayModal(tipo, cotacaoDisparada) {
       // Remove overlay de cotação
-      const overlayCotacao = document.getElementById('overlay-modal-cotacao');
-      if (overlayCotacao) {
-        if (overlayCotacao._escListener) {
-          document.removeEventListener('keydown', overlayCotacao._escListener);
+      if (!tipo || tipo === 'cotacao') {
+        const overlayCotacao = document.getElementById('overlay-modal-cotacao');
+        if (overlayCotacao) {
+          if (overlayCotacao._escListener) {
+            document.removeEventListener('keydown', overlayCotacao._escListener);
+          }
+          overlayCotacao.remove();
+          // Limpa sessionStorage SOMENTE ao fechar o modal de detalhes da cotação
+          sessionStorage.removeItem('cotacaoAtual');
         }
-        overlayCotacao.remove();
       }
       // Remove overlay de seleção de fornecedores
-      const overlaySelecao = document.getElementById('overlay-modal-selecao-fornecedores');
-      if (overlaySelecao) {
-        if (overlaySelecao._escListener) {
-          document.removeEventListener('keydown', overlaySelecao._escListener);
+      if (!tipo || tipo === 'selecao') {
+        const overlaySelecao = document.getElementById('overlay-modal-selecao-fornecedores');
+        if (overlaySelecao) {
+          if (overlaySelecao._escListener) {
+            document.removeEventListener('keydown', overlaySelecao._escListener);
+          }
+          if (overlaySelecao._messageListener) {
+            window.removeEventListener('message', overlaySelecao._messageListener);
+          }
+          overlaySelecao.remove();
+          // Limpa sessionStorage apenas se a cotação foi disparada
+          if (cotacaoDisparada) {
+            sessionStorage.removeItem('cotacaoAtual');
+          }
         }
-        if (overlaySelecao._messageListener) {
-          window.removeEventListener('message', overlaySelecao._messageListener);
-        }
-        overlaySelecao.remove();
       }
-      // Limpa sessionStorage da cotação atual
-      sessionStorage.removeItem('cotacaoAtual');
     }
     window.fecharOverlayModal = fecharOverlayModal;
     window.abrirModalSelecaoFornecedores = abrirModalSelecaoFornecedores;
