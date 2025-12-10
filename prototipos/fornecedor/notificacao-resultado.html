@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado da Cotação | Plurix Fornecedor</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { min-height: 100vh; }
+    .container { max-width: 480px; margin: 56px auto 0 auto; padding: 0 12px; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; text-align: center; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 18px; }
+    .status-aprovada, .status-reprovada { display: inline-block; border-radius: 16px; padding: 7px 28px; font-size: 1.12rem; font-weight: 700; color: #fff; margin-bottom: 18px; }
+    .status-aprovada { background: #4bb543; }
+    .status-reprovada { background: #e74c3c; }
+    .icon-status { font-size: 2.5rem; vertical-align: middle; margin-bottom: 10px; }
+    .info-list { list-style: none; padding: 0; margin: 0 0 18px 0; text-align: left; }
+    .info-list li { margin-bottom: 8px; font-size: 1.07rem; }
+    .btn-primary { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); margin-top: 18px; }
+    .btn-primary:hover { background: #e1a12a; }
+    .btn-secondary { background: #e8eaf0; color: #1a2340; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; margin-top: 18px; margin-left: 8px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .topbar .logo img { height: 40px; }
+    .topbar nav a { color: #1a2340; text-decoration: none; font-weight: 600; margin-left: 18px; font-size: 1.04rem; }
+    .topbar nav a.active { color: #f9b233; }
+    @media (max-width: 700px) { .container { max-width: 98vw; } .card { padding: 18px 8px 16px 8px; } }
+  </style>
+  <script>
+    function voltarDashboard() {
+      window.location.href = '../../dashboard-fornecedor.html';
+    }
+    function confirmarRecebimento() {
+      alert('Recebimento confirmado!');
+      voltarDashboard();
+    }
+    function getStatusFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('status') || 'aceita';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const status = getStatusFromURL();
+      const card = document.getElementById('resultado-card');
+      if (status === 'aceita') {
+        card.innerHTML = `
+          <div class="icon-status status-aprovada" aria-label="Cotação Aceita">&#10003;</div>
+          <div class="card-title">Sua proposta foi <span class="status-aprovada">ACEITA</span></div>
+          <ul class="info-list">
+            <li><strong>Produto:</strong> Carne Bovina (Alcatra)</li>
+            <li><strong>Quantidade Pedida:</strong> 200 kg</li>
+            <li><strong>Valor Total:</strong> R$ 9.800,00</li>
+            <li><strong>Data de Entrega:</strong> 18/06/2024</li>
+          </ul>
+          <button class="btn-primary" onclick="confirmarRecebimento()">Confirmar Recebimento do Pedido</button>
+          <button class="btn-secondary" onclick="voltarDashboard()">Voltar ao Dashboard</button>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="icon-status status-reprovada" aria-label="Cotação Rejeitada">&#10007;</div>
+          <div class="card-title">Sua proposta foi <span class="status-reprovada">REJEITADA</span></div>
+          <p>Obrigado por participar desta cotação.<br>Continue acompanhando novas oportunidades em seu dashboard.</p>
+          <button class="btn-secondary" onclick="voltarDashboard()">Voltar ao Dashboard</button>
+        `;
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix"></div>
+    <nav>
+      <a href="../../dashboard-fornecedor.html">Dashboard</a>
+      <a href="historico-cotacoes-fornecedor.html">Histórico</a>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card" id="resultado-card" aria-label="Resultado da Cotação">
+      <!-- Conteúdo dinâmico JS -->
+    </div>
+  </div>
+</body>
+</html>
