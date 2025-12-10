@@ -9,7 +9,7 @@
     @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
     html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
     .modal-bg { display: flex; justify-content: center; align-items: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); }
-    .modal-content { background: #fff; max-width: 700px; width: 98vw; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; outline: none; }
+    .modal-content { background: #fff; max-width: 900px; width: 98vw; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; outline: none; }
     @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
     .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
@@ -21,9 +21,10 @@
     .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
     .kpi-section { margin: 18px 0 10px 0; }
     .kpi-title { font-size: 1.13rem; font-weight: 700; color: #1a2340; margin-bottom: 8px; }
-    .kpi-graphs { display: flex; flex-wrap: wrap; gap: 32px 28px; padding: 8px 0 4px 0; }
-    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 24px 18px 20px 18px; flex: 1 1 280px; min-width: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; min-height: 420px; }
-    .kpi-graph canvas { max-width: 100%; height: auto; max-height: 340px; margin: 0 auto; }
+    .kpi-graphs { display: block; }
+    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 24px 18px 20px 18px; width: 100%; max-width: 100%; min-height: 480px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; margin-bottom: 24px; }
+    .kpi-graph:last-child { margin-bottom: 0; }
+    .kpi-graph canvas { max-width: 100%; height: auto; max-height: 400px; margin: 0 auto; }
     .kpi-graph-label { margin-top: 10px; font-size: 0.92rem; color: #333; line-height: 1.4; text-align: center; }
     .modal-footer { font-size: 0.9rem; color: #666; text-align: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
     .modal-actions { margin-top: 24px; display: flex; gap: 16px; justify-content: flex-end; }
@@ -31,10 +32,11 @@
     .btn-fechar { background: #b7b9c6; color: #fff; }
     .btn-fechar:hover { background: #8c8e99; }
     @media (max-width: 700px) {
-      .modal-content { padding: 12px 2px 12px 2px; }
-      .kpi-graphs { flex-direction: column; gap: 14px; }
-      .kpi-graph { min-width: 0; width: 100%; padding: 16px 8px 14px 8px; min-height: 380px; }
-      .kpi-graph canvas { max-height: 280px; }
+      .modal-content { padding: 16px 12px; }
+      .kpi-graphs { }
+      .kpi-graph { min-width: 0; width: 100%; padding: 20px 12px; min-height: 420px; margin-bottom: 24px; }
+      .kpi-graph canvas { max-height: 340px; }
+      .kpi-graph:last-child { margin-bottom: 0; }
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -160,7 +162,7 @@
           canvas.chartInstance.destroy();
         }
         const ctx = canvas.getContext('2d');
-        canvas.height = 320;
+        canvas.height = 380;
         const chart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -224,7 +226,7 @@
           canvas.chartInstance.destroy();
         }
         const ctx = canvas.getContext('2d');
-        canvas.height = 320;
+        canvas.height = 380;
         const chart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -288,7 +290,7 @@
           canvas.chartInstance.destroy();
         }
         const ctx = canvas.getContext('2d');
-        canvas.height = 320;
+        canvas.height = 380;
         const chart = new Chart(ctx, {
           type: 'line',
           data: {
