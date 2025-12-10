@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Comprador | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      padding: 32px 40px 40px 40px;
+      display: flex;
+      gap: 32px;
+    }
+    .dashboard-cards {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .cotacoes-lista {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-top: 12px;
+    }
+    .cotacoes-lista th, .cotacoes-lista td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cotacoes-lista th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .cotacoes-lista tr:last-child td {
+      border-bottom: none;
+    }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      cursor: pointer;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    @media (max-width: 1100px) {
+      .dashboard-section {
+        flex-direction: column;
+        gap: 18px;
+        padding: 18px 8px 18px 8px;
+      }
+    }
+    @media (max-width: 900px) {
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 14px 6px 12px 6px;
+      }
+    }
+  </style>
+  <script>
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../../index.html';
+      }
+    }
+    function abrirModalCotacaoPendente(id) {
+      // Simulação de dados
+      var dados = {
+        1: {
+          produto: 'Alcatra Bovina Resfriada',
+          quantidade: '200 kg',
+          condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.',
+          dataEntrega: '15/06/2024'
+        },
+        2: {
+          produto: 'Maçã Fuji',
+          quantidade: '500 kg',
+          condicoes: 'Transporte refrigerado. Entrega em caixas de 20kg. Unidade: kg.',
+          dataEntrega: '17/06/2024'
+        }
+      };
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (!modal) return;
+      modal.querySelector('.modal-produto').textContent = dados[id].produto;
+      modal.querySelector('.modal-quantidade').textContent = dados[id].quantidade;
+      modal.querySelector('.modal-condicoes').textContent = dados[id].condicoes;
+      modal.querySelector('.modal-data-entrega').textContent = dados[id].dataEntrega;
+      modal.style.display = 'flex';
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('role', 'dialog');
+    }
+    function fecharModalCotacaoPendente() {
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    function fazerCotacao() {
+      window.location.href = 'selecao-fornecedores.html';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) fecharModalCotacaoPendente();
+        });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) closeBtn.addEventListener('click', fecharModalCotacaoPendente);
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fecharModalCotacaoPendente();
+      });
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html" class="active">Cotações em Andamento</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Novas Cotações</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Histórico</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Relatórios</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Fornecedores</a>
+      <a href="../../index.html" onclick="sair(); return false;">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Comprador</h1>
+    </header>
+    <main class="dashboard-section">
+      <!-- Coluna A: Cotações em Andamento -->
+      <section class="dashboard-cards" style="flex:1.2">
+        <div class="card">
+          <div class="card-title">Cotações em Andamento</div>
+          <table class="cotacoes-lista" aria-label="Cotações em Andamento">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Data de Entrega</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Filé de Frango</td>
+                <td>300 kg</td>
+                <td>14/06/2024</td>
+                <td><span style="color:#f9b233;font-weight:700">Em Cotação</span></td>
+                <td><a href="#" class="link-detalhes" onclick="window.location.href='selecao-fornecedores.html';return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>Banana Prata</td>
+                <td>800 kg</td>
+                <td>16/06/2024</td>
+                <td><span style="color:#4bb543;font-weight:700">Cotação Pronta</span></td>
+                <td><a href="#" class="link-detalhes" onclick="alert('Fluxo de cotação pronta em breve!');return false;">Ver Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- Coluna B: Cotações Pendentes de Disparo -->
+      <section class="dashboard-cards" style="flex:1">
+        <div class="card">
+          <div class="card-title">Cotações Pendentes de Disparo</div>
+          <table class="cotacoes-lista" aria-label="Cotações Pendentes">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Data de Entrega</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alcatra Bovina Resfriada</td>
+                <td>200 kg</td>
+                <td>15/06/2024</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirModalCotacaoPendente(1);return false;">Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>Maçã Fuji</td>
+                <td>500 kg</td>
+                <td>17/06/2024</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirModalCotacaoPendente(2);return false;">Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- Modal de Detalhes da Cotação Pendente -->
+  <div id="modal-cotacao-pendente" class="modal" tabindex="-1" style="display:none;">
+    <div class="modal-content" tabindex="0" style="max-width:500px;">
+      <div class="modal-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+        <span class="modal-title" style="font-size:1.25rem;font-weight:700;color:#1a2340;">Detalhes da Cotação Pendente</span>
+        <button class="modal-close" aria-label="Fechar" style="cursor:pointer;font-size:28px;color:#999;background:none;border:none;line-height:1;margin-left:16px;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div><strong>Produto:</strong> <span class="modal-produto"></span></div>
+        <div style="margin-top:8px;"><strong>Quantidade:</strong> <span class="modal-quantidade"></span></div>
+        <div style="margin-top:8px;"><strong>Condições:</strong> <span class="modal-condicoes"></span></div>
+        <div style="margin-top:8px;"><strong>Data de Entrega:</strong> <span class="modal-data-entrega"></span></div>
+        <div style="margin-top:22px;display:flex;gap:16px;">
+          <button onclick="fazerCotacao()" style="background:#f9b233;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:1.08rem;font-weight:700;cursor:pointer;">Fazer Cotação</button>
+          <button onclick="fecharModalCotacaoPendente()" style="background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:1.08rem;font-weight:700;cursor:pointer;">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
