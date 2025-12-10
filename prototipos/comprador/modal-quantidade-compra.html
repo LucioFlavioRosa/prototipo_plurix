@@ -8,20 +8,8 @@
   <style>
     @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
     html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
-    /* Removido .modal overlay, pois será gerenciado pelo pai */
-    .modal-content {
-      background: #fff;
-      max-width: 420px;
-      width: 98%;
-      padding: 32px 26px 24px 26px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(30,40,80,0.13);
-      animation: slideIn 0.3s ease;
-      outline: none;
-      margin: 0 auto;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
+    .modal { display: flex; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); justify-content: center; align-items: center; }
+    .modal-content { background: #fff; max-width: 420px; width: 98%; padding: 32px 26px 24px 26px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); animation: slideIn 0.3s ease; outline: none; }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
     .modal-title { font-size: 1.25rem; font-weight: 700; color: #1a2340; margin: 0; }
     .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
@@ -40,73 +28,40 @@
   </style>
 </head>
 <body>
-  <div class="modal-content" tabindex="0">
-    <div class="modal-header">
-      <span class="modal-title">Selecionar Quantidade de Compra</span>
-      <button class="modal-close" aria-label="Fechar" onclick="window.parent.fecharOverlayModalQuantidade()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div><strong>Fornecedor:</strong> <span id="fornecedor-nome">Fornecedor Exemplo S.A.</span></div>
-      <div><strong>Produto:</strong> <span id="produto-nome">Filé de Frango Resfriado 1kg</span></div>
-      <div><strong>Preço Unitário:</strong> <span id="preco-unitario">R$ 14,90</span></div>
-      <label for="quantidade" class="input-label">Quantidade a Comprar</label>
-      <input type="number" id="quantidade" class="form-input" min="1" step="1" placeholder="Digite a quantidade" aria-label="Quantidade a Comprar">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="window.parent.fecharOverlayModalQuantidade()">Cancelar</button>
-      <button class="btn-primary" onclick="confirmarCompra()">Confirmar</button>
+  <div class="modal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Selecionar Quantidade de Compra</span>
+        <button class="modal-close" aria-label="Fechar" onclick="window.location.href='cotacao-pronta.html'">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div><strong>Fornecedor:</strong> <span id="fornecedor-nome">Fornecedor Exemplo S.A.</span></div>
+        <div><strong>Produto:</strong> <span id="produto-nome">Filé de Frango Resfriado 1kg</span></div>
+        <div><strong>Preço Unitário:</strong> <span id="preco-unitario">R$ 14,90</span></div>
+        <label for="quantidade" class="input-label">Quantidade a Comprar</label>
+        <input type="number" id="quantidade" class="form-input" min="1" step="1" placeholder="Digite a quantidade" aria-label="Quantidade a Comprar">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="window.location.href='cotacao-pronta.html'">Cancelar</button>
+        <button class="btn-primary" onclick="confirmarCompra()">Confirmar</button>
+      </div>
     </div>
   </div>
   <script>
-    // Inicializa os dados do modal ao carregar
-    document.addEventListener('DOMContentLoaded', function() {
-      var dadosRaw = sessionStorage.getItem('modalQuantidadeCompra');
-      if (!dadosRaw) {
-        document.getElementById('fornecedor-nome').textContent = '-';
-        document.getElementById('produto-nome').textContent = '-';
-        document.getElementById('preco-unitario').textContent = '-';
-        return;
-      }
-      try {
-        var dados = JSON.parse(dadosRaw);
-        document.getElementById('fornecedor-nome').textContent = dados.fornecedor || '-';
-        document.getElementById('produto-nome').textContent = dados.produto || '-';
-        document.getElementById('preco-unitario').textContent = dados.preco ? 'R$ ' + dados.preco : '-';
-      } catch (e) {
-        document.getElementById('fornecedor-nome').textContent = '-';
-        document.getElementById('produto-nome').textContent = '-';
-        document.getElementById('preco-unitario').textContent = '-';
-      }
-    });
-
     function confirmarCompra() {
-      var dadosRaw = sessionStorage.getItem('modalQuantidadeCompra');
-      if (!dadosRaw) {
-        alert('Dados do fornecedor não encontrados. Por favor, tente novamente.');
-        window.parent.fecharOverlayModalQuantidade();
-        return;
-      }
       var quantidade = document.getElementById('quantidade').value;
-      if (!quantidade || isNaN(Number(quantidade)) || Number(quantidade) <= 0) {
+      if (!quantidade || quantidade <= 0) {
         alert('Informe uma quantidade válida.');
         document.getElementById('quantidade').focus();
         return;
       }
-      try {
-        var dados = JSON.parse(dadosRaw);
-        dados.quantidadeConfirmada = quantidade;
-        sessionStorage.setItem('modalQuantidadeCompra', JSON.stringify(dados));
-        alert('Compra confirmada! Quantidade: ' + quantidade);
-        window.parent.fecharOverlayModalQuantidade();
-      } catch (e) {
-        alert('Erro ao processar os dados. Por favor, tente novamente.');
-        window.parent.fecharOverlayModalQuantidade();
-      }
+      // Aqui seria enviado para backend. Simulação:
+      alert('Compra confirmada! Quantidade: ' + quantidade);
+      window.location.href = 'cotacao-pronta.html';
     }
-
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        window.parent.fecharOverlayModalQuantidade();
+        window.location.href = 'cotacao-pronta.html';
       }
     });
   </script>
