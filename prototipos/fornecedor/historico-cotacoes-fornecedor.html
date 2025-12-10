@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Cotações | Plurix Fornecedor</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { min-height: 100vh; }
+    .container { max-width: 980px; margin: 48px auto 0 auto; padding: 0 12px; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; margin-bottom: 32px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 18px; }
+    .filters { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
+    .filters label { font-weight: 600; color: #1a2340; margin-right: 7px; }
+    .filters input, .filters select { padding: 7px 10px; border: 1px solid #b7b9c6; border-radius: 4px; font-size: 1.01rem; background: #f7f8fa; color: #222; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 1.02rem; }
+    .history-table th, .history-table td { padding: 10px 12px; border-bottom: 1px solid #eaeaea; }
+    .history-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .history-table tr:last-child td { border-bottom: none; }
+    .status-aprovada { background: #4bb543; color: #fff; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; display: inline-block; }
+    .status-reprovada { background: #e74c3c; color: #fff; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; display: inline-block; }
+    .status-pendente { background: #f9b233; color: #fff; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; display: inline-block; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .topbar .logo img { height: 40px; }
+    .topbar nav a { color: #1a2340; text-decoration: none; font-weight: 600; margin-left: 18px; font-size: 1.04rem; }
+    .topbar nav a.active { color: #f9b233; }
+    @media (max-width: 1050px) { .container { max-width: 99vw; } }
+    @media (max-width: 700px) { .card { padding: 18px 8px 16px 8px; } .filters { flex-direction: column; gap: 8px; } }
+  </style>
+  <script>
+    function voltarDashboard() {
+      window.location.href = '../../dashboard-fornecedor.html';
+    }
+    function filtrarTabela() {
+      const dataDe = document.getElementById('dataDe').value;
+      const dataAte = document.getElementById('dataAte').value;
+      const status = document.getElementById('statusFiltro').value;
+      const rows = document.querySelectorAll('.history-table tbody tr');
+      rows.forEach(row => {
+        const data = row.getAttribute('data-data');
+        const statusRow = row.getAttribute('data-status');
+        let show = true;
+        if (dataDe && data < dataDe) show = false;
+        if (dataAte && data > dataAte) show = false;
+        if (status && status !== statusRow) show = false;
+        row.style.display = show ? '' : 'none';
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix"></div>
+    <nav>
+      <a href="../../dashboard-fornecedor.html">Dashboard</a>
+      <a href="#" class="active">Histórico</a>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-title">Histórico de Cotações Recebidas</div>
+      <div class="filters">
+        <div>
+          <label for="dataDe">Data de:</label>
+          <input type="date" id="dataDe" onchange="filtrarTabela()">
+        </div>
+        <div>
+          <label for="dataAte">até:</label>
+          <input type="date" id="dataAte" onchange="filtrarTabela()">
+        </div>
+        <div>
+          <label for="statusFiltro">Status:</label>
+          <select id="statusFiltro" onchange="filtrarTabela()">
+            <option value="">Todos</option>
+            <option value="aceita">Aceita</option>
+            <option value="rejeitada">Rejeitada</option>
+            <option value="pendente">Pendente</option>
+          </select>
+        </div>
+        <div style="flex:1;text-align:right;min-width:120px;">
+          <button class="btn-secondary" onclick="voltarDashboard()">Voltar ao Dashboard</button>
+        </div>
+      </div>
+      <table class="history-table" aria-label="Histórico de Cotações">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Quantidade Solicitada</th>
+            <th>Preço Ofertado</th>
+            <th>Status Final</th>
+            <th>Valor Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-data="2024-06-10" data-status="pendente">
+            <td>10/06/2024</td>
+            <td>Carne Bovina (Alcatra)</td>
+            <td>250 kg</td>
+            <td>R$ 49,00</td>
+            <td><span class="status-pendente">Pendente</span></td>
+            <td>-</td>
+          </tr>
+          <tr data-data="2024-06-05" data-status="aceita">
+            <td>05/06/2024</td>
+            <td>Maçã Gala</td>
+            <td>120 kg</td>
+            <td>R$ 7,80</td>
+            <td><span class="status-aprovada">Aceita</span></td>
+            <td>R$ 936,00</td>
+          </tr>
+          <tr data-data="2024-06-01" data-status="rejeitada">
+            <td>01/06/2024</td>
+            <td>Tomate Italiano</td>
+            <td>200 kg</td>
+            <td>R$ 6,20</td>
+            <td><span class="status-reprovada">Rejeitada</span></td>
+            <td>-</td>
+          </tr>
+          <tr data-data="2024-05-28" data-status="aceita">
+            <td>28/05/2024</td>
+            <td>Alface Crespa</td>
+            <td>80 kg</td>
+            <td>R$ 4,50</td>
+            <td><span class="status-aprovada">Aceita</span></td>
+            <td>R$ 360,00</td>
+          </tr>
+          <tr data-data="2024-05-20" data-status="rejeitada">
+            <td>20/05/2024</td>
+            <td>Batata Inglesa</td>
+            <td>300 kg</td>
+            <td>R$ 3,90</td>
+            <td><span class="status-reprovada">Rejeitada</span></td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
