@@ -126,14 +126,22 @@
     })();
 
     function fecharModal() {
+      // Garante que o modal será fechado corretamente e a dashboard principal ficará visível
       if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
         window.parent.fecharOverlayModal();
+      } else {
+        // fallback: tenta fechar a janela do iframe caso não esteja embutido
+        window.close();
       }
     }
 
     function fazerCotacao() {
-      if (window.parent && typeof window.parent.abrirModalSelecaoFornecedores === 'function') {
-        window.parent.abrirModalSelecaoFornecedores();
+      // Redireciona diretamente a dashboard principal para a página de seleção de fornecedores
+      if (window.parent && window.parent !== window && window.parent.location) {
+        window.parent.location.href = 'selecao-fornecedores.html';
+      } else {
+        // fallback: redireciona o próprio iframe
+        window.location.href = 'selecao-fornecedores.html';
       }
     }
 
