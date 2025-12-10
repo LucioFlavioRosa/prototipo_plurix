@@ -23,46 +23,176 @@
     .kpi-title { font-size: 1.13rem; font-weight: 700; color: #1a2340; margin-bottom: 8px; }
     .kpi-graphs { display: flex; flex-wrap: wrap; gap: 24px; }
     .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 12px 10px; flex: 1 1 240px; min-width: 220px; text-align: center; }
-    .kpi-graph img { max-width: 180px; height: 90px; object-fit: contain; }
+    .kpi-graph canvas { max-width: 180px; height: 90px; object-fit: contain; }
     .modal-actions { margin-top: 24px; display: flex; gap: 16px; justify-content: flex-end; }
     .btn { padding: 12px 28px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
-    .btn-aceitar { background: #4bb543; color: #fff; }
-    .btn-aceitar:hover { background: #399a36; }
-    .btn-rejeitar { background: #e74c3c; color: #fff; }
-    .btn-rejeitar:hover { background: #b93a2e; }
-    .btn-fechar { background: #b7b9c6; color: #fff; }
-    .btn-fechar:hover { background: #8c8e99; }
+    .btn-ok { background: #4bb543; color: #fff; }
+    .btn-ok:hover { background: #399a36; }
     @media (max-width: 700px) {
       .modal-content { padding: 12px 2px 12px 2px; }
       .kpi-graphs { flex-direction: column; gap: 10px; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script>
-    function fecharModal() {
-      window.history.back();
+    // Dados mockados para Banana Prata
+    const propostasBananaPrata = {
+      'Ceasa Sul': {
+        fornecedor: 'Ceasa Sul',
+        produto: 'Banana Prata',
+        preco: '3,90',
+        quantidade: '800 kg',
+        dataEnvio: '14/06/2024',
+        pontualidade: [95, 97, 98, 99, 97, 98, 99],
+        qualidade: [93, 94, 96, 95, 97, 96, 98],
+        historicoPreco: [3.60, 3.75, 3.80, 3.85, 3.90, 4.00, 3.90],
+        mercado: {
+          esalq: [3.65, 3.70, 3.78, 3.82, 3.85, 3.95, 3.92],
+          milkpoint: [3.62, 3.68, 3.76, 3.80, 3.88, 3.97, 3.93],
+          safras: [3.70, 3.73, 3.79, 3.84, 3.89, 3.98, 3.94]
+        }
+      },
+      'Frutas do Vale': {
+        fornecedor: 'Frutas do Vale',
+        produto: 'Banana Prata',
+        preco: '4,10',
+        quantidade: '800 kg',
+        dataEnvio: '14/06/2024',
+        pontualidade: [92, 94, 95, 96, 95, 97, 96],
+        qualidade: [91, 92, 93, 94, 95, 95, 96],
+        historicoPreco: [3.80, 3.85, 3.90, 4.00, 4.10, 4.15, 4.10],
+        mercado: {
+          esalq: [3.65, 3.70, 3.78, 3.82, 3.85, 3.95, 3.92],
+          milkpoint: [3.62, 3.68, 3.76, 3.80, 3.88, 3.97, 3.93],
+          safras: [3.70, 3.73, 3.79, 3.84, 3.89, 3.98, 3.94]
+        }
+      }
+    };
+    // Recupera dados do sessionStorage
+    let dadosModal = sessionStorage.getItem('modalPropostaFornecedor');
+    let proposta = null;
+    if (dadosModal) {
+      try {
+        const obj = JSON.parse(dadosModal);
+        if (obj.produto === 'Banana Prata') {
+          proposta = propostasBananaPrata[obj.fornecedor];
+        }
+      } catch (e) {}
     }
-    function aceitarProposta() {
-      alert('Proposta aceita!');
+    // Fallback
+    if (!proposta) proposta = propostasBananaPrata['Ceasa Sul'];
+
+    function fecharModal() {
+      // Ao fechar, volta para cotacao-pronta.html
       window.location.href = 'cotacao-pronta.html';
     }
-    function rejeitarProposta() {
-      alert('Proposta rejeitada.');
-      fecharModal();
+    function renderDadosProposta() {
+      document.getElementById('modal-title').textContent = 'Proposta de ' + proposta.fornecedor;
+      document.getElementById('info-produto').textContent = proposta.produto;
+      document.getElementById('info-quantidade').textContent = proposta.quantidade;
+      document.getElementById('info-data-entrega').textContent = '16/06/2024';
+      document.getElementById('td-fornecedor').textContent = proposta.fornecedor;
+      document.getElementById('td-preco').textContent = proposta.preco;
+      document.getElementById('td-quantidade').textContent = proposta.quantidade;
+      document.getElementById('td-data-envio').textContent = proposta.dataEnvio;
     }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderDadosProposta();
+      // Gráfico Pontualidade
+      new Chart(document.getElementById('pontualidadeChart'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+          datasets: [{
+            label: 'Pontualidade (%)',
+            data: proposta.pontualidade,
+            borderColor: '#4bb543',
+            backgroundColor: 'rgba(75,181,67,0.12)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { min: 85, max: 100 } }
+        }
+      });
+      // Gráfico Qualidade
+      new Chart(document.getElementById('qualidadeChart'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+          datasets: [{
+            label: 'Qualidade (%)',
+            data: proposta.qualidade,
+            borderColor: '#1a2340',
+            backgroundColor: 'rgba(26,35,64,0.12)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { min: 85, max: 100 } }
+        }
+      });
+      // Gráfico Histórico de Preço vs. Mercado
+      new Chart(document.getElementById('historicoPrecoChart'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+          datasets: [
+            {
+              label: proposta.fornecedor,
+              data: proposta.historicoPreco,
+              borderColor: '#f9b233',
+              backgroundColor: 'rgba(249,178,51,0.10)',
+              tension: 0.3,
+              fill: false
+            },
+            {
+              label: 'Esalq CEPEA',
+              data: proposta.mercado.esalq,
+              borderColor: '#1a2340',
+              borderDash: [4,2],
+              fill: false
+            },
+            {
+              label: 'Milkpoint',
+              data: proposta.mercado.milkpoint,
+              borderColor: '#4bb543',
+              borderDash: [2,2],
+              fill: false
+            },
+            {
+              label: 'Safras',
+              data: proposta.mercado.safras,
+              borderColor: '#e74c3c',
+              borderDash: [1,2],
+              fill: false
+            }
+          ]
+        },
+        options: {
+          plugins: { legend: { display: true } },
+          scales: { y: { min: 3.5, max: 4.3 } }
+        }
+      });
+    });
   </script>
 </head>
 <body>
   <div class="modal-bg" tabindex="-1" aria-modal="true" role="dialog">
     <div class="modal-content" tabindex="0">
       <div class="modal-header">
-        <span class="modal-title">Proposta de Alimentos Verdes LTDA</span>
+        <span class="modal-title" id="modal-title">Proposta de Ceasa Sul</span>
         <button class="modal-close" aria-label="Fechar" onclick="fecharModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div style="margin-bottom:18px;">
-          <strong>Produto:</strong> Tomate Italiano &nbsp; | &nbsp;
-          <strong>Quantidade:</strong> 1.000 kg &nbsp; | &nbsp;
-          <strong>Data de Entrega:</strong> 18/06/2024
+          <strong>Produto:</strong> <span id="info-produto">Banana Prata</span> &nbsp; | &nbsp;
+          <strong>Quantidade:</strong> <span id="info-quantidade">800 kg</span> &nbsp; | &nbsp;
+          <strong>Data de Entrega:</strong> <span id="info-data-entrega">16/06/2024</span>
         </div>
         <table class="card-table" aria-label="Proposta do Fornecedor">
           <thead>
@@ -75,23 +205,26 @@
           </thead>
           <tbody>
             <tr>
-              <td>Alimentos Verdes LTDA</td>
-              <td>5,80</td>
-              <td>1.000 kg</td>
-              <td>14/06/2024</td>
+              <td id="td-fornecedor">Ceasa Sul</td>
+              <td id="td-preco">3,90</td>
+              <td id="td-quantidade">800 kg</td>
+              <td id="td-data-envio">14/06/2024</td>
             </tr>
           </tbody>
         </table>
         <div class="kpi-section">
-          <div class="kpi-title">KPIs Históricos do Fornecedor</div>
+          <div class="kpi-title">Pontualidade na Entrega</div>
           <div class="kpi-graphs">
             <div class="kpi-graph">
-              <div>Pontualidade na Entrega</div>
-              <img src="https://dummyimage.com/180x90/ddd/1a2340&text=Pontualidade" alt="Gráfico Pontualidade">
+              <canvas id="pontualidadeChart" width="180" height="90"></canvas>
             </div>
+          </div>
+        </div>
+        <div class="kpi-section">
+          <div class="kpi-title">Qualidade da Entrega</div>
+          <div class="kpi-graphs">
             <div class="kpi-graph">
-              <div>Qualidade da Entrega</div>
-              <img src="https://dummyimage.com/180x90/ddd/1a2340&text=Qualidade" alt="Gráfico Qualidade">
+              <canvas id="qualidadeChart" width="180" height="90"></canvas>
             </div>
           </div>
         </div>
@@ -99,15 +232,12 @@
           <div class="kpi-title">Histórico de Preço vs. Índices de Mercado</div>
           <div class="kpi-graphs">
             <div class="kpi-graph">
-              <div>Comparativo: Fornecedor x Esalq CEPEA x Milkpoint x Safras</div>
-              <img src="https://dummyimage.com/180x90/ccc/1a2340&text=Hist.+de+Preços" alt="Gráfico Histórico de Preço">
+              <canvas id="historicoPrecoChart" width="180" height="90"></canvas>
             </div>
           </div>
         </div>
         <div class="modal-actions">
-          <button class="btn btn-aceitar" onclick="aceitarProposta()">Aceitar Proposta</button>
-          <button class="btn btn-rejeitar" onclick="rejeitarProposta()">Rejeitar</button>
-          <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
+          <button class="btn btn-ok" onclick="fecharModal()">OK</button>
         </div>
       </div>
     </div>
