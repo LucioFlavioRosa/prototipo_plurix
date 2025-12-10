@@ -124,13 +124,67 @@
         });
       }
     })();
-    function fazerCotacao() {
-      window.location.href = 'selecao-fornecedores.html';
-    }
+
     function fecharModal() {
-      window.history.back();
+      if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+        window.parent.fecharOverlayModal();
+      }
     }
+
+    function fazerCotacao() {
+      if (window.parent && typeof window.parent.abrirModalSelecaoFornecedores === 'function') {
+        window.parent.abrirModalSelecaoFornecedores();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+      // Captura o parâmetro id da URL
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      // Busca os dados da cotação no sessionStorage
+      var dados = null;
+      try {
+        dados = JSON.parse(sessionStorage.getItem('cotacaoAtual'));
+      } catch (e) {
+        dados = null;
+      }
+      // Se não veio via sessionStorage, tenta buscar por id em cotacoesPendentesMock (fallback, só para dev)
+      if ((!dados || typeof dados !== 'object') && id) {
+        var cotacoesPendentesMock = {
+          1: {
+            produto: 'Alcatra Bovina Resfriada',
+            quantidade: '200 kg',
+            condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.',
+            dataEntrega: '15/06/2024'
+          },
+          2: {
+            produto: 'Maçã Fuji',
+            quantidade: '500 kg',
+            condicoes: 'Transporte refrigerado. Entrega em caixas de 20kg. Unidade: kg.',
+            dataEntrega: '17/06/2024'
+          }
+        };
+        dados = cotacoesPendentesMock[id];
+      }
+      // Preenche os campos dinâmicos
+      var modalBody = document.querySelector('.modal-body');
+      if (modalBody && dados) {
+        modalBody.innerHTML =
+          '<div><strong>Produto:</strong> ' + (dados.produto || '-') + '</div>' +
+          '<div style="margin-top:8px;"><strong>Quantidade:</strong> ' + (dados.quantidade || '-') + '</div>' +
+          '<div style="margin-top:8px;"><strong>Condições:</strong> ' + (dados.condicoes || '-') + '</div>' +
+          '<div style="margin-top:8px;"><strong>Data de Entrega:</strong> ' + (dados.dataEntrega || '-') + '</div>' +
+          '<div style="margin-top:22px;display:flex;gap:16px;">' +
+            '<button onclick="fazerCotacao()">Fazer Cotação</button>' +
+            '<button onclick="fecharModal()">Fechar</button>' +
+          '</div>';
+      } else if (modalBody) {
+        modalBody.innerHTML = '<div>Dados da cotação não encontrados.</div>' +
+          '<div style="margin-top:22px;display:flex;gap:16px;">' +
+            '<button onclick="fecharModal()">Fechar</button>' +
+          '</div>';
+      }
+      // Botão de fechar (header)
       var closeBtn = document.querySelector('.modal-close');
       if (closeBtn) closeBtn.addEventListener('click', fecharModal);
       document.addEventListener('keydown', function(e) {
@@ -147,14 +201,7 @@
         <button class="modal-close" aria-label="Fechar">&times;</button>
       </div>
       <div class="modal-body">
-        <div><strong>Produto:</strong> Alcatra Bovina Resfriada</div>
-        <div style="margin-top:8px;"><strong>Quantidade:</strong> 200 kg</div>
-        <div style="margin-top:8px;"><strong>Condições:</strong> Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.</div>
-        <div style="margin-top:8px;"><strong>Data de Entrega:</strong> 15/06/2024</div>
-        <div style="margin-top:22px;display:flex;gap:16px;">
-          <button onclick="fazerCotacao()">Fazer Cotação</button>
-          <button onclick="fecharModal()">Fechar</button>
-        </div>
+        <!-- Conteúdo dinâmico preenchido via JS -->
       </div>
     </div>
   </div>
