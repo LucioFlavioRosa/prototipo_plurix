@@ -186,7 +186,9 @@
       }
       // Botão de fechar (header)
       var closeBtn = document.querySelector('.modal-close');
-      if (closeBtn) closeBtn.addEventListener('click', fecharModal);
+      if (closeBtn) {
+        closeBtn.onclick = fecharModal;
+      }
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') fecharModal();
       });
@@ -198,7 +200,7 @@
     <div class="modal-content" tabindex="0">
       <div class="modal-header">
         <span class="modal-title">Detalhes da Cotação Pendente</span>
-        <button class="modal-close" aria-label="Fechar">&times;</button>
+        <button class="modal-close" aria-label="Fechar" type="button">&times;</button>
       </div>
       <div class="modal-body">
         <!-- Conteúdo dinâmico preenchido via JS -->
