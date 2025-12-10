@@ -9,7 +9,7 @@
     @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
     html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
     .modal-bg { display: flex; justify-content: center; align-items: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); }
-    .modal-content { background: #fff; max-width: 700px; width: 98vw; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; }
+    .modal-content { background: #fff; max-width: 700px; width: 98vw; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; outline: none; }
     @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
     .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
@@ -21,23 +21,56 @@
     .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
     .kpi-section { margin: 18px 0 10px 0; }
     .kpi-title { font-size: 1.13rem; font-weight: 700; color: #1a2340; margin-bottom: 8px; }
-    .kpi-graphs { display: flex; flex-wrap: wrap; gap: 24px; }
-    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 12px 10px; flex: 1 1 240px; min-width: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .kpi-graph img { max-width: 100%; height: auto; max-height: 90px; object-fit: contain; margin: 0 auto; }
-    .kpi-graph-label { margin-top: 6px; font-size: 0.97rem; color: #333; }
+    .kpi-graphs { display: flex; flex-wrap: wrap; gap: 32px 28px; padding: 8px 0 4px 0; }
+    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 18px 10px 14px 10px; flex: 1 1 240px; min-width: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; }
+    .kpi-graph img { max-width: 100%; height: auto; max-height: 140px; object-fit: contain; margin: 0 auto; border-radius: 4px; box-shadow: 0 1px 4px rgba(30,40,80,0.06); background: #fff; }
+    .kpi-graph-label { margin-top: 10px; font-size: 0.92rem; color: #333; line-height: 1.4; text-align: center; }
+    .modal-footer { font-size: 0.9rem; color: #666; text-align: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
     .modal-actions { margin-top: 24px; display: flex; gap: 16px; justify-content: flex-end; }
     .btn { padding: 12px 28px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
     .btn-fechar { background: #b7b9c6; color: #fff; }
     .btn-fechar:hover { background: #8c8e99; }
     @media (max-width: 700px) {
       .modal-content { padding: 12px 2px 12px 2px; }
-      .kpi-graphs { flex-direction: column; gap: 10px; }
-      .kpi-graph { min-width: 0; }
+      .kpi-graphs { flex-direction: column; gap: 14px; }
+      .kpi-graph { min-width: 0; width: 100%; padding: 12px 2px 10px 2px; }
+      .kpi-graph img { max-height: 140px; }
     }
   </style>
   <script>
-    // Carregar dados mokados do fornecedor e produto
+    // Dados mokados detalhados para Banana Prata e fornecedores
+    const dadosMokados = {
+      'Banana Prata': {
+        'Frutas Tropicais LTDA': {
+          preco: '4,20',
+          quantidade: '800 kg',
+          dataEnvio: '13/06/2024',
+          pontualidade: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/pontualidade_frutas_tropicais.png',
+          qualidade: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/qualidade_frutas_tropicais.png',
+          historico: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/historico_precos_frutas_tropicais.png'
+        },
+        'Ceasa Sul': {
+          preco: '4,35',
+          quantidade: '800 kg',
+          dataEnvio: '13/06/2024',
+          pontualidade: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/pontualidade_ceasa_sul.png',
+          qualidade: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/qualidade_ceasa_sul.png',
+          historico: 'https://plurix-static.s3.sa-east-1.amazonaws.com/graficos/historico_precos_ceasa_sul.png'
+        }
+      }
+    };
+
+    // Variáveis para foco e acessibilidade
+    let openerElement = null;
+
     document.addEventListener('DOMContentLoaded', function() {
+      // Guardar o elemento que abriu o modal (se possível)
+      try {
+        if (window.parent && window.parent.document.activeElement) {
+          openerElement = window.parent.document.activeElement;
+        }
+      } catch(e) {}
+
       var dados = sessionStorage.getItem('modalPropostaFornecedor');
       var fornecedor = 'Fornecedor';
       var produto = 'Produto';
@@ -50,37 +83,34 @@
       }
       document.getElementById('modal-title').textContent = 'Proposta de ' + fornecedor;
       document.getElementById('produto').textContent = produto;
-      // Dados mokados para Banana Prata e fornecedores
-      var proposta = {
-        'Frutas Tropicais LTDA': {
-          preco: '4,20',
-          quantidade: '800 kg',
-          dataEnvio: '13/06/2024',
-          pontualidade: 'https://dummyimage.com/340x90/ddd/1a2340&text=Pontualidade+Banana',
-          qualidade: 'https://dummyimage.com/340x90/ddd/1a2340&text=Qualidade+Banana',
-          historico: 'https://dummyimage.com/340x90/ccc/1a2340&text=Hist.+Pre%C3%A7os+Mercado'
-        },
-        'Ceasa Sul': {
-          preco: '4,35',
-          quantidade: '800 kg',
-          dataEnvio: '13/06/2024',
-          pontualidade: 'https://dummyimage.com/340x90/ddd/1a2340&text=Pontualidade+Ceasa',
-          qualidade: 'https://dummyimage.com/340x90/ddd/1a2340&text=Qualidade+Ceasa',
-          historico: 'https://dummyimage.com/340x90/ccc/1a2340&text=Hist.+Pre%C3%A7os+Mercado'
-        }
+      // Buscar dados mokados
+      var proposta = (dadosMokados[produto] && dadosMokados[produto][fornecedor]) ? dadosMokados[produto][fornecedor] : {
+        preco: '-', quantidade: '-', dataEnvio: '-', pontualidade: '', qualidade: '', historico: ''
       };
-      var p = proposta[fornecedor] || proposta['Frutas Tropicais LTDA'];
       document.getElementById('fornecedor').textContent = fornecedor;
-      document.getElementById('preco').textContent = p.preco;
-      document.getElementById('quantidade').textContent = p.quantidade;
-      document.getElementById('dataEnvio').textContent = p.dataEnvio;
-      document.getElementById('pontualidade-img').src = p.pontualidade;
-      document.getElementById('qualidade-img').src = p.qualidade;
-      document.getElementById('historico-img').src = p.historico;
+      document.getElementById('preco').textContent = proposta.preco;
+      document.getElementById('quantidade').textContent = proposta.quantidade;
+      document.getElementById('dataEnvio').textContent = proposta.dataEnvio;
+      document.getElementById('pontualidade-img').src = proposta.pontualidade;
+      document.getElementById('qualidade-img').src = proposta.qualidade;
+      document.getElementById('historico-img').src = proposta.historico;
+      // Rodapé de atualização
+      document.getElementById('modal-footer').textContent = 'Dados atualizados em: ' + new Date().toLocaleString('pt-BR');
+      // Foco acessibilidade
+      setTimeout(function() {
+        var btnFechar = document.getElementById('btn-fechar-modal');
+        if (btnFechar) btnFechar.focus();
+      }, 80);
     });
     function fecharModal() {
+      // Restaura foco ao elemento que abriu o modal
       if (window.parent && window.parent.fecharOverlayModalProposta) {
         window.parent.fecharOverlayModalProposta();
+        setTimeout(function() {
+          try {
+            if (openerElement) openerElement.focus();
+          } catch(e) {}
+        }, 120);
       } else {
         window.history.back();
       }
@@ -89,10 +119,10 @@
 </head>
 <body>
   <div class="modal-bg" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-content" tabindex="0">
+    <div class="modal-content" tabindex="0" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="modal-header">
         <span class="modal-title" id="modal-title">Proposta de Fornecedor</span>
-        <button class="modal-close" aria-label="Fechar" onclick="fecharModal()">&times;</button>
+        <button class="modal-close" id="btn-fechar-modal" aria-label="Fechar modal" onclick="fecharModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div style="margin-bottom:18px;">
@@ -123,13 +153,13 @@
           <div class="kpi-graphs">
             <div class="kpi-graph">
               <div>Pontualidade na Entrega</div>
-              <img id="pontualidade-img" src="https://dummyimage.com/340x90/ddd/1a2340&text=Pontualidade" alt="Gráfico Pontualidade" />
-              <div class="kpi-graph-label">% entregas no prazo</div>
+              <img id="pontualidade-img" src="" alt="Gráfico Pontualidade" />
+              <div class="kpi-graph-label">% de entregas realizadas dentro do prazo acordado nos últimos 12 meses.</div>
             </div>
             <div class="kpi-graph">
               <div>Qualidade da Entrega</div>
-              <img id="qualidade-img" src="https://dummyimage.com/340x90/ddd/1a2340&text=Qualidade" alt="Gráfico Qualidade" />
-              <div class="kpi-graph-label">% entregas sem avarias</div>
+              <img id="qualidade-img" src="" alt="Gráfico Qualidade" />
+              <div class="kpi-graph-label">% de entregas sem avarias ou não conformidades nos últimos 12 meses.</div>
             </div>
           </div>
         </div>
@@ -138,11 +168,12 @@
           <div class="kpi-graphs">
             <div class="kpi-graph">
               <div>Comparativo: Fornecedor x Esalq CEPEA x Milkpoint x Safras</div>
-              <img id="historico-img" src="https://dummyimage.com/340x90/ccc/1a2340&text=Hist.+de+Pre%C3%A7os" alt="Gráfico Histórico de Preço" />
-              <div class="kpi-graph-label">Preço Banana Prata (R$/kg)</div>
+              <img id="historico-img" src="" alt="Gráfico Histórico de Preço" />
+              <div class="kpi-graph-label">Comparativo de preço do fornecedor (R$/kg) vs. índices de mercado (Esalq CEPEA, Milkpoint, Safras) nos últimos 6 meses.</div>
             </div>
           </div>
         </div>
+        <div class="modal-footer" id="modal-footer"></div>
         <div class="modal-actions">
           <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
         </div>
