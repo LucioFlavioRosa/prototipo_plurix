@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios Gerenciais | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 0 0 40px 0; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; margin: 38px 0 0 0; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; display: flex; flex-direction: column; min-height: 140px; justify-content: space-between; }
+    .card-title { font-size: 1.25rem; font-weight: 700; color: #1a2340; margin-bottom: 14px; }
+    .card-desc { font-size: 1.02rem; color: #555; margin-bottom: 18px; }
+    .card-link { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 10px 22px; font-size: 1.08rem; font-weight: 700; text-decoration: none; display: inline-block; transition: background 0.18s; text-align: center; margin-top: 10px; }
+    .card-link:hover { background: #e1a12a; }
+    @media (max-width: 900px) { .main-content { padding: 0 6px 24px 6px; } .header { padding: 18px 10px 12px 10px; } .card { padding: 18px 8px 18px 8px; } .grid-cards { gap: 12px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Relatórios Gerenciais</h1>
+    <nav>
+      <a href="dashboard-comprador.html" style="margin-right:18px; color:#1a2340; font-weight:600; text-decoration:none;">Dashboard</a>
+      <a href="historico-cotacoes.html" style="color:#1a2340; font-weight:600; text-decoration:none;">Histórico</a>
+    </nav>
+  </div>
+  <main class="main-content">
+    <section class="grid-cards">
+      <div class="card">
+        <div class="card-title">Comparativo de Preços por Fornecedor</div>
+        <div class="card-desc">Analise a evolução dos preços ofertados por diferentes fornecedores para cada produto e período.</div>
+        <a href="relatorio-comparativo-precos.html" class="card-link">Acessar Relatório</a>
+      </div>
+      <div class="card">
+        <div class="card-title">Performance de Compradores</div>
+        <div class="card-desc">Veja indicadores de taxa de aproveitamento das melhores cotações e eficiência dos compradores.</div>
+        <a href="relatorio-performance-compradores.html" class="card-link">Acessar Relatório</a>
+      </div>
+      <div class="card">
+        <div class="card-title">Análise de Spread de Preços</div>
+        <div class="card-desc">Compare o spread de preços entre fornecedores e com índices de mercado (Esalq CEPEA, Milkpoint, Safras).</div>
+        <a href="relatorio-spread-precos.html" class="card-link">Acessar Relatório</a>
+      </div>
+      <div class="card">
+        <div class="card-title">KPIs de Tempo de Resposta</div>
+        <div class="card-desc">Acompanhe o tempo médio de resposta dos fornecedores e identifique gargalos no processo.</div>
+        <a href="relatorio-kpi-tempo.html" class="card-link">Acessar Relatório</a>
+      </div>
+      <div class="card">
+        <div class="card-title">Ranking de Fornecedores</div>
+        <div class="card-desc">Visualize o ranking de fornecedores por categoria de produto, qualidade de entrega e score de avaliação.</div>
+        <a href="relatorio-ranking-fornecedores.html" class="card-link">Acessar Relatório</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
