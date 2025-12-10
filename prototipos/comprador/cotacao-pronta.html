@@ -54,6 +54,33 @@
     }
   </style>
   <script>
+    // Carregar dados mokados de Banana Prata se existirem no sessionStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      var cotacao = sessionStorage.getItem('cotacaoPronta');
+      if (cotacao) {
+        cotacao = JSON.parse(cotacao);
+        document.getElementById('produto').textContent = cotacao.produto;
+        document.getElementById('quantidade').textContent = cotacao.quantidade;
+        document.getElementById('unidade').textContent = cotacao.unidade;
+        document.getElementById('condicoes').textContent = cotacao.condicoes;
+        document.getElementById('dataEntrega').textContent = cotacao.dataEntrega;
+        document.getElementById('status').textContent = cotacao.status;
+        // Preencher propostas
+        var tbody = document.getElementById('propostas-tbody');
+        tbody.innerHTML = '';
+        cotacao.propostas.forEach(function(p, idx) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><input type="checkbox" class="select-checkbox" aria-label="Selecionar '+p.fornecedor+'"></td>'+
+            '<td><a href="#" class="fornecedor-link" data-fornecedor="'+encodeURIComponent(p.fornecedor)+'" onclick="abrirModalPropostaFornecedor(\''+p.fornecedor+'\');return false;">'+p.fornecedor+'</a></td>'+
+            '<td>'+p.preco+'</td>'+
+            '<td>'+p.quantidade+'</td>'+
+            '<td>'+p.dataEnvio+'</td>'+
+            '<td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade(\''+p.fornecedor+'\')">Selecionar</button></td>';
+          tbody.appendChild(tr);
+        });
+      }
+    });
     function abrirModalQuantidade(fornecedor) {
       document.getElementById('modal-bg').style.display = 'flex';
       document.getElementById('modal-fornecedor-nome').textContent = fornecedor;
@@ -81,6 +108,62 @@
       alert('Pedido de compra enviado para os fornecedores selecionados!');
       window.location.href = 'dashboard.html';
     }
+    // NOVO: abrir modal de proposta do fornecedor
+    function abrirModalPropostaFornecedor(fornecedor) {
+      // Salva fornecedor e produto atual para o modal usar
+      var produto = document.getElementById('produto').textContent;
+      sessionStorage.setItem('modalPropostaFornecedor', JSON.stringify({fornecedor: fornecedor, produto: produto}));
+      // Overlay modal
+      if (document.getElementById('overlay-modal-proposta')) return;
+      var overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-proposta';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'modal-proposta-fornecedor.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '98vw';
+      iframe.style.maxWidth = '700px';
+      iframe.style.height = '95vh';
+      iframe.style.maxHeight = '90vh';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+      overlay.appendChild(iframe);
+      document.body.appendChild(overlay);
+      setTimeout(function() { iframe.focus(); }, 100);
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModalProposta();
+      });
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModalProposta();
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+    }
+    function fecharOverlayModalProposta() {
+      var overlay = document.getElementById('overlay-modal-proposta');
+      if (overlay) {
+        if (overlay._escListener) document.removeEventListener('keydown', overlay._escListener);
+        overlay.remove();
+        sessionStorage.removeItem('modalPropostaFornecedor');
+      }
+    }
+    window.fecharOverlayModalProposta = fecharOverlayModalProposta;
   </script>
 </head>
 <body>
@@ -105,12 +188,12 @@
       <div class="card">
         <div class="card-title">Informações da Cotação</div>
         <ul class="info-list">
-          <li><strong>Produto:</strong> Tomate Italiano</li>
-          <li><strong>Quantidade:</strong> 1.000 kg</li>
-          <li><strong>Unidade de Medida:</strong> Quilograma</li>
-          <li><strong>Condições Gerais:</strong> Entrega refrigerada, validade mínima 5 dias, embalagem retornável</li>
-          <li><strong>Data de Entrega:</strong> 18/06/2024</li>
-          <li><strong>Status:</strong> Pronta para Pedido</li>
+          <li><strong>Produto:</strong> <span id="produto">Banana Prata</span></li>
+          <li><strong>Quantidade:</strong> <span id="quantidade">800 kg</span></li>
+          <li><strong>Unidade de Medida:</strong> <span id="unidade">Quilograma</span></li>
+          <li><strong>Condições Gerais:</strong> <span id="condicoes">Entrega refrigerada, validade mínima 4 dias, embalagem retornável</span></li>
+          <li><strong>Data de Entrega:</strong> <span id="dataEntrega">16/06/2024</span></li>
+          <li><strong>Status:</strong> <span id="status">Pronta para Pedido</span></li>
         </ul>
       </div>
       <div class="card">
@@ -126,21 +209,21 @@
               <th>Ação</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="propostas-tbody">
             <tr>
-              <td><input type="checkbox" class="select-checkbox" aria-label="Selecionar Alimentos Verdes LTDA"></td>
-              <td>Alimentos Verdes LTDA</td>
-              <td>5,80</td>
-              <td>1.000 kg</td>
-              <td>14/06/2024</td>
-              <td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade('Alimentos Verdes LTDA')">Selecionar</button></td>
+              <td><input type="checkbox" class="select-checkbox" aria-label="Selecionar Frutas Tropicais LTDA"></td>
+              <td><a href="#" class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Frutas Tropicais LTDA');return false;">Frutas Tropicais LTDA</a></td>
+              <td>4,20</td>
+              <td>800 kg</td>
+              <td>13/06/2024</td>
+              <td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade('Frutas Tropicais LTDA')">Selecionar</button></td>
             </tr>
             <tr>
               <td><input type="checkbox" class="select-checkbox" aria-label="Selecionar Ceasa Sul"></td>
-              <td>Ceasa Sul</td>
-              <td>5,95</td>
-              <td>1.000 kg</td>
-              <td>14/06/2024</td>
+              <td><a href="#" class="fornecedor-link" onclick="abrirModalPropostaFornecedor('Ceasa Sul');return false;">Ceasa Sul</a></td>
+              <td>4,35</td>
+              <td>800 kg</td>
+              <td>13/06/2024</td>
               <td><button style="background:#f9b233; color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:1.01rem; font-weight:600; cursor:pointer;" onclick="abrirModalQuantidade('Ceasa Sul')">Selecionar</button></td>
             </tr>
           </tbody>
