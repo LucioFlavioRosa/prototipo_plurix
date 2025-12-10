@@ -1,0 +1,194 @@
+/* dashboard-otimizado.css
+   Versão de desenvolvimento (não minificada)
+   Otimizações: variáveis, remoção de regras não usadas, consolidação, código limpo
+*/
+:root {
+  --color-bg: #f7f8fa;
+  --color-text: #222;
+  --color-primary: #1a2340;
+  --color-accent: #f9b233;
+  --color-success: #4bb543;
+  --color-danger: #e74c3c;
+  --color-table-header: #e8eaf0;
+  --color-table-border: #f0f0f0;
+  --radius-card: 10px;
+  --shadow-card: 0 2px 8px rgba(30,40,80,0.07);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+body {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 260px;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+  z-index: 2;
+}
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.sidebar .logo img {
+  width: 120px;
+  height: auto;
+}
+.sidebar nav {
+  flex: 1;
+}
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  padding: 14px 32px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.08rem;
+  border-left: 4px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  margin-bottom: 2px;
+}
+.sidebar nav a.active, .sidebar nav a:hover {
+  background: #222b4a;
+  border-left: 4px solid var(--color-accent);
+  color: var(--color-accent);
+}
+.sidebar .bottom {
+  margin-bottom: 32px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #b7b9c6;
+}
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.header {
+  background: #fff;
+  padding: 24px 40px 16px 40px;
+  box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.header .cta-upload {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+}
+.header .cta-upload:hover {
+  background: #e1a12a;
+}
+.dashboard-section {
+  padding: 32px 40px 40px 40px;
+  flex: 1;
+  background: var(--color-bg);
+}
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+  margin-bottom: 48px;
+}
+.card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 32px 28px 26px 28px;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+.card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+.card-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.05rem;
+}
+.card-table th, .card-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-table-border);
+}
+.card-table th {
+  background: var(--color-table-header);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+.status {
+  display: inline-block;
+  border-radius: 16px;
+  padding: 4px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.status-pendente { background: var(--color-accent); }
+.status-aprovada { background: var(--color-success); }
+.status-reprovada { background: var(--color-danger); }
+.link-detalhes {
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.15s, text-decoration 0.15s;
+}
+.link-detalhes:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+@media (max-width: 900px) {
+  .dashboard-section {
+    padding: 24px 10px 24px 10px;
+  }
+  .header {
+    padding: 18px 10px 12px 10px;
+  }
+  .sidebar {
+    width: 70px;
+    padding-top: 12px;
+  }
+  .sidebar .logo img {
+    width: 44px;
+  }
+  .sidebar nav a {
+    padding: 10px 10px;
+    font-size: 0.98rem;
+  }
+}
+/* Minificação sugerida para produção: utilize ferramentas como cssnano ou clean-css para minificar este arquivo antes de publicar em produção. */
