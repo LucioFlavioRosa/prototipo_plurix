@@ -14,12 +14,14 @@
       font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
       background: #f7f8fa;
       color: #222;
+      overflow: hidden;
+      box-sizing: border-box;
     }
     .main-content {
-      max-width: 900px;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 32px 0 0 0;
-      min-height: 100vh;
+      padding: 16px;
+      min-height: auto;
       display: flex;
       flex-direction: column;
     }
@@ -130,11 +132,18 @@
   </style>
   <script>
     function dispararCotacao() {
-      alert('Cotação disparada para fornecedores selecionados!');
-      window.location.href = 'dashboard-comprador.html';
+      alert('✓ Cotação disparada com sucesso para os fornecedores selecionados!');
+      if (window.parent && typeof window.parent.postMessage === 'function') {
+        window.parent.postMessage({action: 'cotacaoDisparada'}, '*');
+      }
+      if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+        window.parent.fecharOverlayModal();
+      }
     }
     function cancelar() {
-      window.location.href = 'dashboard-comprador.html';
+      if (window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+        window.parent.fecharOverlayModal();
+      }
     }
     function toggleCheckbox(id) {
       // Placeholder para lógica futura
