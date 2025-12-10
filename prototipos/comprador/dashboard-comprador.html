@@ -176,96 +176,194 @@
     }
   </style>
   <script>
+    // Dados mockados realistas para as cotações pendentes
+    var cotacoesPendentes = {
+      1: {
+        idCotacao: 1,
+        produto: 'Alcatra Bovina Resfriada',
+        quantidade: '200 kg',
+        condicoes: 'Armazenar entre 0°C e 4°C. Transporte em caminhão frigorífico certificado. Entrega em caixas plásticas higienizadas, cada uma com até 20kg. Unidade: kg.',
+        dataEntrega: '15/06/2024',
+        categoria: 'Carnes',
+        observacoes: 'Produto deve ser entregue com laudo sanitário e nota fiscal. Preferência para cortes sem excesso de gordura.'
+      },
+      2: {
+        idCotacao: 2,
+        produto: 'Maçã Fuji',
+        quantidade: '500 kg',
+        condicoes: 'Transporte refrigerado entre 2°C e 8°C. Entrega em caixas de papelão reforçado, cada uma com até 20kg. Frutas selecionadas, sem machucados. Unidade: kg.',
+        dataEntrega: '17/06/2024',
+        categoria: 'Frutas',
+        observacoes: 'Frutas devem ter calibre mínimo 70mm, coloração uniforme e estar livres de resíduos de agrotóxicos.'
+      }
+    };
+
     function sair() {
       if (confirm('Deseja realmente sair?')) {
         window.location.href = '../../index.html';
       }
     }
 
-    // Dados mocados das cotações pendentes
-    const cotacoesPendentesMock = {
-      1: {
-        produto: 'Alcatra Bovina Resfriada',
-        quantidade: '200 kg',
-        condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.',
-        dataEntrega: '15/06/2024'
-      },
-      2: {
-        produto: 'Maçã Fuji',
-        quantidade: '500 kg',
-        condicoes: 'Transporte refrigerado. Entrega em caixas de 20kg. Unidade: kg.',
-        dataEntrega: '17/06/2024'
-      }
-    };
-
-    // Função para abrir o modal de detalhes da cotação pendente em overlay com iframe
     function abrirModalCotacaoPendente(id) {
-      // Cria overlay
-      if (document.getElementById('overlay-modal-cotacao')) return; // Evita múltiplos overlays
-      const overlay = document.createElement('div');
-      overlay.id = 'overlay-modal-cotacao';
+      var dados = cotacoesPendentes[id];
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (!modal || !dados) return;
+      modal.querySelector('.modal-produto').textContent = dados.produto;
+      modal.querySelector('.modal-quantidade').textContent = dados.quantidade;
+      modal.querySelector('.modal-condicoes').textContent = dados.condicoes;
+      modal.querySelector('.modal-data-entrega').textContent = dados.dataEntrega;
+      // Armazenar id da cotação para uso posterior
+      modal.setAttribute('data-idcotacao', dados.idCotacao);
+      modal.setAttribute('data-categoria', dados.categoria);
+      modal.setAttribute('data-observacoes', dados.observacoes);
+      modal.style.display = 'flex';
+      setTimeout(function() {
+        var content = modal.querySelector('.modal-content');
+        if(content) content.focus();
+      }, 100);
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('role', 'dialog');
+    }
+
+    function fecharModalCotacaoPendente() {
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Modal de seleção de fornecedores
+    function abrirModalSelecaoFornecedores() {
+      fecharModalCotacaoPendente();
+      // Bloquear rolagem do body
+      document.body.style.overflow = 'hidden';
+      // Criar overlay do modal
+      var overlay = document.createElement('div');
+      overlay.id = 'modal-selecao-fornecedores-overlay';
       overlay.style.position = 'fixed';
       overlay.style.top = '0';
       overlay.style.left = '0';
       overlay.style.width = '100vw';
       overlay.style.height = '100vh';
       overlay.style.background = 'rgba(30,40,80,0.35)';
-      overlay.style.zIndex = '9999';
+      overlay.style.zIndex = '2000';
       overlay.style.display = 'flex';
       overlay.style.alignItems = 'center';
       overlay.style.justifyContent = 'center';
-      overlay.tabIndex = -1;
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-labelledby', 'modal-selecao-fornecedores-titulo');
 
-      // Cria iframe
-      const iframe = document.createElement('iframe');
-      iframe.src = 'modal-detalhes-cotacao-pendente.html?id=' + encodeURIComponent(id);
-      iframe.style.border = 'none';
-      iframe.style.borderRadius = '12px';
-      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
-      iframe.style.background = '#fff';
-      iframe.style.width = '500px';
-      iframe.style.maxWidth = '95vw';
-      iframe.style.height = 'auto';
-      iframe.style.minHeight = '420px';
-      iframe.setAttribute('aria-modal', 'true');
-      iframe.setAttribute('role', 'dialog');
-      iframe.tabIndex = 0;
+      // Container do modal
+      var container = document.createElement('div');
+      container.id = 'modal-selecao-fornecedores-container';
+      container.style.background = '#fff';
+      container.style.borderRadius = '12px';
+      container.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      container.style.maxWidth = '960px';
+      container.style.width = '95vw';
+      container.style.maxHeight = '95vh';
+      container.style.overflow = 'hidden';
+      container.style.position = 'relative';
+      container.tabIndex = 0;
 
-      overlay.appendChild(iframe);
-      document.body.appendChild(overlay);
+      // Botão de fechar (X)
+      var btnClose = document.createElement('button');
+      btnClose.innerHTML = '&times;';
+      btnClose.setAttribute('aria-label', 'Fechar');
+      btnClose.style.position = 'absolute';
+      btnClose.style.top = '14px';
+      btnClose.style.right = '18px';
+      btnClose.style.fontSize = '32px';
+      btnClose.style.background = 'none';
+      btnClose.style.border = 'none';
+      btnClose.style.color = '#999';
+      btnClose.style.cursor = 'pointer';
+      btnClose.style.zIndex = '10';
+      btnClose.addEventListener('mouseenter', function(){ btnClose.style.color = '#e74c3c'; });
+      btnClose.addEventListener('mouseleave', function(){ btnClose.style.color = '#999'; });
+      btnClose.onclick = cancelarSelecao;
+      container.appendChild(btnClose);
 
-      // Foco no iframe
-      setTimeout(function() {
-        iframe.focus();
-      }, 100);
+      // Carregar conteúdo do selecao-fornecedores.html
+      fetch('selecao-fornecedores.html')
+        .then(function(response) { return response.text(); })
+        .then(function(html) {
+          // Extrair apenas o conteúdo relevante (dentro de <body>)
+          var tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          var mainContent = tempDiv.querySelector('.main-content');
+          if (mainContent) {
+            // Ajustar estilos para evitar rolagem
+            mainContent.style.maxHeight = '80vh';
+            mainContent.style.overflowY = 'auto';
+            mainContent.style.overflowX = 'hidden';
+            mainContent.style.boxSizing = 'border-box';
+            // Remover eventuais margens externas
+            mainContent.style.margin = '0 auto';
+            // Adicionar id para acessibilidade
+            mainContent.id = 'modal-selecao-fornecedores-titulo';
+            // Substituir botões de ação por funções locais
+            var btnDisparar = mainContent.querySelector('.btn-primary');
+            if (btnDisparar) btnDisparar.onclick = dispararCotacao;
+            var btnCancelar = mainContent.querySelector('.btn-cancelar');
+            if (btnCancelar) btnCancelar.onclick = cancelarSelecao;
+          }
+          // Remover eventuais scripts do conteúdo importado
+          var scripts = mainContent ? mainContent.querySelectorAll('script') : [];
+          scripts.forEach(function(s){ s.remove(); });
+          container.appendChild(mainContent);
+          overlay.appendChild(container);
+          document.body.appendChild(overlay);
+          setTimeout(function(){ container.focus(); }, 100);
+        });
 
-      // Fecha overlay ao clicar fora do iframe
-      overlay.addEventListener('mousedown', function(e) {
-        if (e.target === overlay) fecharOverlayModal();
+      // Fechar ao clicar fora do modal
+      overlay.addEventListener('mousedown', function(e){
+        if (e.target === overlay) cancelarSelecao();
       });
-
-      // Fecha overlay ao pressionar ESC
-      function escListener(e) {
-        if (e.key === 'Escape') fecharOverlayModal();
-      }
-      document.addEventListener('keydown', escListener);
-
-      // Remove o escListener ao fechar
-      overlay._escListener = escListener;
     }
 
-    // Função global para fechar o overlay modal
-    function fecharOverlayModal() {
-      const overlay = document.getElementById('overlay-modal-cotacao');
+    function cancelarSelecao() {
+      var overlay = document.getElementById('modal-selecao-fornecedores-overlay');
       if (overlay) {
-        // Remove event listener ESC
-        if (overlay._escListener) {
-          document.removeEventListener('keydown', overlay._escListener);
-        }
         overlay.remove();
       }
+      document.body.style.overflow = '';
     }
-    window.fecharOverlayModal = fecharOverlayModal;
+
+    function dispararCotacao() {
+      cancelarSelecao();
+      setTimeout(function(){
+        alert('Cotação disparada para fornecedores selecionados com sucesso!');
+        // Retornar ao dashboard principal (já está na tela)
+      }, 100);
+    }
+
+    function fazerCotacao() {
+      abrirModalSelecaoFornecedores();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('modal-cotacao-pendente');
+      if (modal) {
+        modal.addEventListener('mousedown', function(e) {
+          if (e.target === modal) fecharModalCotacaoPendente();
+        });
+        var closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) closeBtn.addEventListener('click', fecharModalCotacaoPendente);
+      }
+      document.addEventListener('keydown', function(e) {
+        var overlay = document.getElementById('modal-selecao-fornecedores-overlay');
+        if (e.key === 'Escape') {
+          if (overlay && overlay.style.display !== 'none') {
+            cancelarSelecao();
+          } else {
+            fecharModalCotacaoPendente();
+          }
+        }
+      });
+    });
   </script>
 </head>
 <body>
@@ -352,6 +450,25 @@
         </div>
       </section>
     </main>
+  </div>
+  <!-- Modal de Detalhes da Cotação Pendente -->
+  <div id="modal-cotacao-pendente" class="modal" tabindex="-1" style="display:none;">
+    <div class="modal-content" tabindex="0" style="max-width:500px;">
+      <div class="modal-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+        <span class="modal-title" style="font-size:1.25rem;font-weight:700;color:#1a2340;">Detalhes da Cotação Pendente</span>
+        <button class="modal-close" aria-label="Fechar" style="cursor:pointer;font-size:28px;color:#999;background:none;border:none;line-height:1;margin-left:16px;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div><strong>Produto:</strong> <span class="modal-produto"></span></div>
+        <div style="margin-top:8px;"><strong>Quantidade:</strong> <span class="modal-quantidade"></span></div>
+        <div style="margin-top:8px;"><strong>Condições:</strong> <span class="modal-condicoes"></span></div>
+        <div style="margin-top:8px;"><strong>Data de Entrega:</strong> <span class="modal-data-entrega"></span></div>
+        <div style="margin-top:22px;display:flex;gap:16px;">
+          <button onclick="fazerCotacao()" style="background:#f9b233;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:1.08rem;font-weight:700;cursor:pointer;">Fazer Cotação</button>
+          <button onclick="fecharModalCotacaoPendente()" style="background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:1.08rem;font-weight:700;cursor:pointer;">Fechar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
