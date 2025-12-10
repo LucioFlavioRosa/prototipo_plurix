@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatório Comparativo de Preços | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .filtros-relatorio { display: flex; gap: 18px; margin-bottom: 32px; flex-wrap: wrap; }
+    .filtros-relatorio label { font-weight: 600; color: #1a2340; margin-right: 8px; }
+    .filtros-relatorio select, .filtros-relatorio input { padding: 7px 12px; border: 1px solid #b7b9c6; border-radius: 5px; font-size: 1rem; background: #fff; color: #222; min-width: 160px; }
+    .filtros-relatorio input[type="date"] { min-width: 120px; }
+    .btn-download-excel { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 10px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; margin-top: 16px; margin-bottom: 8px; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); display: inline-block; }
+    .btn-download-excel:hover { background: #e1a12a; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 1.02rem; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); overflow: hidden; }
+    .history-table th, .history-table td { padding: 10px 12px; border-bottom: 1px solid #eaeaea; text-align: left; }
+    .history-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .history-table tr:last-child td { border-bottom: none; }
+    .graficos-relatorio { display: flex; gap: 32px; margin-top: 38px; flex-wrap: wrap; }
+    .grafico-placeholder { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); flex: 1 1 320px; min-width: 320px; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; }
+    .grafico-placeholder span { color: #b7b9c6; font-size: 1.15rem; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .grafico-placeholder { min-width: 180px; padding: 10px; }
+      .filtros-relatorio { gap: 8px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    function goTo(page) { window.location.href = page; }
+    function sair() { if (confirm('Deseja realmente sair?')) { window.location.href = '../../index.html'; } }
+    function exportarExcel() {
+      // Mock: exporta a tabela comparativa
+      var ws_data = [
+        ['Produto', 'Fornecedor', 'Data', 'Preço (R$)', 'Preço Mercado', 'Variação'],
+        ['Tomate', 'Fornecedor A', '10/06/2024', '4,20', '4,10', '+2.4%'],
+        ['Tomate', 'Fornecedor B', '10/06/2024', '4,10', '4,10', '0.0%'],
+        ['Tomate', 'Fornecedor C', '10/06/2024', '4,35', '4,10', '+6.1%'],
+        ['Batata', 'Fornecedor A', '10/06/2024', '3,10', '3,00', '+3.3%'],
+        ['Batata', 'Fornecedor B', '10/06/2024', '3,00', '3,00', '0.0%']
+      ];
+      var ws = XLSX.utils.aoa_to_sheet(ws_data);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Comparativo');
+      XLSX.writeFile(wb, 'relatorio-comparativo-precos.xlsx');
+    }
+    function exportarPDF() {
+      alert('Exportação em PDF não implementada neste protótipo.');
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html">Dashboard</a>
+      <a href="cadastro-fornecedores.html">Fornecedores</a>
+      <a href="relatorio-comparativo-precos.html" class="active">Relatório de Preços</a>
+      <a href="../../index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Relatório Comparativo de Preços</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-relatorio" aria-label="Filtros do Relatório">
+        <div>
+          <label for="filtro-produto">Produto</label>
+          <select id="filtro-produto" name="produto">
+            <option value="">Todos</option>
+            <option value="tomate">Tomate</option>
+            <option value="batata">Batata</option>
+            <option value="alcatra">Alcatra</option>
+            <option value="banana">Banana</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-fornecedor">Fornecedor</label>
+          <select id="filtro-fornecedor" name="fornecedor">
+            <option value="">Todos</option>
+            <option value="fornecedorA">Fornecedor A</option>
+            <option value="fornecedorB">Fornecedor B</option>
+            <option value="fornecedorC">Fornecedor C</option>
+          </select>
+        </div>
+        <div>
+          <label for="filtro-data-inicio">Período</label>
+          <input type="date" id="filtro-data-inicio" name="data-inicio" aria-label="Data início">
+          <span style="margin: 0 6px;">a</span>
+          <input type="date" id="filtro-data-fim" name="data-fim" aria-label="Data fim">
+        </div>
+        <div>
+          <button type="submit" class="btn-download-excel" style="margin:0;">Filtrar</button>
+        </div>
+      </form>
+      <button class="btn-download-excel" onclick="exportarExcel()">Exportar Excel</button>
+      <button class="btn-download-excel" onclick="exportarPDF()" style="background:#1a2340; margin-left:10px;">Exportar PDF</button>
+      <table class="history-table" aria-label="Tabela Comparativa de Preços">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+            <th>Data</th>
+            <th>Preço (R$)</th>
+            <th>Preço Mercado</th>
+            <th>Variação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tomate</td>
+            <td>Fornecedor A</td>
+            <td>10/06/2024</td>
+            <td>4,20</td>
+            <td>4,10</td>
+            <td style="color:#e67e22;">+2.4%</td>
+          </tr>
+          <tr>
+            <td>Tomate</td>
+            <td>Fornecedor B</td>
+            <td>10/06/2024</td>
+            <td>4,10</td>
+            <td>4,10</td>
+            <td style="color:#27ae60;">0.0%</td>
+          </tr>
+          <tr>
+            <td>Tomate</td>
+            <td>Fornecedor C</td>
+            <td>10/06/2024</td>
+            <td>4,35</td>
+            <td>4,10</td>
+            <td style="color:#e74c3c;">+6.1%</td>
+          </tr>
+          <tr>
+            <td>Batata</td>
+            <td>Fornecedor A</td>
+            <td>10/06/2024</td>
+            <td>3,10</td>
+            <td>3,00</td>
+            <td style="color:#e67e22;">+3.3%</td>
+          </tr>
+          <tr>
+            <td>Batata</td>
+            <td>Fornecedor B</td>
+            <td>10/06/2024</td>
+            <td>3,00</td>
+            <td>3,00</td>
+            <td style="color:#27ae60;">0.0%</td>
+          </tr>
+        </tbody>
+      </table>
+      <section class="graficos-relatorio" aria-label="Gráficos Comparativos">
+        <div class="grafico-placeholder" aria-label="Gráfico de Linha Histórico de Preços">
+          <span>Gráfico de Linha<br>Histórico de Preços (placeholder)</span>
+        </div>
+        <div class="grafico-placeholder" aria-label="Gráfico de Barras Variação de Preço">
+          <span>Gráfico de Barras<br>Variação de Preço por Fornecedor (placeholder)</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
