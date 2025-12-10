@@ -19,7 +19,9 @@
       max-width: 900px;
       margin: 0 auto;
       padding: 32px 0 0 0;
-      min-height: 100vh;
+      /* min-height: 100vh; */
+      max-height: 90vh;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
     }
@@ -130,12 +132,67 @@
   </style>
   <script>
     function dispararCotacao() {
-      alert('Cotação disparada para fornecedores selecionados!');
-      window.location.href = 'dashboard-comprador.html';
+      // Exibe mensagem de sucesso (toast simples ou alert estilizado)
+      exibirToast('Cotação disparada com sucesso para os fornecedores selecionados!');
+      // Fecha o modal de seleção de fornecedores
+      cancelarSelecao();
     }
-    function cancelar() {
-      window.location.href = 'dashboard-comprador.html';
+
+    // Nova função para fechar o modal de seleção de fornecedores
+    function cancelarSelecao() {
+      // Se estiver rodando como modal (inserido dinamicamente), remove o elemento do DOM
+      if (window.parent && window.parent !== window) {
+        // Se estiver em iframe/modal, pede ao parent para fechar
+        if (window.parent.fecharModalSelecaoFornecedores) {
+          window.parent.fecharModalSelecaoFornecedores();
+        } else {
+          window.close();
+        }
+      } else {
+        // Se não estiver em iframe, tenta remover modal dinamicamente
+        var modal = document.querySelector('.modal-selecao-fornecedores');
+        if (modal) {
+          modal.parentNode.removeChild(modal);
+        } else {
+          // fallback: recarrega dashboard principal
+          window.location.href = 'dashboard-comprador.html';
+        }
+      }
     }
+
+    // Toast notification simples
+    function exibirToast(msg) {
+      var toast = document.createElement('div');
+      toast.textContent = msg;
+      toast.style.position = 'fixed';
+      toast.style.top = '32px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.background = '#4bb543';
+      toast.style.color = '#fff';
+      toast.style.padding = '16px 32px';
+      toast.style.borderRadius = '8px';
+      toast.style.fontSize = '1.12rem';
+      toast.style.fontWeight = '700';
+      toast.style.boxShadow = '0 2px 8px rgba(30,40,80,0.10)';
+      toast.style.zIndex = '9999';
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s';
+      document.body.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '1';
+      }, 50);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 400);
+      }, 2000);
+    }
+
+    // function cancelar() {
+    //   window.location.href = 'dashboard-comprador.html';
+    // }
     function toggleCheckbox(id) {
       // Placeholder para lógica futura
     }
@@ -204,7 +261,7 @@
       </table>
       <div style="margin-top:24px;text-align:right;">
         <button class="btn-primary" onclick="dispararCotacao()">Disparar Cotação</button>
-        <button class="btn-cancelar" onclick="cancelar()">Cancelar</button>
+        <button class="btn-cancelar" onclick="cancelarSelecao()">Cancelar</button>
       </div>
     </div>
   </div>
