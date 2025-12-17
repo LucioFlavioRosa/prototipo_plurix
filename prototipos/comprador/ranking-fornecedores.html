@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ranking de Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .filtros-ranking { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+    .filtros-ranking label { font-weight: 600; color: #1a2340; margin-right: 8px; }
+    .filtros-ranking select, .filtros-ranking input[type="month"] { padding: 8px 12px; border-radius: 6px; border: 1px solid #b7b9c6; background: #fff; font-size: 1.05rem; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 1.02rem; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(30,40,80,0.07); }
+    .history-table th, .history-table td { padding: 10px 12px; border-bottom: 1px solid #eaeaea; text-align: left; }
+    .history-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .history-table tr:last-child td { border-bottom: none; }
+    .btn-ver-historico { color: #1a2340; text-decoration: underline; font-weight: 600; background: none; border: none; cursor: pointer; transition: color 0.15s; }
+    .btn-ver-historico:hover { color: #f9b233; text-decoration: none; }
+    .score-badge { background: #f9b233; color: #fff; font-weight: 700; border-radius: 16px; padding: 4px 16px; display: inline-block; }
+    .kpi-bar { height: 12px; border-radius: 6px; background: #e8eaf0; position: relative; width: 100px; margin-right: 8px; display: inline-block; vertical-align: middle; }
+    .kpi-bar-inner { height: 12px; border-radius: 6px; background: #4bb543; position: absolute; top: 0; left: 0; }
+    .grafico-container { margin: 36px 0 0 0; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 28px; }
+    .grafico-titulo { font-weight: 700; color: #1a2340; margin-bottom: 18px; font-size: 1.15rem; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .grafico-container { padding: 10px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html">Dashboard</a>
+      <a href="cotar.html">Cotações</a>
+      <a href="historico-cotacoes.html">Histórico</a>
+      <a href="ranking-fornecedores.html" class="active">Ranking de Fornecedores</a>
+      <a href="avaliacao-entrega.html">Avaliação de Entrega</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Ranking de Fornecedores</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="filtros-ranking" aria-label="Filtros de Ranking">
+        <div>
+          <label for="categoria">Categoria:</label>
+          <select id="categoria" name="categoria">
+            <option value="todas">Todas</option>
+            <option value="carnes">Carnes</option>
+            <option value="frutas">Frutas</option>
+            <option value="verduras">Verduras</option>
+            <option value="legumes">Legumes</option>
+          </select>
+        </div>
+        <div>
+          <label for="periodo">Período:</label>
+          <input type="month" id="periodo" name="periodo" value="2024-06">
+        </div>
+      </form>
+      <section>
+        <table class="history-table" aria-label="Ranking de Fornecedores">
+          <thead>
+            <tr>
+              <th>Posição</th>
+              <th>Fornecedor</th>
+              <th>Score Geral</th>
+              <th>KPI Qualidade</th>
+              <th>KPI Pontualidade</th>
+              <th>KPI Conformidade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Alimentos Silva</td>
+              <td><span class="score-badge">92</span></td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:94%;background:#4bb543;"></span></span>9.4</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:96%;background:#4bb543;"></span></span>9.6</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:88%;background:#f9b233;"></span></span>8.8</td>
+              <td><button class="btn-ver-historico" onclick="abrirHistoricoFornecedor('Alimentos Silva')">Ver Histórico</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Frutas do Vale</td>
+              <td><span class="score-badge">89</span></td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:91%;background:#4bb543;"></span></span>9.1</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:88%;background:#f9b233;"></span></span>8.8</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:85%;background:#f9b233;"></span></span>8.5</td>
+              <td><button class="btn-ver-historico" onclick="abrirHistoricoFornecedor('Frutas do Vale')">Ver Histórico</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Legumes Frescor</td>
+              <td><span class="score-badge">85</span></td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:86%;background:#f9b233;"></span></span>8.6</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:81%;background:#e74c3c;"></span></span>8.1</td>
+              <td><span class="kpi-bar"><span class="kpi-bar-inner" style="width:83%;background:#f9b233;"></span></span>8.3</td>
+              <td><button class="btn-ver-historico" onclick="abrirHistoricoFornecedor('Legumes Frescor')">Ver Histórico</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="grafico-container">
+        <div class="grafico-titulo">Evolução dos Scores dos Fornecedores</div>
+        <canvas id="graficoScores" height="120" aria-label="Gráfico de Evolução de Scores"></canvas>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Gráfico de evolução de scores (exemplo mock)
+    const ctx = document.getElementById('graficoScores').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        datasets: [
+          { label: 'Alimentos Silva', data: [88, 90, 91, 92, 91, 92], borderColor: '#4bb543', backgroundColor: 'rgba(75,181,67,0.08)', fill: true, tension: 0.35 },
+          { label: 'Frutas do Vale', data: [85, 87, 88, 89, 88, 89], borderColor: '#f9b233', backgroundColor: 'rgba(249,178,51,0.08)', fill: true, tension: 0.35 },
+          { label: 'Legumes Frescor', data: [80, 82, 83, 84, 85, 85], borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.08)', fill: true, tension: 0.35 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' }, tooltip: { enabled: true } },
+        scales: { y: { beginAtZero: true, max: 100 } }
+      }
+    });
+    function abrirHistoricoFornecedor(nome) {
+      alert('Abrir página de histórico detalhado para ' + nome + '. (Funcionalidade em desenvolvimento)');
+    }
+  </script>
+</body>
+</html>

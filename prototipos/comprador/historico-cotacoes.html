@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico de Cotações | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 0 0 40px 0; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .filtros { display: flex; gap: 18px; margin: 32px 0 18px 0; flex-wrap: wrap; }
+    .filtros label { font-weight: 600; color: #1a2340; margin-right: 6px; }
+    .form-input { padding: 8px 10px; border: 1px solid #b7b9c6; border-radius: 4px; font-size: 1rem; background: #f7f8fa; color: #222; box-sizing: border-box; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; margin-bottom: 32px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 16px; }
+    .history-table { width: 100%; border-collapse: collapse; margin-top: 0; font-size: 1.02rem; }
+    .history-table th, .history-table td { padding: 10px 12px; border-bottom: 1px solid #eaeaea; }
+    .history-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .history-table tr:last-child td { border-bottom: none; }
+    .status { display: inline-block; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; color: #fff; }
+    .status-finalizada { background: #4bb543; }
+    .status-cancelada { background: #e74c3c; }
+    .status-em-andamento { background: #f9b233; }
+    .link-detalhes { color: #1a2340; text-decoration: underline; font-weight: 600; transition: color 0.15s, text-decoration 0.15s; }
+    .link-detalhes:hover { color: #f9b233; text-decoration: none; }
+    @media (max-width: 900px) { .main-content { padding: 0 6px 24px 6px; } .header { padding: 18px 10px 12px 10px; } .card { padding: 18px 8px 18px 8px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Histórico de Cotações</h1>
+    <nav>
+      <a href="dashboard-comprador.html" style="margin-right:18px; color:#1a2340; font-weight:600; text-decoration:none;">Dashboard</a>
+      <a href="relatorios.html" style="color:#1a2340; font-weight:600; text-decoration:none;">Relatórios</a>
+    </nav>
+  </div>
+  <main class="main-content">
+    <section class="card">
+      <div class="card-title">Filtros</div>
+      <form class="filtros" onsubmit="filtrarHistorico(); return false;">
+        <label for="filtro-data">Data:</label>
+        <input type="date" id="filtro-data" class="form-input" name="filtro-data">
+        <label for="filtro-produto">Produto:</label>
+        <input type="text" id="filtro-produto" class="form-input" name="filtro-produto" placeholder="Ex: Tomate, Frango...">
+        <label for="filtro-status">Status:</label>
+        <select id="filtro-status" class="form-input" name="filtro-status">
+          <option value="">Todos</option>
+          <option value="finalizada">Finalizada</option>
+          <option value="cancelada">Cancelada</option>
+          <option value="em-andamento">Em Andamento</option>
+        </select>
+        <button type="submit" class="btn-primary" style="margin-left:10px;">Filtrar</button>
+      </form>
+    </section>
+    <section class="card">
+      <div class="card-title">Cotações Passadas</div>
+      <table class="history-table" aria-label="Histórico de Cotações">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Fornecedor Vencedor</th>
+            <th>Valor Total</th>
+            <th>Status Final</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="historico-lista">
+          <tr>
+            <td>08/06/2024</td>
+            <td>Alcatra Bovina Resfriada</td>
+            <td>Frigorífico Sul Ltda.</td>
+            <td>R$ 12.500,00</td>
+            <td><span class="status status-finalizada">Finalizada</span></td>
+            <td><a href="#" class="link-detalhes" onclick="verDetalhesCotacao('1');return false;">Ver Detalhes</a></td>
+          </tr>
+          <tr>
+            <td>04/06/2024</td>
+            <td>Tomate Italiano</td>
+            <td>HortiFruti Brasil</td>
+            <td>R$ 3.420,00</td>
+            <td><span class="status status-finalizada">Finalizada</span></td>
+            <td><a href="#" class="link-detalhes" onclick="verDetalhesCotacao('2');return false;">Ver Detalhes</a></td>
+          </tr>
+          <tr>
+            <td>01/06/2024</td>
+            <td>Batata Inglesa</td>
+            <td>Verduras do Campo</td>
+            <td>R$ 2.980,00</td>
+            <td><span class="status status-cancelada">Cancelada</span></td>
+            <td><a href="#" class="link-detalhes" onclick="verDetalhesCotacao('3');return false;">Ver Detalhes</a></td>
+          </tr>
+          <tr>
+            <td>29/05/2024</td>
+            <td>Filé de Frango</td>
+            <td>Fornecedor Exemplo S.A.</td>
+            <td>R$ 8.900,00</td>
+            <td><span class="status status-em-andamento">Em Andamento</span></td>
+            <td><a href="#" class="link-detalhes" onclick="verDetalhesCotacao('4');return false;">Ver Detalhes</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+    function filtrarHistorico() {
+      // Simulação de filtro (frontend)
+      alert('Filtro aplicado! (Funcionalidade ilustrativa no protótipo)');
+    }
+    function verDetalhesCotacao(id) {
+      // Redireciona para página de detalhes da cotação (exemplo)
+      window.location.href = 'detalhe-cotacao.html?id=' + id;
+    }
+  </script>
+</body>
+</html>

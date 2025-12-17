@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro/Edição de Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { min-height: 100vh; }
+    .modal { display: flex; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); justify-content: center; align-items: center; }
+    .modal-content { background: #fff; max-width: 540px; width: 98%; padding: 32px 28px 24px 28px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 94vh; overflow-y: auto; animation: slideIn 0.3s ease; }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-close:hover { color: #e74c3c; }
+    .form-cadastro-fornecedor label { font-weight: 600; color: #1a2340; display: block; margin-bottom: 4px; }
+    .form-cadastro-fornecedor input, .form-cadastro-fornecedor select { width: 100%; padding: 8px 10px; border: 1px solid #b7b9c6; border-radius: 5px; font-size: 1rem; background: #f7f8fa; color: #222; margin-bottom: 16px; box-sizing: border-box; }
+    .form-cadastro-fornecedor input:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    .grupo-checkboxes { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .grupo-checkboxes label { font-weight: 400; color: #222; margin-bottom: 0; }
+    .botoes-modal { margin-top: 18px; display: flex; gap: 16px; }
+    .btn-salvar-edicao, .btn-cancelar-edicao { padding: 10px 24px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
+    .btn-salvar-edicao { background: #4bb543; color: #fff; }
+    .btn-salvar-edicao:hover { background: #399a36; }
+    .btn-cancelar-edicao { background: #e74c3c; color: #fff; }
+    .btn-cancelar-edicao:hover { background: #b93a2e; }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 600px) {
+      .modal-content { padding: 14px 4px 12px 4px; }
+    }
+  </style>
+  <script>
+    function fecharModal() {
+      window.location.href = 'cadastro-fornecedores.html';
+    }
+    function salvarFornecedor(e) {
+      e.preventDefault();
+      alert('Fornecedor salvo com sucesso! (mock)');
+      fecharModal();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var closeBtn = document.querySelector('.modal-close');
+      if (closeBtn) closeBtn.addEventListener('click', fecharModal);
+    });
+  </script>
+</head>
+<body>
+  <div class="modal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-content" tabindex="0">
+      <div class="modal-header">
+        <span class="modal-title">Cadastro de Fornecedor</span>
+        <button class="modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <form class="form-cadastro-fornecedor" onsubmit="salvarFornecedor(event)" autocomplete="off">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+        <label for="cnpj">CNPJ</label>
+        <input type="text" id="cnpj" name="cnpj" required pattern="\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" name="endereco" required>
+        <label for="contato">Contato</label>
+        <input type="text" id="contato" name="contato" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" name="telefone" required pattern="\(\d{2}\) \d{4,5}-\d{4}">
+        <label>Categorias de Produtos</label>
+        <div class="grupo-checkboxes" role="group" aria-label="Categorias de Produtos">
+          <label><input type="checkbox" name="categorias" value="Carnes"> Carnes</label>
+          <label><input type="checkbox" name="categorias" value="Frutas"> Frutas</label>
+          <label><input type="checkbox" name="categorias" value="Verduras"> Verduras</label>
+          <label><input type="checkbox" name="categorias" value="Legumes"> Legumes</label>
+        </div>
+        <label>Coligadas/Bandeiras Atendidas</label>
+        <div class="grupo-checkboxes" role="group" aria-label="Coligadas/Bandeiras Atendidas">
+          <label><input type="checkbox" name="coligadas" value="Supermercado Central"> Supermercado Central</label>
+          <label><input type="checkbox" name="coligadas" value="Bandeira Econômica"> Bandeira Econômica</label>
+          <label><input type="checkbox" name="coligadas" value="Mercado Popular"> Mercado Popular</label>
+          <label><input type="checkbox" name="coligadas" value="Super Rede"> Super Rede</label>
+        </div>
+        <div class="botoes-modal">
+          <button type="submit" class="btn-salvar-edicao">Salvar</button>
+          <button type="button" class="btn-cancelar-edicao" onclick="fecharModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

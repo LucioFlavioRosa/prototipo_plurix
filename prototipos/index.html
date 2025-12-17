@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Plurix Plataforma de Cotações</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(30,40,80,0.10);
+      padding: 48px 38px 36px 38px;
+      max-width: 390px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-logo {
+      margin-bottom: 28px;
+    }
+    .login-logo img {
+      width: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .login-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-label {
+      font-size: 1.04rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #b7b9c6;
+      border-radius: 6px;
+      font-size: 1.08rem;
+      background: #f7f8fa;
+      color: #222;
+      box-sizing: border-box;
+      margin-bottom: 2px;
+      transition: border 0.15s, background 0.15s;
+    }
+    .form-input:focus {
+      outline: 2px solid #f9b233;
+      background: #fffbe7;
+    }
+    .perfil-radio-group {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .perfil-radio-label {
+      font-size: 1.03rem;
+      color: #1a2340;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 13px 0;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(249,178,51,0.08);
+      letter-spacing: 0.01em;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .login-footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #b7b9c6;
+      font-size: 0.97rem;
+    }
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 22px 6vw 18px 6vw;
+        max-width: 98vw;
+      }
+      .login-title {
+        font-size: 1.18rem;
+      }
+    }
+  </style>
+  <script>
+    function handleLogin(event) {
+      event.preventDefault();
+      var perfil = document.querySelector('input[name="perfil"]:checked');
+      if (!perfil) {
+        alert('Selecione o perfil para acessar a plataforma.');
+        return;
+      }
+      var email = document.getElementById('email').value.trim();
+      var senha = document.getElementById('senha').value.trim();
+      if (!email || !senha) {
+        alert('Preencha todos os campos para continuar.');
+        return;
+      }
+      if (perfil.value === 'comprador') {
+        window.location.href = 'dashboard-comprador.html';
+      } else {
+        window.location.href = 'dashboard-fornecedor.html';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('form-login');
+      if (form) {
+        form.addEventListener('submit', handleLogin);
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <div class="login-title">Acesse a Plataforma de Cotações<br>Plurix</div>
+    <form id="form-login" class="login-form" autocomplete="off">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" id="email" name="email" class="form-input" placeholder="Seu email" required autocomplete="username">
+      <label for="senha" class="form-label">Senha</label>
+      <input type="password" id="senha" name="senha" class="form-input" placeholder="Sua senha" required autocomplete="current-password">
+      <div class="perfil-radio-group" role="radiogroup" aria-label="Selecione o perfil">
+        <label class="perfil-radio-label">
+          <input type="radio" name="perfil" value="comprador" required> Comprador
+        </label>
+        <label class="perfil-radio-label">
+          <input type="radio" name="perfil" value="fornecedor" required> Fornecedor
+        </label>
+      </div>
+      <button type="submit" class="btn-primary" aria-label="Entrar na plataforma">Entrar</button>
+    </form>
+    <div class="login-footer">&copy; 2024 Plurix</div>
+  </div>
+</body>
+</html>

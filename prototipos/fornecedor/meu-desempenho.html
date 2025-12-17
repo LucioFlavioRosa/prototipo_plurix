@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meu Desempenho | Plurix Fornecedor</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      padding: 32px 40px 40px 40px;
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+    }
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+      margin-bottom: 38px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 28px 22px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 120px;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 10px;
+    }
+    .card-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #f9b233;
+      margin-bottom: 4px;
+    }
+    .kpi-desc {
+      font-size: 1.01rem;
+      color: #555;
+    }
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 32px;
+      margin-bottom: 38px;
+    }
+    .chart-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 20px 20px 20px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .chart-placeholder {
+      flex: 1;
+      background: repeating-linear-gradient(135deg, #f7f8fa, #e8eaf0 20px);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b7b9c6;
+      font-size: 1.1rem;
+      font-style: italic;
+      margin-bottom: 0;
+      min-height: 120px;
+    }
+    .table-section {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 24px 20px 20px 20px;
+      margin-bottom: 18px;
+    }
+    .table-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .card-table tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 900px) {
+      .dashboard-section {
+        padding: 24px 10px 24px 10px;
+      }
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+      }
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script src="../js/navigation.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // KPIs
+      const kpis = window.mockFornecedorKPIs || {
+        scoreGeral: 87,
+        qualidade: 4.7,
+        pontualidade: 4.5,
+        conformidade: '97%',
+        naoConformidades: 2
+      };
+      document.getElementById('kpi-score').textContent = kpis.scoreGeral;
+      document.getElementById('kpi-qualidade').textContent = kpis.qualidade;
+      document.getElementById('kpi-pontualidade').textContent = kpis.pontualidade;
+      document.getElementById('kpi-conformidade').textContent = kpis.conformidade;
+      document.getElementById('kpi-nc').textContent = kpis.naoConformidades;
+      // Tabela de não-conformidades
+      const ncTable = document.getElementById('tabela-nc-body');
+      const ncs = window.mockNaoConformidades || [];
+      ncTable.innerHTML = ncs.map(nc => `
+        <tr>
+          <td>${nc.data}</td>
+          <td>${nc.produto}</td>
+          <td>${nc.tipo}</td>
+          <td>${nc.descricao}</td>
+          <td>${nc.status}</td>
+        </tr>
+      `).join('');
+    });
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="#" onclick="goToPage('dashboard-fornecedor.html')">Dashboard</a>
+      <a href="#" onclick="goToPage('upload-tabela.html')">Nova Tabela</a>
+      <a href="#" onclick="goToPage('historico.html')">Histórico</a>
+      <a href="#" onclick="goToPage('meu-desempenho.html')" class="active">Meu Desempenho</a>
+      <a href="#" onclick="logout()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Meu Desempenho</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">Score Geral</div>
+          <div class="card-value" id="kpi-score">-</div>
+          <div class="kpi-desc">Pontuação geral baseada em todos os KPIs</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Qualidade Média</div>
+          <div class="card-value" id="kpi-qualidade">-</div>
+          <div class="kpi-desc">Média das avaliações de qualidade (0-5)</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Pontualidade Média</div>
+          <div class="card-value" id="kpi-pontualidade">-</div>
+          <div class="kpi-desc">Média das avaliações de pontualidade (0-5)</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Taxa de Conformidade</div>
+          <div class="card-value" id="kpi-conformidade">-</div>
+          <div class="kpi-desc">% de entregas sem não-conformidades</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Não-Conformidades</div>
+          <div class="card-value" id="kpi-nc">-</div>
+          <div class="kpi-desc">Quantidade nos últimos 12 meses</div>
+        </div>
+      </section>
+      <section class="charts-section">
+        <div class="chart-card">
+          <div class="chart-title">Evolução do Score Geral</div>
+          <div class="chart-placeholder" aria-label="Gráfico de Score Geral">[Gráfico Score Geral]</div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Qualidade & Pontualidade (Últimos 12 meses)</div>
+          <div class="chart-placeholder" aria-label="Gráfico de Qualidade e Pontualidade">[Gráfico Qualidade/Pontualidade]</div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Histórico de Não-Conformidades</div>
+          <div class="chart-placeholder" aria-label="Gráfico de Não-Conformidades">[Gráfico Não-Conformidades]</div>
+        </div>
+      </section>
+      <section class="table-section">
+        <div class="table-title">Não-Conformidades Recentes</div>
+        <table class="card-table" aria-label="Tabela de Não-Conformidades">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Produto</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-nc-body">
+            <!-- Populado via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

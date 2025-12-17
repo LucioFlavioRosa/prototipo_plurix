@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avaliação de Entrega | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .form-avaliacao { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; max-width: 600px; margin: 0 auto; }
+    .form-avaliacao label { font-weight: 600; color: #1a2340; display: block; margin-bottom: 6px; }
+    .form-avaliacao select, .form-avaliacao input[type="date"], .form-avaliacao textarea { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #b7b9c6; background: #fff; font-size: 1.05rem; margin-bottom: 16px; }
+    .form-avaliacao textarea { min-height: 72px; resize: vertical; }
+    .estrelas { display: flex; gap: 6px; margin-bottom: 16px; }
+    .estrela { font-size: 1.6rem; color: #e8eaf0; cursor: pointer; transition: color 0.18s; }
+    .estrela.selecionada { color: #f9b233; }
+    .checkboxes-nc { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 18px; }
+    .checkboxes-nc label { font-weight: 400; color: #222; margin-bottom: 0; }
+    .btn-primary { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); display: inline-block; }
+    .btn-primary:hover { background: #e1a12a; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .form-avaliacao { padding: 14px 6px 12px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html">Dashboard</a>
+      <a href="cotar.html">Cotações</a>
+      <a href="historico-cotacoes.html">Histórico</a>
+      <a href="ranking-fornecedores.html">Ranking de Fornecedores</a>
+      <a href="avaliacao-entrega.html" class="active">Avaliação de Entrega</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Registro de Avaliação de Entrega</h1>
+    </header>
+    <main class="dashboard-section">
+      <form class="form-avaliacao" aria-label="Formulário de Avaliação de Entrega" onsubmit="enviarAvaliacao(event)">
+        <div>
+          <label for="cotacao">Cotação/Pedido</label>
+          <select id="cotacao" name="cotacao" required>
+            <option value="">Selecione...</option>
+            <option value="COT20240601">COT20240601 - Carne Bovina</option>
+            <option value="COT20240602">COT20240602 - Maçã Gala</option>
+            <option value="COT20240603">COT20240603 - Tomate Italiano</option>
+          </select>
+        </div>
+        <div>
+          <label for="fornecedor">Fornecedor</label>
+          <input type="text" id="fornecedor" name="fornecedor" value="Alimentos Silva" readonly aria-readonly="true">
+        </div>
+        <div>
+          <label for="data-entrega">Data de Entrega</label>
+          <input type="date" id="data-entrega" name="data-entrega" required>
+        </div>
+        <div>
+          <label>Avaliação de Qualidade</label>
+          <div class="estrelas" id="qualidade-estrelas" role="radiogroup" aria-label="Avaliação de Qualidade">
+            <span class="estrela" data-valor="1" tabindex="0" aria-label="1 estrela">&#9733;</span>
+            <span class="estrela" data-valor="2" tabindex="0" aria-label="2 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="3" tabindex="0" aria-label="3 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="4" tabindex="0" aria-label="4 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="5" tabindex="0" aria-label="5 estrelas">&#9733;</span>
+          </div>
+          <input type="hidden" name="qualidade" id="qualidade" required>
+        </div>
+        <div>
+          <label>Avaliação de Pontualidade</label>
+          <div class="estrelas" id="pontualidade-estrelas" role="radiogroup" aria-label="Avaliação de Pontualidade">
+            <span class="estrela" data-valor="1" tabindex="0" aria-label="1 estrela">&#9733;</span>
+            <span class="estrela" data-valor="2" tabindex="0" aria-label="2 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="3" tabindex="0" aria-label="3 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="4" tabindex="0" aria-label="4 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="5" tabindex="0" aria-label="5 estrelas">&#9733;</span>
+          </div>
+          <input type="hidden" name="pontualidade" id="pontualidade" required>
+        </div>
+        <div>
+          <label>Avaliação de Conformidade de Volume</label>
+          <div class="estrelas" id="conformidade-estrelas" role="radiogroup" aria-label="Avaliação de Conformidade de Volume">
+            <span class="estrela" data-valor="1" tabindex="0" aria-label="1 estrela">&#9733;</span>
+            <span class="estrela" data-valor="2" tabindex="0" aria-label="2 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="3" tabindex="0" aria-label="3 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="4" tabindex="0" aria-label="4 estrelas">&#9733;</span>
+            <span class="estrela" data-valor="5" tabindex="0" aria-label="5 estrelas">&#9733;</span>
+          </div>
+          <input type="hidden" name="conformidade" id="conformidade" required>
+        </div>
+        <div>
+          <label for="observacoes">Observações</label>
+          <textarea id="observacoes" name="observacoes" placeholder="Descreva observações relevantes..."></textarea>
+        </div>
+        <div>
+          <label>Não-Conformidades</label>
+          <div class="checkboxes-nc">
+            <label><input type="checkbox" name="nao-conformidades" value="Produto Fora do Padrão"> Produto Fora do Padrão</label>
+            <label><input type="checkbox" name="nao-conformidades" value="Atraso na Entrega"> Atraso na Entrega</label>
+            <label><input type="checkbox" name="nao-conformidades" value="Volume Incorreto"> Volume Incorreto</label>
+            <label><input type="checkbox" name="nao-conformidades" value="Outros"> Outros</label>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">Registrar Avaliação</button>
+      </form>
+    </main>
+  </div>
+  <script>
+    function setEstrelas(containerId, inputId) {
+      const container = document.getElementById(containerId);
+      const estrelas = container.querySelectorAll('.estrela');
+      estrelas.forEach((estrela, idx) => {
+        estrela.addEventListener('click', function() {
+          estrelas.forEach((e, i) => e.classList.toggle('selecionada', i <= idx));
+          document.getElementById(inputId).value = idx + 1;
+        });
+        estrela.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            estrelas.forEach((e2, i2) => e2.classList.toggle('selecionada', i2 <= idx));
+            document.getElementById(inputId).value = idx + 1;
+          }
+        });
+      });
+    }
+    setEstrelas('qualidade-estrelas', 'qualidade');
+    setEstrelas('pontualidade-estrelas', 'pontualidade');
+    setEstrelas('conformidade-estrelas', 'conformidade');
+    function enviarAvaliacao(e) {
+      e.preventDefault();
+      // Aqui seria enviado para backend
+      alert('Avaliação registrada com sucesso!');
+      window.location.href = 'dashboard-comprador.html';
+    }
+  </script>
+</body>
+</html>

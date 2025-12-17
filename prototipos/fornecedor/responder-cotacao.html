@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responder Cotação | Plurix Fornecedor</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { min-height: 100vh; }
+    .container { max-width: 540px; margin: 48px auto 0 auto; padding: 0 12px; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; margin-bottom: 32px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 12px; }
+    .info-list { list-style: none; padding: 0; margin: 0 0 16px 0; }
+    .info-list li { margin-bottom: 7px; font-size: 1.07rem; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; color: #1a2340; margin-bottom: 6px; }
+    input[type="number"], input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid #b7b9c6; border-radius: 5px; font-size: 1.07rem; background: #f7f8fa; color: #222; box-sizing: border-box; }
+    input[type="number"]:focus, input[type="text"]:focus, textarea:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    textarea { min-height: 70px; resize: vertical; }
+    .btn-primary { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); margin-right: 12px; }
+    .btn-primary:hover { background: #e1a12a; }
+    .btn-secondary { background: #e8eaf0; color: #1a2340; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .topbar .logo img { height: 40px; }
+    .topbar nav a { color: #1a2340; text-decoration: none; font-weight: 600; margin-left: 18px; font-size: 1.04rem; }
+    .topbar nav a.active { color: #f9b233; }
+    @media (max-width: 700px) { .container { max-width: 98vw; } .card { padding: 18px 8px 16px 8px; } }
+  </style>
+  <script>
+    function mascaraMoeda(e) {
+      let v = e.value.replace(/\D/g, "");
+      v = (v/100).toFixed(2) + '';
+      v = v.replace('.', ',');
+      v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      e.value = 'R$ ' + v;
+    }
+    function submitProposta(event) {
+      event.preventDefault();
+      window.location.href = 'notificacao-resultado.html?status=aceita';
+    }
+    function voltarDashboard() {
+      window.location.href = '../../dashboard-fornecedor.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo"><img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix"></div>
+    <nav>
+      <a href="../../dashboard-fornecedor.html">Dashboard</a>
+      <a href="historico-cotacoes-fornecedor.html">Histórico</a>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card" aria-label="Informações da Cotação">
+      <div class="card-title">Cotação #20240610 - Carne Bovina (Alcatra)</div>
+      <ul class="info-list">
+        <li><strong>Produto:</strong> Carne Bovina (Alcatra)</li>
+        <li><strong>Quantidade Solicitada:</strong> 250 kg</li>
+        <li><strong>Condições:</strong> Refrigerado, entrega até 48h, embalagem a vácuo, unidade de medida: kg</li>
+        <li><strong>Data de Entrega:</strong> 14/06/2024</li>
+      </ul>
+    </div>
+    <form class="card" aria-label="Formulário de Proposta" onsubmit="submitProposta(event)">
+      <div class="card-title">Responder Cotação</div>
+      <div class="form-group">
+        <label for="quantidade">Quantidade Ofertada (kg)</label>
+        <input type="number" id="quantidade" name="quantidade" min="1" max="250" required aria-required="true">
+      </div>
+      <div class="form-group">
+        <label for="preco">Preço Unitário (R$)</label>
+        <input type="text" id="preco" name="preco" required aria-required="true" placeholder="R$ 0,00" oninput="mascaraMoeda(this)">
+      </div>
+      <div class="form-group">
+        <label for="obs">Observações</label>
+        <textarea id="obs" name="obs" maxlength="300" placeholder="Informações adicionais, condições especiais, etc."></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Enviar Proposta</button>
+      <button type="button" class="btn-secondary" onclick="voltarDashboard()">Voltar</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação de Arquivo - Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="shortcut icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .header img {
+      height: 40px;
+      margin-right: 16px;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 48px auto 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      padding: 40px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .alert {
+      padding: 18px 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .alert-success {
+      background: #e7f9ed;
+      color: #1e7e34;
+      border: 1px solid #b7e7c2;
+      display: none;
+    }
+    .alert-success.active {
+      display: flex;
+    }
+    .alert-error {
+      background: #fff2f0;
+      color: #d4380d;
+      border: 1px solid #ffccc7;
+    }
+    .alert svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .error-table th, .error-table td {
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .error-table th {
+      background: #f5f6fa;
+      color: #222;
+      font-weight: 700;
+      border-bottom: 2px solid #eaeaea;
+    }
+    .error-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .error-table tr:last-child {
+      border-bottom: none;
+    }
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+    .btn {
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary {
+      background: #1a6ae5;
+      color: #fff;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-primary:hover {
+      background: #144fa1;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #1a6ae5;
+      border: 1px solid #1a6ae5;
+    }
+    .btn-secondary:hover {
+      background: #f0f5ff;
+    }
+    /* Modal de correção */
+    .modal-correcoes-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(34,34,34,0.18);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background 0.3s;
+    }
+    .modal-correcoes-bg.active {
+      display: flex;
+      animation: fadeInBg 0.3s;
+    }
+    @keyframes fadeInBg {
+      from { background: rgba(34,34,34,0); }
+      to { background: rgba(34,34,34,0.18); }
+    }
+    .modal-correcoes {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 32px 28px 24px 28px;
+      min-width: 340px;
+      max-width: 98vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalIn 0.3s;
+    }
+    @keyframes modalIn {
+      from { transform: translateY(40px) scale(0.96); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .modal-correcoes.saindo {
+      animation: modalOut 0.3s forwards;
+    }
+    @keyframes modalOut {
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to { transform: translateY(40px) scale(0.96); opacity: 0; }
+    }
+    .modal-correcoes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .modal-correcoes-header h2 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0;
+    }
+    .modal-correcoes-close {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: #888;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 8px;
+      transition: color 0.2s;
+    }
+    .modal-correcoes-close:hover { color: #d4380d; }
+    .modal-correcoes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .modal-correcoes-table th, .modal-correcoes-table td {
+      padding: 10px 8px;
+      font-size: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    .modal-correcoes-table th {
+      background: #f5f6fa;
+      font-weight: 700;
+      color: #1a2340;
+    }
+    .modal-correcoes-table td input {
+      width: 98%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #dcdcdc;
+      font-size: 1rem;
+      background: #fff;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .modal-correcoes-table td input:focus {
+      outline: none;
+      border-color: #1a6ae5;
+      box-shadow: 0 0 0 1.5px #1a6ae533;
+    }
+    .modal-correcoes-table td input.erro {
+      border-color: #d4380d;
+      background: #fff2f0;
+    }
+    .modal-correcoes-table td input.sucesso {
+      border-color: #1e7e34;
+      background: #e7f9ed;
+    }
+    .modal-correcoes-table .feedback-erro {
+      color: #d4380d;
+      font-size: 0.95rem;
+      margin-top: 2px;
+      min-height: 18px;
+      display: block;
+    }
+    .modal-correcoes-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .modal-correcoes-actions .btn {
+      min-width: 120px;
+    }
+    @media (max-width: 700px) {
+      .container {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+      .modal-correcoes {
+        padding: 18px 4vw 18px 4vw;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,al_c,q_85/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    <span class="header-title">Validação de Arquivo de Preços</span>
+  </header>
+  <main class="container">
+    <!-- Exemplo de alerta de erro -->
+    <div class="alert alert-error" role="alert" id="alertErro">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span>Foram encontrados erros na validação do arquivo enviado. Corrija os itens abaixo e tente novamente.</span>
+    </div>
+    <div class="alert alert-success" role="alert" id="alertSucesso">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <span id="msgSucesso">Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+    </div>
+    <table class="error-table" aria-label="Erros de validação" id="tabelaErros">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Coluna</th>
+          <th>Descrição do Erro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>3</td>
+          <td>SKU</td>
+          <td>SKU inválido (deve conter 13 dígitos numéricos)</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Preço Novo</td>
+          <td>Valor negativo não permitido</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>Descrição</td>
+          <td>Campo obrigatório não preenchido</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="btn btn-primary" id="btnCorrigir">Corrigir e reenviar</button>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard-comprador.html'">Cancelar</button>
+    </div>
+    <!-- Exemplo de alerta de sucesso (descomentar para exibir sucesso)
+    <div class="alert alert-success" role="alert">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Arquivo validado com sucesso! Clique em avançar para prosseguir.</span>
+    </div>
+    -->
+  </main>
+  <!-- Modal de Correções -->
+  <div class="modal-correcoes-bg" id="modalCorrecoesBg">
+    <div class="modal-correcoes" id="modalCorrecoes">
+      <div class="modal-correcoes-header">
+        <h2>Corrigir Dados da Tabela</h2>
+        <button class="modal-correcoes-close" id="fecharModalBtn" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="formCorrecoes" autocomplete="off">
+        <table class="modal-correcoes-table" id="modalCorrecoesTable">
+          <!-- Conteúdo dinâmico -->
+        </table>
+        <div class="modal-correcoes-actions">
+          <button type="button" class="btn btn-primary" id="btnSalvarCorrecoes">Salvar Correções</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Dados simulados da tabela de erros e dados originais (mock)
+    const erros = [
+      { linha: 3, coluna: 'SKU', descricao: 'SKU inválido (deve conter 13 dígitos numéricos)' },
+      { linha: 5, coluna: 'Preço Novo', descricao: 'Valor negativo não permitido' },
+      { linha: 20, coluna: 'Descrição', descricao: 'Campo obrigatório não preenchido' }
+    ];
+    // Simulação dos dados originais das linhas com erro
+    const dadosOriginais = {
+      3: { SKU: '78919910008', Descrição: 'Cerveja Brahma Chopp 350ml', 'Preço Novo': 'R$ 3,49', Embalagem: 'LATA' },
+      5: { SKU: '7891991001340', Descrição: 'Refrigerante Guaraná Antarctica 2L', 'Preço Novo': '- 8,99', Embalagem: 'GARRAFA' },
+      20: { SKU: '7891991010373', Descrição: ' ', 'Preço Novo': 'R$ 6,49', Embalagem: 'GARRAFA' }
+    };
+    // Colunas esperadas (como upload-tabela.html)
+    const colunasTabela = ['SKU', 'Descrição', 'Preço Novo', 'Embalagem'];
+    // Quais campos podem ser editados
+    const camposEditaveis = ['SKU', 'Descrição', 'Preço Novo'];
+
+    // Função para abrir o modal de correção
+    function abrirModalCorrecao() {
+      const modalBg = document.getElementById('modalCorrecoesBg');
+      const modal = document.getElementById('modalCorrecoes');
+      const tabela = document.getElementById('modalCorrecoesTable');
+      tabela.innerHTML = '';
+      // Cabeçalho
+      let thead = '<thead><tr>';
+      for (const col of colunasTabela) {
+        thead += `<th>${col}</th>`;
+      }
+      thead += '</tr></thead>';
+      // Agrupar erros por linha
+      const errosPorLinha = {};
+      erros.forEach(e => {
+        if (!errosPorLinha[e.linha]) errosPorLinha[e.linha] = [];
+        errosPorLinha[e.linha].push(e.coluna);
+      });
+      // Corpo
+      let tbody = '<tbody>';
+      Object.keys(errosPorLinha).forEach(linha => {
+        tbody += '<tr>';
+        colunasTabela.forEach(col => {
+          const valor = dadosOriginais[linha][col] !== undefined ? dadosOriginais[linha][col] : '';
+          if (errosPorLinha[linha].includes(col) && camposEditaveis.includes(col)) {
+            // Campo editável
+            const idCampo = `campo_${linha}_${col.replace(/\s/g,'_')}`;
+            tbody += `<td><input type="text" id="${idCampo}" name="${idCampo}" value="${valor}" data-linha="${linha}" data-coluna="${col}" autocomplete="off" oninput="validarCampoEditavel(this, this.value)"><span class="feedback-erro" id="fb_${idCampo}"></span></td>`;
+          } else {
+            // Não editável
+            tbody += `<td>${valor}</td>`;
+          }
+        });
+        tbody += '</tr>';
+      });
+      tbody += '</tbody>';
+      tabela.innerHTML = thead + tbody;
+      // Exibir modal
+      modalBg.classList.add('active');
+      modal.classList.remove('saindo');
+      // Foco no primeiro campo editável
+      setTimeout(() => {
+        const inp = tabela.querySelector('input');
+        if (inp) inp.focus();
+      }, 200);
+    }
+
+    // Validação de campo editável em tempo real
+    function validarCampoEditavel(input, valor) {
+      const coluna = input.getAttribute('data-coluna');
+      let valido = true;
+      let msg = '';
+      if (coluna === 'SKU') {
+        // Remover espaços e caracteres não numéricos
+        const gtin = valor.replace(/\D/g, '');
+        if (!/^\d{13}$/.test(gtin)) {
+          valido = false;
+          msg = 'SKU deve conter 13 dígitos numéricos';
+        }
+      } else if (coluna === 'Preço Novo') {
+        // Aceita formato R$ 12,34 ou 12.34 ou -12,34
+        let v = valor.replace(/[R$\s]/g, '').replace(',', '.');
+        if (isNaN(v) || Number(v) <= 0) {
+          valido = false;
+          msg = 'Preço deve ser um valor positivo';
+        }
+      } else if (coluna === 'Descrição') {
+        if (!valor.trim()) {
+          valido = false;
+          msg = 'Descrição não pode estar vazia';
+        }
+      }
+      if (valido) {
+        input.classList.remove('erro');
+        input.classList.add('sucesso');
+      } else {
+        input.classList.add('erro');
+        input.classList.remove('sucesso');
+      }
+      // Feedback visual
+      const fb = document.getElementById('fb_' + input.id);
+      if (fb) fb.textContent = msg;
+      return valido;
+    }
+
+    // Salvar correções
+    function salvarCorrecoes() {
+      const tabela = document.getElementById('modalCorrecoesTable');
+      const inputs = tabela.querySelectorAll('input');
+      let todosValidos = true;
+      inputs.forEach(input => {
+        const valido = validarCampoEditavel(input, input.value);
+        if (!valido) todosValidos = false;
+      });
+      if (!todosValidos) {
+        // Foca no primeiro inválido
+        for (const input of inputs) {
+          if (input.classList.contains('erro')) {
+            input.focus();
+            break;
+          }
+        }
+        return;
+      }
+      fecharModal();
+      setTimeout(() => {
+        exibirSucesso();
+      }, 350);
+    }
+
+    // Exibir mensagem de sucesso e redirecionar
+    function exibirSucesso() {
+      document.getElementById('alertErro').style.display = 'none';
+      const alertSucesso = document.getElementById('alertSucesso');
+      const msg = document.getElementById('msgSucesso');
+      msg.textContent = 'Arquivo validado e corrigido com sucesso! Redirecionando...';
+      alertSucesso.classList.add('active');
+      setTimeout(() => {
+        window.location.href = 'dashboard-fornecedor.html';
+      }, 2000);
+    }
+
+    // Fechar modal de correções
+    function fecharModal() {
+      const modalBg = document.getElementById('modalCorrecoesBg');
+      const modal = document.getElementById('modalCorrecoes');
+      modal.classList.add('saindo');
+      setTimeout(() => {
+        modalBg.classList.remove('active');
+        modal.classList.remove('saindo');
+      }, 300);
+    }
+
+    // Eventos
+    document.getElementById('btnCorrigir').addEventListener('click', abrirModalCorrecao);
+    document.getElementById('btnSalvarCorrecoes').addEventListener('click', salvarCorrecoes);
+    document.getElementById('fecharModalBtn').addEventListener('click', fecharModal);
+    // Fechar ao clicar fora do modal
+    document.getElementById('modalCorrecoesBg').addEventListener('mousedown', function(e) {
+      if (e.target === this) fecharModal();
+    });
+    // Fechar com ESC
+    document.addEventListener('keydown', function(e) {
+      const modalBg = document.getElementById('modalCorrecoesBg');
+      if (modalBg.classList.contains('active') && e.key === 'Escape') {
+        fecharModal();
+      }
+    });
+  </script>
+</body>
+</html>

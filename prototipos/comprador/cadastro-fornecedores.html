@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .cta-upload { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.08rem; font-weight: 700; cursor: pointer; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); margin-left: 18px; }
+    .cta-upload:hover { background: #e1a12a; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .card-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); overflow: hidden; margin-bottom: 24px; }
+    .card-table th, .card-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; text-align: left; }
+    .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .card-table tr:last-child td { border-bottom: none; }
+    .status { display: inline-block; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; color: #fff; }
+    .status-ativo { background: #4bb543; }
+    .status-inativo { background: #e74c3c; }
+    .link-acao { color: #1a2340; text-decoration: underline; font-weight: 600; cursor: pointer; transition: color 0.15s, text-decoration 0.15s; margin-right: 12px; }
+    .link-acao:hover { color: #f9b233; text-decoration: none; }
+    .import-excel { color: #1a2340; text-decoration: underline; font-weight: 600; cursor: pointer; margin-left: 8px; }
+    .import-excel:hover { color: #f9b233; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .card-table th, .card-table td { padding: 6px 4px; }
+    }
+  </style>
+  <script>
+    function goTo(page) { window.location.href = page; }
+    function sair() { if (confirm('Deseja realmente sair?')) { window.location.href = '../../index.html'; } }
+    function abrirModalFornecedor() {
+      window.location.href = 'modal-cadastro-fornecedor.html';
+    }
+    function importarExcel() {
+      alert('Funcionalidade de importação em lote não implementada neste protótipo.');
+    }
+    function editarFornecedor(nome) {
+      window.location.href = 'modal-cadastro-fornecedor.html?edit=' + encodeURIComponent(nome);
+    }
+    function desativarFornecedor(nome) {
+      if (confirm('Deseja desativar o fornecedor ' + nome + '?')) {
+        alert('Fornecedor desativado (mock).');
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html">Dashboard</a>
+      <a href="cadastro-fornecedores.html" class="active">Fornecedores</a>
+      <a href="relatorio-comparativo-precos.html">Relatório de Preços</a>
+      <a href="../../index.html" onclick="sair()">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Cadastro de Fornecedores</h1>
+      <div>
+        <button class="cta-upload" onclick="abrirModalFornecedor()">+ Novo Fornecedor</button>
+        <span class="import-excel" onclick="importarExcel()">Importar em lote (Excel)</span>
+      </div>
+    </header>
+    <main class="dashboard-section">
+      <table class="card-table" aria-label="Fornecedores Cadastrados">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Categorias Atendidas</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alimentos Brasil LTDA</td>
+            <td>12.345.678/0001-90</td>
+            <td>Carnes, Frutas</td>
+            <td><span class="status status-ativo">Ativo</span></td>
+            <td>
+              <span class="link-acao" onclick="editarFornecedor('Alimentos Brasil LTDA')">Editar</span>
+              <span class="link-acao" onclick="desativarFornecedor('Alimentos Brasil LTDA')">Desativar</span>
+            </td>
+          </tr>
+          <tr>
+            <td>Verde Vida Distribuidora</td>
+            <td>98.765.432/0001-11</td>
+            <td>Verduras, Legumes</td>
+            <td><span class="status status-ativo">Ativo</span></td>
+            <td>
+              <span class="link-acao" onclick="editarFornecedor('Verde Vida Distribuidora')">Editar</span>
+              <span class="link-acao" onclick="desativarFornecedor('Verde Vida Distribuidora')">Desativar</span>
+            </td>
+          </tr>
+          <tr>
+            <td>Frutas do Sul ME</td>
+            <td>11.222.333/0001-55</td>
+            <td>Frutas</td>
+            <td><span class="status status-inativo">Inativo</span></td>
+            <td>
+              <span class="link-acao" onclick="editarFornecedor('Frutas do Sul ME')">Editar</span>
+              <span class="link-acao" onclick="desativarFornecedor('Frutas do Sul ME')">Desativar</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

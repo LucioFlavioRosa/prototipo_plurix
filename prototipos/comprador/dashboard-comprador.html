@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Comprador | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #1a2340;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding-top: 32px;
+      box-shadow: 2px 0 8px rgba(30,40,80,0.07);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .sidebar .logo img {
+      width: 120px;
+      height: auto;
+    }
+    .sidebar nav {
+      flex: 1;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.08rem;
+      border-left: 4px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #222b4a;
+      border-left: 4px solid #f9b233;
+      color: #f9b233;
+    }
+    .sidebar .bottom {
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #b7b9c6;
+    }
+    .main-content {
+      flex: 1;
+      padding: 0 0 0 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      padding: 24px 40px 16px 40px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin: 0;
+    }
+    .dashboard-section {
+      flex: 1;
+      background: #f7f8fa;
+      min-height: 0;
+      padding: 32px 40px 40px 40px;
+      display: flex;
+      gap: 32px;
+    }
+    .dashboard-cards {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .cotacoes-lista {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-top: 12px;
+    }
+    .cotacoes-lista th, .cotacoes-lista td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cotacoes-lista th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .cotacoes-lista tr:last-child td {
+      border-bottom: none;
+    }
+    .link-detalhes {
+      color: #1a2340;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s, text-decoration 0.15s;
+      cursor: pointer;
+    }
+    .link-detalhes:hover {
+      color: #f9b233;
+      text-decoration: none;
+    }
+    @media (max-width: 1100px) {
+      .dashboard-section {
+        flex-direction: column;
+        gap: 18px;
+        padding: 18px 8px 18px 8px;
+      }
+    }
+    @media (max-width: 900px) {
+      .header {
+        padding: 18px 10px 12px 10px;
+      }
+      .sidebar {
+        width: 70px;
+        padding-top: 12px;
+      }
+      .sidebar .logo img {
+        width: 44px;
+      }
+      .sidebar nav a {
+        padding: 10px 10px;
+        font-size: 0.98rem;
+      }
+      .card {
+        padding: 14px 6px 12px 6px;
+      }
+    }
+  </style>
+  <script>
+    function sair() {
+      if (confirm('Deseja realmente sair?')) {
+        window.location.href = '../../index.html';
+      }
+    }
+
+    // Dados mocados das cotações pendentes (realistas)
+    const cotacoesPendentesMock = {
+      1: {
+        id: 1,
+        produto: 'Alcatra Bovina Resfriada',
+        quantidade: '200 kg',
+        condicoes: 'Armazenar entre 0°C e 4°C. Entrega em caixas plásticas lacradas. Validade mínima: 5 dias. Unidade: kg.',
+        dataEntrega: '15/06/2024',
+        fornecedorSugerido: 'Frigorífico Boa Carne',
+        precoEstimado: 'R$ 36,90/kg',
+        observacoes: 'Solicitar nota fiscal eletrônica. Entrega no período da manhã.'
+      },
+      2: {
+        id: 2,
+        produto: 'Maçã Fuji',
+        quantidade: '500 kg',
+        condicoes: 'Transporte refrigerado a 6°C. Entrega em caixas de papelão reforçadas de 20kg. Frutas selecionadas, sem machucados. Unidade: kg.',
+        dataEntrega: '17/06/2024',
+        fornecedorSugerido: 'Frutas do Vale',
+        precoEstimado: 'R$ 5,80/kg',
+        observacoes: 'Priorizar frutas de calibre médio. Entregar até 12h.'
+      }
+    };
+
+    // Função para abrir o modal de detalhes da cotação pendente em overlay com iframe
+    function abrirModalCotacaoPendente(id) {
+      sessionStorage.setItem('cotacaoAtual', JSON.stringify(cotacoesPendentesMock[id]));
+      if (document.getElementById('overlay-modal-cotacao')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-cotacao';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = 'modal-detalhes-cotacao-pendente.html?id=' + encodeURIComponent(id);
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '500px';
+      iframe.style.maxWidth = '95vw';
+      iframe.style.height = 'auto';
+      iframe.style.minHeight = '420px';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      overlay.appendChild(iframe);
+      document.body.appendChild(overlay);
+
+      setTimeout(function() {
+        iframe.focus();
+      }, 100);
+
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModal('cotacao');
+      });
+
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModal('cotacao');
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+    }
+
+    // Função para abrir o modal de seleção de fornecedores
+    function abrirModalSelecaoFornecedores() {
+      if (document.getElementById('overlay-modal-selecao-fornecedores')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'overlay-modal-selecao-fornecedores';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(30,40,80,0.35)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.tabIndex = -1;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = 'selecao-fornecedores.html';
+      iframe.style.border = 'none';
+      iframe.style.borderRadius = '12px';
+      iframe.style.boxShadow = '0 8px 32px rgba(30,40,80,0.13)';
+      iframe.style.background = '#fff';
+      iframe.style.width = '98vw';
+      iframe.style.maxWidth = '1100px';
+      iframe.style.height = '95vh';
+      iframe.style.maxHeight = '800px';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-modal', 'true');
+      iframe.setAttribute('role', 'dialog');
+      iframe.tabIndex = 0;
+      iframe.scrolling = 'no';
+
+      overlay.appendChild(iframe);
+      document.body.appendChild(overlay);
+
+      setTimeout(function() {
+        iframe.focus();
+      }, 100);
+
+      overlay.addEventListener('mousedown', function(e) {
+        if (e.target === overlay) fecharOverlayModal('selecao');
+      });
+
+      function escListener(e) {
+        if (e.key === 'Escape') fecharOverlayModal('selecao');
+      }
+      document.addEventListener('keydown', escListener);
+      overlay._escListener = escListener;
+
+      // Listener para mensagens do iframe (disparo de cotação)
+      function messageListener(event) {
+        if (event.data && event.data.type === 'cotacao_disparada_sucesso') {
+          console.log('[Dashboard] Mensagem recebida: cotacao_disparada_sucesso');
+          fecharOverlayModal('selecao', true); // true indica que a cotação foi disparada
+          alert('Cotação disparada para fornecedores selecionados com sucesso!');
+        }
+      }
+      window.addEventListener('message', messageListener);
+      overlay._messageListener = messageListener;
+    }
+
+    /**
+     * Função global para fechar overlays modais.
+     * @param {string} tipo - 'cotacao' ou 'selecao' ou undefined para ambos.
+     * @param {boolean} cotacaoDisparada - se true, limpa sessionStorage ao fechar seleção de fornecedores.
+     */
+    function fecharOverlayModal(tipo, cotacaoDisparada) {
+      // Remove overlay de cotação
+      if (!tipo || tipo === 'cotacao') {
+        const overlayCotacao = document.getElementById('overlay-modal-cotacao');
+        if (overlayCotacao) {
+          if (overlayCotacao._escListener) {
+            document.removeEventListener('keydown', overlayCotacao._escListener);
+          }
+          overlayCotacao.remove();
+          // Limpa sessionStorage SOMENTE ao fechar o modal de detalhes da cotação
+          sessionStorage.removeItem('cotacaoAtual');
+        }
+      }
+      // Remove overlay de seleção de fornecedores
+      if (!tipo || tipo === 'selecao') {
+        const overlaySelecao = document.getElementById('overlay-modal-selecao-fornecedores');
+        if (overlaySelecao) {
+          if (overlaySelecao._escListener) {
+            document.removeEventListener('keydown', overlaySelecao._escListener);
+          }
+          if (overlaySelecao._messageListener) {
+            window.removeEventListener('message', overlaySelecao._messageListener);
+          }
+          overlaySelecao.remove();
+          // Limpa sessionStorage apenas se a cotação foi disparada
+          if (cotacaoDisparada) {
+            sessionStorage.removeItem('cotacaoAtual');
+          }
+        }
+      }
+    }
+    window.fecharOverlayModal = fecharOverlayModal;
+    window.abrirModalSelecaoFornecedores = abrirModalSelecaoFornecedores;
+
+    // NOVO: Função para redirecionar para cotacao-pronta.html com dados mokados de Banana Prata
+    function verCotacaoProntaBananaPrata() {
+      // Dados mokados para Banana Prata
+      const cotacaoProntaBanana = {
+        produto: 'Banana Prata',
+        quantidade: '800 kg',
+        unidade: 'Quilograma',
+        condicoes: 'Entrega refrigerada, validade mínima 4 dias, embalagem retornável',
+        dataEntrega: '16/06/2024',
+        status: 'Pronta para Pedido',
+        propostas: [
+          {
+            fornecedor: 'Frutas Tropicais LTDA',
+            preco: '4,20',
+            quantidade: '800 kg',
+            dataEnvio: '13/06/2024'
+          },
+          {
+            fornecedor: 'Ceasa Sul',
+            preco: '4,35',
+            quantidade: '800 kg',
+            dataEnvio: '13/06/2024'
+          }
+        ]
+      };
+      sessionStorage.setItem('cotacaoPronta', JSON.stringify(cotacaoProntaBanana));
+      window.location.href = 'cotacao-pronta.html';
+    }
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-comprador.html" class="active">Cotações em Andamento</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Novas Cotações</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Histórico</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Relatórios</a>
+      <a href="#" onclick="alert('Funcionalidade em breve!')">Fornecedores</a>
+      <a href="../../index.html" onclick="sair(); return false;">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Comprador</h1>
+    </header>
+    <main class="dashboard-section">
+      <!-- Coluna A: Cotações em Andamento -->
+      <section class="dashboard-cards" style="flex:1.2">
+        <div class="card">
+          <div class="card-title">Cotações em Andamento</div>
+          <table class="cotacoes-lista" aria-label="Cotações em Andamento">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Data de Entrega</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Filé de Frango</td>
+                <td>300 kg</td>
+                <td>14/06/2024</td>
+                <td><span style="color:#f9b233;font-weight:700">Em Cotação</span></td>
+                <td><a href="#" class="link-detalhes" onclick="window.location.href='selecao-fornecedores.html';return false;">Ver Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>Banana Prata</td>
+                <td>800 kg</td>
+                <td>16/06/2024</td>
+                <td><span style="color:#4bb543;font-weight:700">Cotação Pronta</span></td>
+                <td><a href="#" class="link-detalhes" onclick="verCotacaoProntaBananaPrata();return false;">Ver Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- Coluna B: Cotações Pendentes de Disparo -->
+      <section class="dashboard-cards" style="flex:1">
+        <div class="card">
+          <div class="card-title">Cotações Pendentes de Disparo</div>
+          <table class="cotacoes-lista" aria-label="Cotações Pendentes">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Data de Entrega</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alcatra Bovina Resfriada</td>
+                <td>200 kg</td>
+                <td>15/06/2024</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirModalCotacaoPendente(1);return false;">Detalhes</a></td>
+              </tr>
+              <tr>
+                <td>Maçã Fuji</td>
+                <td>500 kg</td>
+                <td>17/06/2024</td>
+                <td><a href="#" class="link-detalhes" onclick="abrirModalCotacaoPendente(2);return false;">Detalhes</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

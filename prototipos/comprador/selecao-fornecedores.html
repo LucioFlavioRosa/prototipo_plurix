@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seleção de Fornecedores | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .main-content {
+      max-width: 100%;
+      margin: 0;
+      padding: 8px;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,40,80,0.07);
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 12px;
+    }
+    .info-cotacao {
+      font-size: 1.09rem;
+      color: #222;
+      margin-bottom: 12px;
+    }
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+      margin-top: 12px;
+      margin-bottom: 18px;
+    }
+    .card-table th, .card-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .card-table th {
+      background: #e8eaf0;
+      color: #1a2340;
+      font-weight: 700;
+    }
+    .card-table tr:last-child td {
+      border-bottom: none;
+    }
+    .kpi-bar {
+      display: inline-block;
+      height: 12px;
+      border-radius: 8px;
+      background: #e8eaf0;
+      width: 80px;
+      vertical-align: middle;
+      margin-right: 6px;
+      position: relative;
+    }
+    .kpi-bar-inner {
+      display: inline-block;
+      height: 12px;
+      border-radius: 8px;
+      background: #4bb543;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .kpi-label {
+      font-size: 0.98rem;
+      color: #222;
+      margin-left: 4px;
+    }
+    .btn-primary {
+      background: #f9b233;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 16px;
+      transition: background 0.18s;
+    }
+    .btn-primary:hover {
+      background: #e1a12a;
+    }
+    .btn-cancelar {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-cancelar:hover {
+      background: #b93a2e;
+    }
+    .cotacao-success-message {
+      display: none;
+      text-align: center;
+      color: #fff;
+      background: #4bb543;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 12px;
+      padding: 16px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(30,40,80,0.10);
+      letter-spacing: 0.02em;
+      animation: fadeInCotacaoMsg 0.7s ease;
+    }
+    .cotacao-success-message.visible {
+      display: block;
+      animation: fadeInCotacaoMsg 0.7s ease;
+    }
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay.visible {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 900px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn-fechar-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .btn-fechar-modal:hover {
+      background: #b93a2e;
+    }
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a2340;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .legenda-grafico {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        padding: 8px 0 0 0;
+      }
+      .card {
+        padding: 14px 6px 12px 6px;
+      }
+      .card-table th, .card-table td {
+        padding: 6px 4px;
+      }
+      .modal-content {
+        padding: 20px;
+        max-width: 95%;
+      }
+      .modal-title {
+        font-size: 1.2rem;
+      }
+      #grafico-historico {
+        max-height: 300px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    function isInIframe() {
+      try {
+        return window.self !== window.top;
+      } catch (e) {
+        return true;
+      }
+    }
+    function dispararCotacao() {
+      // Exibe mensagem de sucesso personalizada com animação
+      var msg = document.getElementById('cotacao-success-message');
+      if (msg) {
+        msg.classList.add('visible');
+      }
+      // Envia mensagem ao dashboard principal se estiver em overlay
+      if (isInIframe() && window.parent && typeof window.parent.postMessage === 'function') {
+        window.parent.postMessage({type: 'cotacao_disparada_sucesso'}, '*');
+      }
+      // Fecha o modal ou redireciona após um delay maior para o usuário ler
+      setTimeout(function() {
+        if (isInIframe() && window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+          window.parent.fecharOverlayModal();
+        } else {
+          window.location.href = 'dashboard-comprador.html';
+        }
+      }, 2000);
+    }
+    function cancelar() {
+      if (isInIframe() && window.parent && typeof window.parent.fecharOverlayModal === 'function') {
+        window.parent.fecharOverlayModal();
+      } else {
+        window.location.href = 'dashboard-comprador.html';
+      }
+    }
+    function toggleCheckbox(id) {
+      // Placeholder para lógica futura
+    }
+
+    // Modal Gráfico - Chart.js
+    var chartHistorico = null;
+
+    function abrirModalGrafico(nomeFornecedor) {
+      var modal = document.getElementById('modal-grafico');
+      if (modal) {
+        modal.classList.add('visible');
+        renderizarGrafico(nomeFornecedor);
+      }
+    }
+
+    function fecharModalGrafico() {
+      var modal = document.getElementById('modal-grafico');
+      if (modal) {
+        modal.classList.remove('visible');
+      }
+      // Limpar canvas Chart.js
+      var canvas = document.getElementById('grafico-historico');
+      if (chartHistorico) {
+        chartHistorico.destroy();
+        chartHistorico = null;
+      }
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      // Limpa mensagens de erro do modal
+      var titulo = document.getElementById('titulo-modal-grafico');
+      if (titulo) {
+        titulo.textContent = '';
+      }
+    }
+
+    function renderizarGrafico(nomeFornecedor) {
+      var dadosHistorico = {
+        'Frigorífico Boa Carne': [22.5, 21.8, 22.0, 21.5, 22.2, 22.8],
+        'CarneFácil Distribuidora': [21.2, 20.9, 21.5, 21.0, 21.7, 21.9],
+        'SuperCarnes Ltda': [19.8, 20.1, 19.5, 20.3, 20.0, 19.7]
+      };
+      var mercadoEsalq = [21.8, 21.6, 21.9, 22.1, 22.0, 22.3];
+      var mercadoMilkpoint = [20.5, 20.7, 20.6, 20.8, 20.9, 21.0];
+      var mercadoSafras = [23.0, 22.7, 22.9, 23.2, 23.1, 23.3];
+      var meses = ['Jan/24', 'Fev/24', 'Mar/24', 'Abr/24', 'Mai/24', 'Jun/24'];
+      var titulo = document.getElementById('titulo-modal-grafico');
+      var canvas = document.getElementById('grafico-historico');
+      var legenda = document.querySelector('.legenda-grafico');
+      // Limpa mensagens de erro
+      if (titulo) {
+        titulo.textContent = '';
+      }
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      if (chartHistorico) {
+        chartHistorico.destroy();
+        chartHistorico = null;
+      }
+      if (!dadosHistorico[nomeFornecedor]) {
+        if (titulo) {
+          titulo.textContent = 'Dados não disponíveis para este fornecedor.';
+        }
+        return;
+      }
+      if (titulo) {
+        titulo.textContent = 'Histórico de Preços - ' + nomeFornecedor;
+      }
+      chartHistorico = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: meses,
+          datasets: [
+            {
+              label: nomeFornecedor,
+              data: dadosHistorico[nomeFornecedor],
+              borderColor: '#3498db',
+              backgroundColor: 'rgba(52,152,219,0.12)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 4,
+              pointBackgroundColor: '#3498db',
+              pointBorderColor: '#3498db',
+              borderWidth: 3
+            },
+            {
+              label: 'Esalq CEPEA',
+              data: mercadoEsalq,
+              borderColor: '#4bb543',
+              backgroundColor: 'rgba(75,181,67,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#4bb543',
+              pointBorderColor: '#4bb543',
+              borderWidth: 2
+            },
+            {
+              label: 'Milkpoint',
+              data: mercadoMilkpoint,
+              borderColor: '#f9b233',
+              backgroundColor: 'rgba(249,178,51,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#f9b233',
+              pointBorderColor: '#f9b233',
+              borderWidth: 2
+            },
+            {
+              label: 'Safras',
+              data: mercadoSafras,
+              borderColor: '#9b59b6',
+              backgroundColor: 'rgba(155,89,182,0.10)',
+              fill: false,
+              tension: 0.3,
+              pointRadius: 3,
+              pointBackgroundColor: '#9b59b6',
+              pointBorderColor: '#9b59b6',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                font: {
+                  size: 13
+                }
+              }
+            },
+            title: {
+              display: false
+            },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += 'R$ ' + context.parsed.y.toFixed(2).replace('.', ',');
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Preço (R$/kg)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return 'R$ ' + value.toFixed(2).replace('.', ',');
+                }
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Mês'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnFechar = document.querySelector('.btn-fechar-modal');
+      if(btnFechar) {
+        btnFechar.addEventListener('click', fecharModalGrafico);
+      }
+      var modalOverlay = document.getElementById('modal-grafico');
+      if(modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+          if(e.target === modalOverlay) {
+            fecharModalGrafico();
+          }
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="main-content">
+    <div class="card">
+      <div class="card-title">Cotação: Alcatra Bovina Resfriada</div>
+      <div class="info-cotacao">
+        <strong>Quantidade:</strong> 200 kg<br>
+        <strong>Condições:</strong> Armazenar entre 0°C e 4°C. Entrega em caixas plásticas. Unidade: kg.<br>
+        <strong>Data de Entrega:</strong> 15/06/2024
+      </div>
+      <table class="card-table" aria-label="Seleção de Fornecedores">
+        <thead>
+          <tr>
+            <th>Fornecedor</th>
+            <th>KPI Qualidade</th>
+            <th>KPI Pontualidade</th>
+            <th>Histórico de Preços</th>
+            <th>Selecionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Frigorífico Boa Carne</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:90%;background:#4bb543;"></span></span>
+              <span class="kpi-label">9.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:85%;background:#4bb543;"></span></span>
+              <span class="kpi-label">8.5</span>
+            </td>
+            <td><a href="#" onclick="abrirModalGrafico('Frigorífico Boa Carne')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="boa-carne" checked onclick="toggleCheckbox(1)"></td>
+          </tr>
+          <tr>
+            <td>CarneFácil Distribuidora</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:80%;background:#f9b233;"></span></span>
+              <span class="kpi-label">8.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:70%;background:#f9b233;"></span></span>
+              <span class="kpi-label">7.0</span>
+            </td>
+            <td><a href="#" onclick="abrirModalGrafico('CarneFácil Distribuidora')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="carnefácil" onclick="toggleCheckbox(2)"></td>
+          </tr>
+          <tr>
+            <td>SuperCarnes Ltda</td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:60%;background:#e74c3c;"></span></span>
+              <span class="kpi-label">6.0</span>
+            </td>
+            <td>
+              <span class="kpi-bar"><span class="kpi-bar-inner" style="width:65%;background:#e74c3c;"></span></span>
+              <span class="kpi-label">6.5</span>
+            </td>
+            <td><a href="#" onclick="abrirModalGrafico('SuperCarnes Ltda')">Ver Gráfico</a></td>
+            <td><input type="checkbox" name="fornecedor" value="supercarnes" onclick="toggleCheckbox(3)"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="cotacao-success-message" class="cotacao-success-message">✓ Cotação disparada com sucesso para os fornecedores selecionados!</div>
+      <div style="margin-top:24px;text-align:right;">
+        <button class="btn-primary" onclick="dispararCotacao()">Disparar Cotação</button>
+        <button class="btn-cancelar" onclick="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Gráfico -->
+  <div id="modal-grafico" class="modal-overlay">
+    <div class="modal-content">
+      <button class="btn-fechar-modal" title="Fechar">&times;</button>
+      <div id="titulo-modal-grafico" class="modal-title"></div>
+      <div style="width:100%;height:350px;max-height:60vh;">
+        <canvas id="grafico-historico" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="legenda-grafico">
+        Comparação entre o histórico de preços do fornecedor e as médias de mercado (Esalq CEPEA, Milkpoint, Safras) para Alcatra Bovina Resfriada (kg) nos últimos 6 meses.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

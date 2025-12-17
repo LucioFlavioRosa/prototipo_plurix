@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vinculação Fornecedor x Produto x Coligada | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .header .back-link { color: #1a2340; text-decoration: underline; font-weight: 600; margin-right: 24px; font-size: 1.08rem; }
+    .header .back-link:hover { color: #f9b233; text-decoration: none; }
+    .section-filtros { background: #fff; padding: 24px 40px 18px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.03); display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+    .section-filtros label { font-weight: 600; color: #1a2340; margin-bottom: 4px; display: block; font-size: 1.04rem; }
+    .section-filtros select, .section-filtros input { padding: 8px 12px; border: 1px solid #b7b9c6; border-radius: 4px; font-size: 1.04rem; background: #f7f8fa; color: #222; min-width: 180px; }
+    .section-filtros button { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 10px 22px; font-size: 1.08rem; font-weight: 700; cursor: pointer; margin-left: 8px; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); }
+    .section-filtros button:hover { background: #e1a12a; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .tabela-editavel { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 1.04rem; background: #fff; }
+    .tabela-editavel th, .tabela-editavel td { padding: 8px 10px; border-bottom: 1px solid #eaeaea; text-align: left; }
+    .tabela-editavel th { background: #f7f8fa; color: #1a2340; font-weight: 700; }
+    .tabela-editavel input, .tabela-editavel select { width: 100%; padding: 6px 7px; border: 1px solid #b7b9c6; border-radius: 4px; font-size: 1rem; background: #f7f8fa; color: #222; box-sizing: border-box; transition: border 0.15s, background 0.15s; }
+    .tabela-editavel input:focus, .tabela-editavel select:focus { outline: 2px solid #f9b233; background: #fffbe7; }
+    .btn-add, .btn-remove { background: #4bb543; color: #fff; border: none; border-radius: 6px; padding: 7px 14px; font-size: 1.01rem; font-weight: 700; cursor: pointer; margin-right: 6px; transition: background 0.18s; }
+    .btn-add:hover { background: #399a36; }
+    .btn-remove { background: #e74c3c; }
+    .btn-remove:hover { background: #b93a2e; }
+    .btn-salvar-vinc { background: #f9b233; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 12px; transition: background 0.18s; box-shadow: 0 2px 8px rgba(249,178,51,0.08); }
+    .btn-salvar-vinc:hover { background: #e1a12a; }
+    @media (max-width: 900px) {
+      .dashboard-section, .section-filtros { padding: 18px 6px 18px 6px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+      .tabela-editavel th, .tabela-editavel td { padding: 6px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="../dashboard-comprador.html">Dashboard</a>
+      <a href="../cotacoes.html">Cotações</a>
+      <a href="aprovacoes-pendentes.html">Aprovações</a>
+      <a href="vinculacao-fornecedor-produto.html" class="active">Vinculação Fornecedor</a>
+      <a href="../../index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <a href="../dashboard-comprador.html" class="back-link">&larr; Voltar ao Dashboard</a>
+      <h1>Vinculação Fornecedor x Produto x Coligada/Bandeira</h1>
+    </header>
+    <section class="section-filtros">
+      <div>
+        <label for="filtro-fornecedor">Fornecedor</label>
+        <select id="filtro-fornecedor" aria-label="Filtrar por Fornecedor">
+          <option value="">Todos</option>
+          <option>Fornecedor Ambev</option>
+          <option>Fornecedor Hortifruti</option>
+          <option>Fornecedor Carnes</option>
+        </select>
+      </div>
+      <div>
+        <label for="filtro-produto">Produto</label>
+        <select id="filtro-produto" aria-label="Filtrar por Produto">
+          <option value="">Todos</option>
+          <option>Banana Nanica</option>
+          <option>Alcatra Bovino</option>
+          <option>Tomate Italiano</option>
+        </select>
+      </div>
+      <div>
+        <label for="filtro-bandeira">Bandeira/Coligada</label>
+        <select id="filtro-bandeira" aria-label="Filtrar por Bandeira">
+          <option value="">Todas</option>
+          <option>Supermercado Central</option>
+          <option>Supermercado Sul</option>
+          <option>Supermercado Norte</option>
+        </select>
+      </div>
+      <button onclick="filtrarVinculacoes()">Filtrar</button>
+    </section>
+    <main class="dashboard-section">
+      <form id="form-vinculacao" autocomplete="off">
+        <table class="tabela-editavel" aria-label="Tabela de Vinculações">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Produto</th>
+              <th>Bandeira/Coligada</th>
+              <th>Unidade de Medida</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-vinculacoes">
+            <tr>
+              <td><input type="text" name="fornecedor" value="Fornecedor Hortifruti" required></td>
+              <td><input type="text" name="produto" value="Banana Nanica" required></td>
+              <td><input type="text" name="bandeira" value="Supermercado Central" required></td>
+              <td><input type="text" name="unidade" value="Kg" required></td>
+              <td>
+                <button type="button" class="btn-remove" aria-label="Remover" onclick="removerLinha(this)">Remover</button>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" name="fornecedor" value="Fornecedor Carnes" required></td>
+              <td><input type="text" name="produto" value="Alcatra Bovino" required></td>
+              <td><input type="text" name="bandeira" value="Supermercado Sul" required></td>
+              <td><input type="text" name="unidade" value="Kg" required></td>
+              <td>
+                <button type="button" class="btn-remove" aria-label="Remover" onclick="removerLinha(this)">Remover</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn-add" onclick="adicionarLinha()">Adicionar Vinculação</button>
+        <button type="submit" class="btn-salvar-vinc">Salvar Vinculações</button>
+      </form>
+    </main>
+  </div>
+  <script>
+    function adicionarLinha() {
+      var tbody = document.getElementById('tbody-vinculacoes');
+      var tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" name="fornecedor" required></td>
+        <td><input type="text" name="produto" required></td>
+        <td><input type="text" name="bandeira" required></td>
+        <td><input type="text" name="unidade" required></td>
+        <td><button type="button" class="btn-remove" aria-label="Remover" onclick="removerLinha(this)">Remover</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+    function removerLinha(btn) {
+      var tr = btn.closest('tr');
+      if (tr) tr.remove();
+    }
+    document.getElementById('form-vinculacao').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Vinculações salvas com sucesso!');
+      // Aqui poderia ser feito um envio para backend
+    });
+    function filtrarVinculacoes() {
+      alert('Funcionalidade de filtro ilustrativa.');
+    }
+  </script>
+</body>
+</html>

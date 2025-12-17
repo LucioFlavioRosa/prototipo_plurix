@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard do Fornecedor | Plurix</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    body { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #1a2340; color: #fff; display: flex; flex-direction: column; padding-top: 32px; box-shadow: 2px 0 8px rgba(30,40,80,0.07); position: relative; z-index: 2; }
+    .sidebar .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    .sidebar .logo img { width: 120px; height: auto; }
+    .sidebar nav { flex: 1; }
+    .sidebar nav a { display: flex; align-items: center; padding: 14px 32px; color: #fff; text-decoration: none; font-size: 1.08rem; border-left: 4px solid transparent; transition: background 0.15s, border-color 0.15s; margin-bottom: 2px; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #222b4a; border-left: 4px solid #f9b233; color: #f9b233; }
+    .sidebar .bottom { margin-bottom: 32px; text-align: center; font-size: 0.95rem; color: #b7b9c6; }
+    .main-content { flex: 1; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #fff; padding: 24px 40px 16px 40px; box-shadow: 0 2px 8px rgba(30,40,80,0.04); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .dashboard-section { padding: 32px 40px 40px 40px; flex: 1; background: #f7f8fa; min-height: 0; }
+    .dashboard-cards { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 48px; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(30,40,80,0.07); padding: 32px 28px 26px 28px; display: flex; flex-direction: column; min-height: 180px; }
+    .card-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin-bottom: 12px; }
+    .card-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+    .card-table th, .card-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .card-table tr:last-child td { border-bottom: none; }
+    .status { display: inline-block; border-radius: 16px; padding: 4px 16px; font-size: 1rem; font-weight: 700; color: #fff; }
+    .status-pendente { background: #f9b233; }
+    .status-enviada { background: #4bb543; }
+    .status-aceita { background: #1a2340; }
+    .status-rejeitada { background: #e74c3c; }
+    .link-detalhes, .link-responder { color: #1a2340; text-decoration: underline; font-weight: 600; transition: color 0.15s, text-decoration 0.15s; cursor: pointer; background: none; border: none; }
+    .link-detalhes:hover, .link-responder:hover { color: #f9b233; text-decoration: none; }
+    @media (max-width: 900px) {
+      .dashboard-section { padding: 24px 10px 24px 10px; }
+      .header { padding: 18px 10px 12px 10px; }
+      .sidebar { width: 70px; padding-top: 12px; }
+      .sidebar .logo img { width: 44px; }
+      .sidebar nav a { padding: 10px 10px; font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157~mv2.png/v1/fill/w_180,h_180,al_c,q_85,usm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157~mv2.png" alt="Logo Plurix">
+    </div>
+    <nav>
+      <a href="dashboard-fornecedor.html" class="active">Dashboard</a>
+      <a href="responder-cotacao.html">Responder Cotação</a>
+      <a href="historico-fornecedor.html">Histórico</a>
+      <a href="index.html">Sair</a>
+    </nav>
+    <div class="bottom">&copy; 2024 Plurix</div>
+  </aside>
+  <div class="main-content">
+    <header class="header">
+      <h1>Dashboard do Fornecedor</h1>
+    </header>
+    <main class="dashboard-section">
+      <section class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">Cotações Recebidas</div>
+          <table class="card-table" aria-label="Cotações Recebidas">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Data Limite Resposta</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>13/06/2024</td>
+                <td>Carne Bovina</td>
+                <td>500 kg</td>
+                <td>15/06/2024</td>
+                <td><span class="status status-pendente">Pendente</span></td>
+                <td><button class="link-responder" onclick="window.location.href='responder-cotacao.html'">Responder</button></td>
+              </tr>
+              <tr>
+                <td>12/06/2024</td>
+                <td>Maçã Gala</td>
+                <td>300 cx</td>
+                <td>14/06/2024</td>
+                <td><span class="status status-enviada">Proposta Enviada</span></td>
+                <td><button class="link-detalhes" onclick="window.location.href='detalhe-cotacao.html'">Ver Detalhes</button></td>
+              </tr>
+              <tr>
+                <td>10/06/2024</td>
+                <td>Tomate Italiano</td>
+                <td>800 kg</td>
+                <td>13/06/2024</td>
+                <td><span class="status status-aceita">Aceita</span></td>
+                <td><button class="link-detalhes" onclick="window.location.href='detalhe-cotacao.html'">Ver Detalhes</button></td>
+              </tr>
+              <tr>
+                <td>08/06/2024</td>
+                <td>Alface Crespa</td>
+                <td>1200 maços</td>
+                <td>10/06/2024</td>
+                <td><span class="status status-rejeitada">Rejeitada</span></td>
+                <td><button class="link-detalhes" onclick="window.location.href='detalhe-cotacao.html'">Ver Detalhes</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proposta do Fornecedor | Plurix Comprador</title>
+  <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/511fa0_114311e069c34ae48f752e23361e9157%7Emv2.png" type="image/png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Helvetica:400,700&display=swap');
+    html, body { height: 100%; margin: 0; padding: 0; font-family: 'helvetica-w01-roman', Helvetica, Arial, sans-serif; background: #f7f8fa; color: #222; }
+    .modal-bg { display: flex; justify-content: center; align-items: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(30,40,80,0.35); }
+    .modal-content { background: #fff; max-width: 900px; width: 98vw; padding: 32px; border-radius: 12px; box-shadow: 0 8px 32px rgba(30,40,80,0.13); max-height: 90vh; overflow-y: auto; animation: slideIn 0.3s ease; outline: none; }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+    .modal-title { font-size: 1.35rem; font-weight: 700; color: #1a2340; margin: 0; }
+    .modal-close { cursor: pointer; font-size: 28px; color: #999; background: none; border: none; line-height: 1; margin-left: 16px; transition: color 0.18s; }
+    .modal-close:hover { color: #e74c3c; }
+    .modal-body { font-size: 1.05rem; line-height: 1.6; color: #222; }
+    .card-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; margin-bottom: 18px; }
+    .card-table th, .card-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    .card-table th { background: #e8eaf0; color: #1a2340; font-weight: 700; }
+    .kpi-section { margin: 18px 0 10px 0; }
+    .kpi-title { font-size: 1.13rem; font-weight: 700; color: #1a2340; margin-bottom: 8px; }
+    .kpi-graphs { display: block; }
+    .kpi-graph { background: #f7f8fa; border-radius: 8px; padding: 24px 18px 20px 18px; width: 100%; max-width: 100%; min-height: 480px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; margin-bottom: 24px; }
+    .kpi-graph:last-child { margin-bottom: 0; }
+    .kpi-graph canvas { width: 100% !important; max-width: 100%; height: auto; max-height: 250px; margin: 0 auto; }
+    .kpi-graph-label { margin-top: 10px; font-size: 0.92rem; color: #333; line-height: 1.4; text-align: center; }
+    .modal-footer { font-size: 0.9rem; color: #666; text-align: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
+    .modal-actions { margin-top: 24px; display: flex; gap: 16px; justify-content: flex-end; }
+    .btn { padding: 12px 28px; font-size: 1.08rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: background 0.18s; }
+    .btn-fechar { background: #b7b9c6; color: #fff; }
+    .btn-fechar:hover { background: #8c8e99; }
+    @media (max-width: 700px) {
+      .modal-content { padding: 16px 12px; }
+      .kpi-graphs { }
+      .kpi-graph { min-width: 0; width: 100%; padding: 20px 12px; min-height: 420px; margin-bottom: 24px; }
+      .kpi-graph canvas { max-height: 340px; }
+      .kpi-graph:last-child { margin-bottom: 0; }
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="modal-bg" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-content" tabindex="0" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Proposta de Fornecedor</span>
+        <button class="modal-close" id="btn-fechar-modal" aria-label="Fechar modal" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:18px;">
+          <strong>Produto:</strong> <span id="produto">Banana Prata</span> &nbsp; | &nbsp;
+          <strong>Quantidade:</strong> <span id="quantidade">800 kg</span> &nbsp; | &nbsp;
+          <strong>Data de Entrega:</strong> <span id="dataEnvio">13/06/2024</span>
+        </div>
+        <table class="card-table" aria-label="Proposta do Fornecedor">
+          <thead>
+            <tr>
+              <th>Fornecedor</th>
+              <th>Preço Unitário (R$)</th>
+              <th>Quantidade</th>
+              <th>Data Envio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="fornecedor">Frutas Tropicais LTDA</td>
+              <td id="preco">4,20</td>
+              <td id="quantidade">800 kg</td>
+              <td id="dataEnvio">13/06/2024</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="kpi-section">
+          <div class="kpi-title">KPIs Históricos do Fornecedor</div>
+          <div class="kpi-graphs">
+            <div class="kpi-graph">
+              <div style="font-weight: 700; margin-bottom: 8px; color: #1a2340; font-size: 1.05rem;">Pontualidade na Entrega</div>
+              <canvas id="grafico-pontualidade" aria-label="Gráfico de Pontualidade na Entrega"></canvas>
+              <div class="kpi-graph-label">Percentual de entregas realizadas dentro do prazo acordado nos últimos 12 meses (dados simulados).</div>
+            </div>
+            <div class="kpi-graph">
+              <div style="font-weight: 700; margin-bottom: 8px; color: #1a2340; font-size: 1.05rem;">Qualidade da Entrega</div>
+              <canvas id="grafico-qualidade" aria-label="Gráfico de Qualidade da Entrega"></canvas>
+              <div class="kpi-graph-label">Percentual de entregas sem avarias ou não conformidades nos últimos 12 meses (dados simulados).</div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-section">
+          <div class="kpi-title">Histórico de Preço vs. Índices de Mercado</div>
+          <div class="kpi-graphs">
+            <div class="kpi-graph">
+              <div style="font-weight: 700; margin-bottom: 8px; color: #1a2340; font-size: 1.05rem;">Comparativo de Preços</div>
+              <canvas id="grafico-historico-preco" aria-label="Gráfico Comparativo de Preço vs Índices de Mercado"></canvas>
+              <div class="kpi-graph-label">Comparativo de preço do fornecedor (R$/kg) versus índices de mercado (Esalq CEPEA, Milkpoint, Safras) nos últimos 6 meses (dados simulados).</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" id="modal-footer"></div>
+        <div class="modal-actions">
+          <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Dados mokados detalhados para Banana Prata e fornecedores
+    const dadosMokados = {
+      'Banana Prata': {
+        'Frutas Tropicais LTDA': {
+          preco: '4,20',
+          quantidade: '800 kg',
+          dataEnvio: '13/06/2024',
+          pontualidadeDados: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            valores: [95, 92, 98, 94, 96, 97, 93, 95, 98, 96, 94, 97]
+          },
+          qualidadeDados: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            valores: [97, 96, 98, 95, 97, 98, 96, 97, 99, 98, 96, 98]
+          },
+          historicoPrecoDados: {
+            labels: ['Jan/24', 'Fev/24', 'Mar/24', 'Abr/24', 'Mai/24', 'Jun/24'],
+            fornecedor: [4.10, 4.15, 4.08, 4.20, 4.18, 4.20],
+            esalq: [4.25, 4.30, 4.22, 4.35, 4.32, 4.38],
+            milkpoint: [4.20, 4.28, 4.18, 4.32, 4.30, 4.35],
+            safras: [4.18, 4.25, 4.15, 4.30, 4.28, 4.33]
+          }
+        },
+        'Ceasa Sul': {
+          preco: '4,35',
+          quantidade: '800 kg',
+          dataEnvio: '13/06/2024',
+          pontualidadeDados: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            valores: [88, 85, 90, 87, 89, 91, 86, 88, 92, 89, 87, 90]
+          },
+          qualidadeDados: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            valores: [91, 89, 93, 90, 92, 94, 88, 91, 95, 92, 90, 93]
+          },
+          historicoPrecoDados: {
+            labels: ['Jan/24', 'Fev/24', 'Mar/24', 'Abr/24', 'Mai/24', 'Jun/24'],
+            fornecedor: [4.28, 4.32, 4.25, 4.38, 4.35, 4.35],
+            esalq: [4.25, 4.30, 4.22, 4.35, 4.32, 4.38],
+            milkpoint: [4.20, 4.28, 4.18, 4.32, 4.30, 4.35],
+            safras: [4.18, 4.25, 4.15, 4.30, 4.28, 4.33]
+          }
+        }
+      }
+    };
+
+    // Variáveis para foco e acessibilidade
+    let openerElement = null;
+
+    function renderizarGraficoPontualidade(dados) {
+      try {
+        const canvas = document.getElementById('grafico-pontualidade');
+        if (!canvas) return;
+        if (canvas.chartInstance) {
+          canvas.chartInstance.destroy();
+        }
+        const ctx = canvas.getContext('2d');
+        canvas.height = 380;
+        const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dados.labels,
+            datasets: [{
+              label: 'Pontualidade (%)',
+              data: dados.valores,
+              borderColor: '#3498db',
+              backgroundColor: 'rgba(52, 152, 219, 0.1)',
+              tension: 0.3,
+              fill: true,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              pointBackgroundColor: '#3498db'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: true, position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { font: { size: 13 } }
+              },
+              y: {
+                min: 0,
+                max: 100,
+                ticks: { callback: function(value) { return value + '%'; }, font: { size: 13 } }
+              }
+            }
+          }
+        });
+        canvas.chartInstance = chart;
+      } catch (error) {
+        console.error('Erro ao renderizar gráfico:', error);
+        const canvas = document.getElementById('grafico-pontualidade');
+        if (canvas && canvas.getContext) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.font = '16px Arial';
+          ctx.fillStyle = '#e74c3c';
+          ctx.fillText('Erro ao carregar gráfico', 10, 50);
+        }
+      }
+    }
+
+    function renderizarGraficoQualidade(dados) {
+      try {
+        const canvas = document.getElementById('grafico-qualidade');
+        if (!canvas) return;
+        if (canvas.chartInstance) {
+          canvas.chartInstance.destroy();
+        }
+        const ctx = canvas.getContext('2d');
+        canvas.height = 380;
+        const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dados.labels,
+            datasets: [{
+              label: 'Qualidade (%)',
+              data: dados.valores,
+              borderColor: '#2ecc71',
+              backgroundColor: 'rgba(46, 204, 113, 0.1)',
+              tension: 0.3,
+              fill: true,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              pointBackgroundColor: '#2ecc71'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: true, position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { font: { size: 13 } }
+              },
+              y: {
+                min: 0,
+                max: 100,
+                ticks: { callback: function(value) { return value + '%'; }, font: { size: 13 } }
+              }
+            }
+          }
+        });
+        canvas.chartInstance = chart;
+      } catch (error) {
+        console.error('Erro ao renderizar gráfico:', error);
+        const canvas = document.getElementById('grafico-qualidade');
+        if (canvas && canvas.getContext) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.font = '16px Arial';
+          ctx.fillStyle = '#e74c3c';
+          ctx.fillText('Erro ao carregar gráfico', 10, 50);
+        }
+      }
+    }
+
+    function renderizarGraficoHistoricoPreco(dados) {
+      try {
+        const canvas = document.getElementById('grafico-historico-preco');
+        if (!canvas) return;
+        if (canvas.chartInstance) {
+          canvas.chartInstance.destroy();
+        }
+        const ctx = canvas.getContext('2d');
+        canvas.height = 380;
+        const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dados.labels,
+            datasets: [
+              {
+                label: 'Fornecedor',
+                data: dados.fornecedor,
+                borderColor: '#e74c3c',
+                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                tension: 0.3,
+                fill: false,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: '#e74c3c'
+              },
+              {
+                label: 'Esalq CEPEA',
+                data: dados.esalq,
+                borderColor: '#f39c12',
+                backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                tension: 0.3,
+                fill: false,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: '#f39c12'
+              },
+              {
+                label: 'Milkpoint',
+                data: dados.milkpoint,
+                borderColor: '#9b59b6',
+                backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                tension: 0.3,
+                fill: false,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: '#9b59b6'
+              },
+              {
+                label: 'Safras',
+                data: dados.safras,
+                borderColor: '#1abc9c',
+                backgroundColor: 'rgba(26, 188, 156, 0.1)',
+                tension: 0.3,
+                fill: false,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: '#1abc9c'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: { boxWidth: 12, padding: 8 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + ' R$';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { font: { size: 13 } }
+              },
+              y: {
+                min: 3.8,
+                ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); }, font: { size: 13 } }
+              }
+            }
+          }
+        });
+        canvas.chartInstance = chart;
+      } catch (error) {
+        console.error('Erro ao renderizar gráfico:', error);
+        const canvas = document.getElementById('grafico-historico-preco');
+        if (canvas && canvas.getContext) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.font = '16px Arial';
+          ctx.fillStyle = '#e74c3c';
+          ctx.fillText('Erro ao carregar gráfico', 10, 50);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof Chart === 'undefined') {
+        console.error('Chart.js não carregado');
+        return;
+      }
+      // Guardar o elemento que abriu o modal (se possível)
+      try {
+        if (window.parent && window.parent.document.activeElement) {
+          openerElement = window.parent.document.activeElement;
+        }
+      } catch(e) {}
+
+      var dados = sessionStorage.getItem('modalPropostaFornecedor');
+      var fornecedor = 'Fornecedor';
+      var produto = 'Produto';
+      if (dados) {
+        try {
+          var obj = JSON.parse(dados);
+          fornecedor = obj.fornecedor || fornecedor;
+          produto = obj.produto || produto;
+        } catch(e) {}
+      }
+      document.getElementById('modal-title').textContent = 'Proposta de ' + fornecedor;
+      document.getElementById('produto').textContent = produto;
+      // Buscar dados mokados
+      var proposta = (dadosMokados[produto] && dadosMokados[produto][fornecedor]) ? dadosMokados[produto][fornecedor] : {
+        preco: '-', quantidade: '-', dataEnvio: '-', pontualidadeDados: null, qualidadeDados: null, historicoPrecoDados: null
+      };
+      document.getElementById('fornecedor').textContent = fornecedor;
+      document.getElementById('preco').textContent = proposta.preco;
+      document.getElementById('quantidade').textContent = proposta.quantidade;
+      document.getElementById('dataEnvio').textContent = proposta.dataEnvio;
+      // Rodapé de atualização
+      document.getElementById('modal-footer').textContent = 'Dados atualizados em: ' + new Date().toLocaleString('pt-BR');
+      // Renderização dos gráficos simulados
+      if(proposta.pontualidadeDados) renderizarGraficoPontualidade(proposta.pontualidadeDados);
+      if(proposta.qualidadeDados) renderizarGraficoQualidade(proposta.qualidadeDados);
+      if(proposta.historicoPrecoDados) renderizarGraficoHistoricoPreco(proposta.historicoPrecoDados);
+      // Foco acessibilidade
+      setTimeout(function() {
+        var btnFechar = document.getElementById('btn-fechar-modal');
+        if (btnFechar) btnFechar.focus();
+      }, 80);
+    });
+    function fecharModal() {
+      // Restaura foco ao elemento que abriu o modal
+      if (window.parent && window.parent.fecharOverlayModalProposta) {
+        window.parent.fecharOverlayModalProposta();
+        setTimeout(function() {
+          try {
+            if (openerElement) openerElement.focus();
+          } catch(e) {}
+        }, 120);
+      } else {
+        window.history.back();
+      }
+    }
+  </script>
+</body>
+</html>
